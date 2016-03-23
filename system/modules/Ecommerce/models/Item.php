@@ -26,7 +26,8 @@ class Item extends \Model
         'options' => 'Параметры',
         'offers' => 'Торговые предложения',
         'widget' => 'Виджет для отображения в каталоге',
-        'view' => 'Шаблон для отображения полной информации',
+        'view' => 'Шаблон',
+        'composition' => 'Состав набора',
     ];
     public static $cols = [
         //Основные параметры
@@ -47,6 +48,7 @@ class Item extends \Model
         'date_create' => ['type' => 'dateTime'],
         'widget' => ['type' => 'text'],
         'view' => ['type' => 'text'],
+        'composition' => ['type' => 'text'],
         //Менеджеры
         'options' => ['type' => 'dataManager', 'relation' => 'options'],
         'offers' => ['type' => 'dataManager', 'relation' => 'offers'],
@@ -73,7 +75,7 @@ class Item extends \Model
             'map' => [
                 ['name', 'alias'],
                 ['category_id', 'item_type_id'],
-                ['widget', 'view'],
+                ['widget', 'view', 'composition'],
                 ['best', 'image_file_id'],
                 ['description'],
                 ['options'],
