@@ -25,7 +25,7 @@ class ChangePassword extends \Ui\ActiveForm\Input
                 return FALSE;
             }
             if ($request[$this->colName]['pass'] != $request[$this->colName]['repeat']) {
-                \Msg::add('Введенные пароли не совадают', 'danger');
+                \Msg::add('Введенные пароли не совпадают', 'danger');
                 return FALSE;
             }
             $this->activeForm->model->{$this->colName} = \App::$cur->users->hashpass($request[$this->colName]['pass']);
