@@ -74,6 +74,7 @@ class Object extends \Object
                 }
                 $walked[$param->code] = true;
             }
+            
             //check unparsed params
             foreach ($data as $key => $item) {
                 //skip parsed and attribtes
@@ -84,6 +85,8 @@ class Object extends \Object
                 $param->object_id = $this->object->id;
                 $param->code = $key;
                 $param->save();
+                $className = get_class($this->object);
+                $this->object = $className::get($this->object->id);
             }
             if ($model) {
                 if (!$model->pk() || !empty($model->_changedParams)) {
