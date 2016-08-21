@@ -76,7 +76,7 @@ class Walker
         $objectParser->walker = $this;
         $ids = $objectParser->parse();
 
-        if ($objectParser->object->clear) {
+        if ($objectParser->object->clear && json_decode($objectParser->object->clear, true)) {
 
             $where = json_decode($objectParser->object->clear, true);
             if (!$where) {
