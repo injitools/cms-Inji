@@ -20,6 +20,7 @@ class File extends \Exchange1c\Mode
         $file = new \Exchange1c\Exchange\File();
         $file->name = $_GET['filename'];
         $file->exchange_id = $this->exchange->id;
+        $file->size = ceil(filesize($dir . '/' . $_GET['filename']));
         $file->save();
 
         if (strpos($_GET['filename'], '/') !== false) {

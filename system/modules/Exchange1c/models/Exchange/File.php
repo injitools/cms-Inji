@@ -15,12 +15,13 @@ class File extends \Model
 {
     public static $cols = [
         'name' => ['type' => 'text'],
+        'size' => ['type' => 'number'],
         'date_create' => ['type' => 'dateTime'],
     ];
     public static $dataManagers = [
         'manager' => [
             'cols' => [
-                'name', 'date_create'
+                'name', 'size', 'date_create'
             ],
         ]
     ];
