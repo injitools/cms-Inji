@@ -305,6 +305,7 @@ class Module
     {
         $moduleName = $moduleName ? $moduleName : $this->moduleName;
         $modulePaths = Module::getModulePaths($moduleName);
+        $modulePaths = array_reverse($modulePaths);
         $modulePaths['templatePath'] = App::$cur->view->template->path . '/modules/' . ucfirst($moduleName);
         $snippets = [];
         foreach ($modulePaths as $path) {
