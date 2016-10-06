@@ -3,7 +3,7 @@
     <?php
     $min = App::$cur->ecommerce->getItems(['sort' => ['price' => 'asc'], 'count' => 1, 'key' => false]);
     $max = App::$cur->ecommerce->getItems(['sort' => ['price' => 'desc'], 'count' => 1, 'key' => false]);
-    if ($min && $max) {
+    if ($min && $min[0]->getPrice() && $max && $max[0]->getPrice()) {
         ?>
         <h4>Фильтр по цене</h4>
         <div class="form-group">      
@@ -37,7 +37,7 @@
                       ?>
                       <div class="radio">
                         <label>
-                          <input type="radio" name = 'filters[options][<?= $option->id; ?>]' value ="<?= $item->id; ?>" <?= !empty($_GET['filters']['options'][$option->id]) && $_GET['filters']['options'][$option->id] == $item->id ? 'checked' : ''; ?>>
+                          <input type="checkbox" name = 'filters[options][<?= $option->id; ?>][]' value ="<?= $item->id; ?>" <?= !empty($_GET['filters']['options'][$option->id]) && in_array($item->id, $_GET['filters']['options'][$option->id]) ? 'checked' : ''; ?>>
                           <?= $item->value; ?>
                         </label>
                       </div>
