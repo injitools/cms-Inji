@@ -6,7 +6,7 @@ echo Html::el('div', [
     'data-modelname' => ($model ? get_class($model) : $dataManager->modelName) . ($model && $model->pk() ? ':' . $model->pk() : ''),
     'data-managername' => $dataManager->managerName,
     'data-cols' => $dataManager->cols,
-    'data-options' => $dataManager->managerOptions
+    'data-options' => array_merge($dataManager->managerOptions, ['actions'=>$dataManager->getActions()])
         ], '', true);
 ?>
 <h3 class="dataManager-title"><?= $dataManager->name; ?> 
@@ -22,31 +22,31 @@ $mainCol = [
     'style' => ''
 ];
 if (!empty($dataManager->managerOptions['categorys'])) {
-    $mainCol['style'].='margin-left:260px;';
-    echo '<div class ="pull-left dataManager-categorys" style = "width:250px;">';
-    $this->widget('Ui\DataManager/categorys', compact('dataManager'));
-    echo '</div>';
+  $mainCol['style'].='margin-left:260px;';
+  echo '<div class ="pull-left dataManager-categorys" style = "width:250px;">';
+  $this->widget('Ui\DataManager/categorys', compact('dataManager'));
+  echo '</div>';
 }
 if (!empty($dataManager->managerOptions['filters'])) {
-    ?>
-    <div class="modal fade" id = "<?= $dataManager->managerId; ?>_filters" >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3>Фильтры</h3>
+  ?>
+  <div class="modal fade" id = "<?= $dataManager->managerId; ?>_filters" >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Фильтры</h3>
+        </div>
+        <div class="modal-body">
+          <div class ="dataManager-filters">
+            <?php $this->widget('Ui\DataManager/filters', compact('dataManager', 'params')); ?>
           </div>
-          <div class="modal-body">
-            <div class ="dataManager-filters">
-              <?php $this->widget('Ui\DataManager/filters', compact('dataManager', 'params')); ?>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
         </div>
       </div>
     </div>
-    <?php
+  </div>
+  <?php
 }
 echo Html::el('div', $mainCol, '', true);
 $table->draw();

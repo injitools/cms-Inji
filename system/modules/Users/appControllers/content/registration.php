@@ -6,16 +6,16 @@
         <?php
         $socials = Users\Social::getList(['where' => ['active', 1]]);
         if ($socials) {
-            ?>
-            <div class="form-group">
-              <label>Регистрация через соц.сети</label><br />
-              <?php
-              foreach (Users\Social::getList(['where' => ['active', 1]]) as $social) {
-                  echo "<a href = '/users/social/auth/{$social->code}'>{$social->name()}</a> ";
-              }
-              ?>
-            </div>
+          ?>
+          <div class="form-group">
+            <label>Регистрация через соц.сети</label><br />
             <?php
+            foreach (Users\Social::getList(['where' => ['active', 1]]) as $social) {
+              echo "<a href = '/users/social/auth/{$social->code}'>{$social->name()}</a> ";
+            }
+            ?>
+          </div>
+          <?php
         }
         ?>
         <?php
@@ -25,37 +25,32 @@
           <div class ='row'>
             <div class="col-sm-6">
               <?php $form->input('email', 'user_mail', 'Электронная почта', ['required' => true]); ?>
+            </div>
+            <div class="col-sm-6">
               <?php $form->input('text', 'user_name', 'Ваше имя (не фио)'); ?>
+            </div>
+          </div>
+          <div class ='row'>
+            <div class="col-sm-6">
               <?php $form->input('date', 'user_birthday', 'Дата рождения'); ?>
+            </div>
+            <div class="col-sm-6">
               <?php $form->input('text', 'user_city', 'Город'); ?>
+            </div>
+          </div>
+          <div class ='row'>
+            <div class="col-sm-6">
               <?php
               if (!empty(App::$cur->users->config['invites'])) {
-                  ?>
-                  <div class ='form-group'>
-                    <label><?= !empty(App::$cur->users->config['invitesName']) ? App::$cur->users->config['invitesName'] : 'Код приглашения'; ?></label>
-                    <input type ='text' name ='invite_code' class ='form-control' value ="<?= (isset($_POST['invite_code']) ? $_POST['invite_code'] : ((!empty($_COOKIE['invite_code']) ? $_COOKIE['invite_code'] : ((!empty($_GET['invite_code']) ? $_GET['invite_code'] : ''))))); ?>" />
-                  </div>   
-                  <?php
+                ?>
+                <div class ='form-group'>
+                  <label><?= !empty(App::$cur->users->config['invitesName']) ? App::$cur->users->config['invitesName'] : 'Код приглашения'; ?></label>
+                  <input type ='text' name ='invite_code' class ='form-control' value ="<?= (isset($_POST['invite_code']) ? $_POST['invite_code'] : ((!empty($_COOKIE['invite_code']) ? $_COOKIE['invite_code'] : ((!empty($_GET['invite_code']) ? $_GET['invite_code'] : ''))))); ?>" />
+                </div>   
+                <?php
               }
               ?>
             </div>
-            <div class="col-sm-6">
-              <div class ='form-group'>
-                <label>Ваше фото</label>
-                <img src ='/static/system/images/no-image.png' class ='img-responsive' />
-                <input type ='file' name ='user_photo' onchange="
-                  if (this.files && this.files[0]) {
-                    var reader = new FileReader();
-                    _this = this;
-                    reader.onload = function (e) {
-                      $(_this).prev().attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(this.files[0]);
-                  }
-                       "/>
-              </div>
-            </div>
-
           </div>
           <div class ='form-group'>
             <?php App::$cur->Recaptcha ? App::$cur->Recaptcha->show() : ''; ?>

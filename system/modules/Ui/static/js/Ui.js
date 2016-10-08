@@ -168,8 +168,9 @@ Modals.prototype.show = function (title, body, code, size) {
  */
 function Forms() {
   this.dataManagers = 0;
+  this.formCallbacks = {};
 }
-Forms.prototype.popUp = function (item, params) {
+Forms.prototype.popUp = function (item, params, callback) {
   var code = item;
 
   if (typeof params == 'undefined') {
@@ -190,6 +191,9 @@ Forms.prototype.popUp = function (item, params) {
     data: {item: item, params: params},
     success: function (data) {
       modal.find('.modal-body').html(data);
+      if (callback) {
+        inji.Ui.forms.formCallbacks[modal.find('.form').attr('id')] = callback;
+      }
       inji.Ui.editors.loadIn(modal.find('.modal-body'), '.htmleditor');
     }
   });
@@ -221,6 +225,10 @@ Forms.prototype.submitAjax = function (form, params) {
     data: formData,
     processData: false,
     success: function (data) {
+      if(inji.Ui.forms.formCallbacks[form.attr('id')]){
+        inji.Ui.forms.formCallbacks[form.attr('id')]();
+        delete inji.Ui.forms.formCallbacks[form.attr('id')];
+      }
       container.html(data);
       inji.Ui.editors.loadIn(container, '.htmleditor');
       var btn = container.find('form button');
@@ -298,7 +306,6 @@ function ActiveForm() {
   this.index;
   this.element;
   this.load = function () {
-    console.log(this.element.element.id, this.inputs);
     for (var inputName in this.inputs) {
       var inputParams = this.inputs[inputName];
       var self = this;

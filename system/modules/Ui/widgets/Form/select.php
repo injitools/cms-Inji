@@ -1,7 +1,12 @@
 <?php
 $aditionalInputs = [];
 $showedInput = false;
-$optionsHtml = '';
+if(!empty($options['createBtn'])){
+  $optionsHtml = '<option disabled onclick="'.$options['createBtn']['onclick'].'">'.$options['createBtn']['text'].'</option>';
+}else {
+  $optionsHtml = '';
+}
+
 foreach ($options['values'] as $key => $value) {
     $selected = '';
 

@@ -170,7 +170,7 @@ class DataManager extends \Object
               <?php
               foreach ($actions as $action => $actionParams) {
                   if (class_exists($actionParams['className']) && $actionParams['className']::$groupAction) {
-                      echo "<li><a href ='' onclick='inji.Ui.dataManagers.get(this).groupAction(\"" . str_replace('\\', '\\\\', $action) . "\");return false;'>{$actionParams['className']::$name}</a></li>";
+                      echo "<li><a role='button' href ='#' onclick='inji.Ui.dataManagers.get(this).groupAction(\"" . str_replace('\\', '\\\\', $action) . "\");return false;'>{$actionParams['className']::$name}</a></li>";
                   }
               }
               ?>
