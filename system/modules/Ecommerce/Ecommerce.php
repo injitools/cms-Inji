@@ -353,11 +353,6 @@ class Ecommerce extends Module {
       ];
     }
 
-
-
-
-
-
     $selectOptions['group'] = Ecommerce\Item::index();
 
     return $selectOptions;
@@ -371,7 +366,11 @@ class Ecommerce extends Module {
    */
   public function getItemsParams($params = []) {
     $selectOptions = $this->parseOptions($params);
+
     $items = Ecommerce\Item::getList($selectOptions);
+    if (!$items) {
+      return [];
+    }
     $items = Ecommerce\Item\Param::getList([
                 'where' => ['item_id', array_keys($items), 'IN'],
                 'join' => [[Ecommerce\Item\Option::table(), Ecommerce\Item\Option::index() . ' = ' . \Ecommerce\Item\Param::colPrefix() . Ecommerce\Item\Option::index() . ' and ' . \Ecommerce\Item\Option::colPrefix() . 'searchable = 1', 'inner']],

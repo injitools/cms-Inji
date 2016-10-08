@@ -197,6 +197,7 @@ class ecommerceController extends Controller
                 $options = [];
             }
         }
+        
 
         //child categorys
         if ($category) {
