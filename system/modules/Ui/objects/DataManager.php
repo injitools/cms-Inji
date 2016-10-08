@@ -670,7 +670,7 @@ class DataManager extends \Object
         $tree->ul($this->managerOptions['categorys']['model'], 0, function($category) {
             $path = $category->tree_path . ($category->pk() ? $category->pk() . "/" : '');
             $cleanClassName = str_replace('\\', '\\\\', get_class($category));
-            return "<a href='#' onclick='inji.Ui.dataManagers.get(this).switchCategory(this);return false;' data-index='{$category->index()}' data-path ='{$path}' data-id='{$category->pk()}'> {$category->name}</a> 
+            return "<a href='#' onclick='inji.Ui.dataManagers.get(this).switchCategory(this);return false;' data-index='{$category->index()}' data-path ='{$path}' data-id='{$category->pk()}' data-model='{$this->managerOptions['categorys']['model']}'> {$category->name}</a> 
                 
                     <a href = '#' class ='glyphicon glyphicon-edit'   onclick = 'inji.Ui.forms.popUp(\"{$cleanClassName}:{$category->pk()}\")'></a>&nbsp;
                     <a href = '#' class ='glyphicon glyphicon-remove' onclick = 'inji.Ui.dataManagers.get(this).delCategory({$category->pk()});return false;'></a>";

@@ -8,6 +8,7 @@ CKEDITOR.plugins.addExternal('font', '/static/moduleAsset/libs/libs/ckeditor/plu
 CKEDITOR.plugins.addExternal('justify', '/static/moduleAsset/libs/libs/ckeditor/plugins/justify/');
 
 CKEDITOR.editorConfig = function (config) {
+  config.enterMode = CKEDITOR.ENTER_BR;
   config.filebrowserBrowseUrl = '/admin/files/managerForEditor?folder=images';
   config.filebrowserImageBrowseUrl = '/admin/files/managerForEditor';
   config.contentsCss = ['/view/editorcss'];

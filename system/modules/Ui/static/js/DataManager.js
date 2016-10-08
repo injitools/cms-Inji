@@ -403,10 +403,12 @@ DataManager.prototype.load = function (options) {
           $(instance.element).find('.categoryTree ul').sortable({
             stop: function (event, ui) {
               ids = $(instance.element).find('li');
+              console.log(instance.element,ids)
               i = 0;
               while (ids[i]) {
-                var key = $(ids[i]).data('id');
-                var model = $(ids[i]).data('model');
+                var key = $(ids[i]).find('>a').data('id');
+                var model = $(ids[i]).find('>a').data('model');
+                console.log(key , model)
                 if (key && model) {
                   inji.Server.request({
                     url: 'ui/dataManager/updateRow',
