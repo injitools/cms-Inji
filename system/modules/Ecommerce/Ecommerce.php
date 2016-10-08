@@ -200,6 +200,9 @@ class Ecommerce extends Module {
           case 'weight':
             $selectOptions['order'][] = ['weight', strtolower($direction) == 'desc' ? 'desc' : 'asc'];
             break;
+          case 'new':
+            $selectOptions['order'][] = ['date_create', strtolower($direction) == 'desc' ? 'desc' : 'asc'];
+            break;
         }
       }
     }

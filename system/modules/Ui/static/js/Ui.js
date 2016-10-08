@@ -107,9 +107,11 @@ Editors.prototype.loadIn = function (selector, search) {
 }
 Editors.prototype.beforeSubmit = function (form) {
   if (this.ckeditor) {
+    $.each(CKEDITOR.instances, function () {
+      this.updateElement();
+    })
     $.each($(form).find('.cke'), function () {
       var instance = $(this).attr('id').replace('cke_', '');
-      CKEDITOR.instances[instance].updateElement();
       $(CKEDITOR.instances[instance].element).closest('.modal').unbind();
       CKEDITOR.instances[instance].destroy();
     });
@@ -232,7 +234,7 @@ Forms.prototype.submitAjax = function (form, params) {
       container.html(data);
       inji.Ui.editors.loadIn(container, '.htmleditor');
       inji.Ui.dataManagers.reloadAll();
-      if (!params.notSave) {
+      if (params && !params.notSave) {
         var btn = container.find('form button');
         var text = btn.text();
         btn.text('Изменения сохранены!');
