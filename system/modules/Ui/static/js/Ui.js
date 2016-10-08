@@ -225,19 +225,21 @@ Forms.prototype.submitAjax = function (form, params) {
     data: formData,
     processData: false,
     success: function (data) {
-      if(inji.Ui.forms.formCallbacks[form.attr('id')]){
+      if (inji.Ui.forms.formCallbacks[form.attr('id')]) {
         inji.Ui.forms.formCallbacks[form.attr('id')]();
         delete inji.Ui.forms.formCallbacks[form.attr('id')];
       }
       container.html(data);
       inji.Ui.editors.loadIn(container, '.htmleditor');
-      var btn = container.find('form button');
-      var text = btn.text();
-      btn.text('Изменения сохранены!');
       inji.Ui.dataManagers.reloadAll();
-      setTimeout(function () {
-        btn.text(text)
-      }, 3000);
+      if (!params.notSave) {
+        var btn = container.find('form button');
+        var text = btn.text();
+        btn.text('Изменения сохранены!');
+        setTimeout(function () {
+          btn.text(text)
+        }, 3000);
+      }
     }
   });
 }
