@@ -11,41 +11,45 @@
 
 namespace Ecommerce\Delivery;
 
-class DeliveryFieldLink extends \Model {
+class Price extends \Model {
 
   public static $labels = [
       'delivery_id' => 'Тип доставки',
-      'delivery_field_id' => 'Поле доставки'
+      'cart_price' => 'Сумма корзины',
+      'price' => 'Стоимость доставки',
+      'currency_id' => 'Валюта',
   ];
   public static $cols = [
       'delivery_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'delivery'],
-      'delivery_field_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'field'],
-      'weight' => ['type' => 'number'],
+      'cart_price' => ['type' => 'number'],
+      'price' => ['type' => 'number'],
+      'currency_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'currency'],
       'date_create' => ['type' => 'dateTime']
   ];
   public static $dataManagers = [
       'manager' => [
-          'name' => 'Поля для доставки',
-          'cols' => ['delivery_id', 'delivery_field_id', 'date_create'],
+          'name' => 'Цены для стоимости корзин',
+          'cols' => ['delivery_id', 'cart_price', 'price', 'currency_id'],
       ]
   ];
   public static $forms = [
       'manager' => [
           'map' => [
-              ['delivery_id', 'delivery_field_id'],
+              ['delivery_id', 'currency_id'],
+              ['cart_price', 'price'],
           ]
       ]
   ];
 
   public static function relations() {
     return [
-        'field' => [
-            'model' => 'Ecommerce\Delivery\Field',
-            'col' => 'delivery_field_id'
-        ],
         'delivery' => [
             'model' => 'Ecommerce\Delivery',
             'col' => 'delivery_id'
+        ],
+        'currency' => [
+            'model' => 'Money\Currency',
+            'col' => 'currency_id'
         ],
     ];
   }
