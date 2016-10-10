@@ -30,6 +30,7 @@ class Images extends \Migrations\Parser {
       }
       $notEq = true;
       $md5Cur = md5_file($dir . '/' . $imagePath);
+      var_dump($this->model->images);
       foreach ($this->model->images as $imageId => $image) {
         $file = $image->file;
         $md5File = '';
