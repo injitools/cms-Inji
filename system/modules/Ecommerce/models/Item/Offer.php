@@ -103,7 +103,7 @@ class Offer extends \Model
     public function warehouseCount($cart_id = 0)
     {
         $warehouseIds = [];
-        if (class_exists('Geography\City\Data')) {
+        if (App::$cur->geography && \Geography\City::$cur) {
             $warehouses = \Geography\City\Data::get([['code', 'warehouses'], ['city_id', \Geography\City::$cur->id]]);
             if ($warehouses && $warehouses->data) {
                 foreach (explode(',', $warehouses->data) as $id) {
