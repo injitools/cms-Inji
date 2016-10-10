@@ -30,8 +30,11 @@ class Images extends \Migrations\Parser {
       }
       $notEq = true;
       $md5Cur = md5_file($dir . '/' . $imagePath);
-      var_dump($this->model->images);
       foreach ($this->model->images as $imageId => $image) {
+        if (!$image->file) {
+          $image->delete();
+          continue;
+        }
         $file = $image->file;
         $md5File = '';
         if ($file->md5) {
@@ -49,12 +52,14 @@ class Images extends \Migrations\Parser {
       }
       if ($notEq) {
         $file_id = \App::$primary->files->uploadFromUrl($dir . '/' . $imagePath, ['accept_group' => 'image', 'upload_code' => 'MigrationUpload']);
-        $image = new \Ecommerce\Item\Image([
-            'item_id' => $this->model->pk(),
-            'file_id' => $file_id
-        ]);
-        $image->save();
-        $ids[] = $image->id;
+        if ($file_id) {
+          $image = new \Ecommerce\Item\Image([
+              'item_id' => $this->model->pk(),
+              'file_id' => $file_id
+          ]);
+          $image->save();
+          $ids[] = $image->id;
+        }
       } else {
         $image->weight = $key;
       }
