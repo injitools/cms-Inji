@@ -23,7 +23,10 @@ class Options extends \Migrations\Parser {
     $modelName = 'Ecommerce\Item\Option';
     foreach ($this->data['ЗначенияСвойства'] as $opt) {
       $optionId = \App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option'][$opt['Ид']]->object_id;
-      if (Options::$options[$optionId]->type == 'select') {
+      if ($optionId && !isset(Options::$options[$optionId])) {
+        Options::$options = \Ecommerce\Item\Option::getList();
+      }
+      if (isset(Options::$options[$optionId]) && Options::$options[$optionId]->type == 'select') {
         if (empty($options[$optionId])) {
           $options[$optionId] = [];
         } else {
@@ -39,7 +42,10 @@ class Options extends \Migrations\Parser {
     }
     $itemParams = \Ecommerce\Item\Param::getList(['where' => ['item_id', $this->model->id]]);
     foreach ($itemParams as $itemParam) {
-      if (Options::$options[$itemParam->item_option_id]->type == 'select') {
+      if ($itemParam->item_option_id && !isset(Options::$options[$itemParam->item_option_id])) {
+        Options::$options = \Ecommerce\Item\Option::getList();
+      }
+      if (isset(Options::$options[$itemParam->item_option_id]) && Options::$options[$itemParam->item_option_id]->type == 'select') {
         if (empty($options[$itemParam->item_option_id]) || !in_array($itemParam->value, $options[$itemParam->item_option_id])) {
           $itemParam->delete();
         } else {
