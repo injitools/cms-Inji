@@ -11,58 +11,58 @@
 
 namespace Ecommerce\Item;
 
-class Image extends \Model
-{
-    static $objectName = 'Фото товара';
-    static $labels = [
-        'file_id' => 'Изображение',
-        'item_id' => 'Товар',
-        'name' => 'Название',
-        'description' => 'Описание',
-    ];
-    static $cols = [
-        'file_id' => ['type' => 'image'],
-        'item_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'item'],
-        'name' => ['type' => 'text'],
-        'description' => ['type' => 'html'],
-        'weight' => ['type' => 'number'],
-    ];
+class Image extends \Model {
 
-    static function relations()
-    {
-        return [
-            'item' => [
-                'col' => 'item_id',
-                'model' => 'Ecommerce\Item'
-            ],
-            'file' => [
-                'col' => 'file_id',
-                'model' => 'Files\File'
-            ]
-        ];
-    }
+  static $objectName = 'Фото товара';
+  static $labels = [
+      'file_id' => 'Изображение',
+      'item_id' => 'Товар',
+      'name' => 'Название',
+      'description' => 'Описание',
+  ];
+  static $cols = [
+      'file_id' => ['type' => 'image'],
+      'item_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'item'],
+      'name' => ['type' => 'text'],
+      'description' => ['type' => 'html'],
+      'weight' => ['type' => 'number'],
+  ];
 
-    static $dataManagers = [
-        'manager' => [
-            'name' => 'Фото товара',
-            'cols' => [
-                'file_id', 'name'
-            ]
+  static function relations() {
+    return [
+        'item' => [
+            'col' => 'item_id',
+            'model' => 'Ecommerce\Item'
+        ],
+        'file' => [
+            'col' => 'file_id',
+            'model' => 'Files\File'
         ]
     ];
-    static $forms = [
-        'manager' => [
-            'map' => [
-                ['name'],
-                ['item_id', 'file_id'],
-                ['description']
-            ]
-        ]
-    ];
+  }
 
-    function beforeDelete()
-    {
-        $this->file->delete();
+  static $dataManagers = [
+      'manager' => [
+          'name' => 'Фото товара',
+          'cols' => [
+              'file_id', 'name'
+          ]
+      ]
+  ];
+  static $forms = [
+      'manager' => [
+          'map' => [
+              ['name'],
+              ['item_id', 'file_id'],
+              ['description']
+          ]
+      ]
+  ];
+
+  function beforeDelete() {
+    if ($this->file) {
+      $this->file->delete();
     }
+  }
 
 }
