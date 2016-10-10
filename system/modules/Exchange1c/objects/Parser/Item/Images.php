@@ -32,6 +32,7 @@ class Images extends \Migrations\Parser {
       $md5Cur = md5_file($dir . '/' . $imagePath);
       foreach ($this->model->images as $imageId => $image) {
         if (!$image->file) {
+          var_dump($image,$this->model->images);
           $image->delete();
           continue;
         }
