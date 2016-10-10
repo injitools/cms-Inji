@@ -7,10 +7,11 @@ return [
     'sell_over_warehouse' => true,
     'notify_mail' => '',
     'defaultCategoryView' => 'itemList',
+    'defaultCategoryTemplate' => 'current',
     'defaultCurrency' => 1,
     'defaultSort' => ['name' => 'asc'],
     'orderPrefix' => '',
     'catalogPresentPage' => false,
-    'show_zero_price'=>false,
-    'show_without_price'=>false,
+    'show_zero_price' => false,
+    'show_without_price' => false,
 ];

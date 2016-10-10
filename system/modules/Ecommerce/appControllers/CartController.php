@@ -67,19 +67,19 @@ class CartController extends Controller {
         }
         if ($deliverys && empty($deliverys[$_POST['delivery']])) {
           $error = 1;
-          Msg::add('Выберите способ доставки');
+          Msg::add('Выберите способ доставки', 'danger');
         } elseif ($deliverys && !empty($deliverys[$_POST['delivery']])) {
           $cart->delivery_id = $_POST['delivery'];
           foreach ($deliverys[$cart->delivery_id]->fields as $field) {
             if (empty($_POST['deliveryFields'][$field->id]) && $field->required) {
               $error = 1;
-              Msg::add('Вы не указали: ' . $field->name);
+              Msg::add('Вы не указали: ' . $field->name, 'danger');
             }
           }
         }
         if ($payTypes && (empty($_POST['payType']) || empty($payTypes[$_POST['payType']]))) {
           $error = 1;
-          Msg::add('Выберите способ оплаты');
+          Msg::add('Выберите способ оплаты', 'danger');
         } elseif ($payTypes && !empty($payTypes[$_POST['payType']])) {
           $payType = $payTypes[$_POST['payType']];
           $cart->paytype_id = $payType->id;
@@ -89,17 +89,17 @@ class CartController extends Controller {
         foreach (\Ecommerce\UserAdds\Field::getList() as $field) {
           if (empty($_POST['userAdds']['fields'][$field->id]) && $field->required) {
             $error = 1;
-            Msg::add('Вы не указали: ' . $field->name);
+            Msg::add('Вы не указали: ' . $field->name, 'danger');
           }
         }
         if (!empty($_POST['discounts']['card_item_id'])) {
           $userCard = \Ecommerce\Card\Item::get((int) $_POST['discounts']['card_item_id']);
           if (!$userCard) {
             $error = true;
-            Msg::add('Такой карты не существует');
+            Msg::add('Такой карты не существует', 'danger');
           } elseif ($userCard->user_id != $user->id) {
             $error = true;
-            Msg::add('Это не ваша карта');
+            Msg::add('Это не ваша карта', 'danger');
           } else {
             $cart->card_item_id = $userCard->id;
           }

@@ -135,7 +135,7 @@ class Category extends \Model {
     } elseif ($this->template == 'inherit' && $this->category) {
       return $this->category->resolveTemplate(true);
     } else {
-      return 'current';
+      return (!empty(\App::$cur->ecommerce->config['defaultCategoryTemplate']) ? \App::$cur->ecommerce->config['defaultCategoryTemplate'] : 'current');
     }
   }
 
