@@ -11,19 +11,20 @@
 
 namespace Exchange1c\Exchange;
 
-class File extends \Model
-{
-    public static $cols = [
-        'name' => ['type' => 'text'],
-        'size' => ['type' => 'number'],
-        'date_create' => ['type' => 'dateTime'],
-    ];
-    public static $dataManagers = [
-        'manager' => [
-            'cols' => [
-                'name', 'size', 'date_create'
-            ],
-        ]
-    ];
+class File extends \Model {
+
+  public static $cols = [
+      'name' => ['type' => 'text'],
+      'size' => ['type' => 'number'],
+      'status' => ['type' => 'text'],
+      'date_create' => ['type' => 'dateTime'],
+  ];
+  public static $dataManagers = [
+      'manager' => [
+          'cols' => [
+              'name', 'size', 'date_create'
+          ],
+      ]
+  ];
 
 }
