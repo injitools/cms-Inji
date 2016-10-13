@@ -35,7 +35,8 @@ class Comment extends \Model
                 'module' => 'Dashboard',
                 'method' => 'itemHref'
             ]
-        ]
+        ],
+        'date_create' => ['type' => 'dateTime']
     ];
     public static $dataManagers = [
         'manager' => [
