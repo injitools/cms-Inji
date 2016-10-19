@@ -54,7 +54,8 @@ class CartController extends Controller {
         }
         $cart = Ecommerce\Cart::get($cart->id);
         if (!$cart->cartItems) {
-          Tools::redirect('/ecommerce', 'Ваша корзина пуста');
+          $error = true;
+          //Tools::redirect('/ecommerce', 'Ваша корзина пуста');
         }
         if (empty($this->module->config['sell_over_warehouse'])) {
           foreach ($cart->cartItems as $cartitem) {
