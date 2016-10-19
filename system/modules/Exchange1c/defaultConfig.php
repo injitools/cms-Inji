@@ -5,5 +5,6 @@ return [
         'login' => 'sync',
         'password' => ''
     ],
-    'uploadStatusId' => 3
+    'uploadStatusId' => 3,
+    'maxSaveFilesInterval' => '20 HOUR'
 ];
