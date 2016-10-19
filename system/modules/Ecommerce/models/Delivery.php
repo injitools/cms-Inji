@@ -23,6 +23,7 @@ class Delivery extends \Model {
       'max_cart_price' => ['type' => 'decimal'],
       'icon_file_id' => ['type' => 'image'],
       'info' => ['type' => 'html'],
+      'disabled' => ['type' => 'bool'],
       //Системные
       'weight' => ['type' => 'number'],
       'date_create' => ['type' => 'dateTime'],
@@ -40,6 +41,7 @@ class Delivery extends \Model {
       'info' => 'Дополнительная информация',
       'priceChanger' => 'Градация стоимости',
       'field' => 'Поля',
+      'disabled' => 'Отключено',
   ];
   public static $dataManagers = [
       'manager' => [
@@ -49,8 +51,9 @@ class Delivery extends \Model {
               'price',
               'currency_id',
               'max_cart_price',
+              'disabled',
               'field',
-              'priceChanger'
+              'priceChanger',
           ],
           'sortMode' => true
       ],
@@ -58,7 +61,7 @@ class Delivery extends \Model {
   public static $forms = [
       'manager' => [
           'map' => [
-              ['name',],
+              ['name', 'disabled'],
               ['max_cart_price', 'icon_file_id'],
               ['price', 'currency_id'],
               ['price_text'],

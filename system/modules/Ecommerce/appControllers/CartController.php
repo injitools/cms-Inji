@@ -12,7 +12,7 @@ class CartController extends Controller {
 
   public function indexAction() {
     $cart = '';
-    $deliverys = \Ecommerce\Delivery::getList(['order' => ['weight', 'ASC']]);
+    $deliverys = \Ecommerce\Delivery::getList(['where' => ['disabled', 0], 'order' => ['weight', 'ASC']]);
     $payTypes = \Ecommerce\PayType::getList(['order' => ['weight', 'ASC']]);
     if (!empty($_SESSION['cart']['cart_id'])) {
       $cart = Ecommerce\Cart::get($_SESSION['cart']['cart_id']);
