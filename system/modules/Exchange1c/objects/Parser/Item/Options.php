@@ -35,7 +35,9 @@ class Options extends \Migrations\Parser {
             Options::$options[$optionId]->save();
           }
         }
-        $options[$optionId][] = \App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option\Item'][$opt['Значение']]->object_id;
+        if ($opt['Значение'] && isset(\App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option\Item'][$opt['Значение']])) {
+          $options[$optionId][] = \App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option\Item'][$opt['Значение']]->object_id;
+        }
       } else {
         $options[$optionId] = $opt['Значение'];
       }
