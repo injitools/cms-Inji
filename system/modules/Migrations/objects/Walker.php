@@ -84,9 +84,12 @@ class Walker {
       }
       if ($ids) {
         $where[] = ['id', implode(',', $ids), 'NOT IN'];
-        if (!empty(\App::$cur->migrations->ids['objectIds'][$objectParser->object->model])) {
-          $where[] = ['id', implode(',', array_keys(\App::$cur->migrations->ids['objectIds'][$objectParser->object->model])), 'IN'];
-        }
+      }
+      if (empty(\App::$cur->migrations->ids['objectIds'])) {
+        \App::$cur->migrations->loadObjectIds($objectParser->object->model);
+      }
+      if (!empty(\App::$cur->migrations->ids['objectIds'][$objectParser->object->model])) {
+        $where[] = ['id', implode(',', array_keys(\App::$cur->migrations->ids['objectIds'][$objectParser->object->model])), 'IN'];
       }
       $modelName = $objectParser->object->model;
       $objects = $modelName::getList(['where' => $where]);
