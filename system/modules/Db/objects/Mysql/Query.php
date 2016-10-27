@@ -346,7 +346,7 @@ class Query extends \Object
         $this->curInstance->lastQuery = $query;
         $result = new Result();
         $result->pdoResult = $prepare;
-        if ($this->curInstance->dbInstance->curQuery && $this->curInstance->dbInstance->curQuery === $this) {
+        if ($this->curInstance->dbInstance && $this->curInstance->dbInstance->curQuery && $this->curInstance->dbInstance->curQuery === $this) {
             $this->curInstance->dbInstance->curQuery = null;
         }
 
