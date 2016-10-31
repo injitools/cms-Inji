@@ -39,9 +39,9 @@ class Select extends \Ui\ActiveForm\Input {
     }
     if (!empty($modelName)) {
       $inputOptions['createBtn'] = [
-          'text' => 'Создать элемент',
+          'text' => 'Создать',
           'onclick' => 'inji.Ui.forms.popUp(\'' . addslashes($modelName) . '\',{},function(elem){'
-          . 'return function(data,modal){inji.Ui.forms.submitAjax($(elem).closest(\'form\')[0], {notSave: true});}}(this))'
+          . 'return function(data,modal){inji.Ui.forms.submitAjax($(elem).closest(\'form\')[0], {notSave: true});}}(this));return false;'
       ];
     }
     if (!empty($inputOptions['values'][$this->activeForm->model->{$this->colName}]) &&

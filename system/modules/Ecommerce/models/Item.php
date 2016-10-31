@@ -55,6 +55,59 @@ class Item extends \Model {
       'offers' => ['type' => 'dataManager', 'relation' => 'offers'],
       'imgs' => ['type' => 'dataManager', 'relation' => 'images'],
   ];
+
+  public static function simpleItemHandler($request) {
+    if ($request) {
+      $item = new Item();
+      $item->name = $request['name'];
+      $item->description = $request['description'];
+      $item->category_id = $request['category'];
+      $item->save();
+      if (!empty($_FILES['ActiveForm_simpleItem']['tmp_name']['Ecommerce\Item']['image'])) {
+        $file_id = \App::$primary->files->upload([
+            'tmp_name' => $_FILES['ActiveForm_simpleItem']['tmp_name']['Ecommerce\Item']['image'],
+            'name' => $_FILES['ActiveForm_simpleItem']['name']['Ecommerce\Item']['image'],
+            'type' => $_FILES['ActiveForm_simpleItem']['type']['Ecommerce\Item']['image'],
+            'size' => $_FILES['ActiveForm_simpleItem']['size']['Ecommerce\Item']['image'],
+            'error' => $_FILES['ActiveForm_simpleItem']['error']['Ecommerce\Item']['image'],
+                ], [
+            'upload_code' => 'activeForm:' . 'Ecommerce\Item' . ':' . $item->pk(),
+            'accept_group' => 'image'
+        ]);
+        if ($file_id) {
+          $item->image_file_id = $file_id;
+          $item->save();
+        }
+      }
+      if (!empty($request['options']['option'])) {
+        foreach ($request['options']['option'] as $key => $option_id) {
+          $param = new Item\Param();
+          $param->item_id = $item->id;
+          $param->value = $request['options']['value'][$key];
+          $param->item_option_id = $option_id;
+          $param->save();
+        }
+      }
+      $offer = new Item\Offer();
+      $offer->item_id = $item->id;
+      $offer->save();
+      if (!empty($request['offerOptions']['option'])) {
+        foreach ($request['offerOptions']['option'] as $key => $option_id) {
+          $param = new Item\Offer\Param();
+          $param->item_offer_id = $offer->id;
+          $param->value = $request['offerOptions']['value'][$key];
+          $param->item_offer_option_id = $option_id;
+          $param->save();
+        }
+      }
+      $price = new Item\Offer\Price();
+      $price->price = $request['price'];
+      $price->item_offer_id = $offer->id;
+      $price->currency_id = $request['currency'];
+      $price->save();
+    }
+  }
+
   public static $dataManagers = [
       'manager' => [
           'name' => 'Товары',
@@ -86,7 +139,65 @@ class Item extends \Model {
               ['options'],
               ['offers'],
           ]
-  ]];
+      ],
+      'simpleItem' => [
+          'options' => [
+              'access' => [
+                  'groups' => [
+                      3
+                  ]
+              ],
+          ],
+          'name' => 'Простой товар с ценой',
+          'inputs' => [
+              'name' => ['type' => 'text'],
+              'description' => ['type' => 'html'],
+              'category' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Category', 'label' => 'Категория'],
+              'image' => ['type' => 'image', 'label' => 'Изображение'],
+              'price' => ['type' => 'text', 'label' => 'Цена'],
+              'currency' => ['type' => 'select', 'source' => 'model', 'model' => 'Money\Currency', 'label' => 'Валюта'],
+              'options' => ['type' => 'dynamicList', 'source' => 'options', 'options' => [
+                      'inputs' => [
+                          'option' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Item\Option', 'label' => 'Свойство'],
+                          'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType', 'label' => 'Значение'],
+                      ]
+                  ]
+              ],
+              'offerOptions' => ['type' => 'dynamicList', 'source' => 'options', 'options' => [
+                      'inputs' => [
+                          'option' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Item\Offer\Option', 'label' => 'Свойство предложения'],
+                          'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType', 'label' => 'Значение'],
+                      ]
+                  ],'label'=>'Параметры предлоежния'
+              ]
+          ],
+          'map' => [
+              ['name', 'category'],
+              ['description'],
+              ['image'],
+              ['price', 'currency'],
+              ['options'],
+              ['offerOptions'],
+          ],
+          'handler' => 'simpleItemHandler'
+      ]
+  ];
+
+  public function realType() {
+    if ($this->option && $this->option->type) {
+      $type = $this->option->type;
+
+      if ($type == 'select') {
+        return [
+            'type' => 'select',
+            'source' => 'relation',
+            'relation' => 'option:items',
+        ];
+      }
+      return $type;
+    }
+    return 'text';
+  }
 
   public static function indexes() {
     return [
