@@ -168,7 +168,7 @@ class Item extends \Model {
                           'option' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Item\Offer\Option', 'label' => 'Свойство предложения'],
                           'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType', 'label' => 'Значение'],
                       ]
-                  ],'label'=>'Параметры предлоежния'
+                  ],'label'=>'Параметры предложения'
               ]
           ],
           'map' => [
