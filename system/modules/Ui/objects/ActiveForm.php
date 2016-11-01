@@ -102,7 +102,7 @@ class ActiveForm extends \Object {
     if (!empty($_POST[$this->requestFormName][$this->modelName])) {
       $request = $_POST[$this->requestFormName][$this->modelName];
       if ($this->model) {
-        if ($this->form['handler']) {
+        if (!empty($this->form['handler'])) {
           $modelName = $this->model;
           $modelName::{$this->form['handler']}($request);
           $text = 'Новый элемент был успешно добавлен';
