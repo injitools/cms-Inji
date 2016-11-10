@@ -6,17 +6,21 @@ echo Html::el('div', [
     'data-modelname' => ($model ? get_class($model) : $dataManager->modelName) . ($model && $model->pk() ? ':' . $model->pk() : ''),
     'data-managername' => $dataManager->managerName,
     'data-cols' => $dataManager->cols,
-    'data-options' => array_merge($dataManager->managerOptions, ['actions'=>$dataManager->getActions()])
+    'data-options' => array_merge($dataManager->managerOptions, ['actions' => $dataManager->getActions()])
         ], '', true);
-?>
-<h3 class="dataManager-title"><?= $dataManager->name; ?> 
-  <div class ='pull-right dataManager-managerButtons'>
-    <div class="btn-group">
-      <?php $this->widget('Ui\DataManager/managerButtons', ['buttons' => $dataManager->getButtons($params, $model)]); ?>
+$buttons = $dataManager->getButtons($params, $model);
+if ($buttons) {
+  ?>
+  <h3 class="dataManager-title"><?= $dataManager->name; ?> 
+    <div class ='pull-right dataManager-managerButtons'>
+      <div class="btn-group">
+        <?php $this->widget('Ui\DataManager/managerButtons', ['buttons' => $buttons]); ?>
+      </div>
     </div>
-  </div>
-</h3>
-<?php
+    <div class="clearfix"></div>
+  </h3>
+  <?php
+}
 $mainCol = [
     'class' => 'mainTableWrap table-responsive',
     'style' => ''

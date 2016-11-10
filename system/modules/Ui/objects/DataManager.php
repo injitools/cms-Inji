@@ -119,10 +119,12 @@ class DataManager extends \Object {
     if ($modelName::$objectName) {
       $name = $modelName::$objectName;
     }
-    $buttons[] = [
-        'text' => 'Создать ' . $name,
-        'onclick' => 'inji.Ui.dataManagers.get(this).newItem("' . str_replace('\\', '\\\\', $modelName) . '",' . json_encode($formParams) . ');',
-    ];
+    if (!empty($modelName::$forms[$formParams['formName']])) {
+      $buttons[] = [
+          'text' => 'Создать ' . $name,
+          'onclick' => 'inji.Ui.dataManagers.get(this).newItem("' . str_replace('\\', '\\\\', $modelName) . '",' . json_encode($formParams) . ');',
+      ];
+    }
 
     return $buttons;
   }
