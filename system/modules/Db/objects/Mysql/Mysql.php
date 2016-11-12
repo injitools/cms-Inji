@@ -59,6 +59,7 @@ class Mysql extends \Object {
       $this->connect = true;
       $query = new Mysql\Query($this);
       $query->query("SET SQL_BIG_SELECTS=1");
+      $query->query("SET SESSION sql_mode = 'NO_ENGINE_SUBSTITUTION'");
       return true;
     }
   }
