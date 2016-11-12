@@ -138,6 +138,9 @@ class Material extends \Model {
         }
       }
     }
+    if ((!$href || $href == '/materials') && !$this->alias) {
+      return ($href ? $href : '/materials') . '/view/' . $this->pk();
+    }
     return $href . "/" . ($this->alias ? $this->alias : $this->pk());
   }
 
