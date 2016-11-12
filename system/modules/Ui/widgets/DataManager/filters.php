@@ -8,6 +8,7 @@ if (!$dataManager->checkAccess()) {
       return false;">
   <div class="row">       
     <?php
+    $i = -1;
     $form = new Ui\Form();
     foreach ($dataManager->managerOptions['filters'] as $col) {
 
@@ -43,6 +44,9 @@ if (!$dataManager->checkAccess()) {
                 $form->input('hidden', "datamanagerFilters[{$col}][value]", '', $inputOptions);
             }
             continue;
+        }
+        if(++$i && !($i%2)){
+          echo '</div><div class="row">';
         }
         echo '<div class="col-md-6">';
         if (!empty($colInfo['colParams']['type'])) {
