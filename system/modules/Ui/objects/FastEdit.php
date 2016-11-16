@@ -11,23 +11,24 @@
 
 namespace Ui;
 
-class FastEdit extends \Object
-{
-    public static function block($object, $col, $value = null, $parse = false)
-    {
-        echo "<div class = 'fastEdit' ";
-        if ($object) {
-            echo "data-model='" . get_class($object) . "' data-col='{$col}' data-key='" . $object->pk() . "'";
-        }
-        echo ">";
-        $value = $value !== null ? $value : ($object ? $object->$col : '');
-        if ($parse) {
-            \App::$cur->view->parseSource($value);
-        } else {
-            echo $value;
-        }
+class FastEdit extends \Object {
 
-        echo "</div>";
+  public static function block($object, $col, $value = null, $parse = false) {
+
+    $str = "<div class = 'fastEdit' ";
+    if ($object) {
+      $str .= "data-model='" . get_class($object) . "' data-col='{$col}' data-key='" . $object->pk() . "'";
     }
+    $str .= ">";
+    $value = $value !== null ? $value : ($object ? $object->$col : '');
+    if ($parse) {
+      \App::$cur->view->parseSource($value);
+    } else {
+      $str .= $value;
+    }
+
+    $str .= "</div>";
+    return $str;
+  }
 
 }
