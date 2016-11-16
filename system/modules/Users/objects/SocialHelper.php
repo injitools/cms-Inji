@@ -31,4 +31,9 @@ class SocialHelper extends \Object
         return $configs;
     }
 
+    public static function checkAppAccess()
+    {
+        return false;
+    }
+
 }

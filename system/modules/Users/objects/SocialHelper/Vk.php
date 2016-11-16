@@ -137,4 +137,47 @@ class Vk extends \Users\SocialHelper
         }
     }
 
+    public static function checkAppAccess()
+    {
+        $viewer_id = filter_input(INPUT_GET, 'viewer_id', FILTER_SANITIZE_NUMBER_INT);
+        $get_auth_key = filter_input(INPUT_GET, 'auth_key', FILTER_SANITIZE_STRING);
+
+        $config = static::getConfig();
+
+        $auth_key = md5($config['appId'] . '_' . $viewer_id . '_' . $config['secret']);
+
+        if ($auth_key !== $get_auth_key) {
+            return FALSE;
+        }
+        $userQuery = [
+            'user_id' => $viewer_id,
+            'fields' => 'photo_medium,nickname, domain, sex, bdate, city, country, timezone, photo_50, photo_100, photo_200_orig, has_mobile, contacts, education, online, relation, last_seen, status, can_write_private_message, can_see_all_posts, can_post, universities',
+            'access_token' => filter_input(INPUT_GET, 'access_token', FILTER_SANITIZE_STRING)
+        ];
+        $userResult = json_decode(@file_get_contents("https://api.vk.com/method/users.get?" . http_build_query($userQuery)), true);
+        $object = static::getObject();
+
+        $socUser = \Users\User\Social::get([['social_id', $object->pk()], ['uid', $viewer_id]]);
+        if (!$socUser) {
+            $user = new \Users\User();
+            $user->login = $userResult['response'][0]['domain'];
+            $user->save();
+            $info = new \Users\User\Info();
+            $info->user_id = $user->id;
+            $info->sex = $userResult['response'][0]['sex'] == 2 ? 1 : ($userResult['response'][0]['sex'] == 1 ? 2 : 0);
+            $info->first_name = $userResult['response'][0]['first_name'];
+            $info->last_name = $userResult['response'][0]['last_name'];
+            $info->photo_file_id = \App::$cur->files->uploadFromUrl($userResult['response'][0]['photo_200_orig'], ['accept_group' => 'image']);
+            $info->save();
+            $social = new \Users\User\Social();
+            $social->user_id = $user->id;
+            $social->social_id = 1;
+            $social->uid = $userResult['response'][0]['uid'];
+            $social->save();
+        } else {
+            $user = $socUser->user;
+        }
+        return $user;
+    }
+
 }
