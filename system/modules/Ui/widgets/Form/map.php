@@ -5,48 +5,67 @@ $uid = Tools::randomString();
 ?>
 <div id='map<?= $uid; ?>' class="formMap"  style="width: 100%; height: 400px"></div>
 <script>
-    var myMap<?= $uid; ?>;
-    inji.onLoad(function () {
-      ymaps.ready(init<?= $uid; ?>);
+  var myMap<?= $uid; ?>;
+  var myMap<?= $uid; ?>CurPin;
+  inji.onLoad(function () {
+    ymaps.ready(init<?= $uid; ?>);
 
-      function init<?= $uid; ?>() {
+    function init<?= $uid; ?>() {
 
-        var myPlacemark;
-        myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
-          center: ["<?= !empty($options['value']['lat']) ? $options['value']['lat'] : '55.76'; ?>", "<?= !empty($options['value']['lng']) ? $options['value']['lng'] : '37.64'; ?>"],
-          zoom: 13
-        });
+      var myPlacemark;
+      myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+        // Moscow 55.76 37.64
+        // 56.01, 92.85
+        center: ["<?= !empty($options['value']['lat']) ? $options['value']['lat'] : '56.01'; ?>", "<?= !empty($options['value']['lng']) ? $options['value']['lng'] : '92.85'; ?>"],
+        zoom: 13
+      });
 
 <?php
 if (!empty($options['value']['lat']) && !empty($options['value']['lng'])) {
-    /*
-      ?>
-      myPlacemark = new ymaps.Placemark([<?= $options['value']['lat']; ?>,<?= $options['value']['lng']; ?>], {
-      // Чтобы балун и хинт открывались на метке, необходимо задать ей определенные свойства.
-      //balloonContentHeader: "",
-      //balloonContentBody: "",
-      //balloonContentFooter: "Подвал",
-      });
-      myMap.geoObjects.add(myPlacemark);
-      <?php */
+  /*
+    ?>
+    myPlacemark = new ymaps.Placemark([<?= $options['value']['lat']; ?>,<?= $options['value']['lng']; ?>], {
+    // Чтобы балун и хинт открывались на метке, необходимо задать ей определенные свойства.
+    //balloonContentHeader: "",
+    //balloonContentBody: "",
+    //balloonContentFooter: "Подвал",
+    });
+    myMap.geoObjects.add(myPlacemark);
+    <?php */
 }
 ?>
-        myMap<?= $uid; ?>.events.add('click', function (e) {
-          console.log(e);
-          console.log(e.get('coordPosition'));
-          var coords = e.get('coordPosition');
-          myMap<?= $uid; ?>.balloon.open(coords, {
-            contentHeader: 'Событие!',
-            contentBody: '<p>Кто-то щелкнул по карте.</p>' +
-                    '<p>Координаты щелчка: ' + [
-                      coords[0].toPrecision(6),
-                      coords[1].toPrecision(6)
-                    ].join(', ') + '</p>',
-            contentFooter: '<sup>Щелкните еще раз</sup>'
-          });
-        });
-      }
-    });
+      myMap<?= $uid; ?>.events.add('click', function (e) {
+        console.log(e.get('coords'));
+        var myCoords = e.get('coords');
+        $('[name="<?= $name; ?>[lat]"]').val(myCoords[0]);
+        $('[name="<?= $name; ?>[lng]"]').val(myCoords[1]);
+        console.log($('[name="<?= $name; ?>[lng]"]').val());
+        var myGeocoder = ymaps.geocode(myCoords, {kind: 'house'});
+        if (myMap<?= $uid; ?>CurPin) {
+          myMap<?= $uid; ?>.geoObjects.remove(myMap<?= $uid; ?>CurPin);
+        }
+        myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                {iconContent: 'подождите...'},
+                {preset: 'islands#greenStretchyIcon'}
+        );
+        myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+        myGeocoder.then(
+                function (res) {
+                  myMap<?= $uid; ?>.geoObjects.remove(myMap<?= $uid; ?>CurPin);
+                  var nearest = res.geoObjects.get(0);
+                  myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                          {iconContent: nearest.properties.get('name')},
+                          {preset: 'islands#greenStretchyIcon'}
+                  );
+                  myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+                },
+                function (err) {
+                  console.log(err);
+                }
+        );
+      });
+    }
+  });
 </script>
 <input type ="hidden" name = '<?= $name; ?>[lat]' value = '<?= !empty($options['value']['lat']) ? addcslashes($options['value']['lat'], "'") : ''; ?>' />
 <input type ="hidden" name = '<?= $name; ?>[lng]' value = '<?= !empty($options['value']['lng']) ? addcslashes($options['value']['lng'], "'") : ''; ?>' />
