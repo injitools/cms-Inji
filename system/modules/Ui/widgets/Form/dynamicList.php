@@ -17,6 +17,9 @@
           <tr>
             <?php
             foreach ($options['cols'] as $colName => $col) {
+              if (!empty($col['hidden'])) {
+                continue;
+              }
               echo "<th>";
               echo $col['col']['label'];
               if (!empty($col['col']['model'])) {
@@ -36,15 +39,22 @@
           $i = 0;
           if (!empty($options['values'])) {
             foreach ($options['values'] as $row) {
-              $i++;
               echo '<tr>';
               foreach ($options['cols'] as $colName => $col) {
-                echo '<td>';
-                $col['options']['noContainer'] = true;
-                $col['options']['value'] = $row[$colName];
-                $form->input($col['type'], $name . '[' . ($i) . '][' . $colName . ']', false, $col['options']);
-                echo '</td>';
+                $input = clone $col['input'];
+                if (empty($col['hidden'])) {
+                  echo '<td>';
+                }
+                $input->options['noContainer'] = true;
+                $input->colParams['label'] = false;
+                $input->colParams['value'] = $row[$colName];
+                $input->colName .= '[' . $colName . '][' . ($i) . ']';
+                $input->draw();
+                if (empty($col['hidden'])) {
+                  echo '</td>';
+                }
               }
+              $i++;
               echo '<td class="actionTd"><a class="btn btn-danger btn-xs" onclick="inji.Ui.forms.delRowFromList(this);"><i class="glyphicon glyphicon-remove"></i></a></td>';
               echo '</tr>';
             }
@@ -55,6 +65,9 @@
           <tr>
             <?php
             foreach ($options['cols'] as $colName => $col) {
+              if (!empty($col['hidden'])) {
+                continue;
+              }
               echo "<th>{$col['col']['label']}</th>";
             }
             ?>
@@ -69,11 +82,16 @@
        <tr>
   <?php
   foreach ($options['cols'] as $colName => $col) {
-    echo '<td>';
+    if (empty($col['hidden'])) {
+      echo '<td>';
+    }
     $col['input']->options['noContainer'] = true;
     $col['input']->colParams['label'] = false;
+    $col['input']->colName.="[{$colName}][]";
     $col['input']->draw();
-    echo '</td>';
+    if (empty($col['hidden'])) {
+      echo '</td>';
+    }
   }
   ?>
        <td class="actionTd"><a class="btn btn-danger btn-xs" onclick="inji.Ui.forms.delRowFromList(this);"><i class="glyphicon glyphicon-remove"></i></a></td>

@@ -36,7 +36,7 @@ class DynamicList extends \Ui\ActiveForm\Input {
       default:
         $rels = [];
         $relation = $modelName::getRelation($this->colParams['relation']);
-        if (!empty($request[$this->colName]) && $this->activeForm->model->pk()) {
+        if ($this->activeForm->model->pk()) {
           switch ($relation['type']) {
             case 'relModel':
               foreach ($request[$this->colName] as $row) {
@@ -58,6 +58,37 @@ class DynamicList extends \Ui\ActiveForm\Input {
                 $model->save();
               }
               break;
+
+            case 'many':
+              $requestData = [];
+              if (!empty($request[$this->colName])) {
+                foreach ($request[$this->colName] as $colName => $items) {
+                  foreach ($request[$this->colName][$colName] as $key => $data) {
+                    $requestData[$key][$colName] = $data;
+                  }
+                }
+              }
+              foreach ($requestData as $key => $row) {
+                if (!empty($row['id'])) {
+                  $rels[$row['id']] = $row;
+                  unset($requestData[$key]);
+                }
+              }
+              $relModels = $this->activeForm->model->{$this->colParams['relation']};
+              foreach ($relModels as $model) {
+                if (empty($rels[$model->pk()])) {
+                  $model->delete();
+                } else {
+                  $model->setParams($rels[$model->pk()]);
+                  $model->save();
+                }
+              }
+              foreach ($requestData as $row) {
+                $row[$relation['col']] = $this->activeForm->model->pk();
+                $model = new $relation['model']($row);
+                $model->save();
+              }
+              $this->activeForm->model->loadRelation($this->colParams['relation']);
           }
         }
     }
@@ -71,9 +102,13 @@ class DynamicList extends \Ui\ActiveForm\Input {
         break;
       default:
         if ($this->activeForm->model) {
-          $items = $this->activeForm->model->{$this->colParams['relation']}(['array' => true]);
+          $items = $this->activeForm->model->{$this->colParams['relation']};
           foreach ($items as $key => $item) {
-            $values[] = ['relItem' => $key];
+            $value = ['id' => $item->id];
+            foreach ($this->colParams['options']['cols'] as $colName) {
+              $value[$colName] = $item->$colName;
+            }
+            $values[] = $value;
           }
         }
     }
@@ -83,6 +118,7 @@ class DynamicList extends \Ui\ActiveForm\Input {
 
   public function getCols() {
     $modelName = $this->modelName;
+    $cols = [];
     switch ($this->colParams['source']) {
       case'options':
         foreach ($this->colParams['options']['inputs'] as $colName => $col) {
@@ -92,7 +128,7 @@ class DynamicList extends \Ui\ActiveForm\Input {
           $input->activeForm = $this->activeForm;
           $input->activeFormParams = $this->activeFormParams;
           $input->modelName = $this->modelName;
-          $input->colName = "[{$this->colName}][{$colName}][]";
+          $input->colName = "[{$this->colName}]";
           $input->colParams = $col;
           $input->options = !empty($col['options']) ? $col['options'] : [];
           $cols[] = ['input' => $input, 'col' => $col];
@@ -100,7 +136,6 @@ class DynamicList extends \Ui\ActiveForm\Input {
         break;
       default:
         $relation = $modelName::getRelation($this->colParams['relation']);
-        $cols = [];
         switch ($relation['type']) {
           case 'relModel':
             $cols['relItem'] = [
@@ -112,6 +147,31 @@ class DynamicList extends \Ui\ActiveForm\Input {
                     ]
                 ]
             ];
+            break;
+          case 'many':
+            $inputClassName = '\Ui\ActiveForm\Input\Hidden';
+            $input = new $inputClassName();
+            $input->form = $this->form;
+            $input->activeForm = $this->activeForm;
+            $input->activeFormParams = $this->activeFormParams;
+            $input->modelName = $relation['model'];
+            $input->colName = "[{$this->colName}]";
+            $input->colParams = [];
+            $input->options = [];
+            $cols['id'] = ['input' => $input, 'hidden' => true];
+            foreach ($this->colParams['options']['cols'] as $colName) {
+              $col = $relation['model']::getColInfo($colName);
+              $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($col['colParams']['type']);
+              $input = new $inputClassName();
+              $input->form = $this->form;
+              $input->activeForm = $this->activeForm;
+              $input->activeFormParams = $this->activeFormParams;
+              $input->modelName = $relation['model'];
+              $input->colName = "[{$this->colName}]";
+              $input->colParams = $col;
+              $input->options = !empty($col['options']) ? $col['options'] : [];
+              $cols[$colName] = ['input' => $input, 'col' => $col];
+            }
             break;
         }
     }
