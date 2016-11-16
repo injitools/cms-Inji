@@ -57,6 +57,7 @@ class Input extends \Object {
       $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
       $value = ($this->activeForm && $this->activeForm->model && isset($this->activeForm->model->{$colName})) ? $this->activeForm->model->{$colName} : $value;
     }
+    $value = isset($this->colParams['value']) ? $this->colParams['value'] : $value;
     return $value;
   }
 
@@ -82,7 +83,7 @@ class Input extends \Object {
   }
 
   public function colName() {
-    return "{$this->activeForm->requestFormName}[{$this->activeForm->modelName}]".(stristr($this->colName, '[')?$this->colName:"[{$this->colName}]");
+    return "{$this->activeForm->requestFormName}[{$this->activeForm->modelName}]" . (stristr($this->colName, '[') ? $this->colName : "[{$this->colName}]");
   }
 
   public function colLabel() {
