@@ -24,31 +24,31 @@ class Users extends Module {
       return $this->logOut();
     }
     /*
-    $activeSocials = Users\Social::getList(['where' => ['active', 1]]);
-    foreach ($activeSocials as $activeSocial) {
+      $activeSocials = Users\Social::getList(['where' => ['active', 1]]);
+      foreach ($activeSocials as $activeSocial) {
       $objectName = 'Users\SocialHelper\\' . $activeSocial->object_name;
       if (method_exists($objectName, 'checkAppAccess')) {
-        $user = $objectName::checkAppAccess();
-        if ($user) {
-          \Users\User::$cur = $user;
-          return true;
-        }
+      $user = $objectName::checkAppAccess();
+      if ($user) {
+      \Users\User::$cur = $user;
+      return true;
       }
-    }
+      }
+      }
      * 
      */
+    if (isset($_GET['passre']) && filter_input(INPUT_GET, 'user_mail')) {
+      $this->passre(trim(filter_input(INPUT_GET, 'user_mail')));
+    }
+    if (!empty($_GET['passrecont']) && filter_input(INPUT_GET, 'hash')) {
+      $this->passrecont(filter_input(INPUT_GET, 'hash'));
+    }
     if (filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash') && filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id')) {
       return $this->cuntinueSession(filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash'), filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id'));
     }
     if (isset($_POST['autorization']) && trim(filter_input(INPUT_POST, 'user_login')) && trim(filter_input(INPUT_POST, 'user_pass'))) {
       unset($_POST['autorization']);
       return $this->autorization(trim(filter_input(INPUT_POST, 'user_login')), trim(filter_input(INPUT_POST, 'user_pass')), strpos(filter_input(INPUT_POST, 'user_login'), '@') ? 'mail' : 'login', false);
-    }
-    if (isset($_GET['passre']) && filter_input(INPUT_GET, 'user_mail')) {
-      return $this->passre(trim(filter_input(INPUT_GET, 'user_mail')));
-    }
-    if (!empty($_GET['passrecont']) && filter_input(INPUT_GET, 'hash')) {
-      return $this->passrecont(filter_input(INPUT_GET, 'hash'));
     }
   }
 

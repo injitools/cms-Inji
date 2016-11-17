@@ -7,11 +7,11 @@
           <?php
           $socials = Users\Social::getList(['where' => ['active', 1]]);
           if ($socials) {
-              echo 'Войти через: ';
-              foreach (Users\Social::getList(['where' => ['active', 1]]) as $social) {
-                  $text = $social->image ? '<img src ="' . Statics::file($social->image->path, '25x25', 'q') . '">' : $social->name();
-                  echo "<a href = '/users/social/auth/{$social->code}'>{$text}</a> ";
-              }
+            echo 'Войти через: ';
+            foreach (Users\Social::getList(['where' => ['active', 1]]) as $social) {
+              $text = $social->image ? '<img src ="' . Statics::file($social->image->path) . '">' : $social->name();
+              echo "<a href = '/users/social/auth/{$social->code}'>{$text}</a> ";
+            }
           }
           ?>
         </div>
