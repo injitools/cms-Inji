@@ -73,6 +73,11 @@ return function ($step = NULL, $params = []) {
             'code' => 'facebook',
             'object_name' => 'Facebook'
         ],
+        [
+            'name' => 'Twitter',
+            'code' => 'twitter',
+            'object_name' => 'Twitter'
+        ],
     ];
     $socialsConfig = [
         [
@@ -97,6 +102,14 @@ return function ($step = NULL, $params = []) {
             ],
             [
                 'name' => 'secret'
+            ]
+        ],
+        [
+            [
+                'name' => 'consumer_key'
+            ],
+            [
+                'name' => 'consumer_secret'
             ]
         ],
     ];
