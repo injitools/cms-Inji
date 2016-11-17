@@ -53,6 +53,7 @@ if (!empty($options['value']['lat']) && !empty($options['value']['lng'])) {
                 function (res) {
                   myMap<?= $uid; ?>.geoObjects.remove(myMap<?= $uid; ?>CurPin);
                   var nearest = res.geoObjects.get(0);
+                  $('[name="<?= $name; ?>[address]"]').val( nearest.properties.get('name'));
                   myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
                           {iconContent: nearest.properties.get('name')},
                           {preset: 'islands#greenStretchyIcon'}
@@ -69,6 +70,7 @@ if (!empty($options['value']['lat']) && !empty($options['value']['lng'])) {
 </script>
 <input type ="hidden" name = '<?= $name; ?>[lat]' value = '<?= !empty($options['value']['lat']) ? addcslashes($options['value']['lat'], "'") : ''; ?>' />
 <input type ="hidden" name = '<?= $name; ?>[lng]' value = '<?= !empty($options['value']['lng']) ? addcslashes($options['value']['lng'], "'") : ''; ?>' />
+<input type ="hidden" name = '<?= $name; ?>[address]' value = '<?= !empty($options['value']['address']) ? addcslashes($options['value']['address'], "'") : ''; ?>' />
 <?php
 echo!empty($options['helpText']) ? "<div class='help-block'>{$options['helpText']}</div>" : '';
 echo empty($options['noContainer']) ? '</div>' : '';
