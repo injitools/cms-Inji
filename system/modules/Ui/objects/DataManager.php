@@ -120,10 +120,13 @@ class DataManager extends \Object {
       $name = $modelName::$objectName;
     }
     if (!empty($modelName::$forms[$formParams['formName']])) {
-      $buttons[] = [
-          'text' => 'Создать ' . $name,
-          'onclick' => 'inji.Ui.dataManagers.get(this).newItem("' . str_replace('\\', '\\\\', $modelName) . '",' . json_encode($formParams) . ');',
-      ];
+      $aform = new ActiveForm(new $modelName, $formParams['formName']);
+      if ($aform->checkAccess()) {
+        $buttons[] = [
+            'text' => 'Создать ' . $name,
+            'onclick' => 'inji.Ui.dataManagers.get(this).newItem("' . str_replace('\\', '\\\\', $modelName) . '",' . json_encode($formParams) . ');',
+        ];
+      }
     }
 
     return $buttons;
@@ -144,6 +147,9 @@ class DataManager extends \Object {
       if (is_array($action)) {
         if (!empty($action['access']['groups']) && !in_array(\Users\User::$cur->group_id, $action['access']['groups'])) {
           continue;
+        }
+        if (empty($action['className'])) {
+          $action['className'] = $key;
         }
         $return[$key] = $action;
       } else {
@@ -260,12 +266,15 @@ class DataManager extends \Object {
     if (!empty($this->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'])) {
       foreach ($this->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'] as $colName => $colOptions) {
         if (!empty($colOptions['userCol'])) {
-          if (strpos($colOptions['userCol'], ':')) {
-            $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
-            $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
-            $queryParams['where'][] = [$colName, \Users\User::$cur->$rel->$param];
-          }
+          $queryParams['where'][] = [$colName, \Model::getColValue(\Users\User::$cur, $colOptions['userCol'])];
         } elseif (isset($colOptions['value'])) {
+          if (is_array($colOptions['value'])) {
+            foreach ($colOptions['value'] as $key => $value) {
+              if ($key === 'userCol') {
+                $colOptions['value'][$key] = \Model::getColValue(\Users\User::$cur, $value);
+              }
+            }
+          }
           $queryParams['where'][] = [$colName, $colOptions['value'], is_array($colOptions['value']) ? 'IN' : '='];
         }
       }
@@ -384,7 +393,8 @@ class DataManager extends \Object {
       }
       $row = [];
       $row[] = '<input type ="checkbox" name = "pk[]" value =' . $item->pk() . '>';
-      $row[] = $item->pk();
+      $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '%5C', get_class($originalItem));
+      $row[] = "<a href ='/admin/" . $item->genViewLink() . "?redirectUrl={$redirectUrl}'>{$item->pk()}</a>";
       foreach ($this->managerOptions['cols'] as $key => $colName) {
         if (!empty($params['download'])) {
           $row[] = \Model::getColValue($item, is_array($colName) ? $key : $colName, true, false);
@@ -437,7 +447,7 @@ class DataManager extends \Object {
         default :
           if ($item->{$modelName::$cols[$colName]['relation']}) {
             if (\App::$cur->name == 'admin') {
-              $href = "<a href ='/admin/" . str_replace('\\', '/view/', $relations[$modelName::$cols[$colName]['relation']]['model']) . "/" . $item->{$modelName::$cols[$colName]['relation']}->pk() . "'>";
+              $href = "<a href ='/admin/" . $item->{$modelName::$cols[$colName]['relation']}->genViewLink() . "'>";
               if (!empty($modelName::$cols[$colName]['showCol'])) {
                 $href .= $item->{$modelName::$cols[$colName]['relation']}->{$modelName::$cols[$colName]['showCol']};
               } else {
@@ -475,10 +485,39 @@ class DataManager extends \Object {
         if (\App::$cur->name == 'admin' && $originalCol == 'name' || ( $dataManager && !empty($dataManager->managerOptions['colToView']) && $dataManager->managerOptions['colToView'] == $originalCol)) {
           $formName = $dataManager && !empty($dataManager->managerOptions['editForm']) ? $dataManager->managerOptions['editForm'] : 'manager';
           $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '/', get_class($originalItem));
-          return "<a href ='/admin/" . str_replace('\\', '/view/', get_class($originalItem)) . "/{$originalItem->id}?formName={$formName}&redirectUrl={$redirectUrl}'>{$item->$colName}</a>";
+          return "<a href ='/admin/{$originalItem->genViewLink()}?formName={$formName}&redirectUrl={$redirectUrl}'>{$item->$colName}</a>";
         } elseif (\App::$cur->name == 'admin' && $colName == 'name') {
           $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '/', get_class($originalItem));
-          return "<a href ='/admin/" . str_replace('\\', '/view/', get_class($item)) . "/{$item->id}?redirectUrl={$redirectUrl}'>{$item->$colName}</a>";
+          return "<a href ='/admin/{$item->genViewLink()}?redirectUrl={$redirectUrl}'>{$item->$colName}</a>";
+        } elseif ($modelName::$cols[$colName]['type'] == 'html') {
+          $uid = \Tools::randomString();
+          $script = "<script>inji.onLoad(function(){
+            var el{$uid}=$('#{$uid}');
+            var height{$uid} = el{$uid}.height();
+            el{$uid}.css('maxHeight','none');
+            function el{$uid}Toggle(){
+              console.log($('#{$uid}').css('height'));
+                
+              if( $('#{$uid}').css('height')=='44px'){
+                $('#{$uid}').css('height','auto');
+                  var height = $('#{$uid}').height();
+                  $('#{$uid}').css('height','44px');
+                  $('#{$uid}').animate({height:height});
+                  $('#{$uid}').next().text('Свернуть' )
+                }
+                else {
+                  $('#{$uid}').next().text('Развернуть')
+                  $('#{$uid}').animate({height:'44px'});
+                }
+            }
+            window['el{$uid}Toggle']= el{$uid}Toggle;
+            if(el{$uid}.height()>height{$uid}){
+              el{$uid}.css('height','44px');
+                
+              el{$uid}.after('<a href=\"#\" onclick=\"el{$uid}Toggle();return false;\">Развернуть</a>');
+            }
+            })</script>";
+          return "<div id = '{$uid}' style='max-height:44px;overflow:hidden;'>{$item->$colName}</div>" . $script;
         } else {
           return \Model::resloveTypeValue($item, $colName);
         }
@@ -530,12 +569,15 @@ class DataManager extends \Object {
     if (!empty($this->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'])) {
       foreach ($this->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'] as $colName => $colOptions) {
         if (!empty($colOptions['userCol'])) {
-          if (strpos($colOptions['userCol'], ':')) {
-            $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
-            $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
-            $queryParams['where'][] = [$colName, \Users\User::$cur->$rel->$param];
-          }
+          $queryParams['where'][] = [$colName, \Model::getColValue(\Users\User::$cur, $colOptions['userCol'])];
         } elseif (isset($colOptions['value'])) {
+          if (is_array($colOptions['value'])) {
+            foreach ($colOptions['value'] as $key => $value) {
+              if ($key === 'userCol') {
+                $colOptions['value'][$key] = \Model::getColValue(\Users\User::$cur, $value);
+              }
+            }
+          }
           $queryParams['where'][] = [$colName, $colOptions['value'], is_array($colOptions['value']) ? 'IN' : '='];
         }
       }
