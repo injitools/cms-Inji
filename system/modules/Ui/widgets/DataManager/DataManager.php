@@ -9,15 +9,17 @@ echo Html::el('div', [
     'data-options' => array_merge($dataManager->managerOptions, ['actions' => $dataManager->getActions()])
         ], '', true);
 $buttons = $dataManager->getButtons($params, $model);
-if ($buttons) {
+if ($dataManager->name || $buttons) {
   ?>
   <h3 class="dataManager-title"><?= $dataManager->name; ?> 
-    <div class ='pull-right dataManager-managerButtons'>
-      <div class="btn-group">
-        <?php $this->widget('Ui\DataManager/managerButtons', ['buttons' => $buttons]); ?>
+    <?php if ($buttons) { ?>
+      <div class ='pull-right dataManager-managerButtons'>
+        <div class="btn-group">
+          <?php $this->widget('Ui\DataManager/managerButtons', ['buttons' => $buttons]); ?>
+        </div>
       </div>
-    </div>
-    <div class="clearfix"></div>
+      <div class="clearfix"></div>
+    <?php } ?>
   </h3>
   <?php
 }
@@ -59,7 +61,7 @@ $table->draw();
   <div class="dataManager-bottomFloat">
     <div class="pagesContainer pull-right"></div>
     <div class="pull-left">
-      Скачать: <a onclick="inji.Ui.dataManagers.get(this).load({download: true});                      return false;" href="#">csv</a>
+      Скачать: <a onclick="inji.Ui.dataManagers.get(this).load({download: true}); return false;" href="#">csv</a>
     </div>
     <div class="clearfix"></div>
   </div>
