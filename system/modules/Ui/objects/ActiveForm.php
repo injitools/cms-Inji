@@ -241,6 +241,9 @@ class ActiveForm extends \Object {
           if (!empty($filters['getRows']['where'])) {
             $options['where'][] = $filters['getRows']['where'];
           }
+          if (!empty($relation['where'])) {
+            $options['where'][] = $relation['where'];
+          }
           if (!empty($relation['order'])) {
             $options['order'] = $relation['order'];
           }
