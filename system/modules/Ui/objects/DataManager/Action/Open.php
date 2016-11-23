@@ -26,7 +26,7 @@ class Open extends \Ui\DataManager\Action
             'formName' => !empty($dataManager->managerOptions['editForm']) ? $dataManager->managerOptions['editForm'] : 'manager',
             'redirectUrl' => !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : str_replace('\\', '/', $dataManager->modelName)
         ];
-        return "<a href='/admin/" . str_replace('\\', '/view/', get_class($item)) . "/{$item->pk()}?" . http_build_query($query) . "'><i class='glyphicon glyphicon-eye-open'></i></a>";
+        return "<a href='/admin/{$item->genViewLink()}?" . http_build_query($query) . "'><i class='glyphicon glyphicon-eye-open'></i></a>";
     }
 
 }
