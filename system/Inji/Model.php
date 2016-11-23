@@ -257,7 +257,54 @@ class Model {
                 $value = $item->$colName;
               }
             } else {
-              $value = $item->$colName;
+              switch ($type) {
+                case 'map':
+                  if ($item->$colName && json_decode($item->$colName, true)) {
+                    $addres = json_decode($item->$colName, true);
+                    $name = $addres['address'] ? $addres['address'] : 'lat:' . $addres['lat'] . ': lng:' . $addres['lng'];
+                    \App::$cur->libs->loadLib('yandexMap');
+                    ob_start();
+                    $uid = Tools::randomString();
+                    ?>
+                    <div id='map<?= $uid; ?>_container' style="display:none;"><script>/*
+                     <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
+                     <script>
+                     var myMap<?= $uid; ?>;
+                     var myMap<?= $uid; ?>CurPin;
+                     inji.onLoad(function () {
+                     ymaps.ready(init<?= $uid; ?>);
+                     function init<?= $uid; ?>() {
+                     var myPlacemark;
+                     myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+                     center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
+                     zoom: 13
+                     });
+                     myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
+                     myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                     {iconContent: "<?= $addres['address']; ?>"},
+                     {preset: 'islands#greenStretchyIcon'}
+                     );
+                     myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+                     }
+                     window['init<?= $uid; ?>'] = init<?= $uid; ?>;
+                     });
+                     */</script>
+                    </div>
+                    <?php
+                    $content = ob_get_contents();
+                    ob_end_clean();
+                    $onclick = 'inji.Ui.modals.show("' . addcslashes($addres['address'], '"') . '", $("#map' . $uid . '_container script").html().replace(/^\/\*/g, "").replace(/\*\/$/g, "")+"</script>","mapmodal' . $uid . '","modal-lg");';
+                    $onclick .= 'return false;';
+                    $value = "<a href ='#' onclick='{$onclick}' >{$name}</a>";
+                    $value .= $content;
+                  } else {
+                    $value = 'Местоположение не заданно';
+                  }
+
+                  break;
+                default:
+                  $value = $item->$colName;
+              }
             }
             break;
         }
@@ -387,7 +434,7 @@ class Model {
    */
   public static function parseColRecursion($info) {
     if (is_string($info)) {
-      $info = ['col' => $info, 'rawCol' => $info, 'modelName' => '', 'label' => [], 'joins' => []];
+      $info = ['col' => $info, 'rawCol' => $info, 'modelName' => '', 'label' => '', 'joins' => []];
     }
     if (strpos($info['col'], ':') !== false) {
       $relations = static::relations();
@@ -428,6 +475,9 @@ class Model {
         $info['col'] = static::colPrefix() . $info['col'];
       }
       $info['modelName'] = get_called_class();
+    }
+    if (!empty(static::$labels[$info['rawCol']])) {
+      $info['label'] = static::$labels[$info['rawCol']];
     }
     return $info;
   }
@@ -626,6 +676,13 @@ class Model {
   }
 
   /**
+   * views list
+   * 
+   * @return array
+   */
+  public static $views = [];
+
+  /**
    * Return name of col with object name
    * 
    * @return string
@@ -640,7 +697,7 @@ class Model {
    * @return string
    */
   public function name() {
-    return $this->{$this->nameCol()} ? $this->{$this->nameCol()} : $this->pk();
+    return $this->{$this->nameCol()} ? $this->{$this->nameCol()} : '№' . $this->pk();
   }
 
   /**
@@ -876,15 +933,17 @@ class Model {
     if (!empty($storage[$classPath[1]])) {
       $items = $storage[$classPath[1]];
       $class = get_called_class();
+      $where = is_array($param) ? $param : [$col, $param];
       foreach ($items as $key => $item) {
-        if ($item[$col] == $param) {
-          if (!empty($options['array'])) {
-            return $item;
-          }
-          $item = new $class($item);
-          $item->appType = $appType;
+        if (!Model::checkWhere($item, $where)) {
+          continue;
+        }
+        if (!empty($options['array'])) {
           return $item;
         }
+        $item = new $class($item);
+        $item->appType = $appType;
+        return $item;
       }
     }
     return false;
@@ -1001,18 +1060,24 @@ class Model {
 
     if (is_array($where)) {
       if (is_array($where[0])) {
-        foreach ($where as $whereItem) {
-          $result = forward_static_call_array(['Model', 'checkWhere'], array_merge([$item], $whereItem));
-          if (!$result) {
-            return false;
+        $result = true;
+        foreach ($where as $key => $whereItem) {
+          $concatenation = empty($whereItem[3]) ? 'AND' : strtoupper($whereItem[3]);
+          switch ($concatenation) {
+            case 'AND':
+              $result = $result && forward_static_call_array(['Model', 'checkWhere'], [$item, $whereItem]);
+              break;
+            case 'OR':
+              $result = $result || forward_static_call_array(['Model', 'checkWhere'], [$item, $whereItem]);
+              break;
           }
         }
-        return true;
+
+        return $result;
       } else {
         return forward_static_call_array(['Model', 'checkWhere'], array_merge([$item], $where));
       }
     }
-
     if (!isset($item[$where]) && !$value) {
       return true;
     }
@@ -1746,6 +1811,15 @@ class Model {
       return $validators[$name];
     }
     return [];
+  }
+
+  function genViewLink() {
+    $className = get_class($this);
+    $link = substr($className, 0, strpos($className, '\\'));
+    $link .= '/view/';
+    $link .= str_replace('\\', '%5C', substr($className, strpos($className, '\\') + 1));
+    $link .= "/{$this->id}";
+    return $link;
   }
 
   /**
