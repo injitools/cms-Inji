@@ -2,53 +2,37 @@
 $modelName = get_class($item);
 $table = new Ui\Table();
 $table->name = $item->name();
+$formParams = ['formName' => 'manager'];
+$aform = new \Ui\ActiveForm($item, $formParams['formName']);
+if ($aform->checkAccess()) {
+  $table->addButton([
+      'text' => 'Редактировать',
+      'onclick' => 'inji.Ui.forms.popUp("' . addcslashes($modelName, '\\') . ':' . $item->pk() . '",' . json_encode($formParams) . ');',
+  ]);
+}
 $row = [];
-foreach ($modelName::$cols as $colName => $options) {
-    $modelName = get_class($item);
-    $colInfo = $modelName::getColInfo($colName);
-    $type = !empty($colInfo['colParams']['type']) ? $colInfo['colParams']['type'] : 'string';
-    switch ($type) {
-        case'select':
-            switch ($colInfo['colParams']['source']) {
-                case 'array':
-                    $value = !empty($colInfo['colParams']['sourceArray'][$item->$colName]) ? $colInfo['colParams']['sourceArray'][$item->$colName] : 'Не задано';
-                    break;
-                case 'method':
-                    if (!empty($colInfo['colParams']['params'])) {
-                        $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
-                    } else {
-                        $values = App::$primary->$colInfo['colParams']['module']->$colInfo['colParams']['method']();
-                    }
-                    $value = !empty($values[$item->$colName]) ? $values[$item->$colName] : 'Не задано';
-                    break;
-                case 'relation':
-                    $relations = $colInfo['modelName']::relations();
-                    $relValue = $relations[$colInfo['colParams']['relation']]['model']::get($item->$colName);
-                    $value = $relValue ? "<a href='/admin/" . str_replace('\\', '/view/', $relations[$colInfo['colParams']['relation']]['model']) . "/" . $relValue->pk() . "'>" . $relValue->name() . "</a>" : 'Не задано';
-                    break;
-            }
-            break;
-        case 'image':
-            $file = Files\File::get($item->$colName);
-            if ($file) {
-                $value = '<img src="' . $file->path . '?resize=60x120" />';
-            } else {
-                $value = '<img src="/static/system/images/no-image.png?resize=60x120" />';
-            }
-            break;
-        case 'bool':
-            $value = $item->$colName ? 'Да' : 'Нет';
-            break;
-        default:
-            $value = $item->$colName;
-            break;
-    }
+$cols = !empty($modelName::$views['manager']['cols']) ? $modelName::$views['manager']['cols'] : array_keys($modelName::$cols);
+foreach ($cols as $colName) {
+  $modelName = get_class($item);
+  $colInfo = $modelName::getColInfo($colName);
+  $type = !empty($colInfo['colParams']['type']) ? $colInfo['colParams']['type'] : 'string';
+  if ($type != 'dataManager') {
     $table->addRow([
         !empty($modelName::$labels[$colName]) ? $modelName::$labels[$colName] : $colName,
-        $value
+        \Model::resloveTypeValue($item, $colName, true)
     ]);
+  }
 }
 $table->draw();
+$form = new \Ui\Form();
+$relations = $modelName::relations();
+foreach ($cols as $colName) {
+  $colInfo = $modelName::getColInfo($colName);
+  if ($colInfo['colParams']['type'] == 'dataManager') {
+    $dataManager = new \Ui\DataManager($relations[$colInfo['colParams']['relation']]['model']);
+    $dataManager->draw(['relation' => $colInfo['colParams']['relation']], $item);
+  }
+}
 ?>
 <div>
   <h3>Комментарии (<?=
@@ -62,17 +46,17 @@ $table->draw();
           ['item_id', $item->id],
           ['model', $modelName],
       ], 'order' => ['date_create', 'desc']]) as $comment) {
-      ?>
-      <div class="row">
-        <div class="col-sm-3" style="max-width: 300px;">
-          <a href='/admin/Users/view/User/<?= $comment->user->pk(); ?>'><?= $comment->user->name(); ?></a><br />
-          <?= $comment->date_create; ?>
-        </div>
-        <div class="col-sm-9">
-          <?= $comment->text; ?>
-        </div>
+    ?>
+    <div class="row">
+      <div class="col-sm-3" style="max-width: 300px;">
+        <a href='/admin/Users/view/User/<?= $comment->user->pk(); ?>'><?= $comment->user->name(); ?></a><br />
+        <?= $comment->date_create; ?>
       </div>
-      <?php
+      <div class="col-sm-9">
+        <?= $comment->text; ?>
+      </div>
+    </div>
+    <?php
   }
   ?>
 </div>
