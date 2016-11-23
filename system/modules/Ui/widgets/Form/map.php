@@ -19,21 +19,6 @@ $uid = Tools::randomString();
         center: ["<?= !empty($options['value']['lat']) ? $options['value']['lat'] : '56.01'; ?>", "<?= !empty($options['value']['lng']) ? $options['value']['lng'] : '92.85'; ?>"],
         zoom: 13
       });
-
-<?php
-if (!empty($options['value']['lat']) && !empty($options['value']['lng'])) {
-  /*
-    ?>
-    myPlacemark = new ymaps.Placemark([<?= $options['value']['lat']; ?>,<?= $options['value']['lng']; ?>], {
-    // Чтобы балун и хинт открывались на метке, необходимо задать ей определенные свойства.
-    //balloonContentHeader: "",
-    //balloonContentBody: "",
-    //balloonContentFooter: "Подвал",
-    });
-    myMap.geoObjects.add(myPlacemark);
-    <?php */
-}
-?>
       myMap<?= $uid; ?>.events.add('click', function (e) {
         console.log(e.get('coords'));
         var myCoords = e.get('coords');
@@ -53,7 +38,7 @@ if (!empty($options['value']['lat']) && !empty($options['value']['lng'])) {
                 function (res) {
                   myMap<?= $uid; ?>.geoObjects.remove(myMap<?= $uid; ?>CurPin);
                   var nearest = res.geoObjects.get(0);
-                  $('[name="<?= $name; ?>[address]"]').val( nearest.properties.get('name'));
+                  $('[name="<?= $name; ?>[address]"]').val(nearest.properties.get('name'));
                   myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
                           {iconContent: nearest.properties.get('name')},
                           {preset: 'islands#greenStretchyIcon'}
