@@ -48,13 +48,6 @@ return [
                     'href' => '/admin/view',
                     'Menu_id' => 1
                 ],
-                [
-                    'id' => 5,
-                    'type' => 'href',
-                    'name' => 'Выход',
-                    'href' => '?logout',
-                    'Menu_id' => 1
-                ],
             ]
         ]
     ]
