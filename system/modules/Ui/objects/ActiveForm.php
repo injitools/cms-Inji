@@ -99,8 +99,8 @@ class ActiveForm extends \Object {
       return [];
     }
     $successId = 0;
-    if (!empty($_POST[$this->requestFormName][$this->modelName])) {
-      $request = $_POST[$this->requestFormName][$this->modelName];
+    if (!empty($_POST[$this->requestFormName][$this->modelName]) || !empty($_FILES[$this->requestFormName]['tmp_name'][$this->modelName])) {
+      $request = !empty($_POST[$this->requestFormName][$this->modelName])?$_POST[$this->requestFormName][$this->modelName]:[];
       if ($this->model) {
         if (!empty($this->form['handler'])) {
           $modelName = $this->model;
