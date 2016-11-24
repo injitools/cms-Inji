@@ -31,6 +31,34 @@ return function($step = NULL, $params = []) {
           'allow_resize' => 1,
           'options' => json_encode($options)
       ],
+      [
+          'dir' => '/static/mediafiles/docs/',
+          'ext' => 'xls',
+          'group' => 'doc',
+          'allow_resize' => 0,
+          'options' => ''
+      ],
+      [
+          'dir' => '/static/mediafiles/docs/',
+          'ext' => 'pdf',
+          'group' => 'doc',
+          'allow_resize' => 0,
+          'options' => ''
+      ],
+      [
+          'dir' => '/static/mediafiles/docs/',
+          'ext' => 'docx',
+          'group' => 'doc',
+          'allow_resize' => 0,
+          'options' => ''
+      ],
+      [
+          'dir' => '/static/mediafiles/docs/',
+          'ext' => 'xlsx',
+          'group' => 'doc',
+          'allow_resize' => 0,
+          'options' => ''
+      ],
   ];
   foreach ($types as $type) {
     $typeObject = new \Files\Type($type);
