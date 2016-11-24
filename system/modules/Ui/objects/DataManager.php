@@ -363,16 +363,7 @@ class DataManager extends \Object {
     if (!empty($params['mode']) && $params['mode'] == 'sort') {
       $queryParams['order'] = ['weight', 'asc'];
     } elseif (!empty($params['sortered']) && !empty($this->managerOptions['sortable'])) {
-      foreach ($params['sortered'] as $key => $sortType) {
-        $keys = array_keys($this->managerOptions['cols']);
-        $colName = '';
-        if (isset($keys[$key])) {
-          if (is_array($this->managerOptions['cols'][$keys[$key]])) {
-            $colName = $keys[$key];
-          } else {
-            $colName = $this->managerOptions['cols'][$keys[$key]];
-          }
-        }
+      foreach ($params['sortered'] as $colName => $sortType) {
         if ($colName && in_array($colName, $this->managerOptions['sortable'])) {
           $sortType = in_array($sortType, ['desc', 'asc']) ? $sortType : 'desc';
           $queryParams['order'][] = [$colName, $sortType];
@@ -687,7 +678,10 @@ class DataManager extends \Object {
     $this->table = new Table();
     $tableCols = [];
     foreach ($cols as $colName => $colOptions) {
-      $tableCols[] = !empty($colOptions['label']) ? $colOptions['label'] : $colName;
+      $tableCols[] = [
+          'attributes' => ['class' => $this->managerId . '_colname_' . $colName, 'data-colname' => $colName],
+          'text' => !empty($colOptions['label']) ? $colOptions['label'] : $colName
+      ];
     }
     $tableCols[] = '';
     $this->table->class .=' datamanagertable';

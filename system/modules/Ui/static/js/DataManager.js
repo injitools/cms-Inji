@@ -238,84 +238,48 @@ DataManager.prototype.load = function (options) {
     });
   }
   if (this.options.sortable) {
-    sortableIndexes = [];
-    var i = 0;
-    for (key2 in  this.options.cols) {
+    for (var key2 in this.options.cols) {
       var colname;
       if (typeof this.options.cols[key2] == 'object') {
         colname = key2;
       } else {
         colname = this.options.cols[key2];
       }
-      for (key in this.options.sortable) {
-        if (colname == this.options.sortable[key]) {
-          sortableIndexes.push(parseInt(i));
-        }
+      if (this.options.sortable.indexOf(colname) == -1) {
+        continue;
       }
-      i++;
-    }
-    for (key in sortableIndexes) {
-      var shift = 1;
-
-      shift++;
-
-      var headTh = $(dataManager.element.find('thead th').get(sortableIndexes[key] + shift));
-      var footTh = $(dataManager.element.find('tfoot th').get(sortableIndexes[key] + shift));
-      if (!headTh.hasClass('sortable')) {
-        headTh.html('<a href = "#">' + headTh.html() + '</a>');
-        headTh.addClass('sortable');
-        if (this.options.preSort && this.options.preSort[this.options.sortable[key]]) {
-          if (this.options.preSort[this.options.sortable[key]] == 'asc') {
-            headTh.addClass('sorted-asc');
-            this.sortered[sortableIndexes[key]] = 'asc';
-          } else if (this.options.preSort[this.options.sortable[key]] == 'desc') {
-            headTh.addClass('sorted-desc');
-            this.sortered[sortableIndexes[key]] = 'desc';
+      var th = $('.' + dataManager.element.attr('id') + '_colname_' + colname);
+      if (!th.hasClass('sortable')) {
+        th.html('<a href = "#">' + th.html() + '</a>');
+        th.addClass('sortable');
+        if (this.options.preSort && this.options.preSort[colname]) {
+          if (this.options.preSort[colname] == 'asc') {
+            th.addClass('sorted-asc');
+            this.sortered[colname] = 'asc';
+          } else if (this.options.preSort[colname] == 'desc') {
+            th.addClass('sorted-desc');
+            this.sortered[colname] = 'desc';
           }
         }
         //sorted-desc
-        headTh.click(function () {
+        th.click(function () {
+          var colname = $(this).data('colname');
           $(this).addClass('clickedsort');
-          $('.sortable').not('.clickedsort').removeClass('sorted-asc').removeClass('sorted-desc');
+          dataManager.element.find('.sortable').not('.clickedsort').removeClass('sorted-asc').removeClass('sorted-desc');
           $(this).removeClass('clickedsort');
           dataManager.sortered = {};
           if (!$(this).hasClass('sorted-desc') && !$(this).hasClass('sorted-asc')) {
             $(this).addClass('sorted-desc');
-            dataManager.sortered[$(this).index() - shift] = 'desc';
+            dataManager.sortered[colname] = 'desc';
             dataManager.reload();
           } else if ($(this).hasClass('sorted-desc')) {
             $(this).removeClass('sorted-desc');
             $(this).addClass('sorted-asc');
-            dataManager.sortered[$(this).index() - shift] = 'asc';
+            dataManager.sortered[colname] = 'asc';
             dataManager.reload();
           } else if ($(this).hasClass('sorted-asc')) {
             $(this).removeClass('sorted-asc');
-            delete dataManager.sortered[$(this).index() - shift];
-            dataManager.reload();
-          }
-          return false;
-        })
-      }
-      if (!footTh.hasClass('sortable')) {
-        footTh.html('<a href = "#">' + footTh.html() + '</a>');
-        footTh.addClass('sortable');
-        footTh.click(function () {
-          $(this).addClass('clickedsort');
-          $('.sortable').not('.clickedsort').removeClass('sorted-asc').removeClass('sorted-desc');
-          $(this).removeClass('clickedsort');
-          dataManager.sortered = {};
-          if (!$(this).hasClass('sorted-desc') && !$(this).hasClass('sorted-asc')) {
-            $(this).addClass('sorted-desc');
-            dataManager.sortered[$(this).index() - shift] = 'desc';
-            dataManager.reload();
-          } else if ($(this).hasClass('sorted-desc')) {
-            $(this).removeClass('sorted-desc');
-            $(this).addClass('sorted-asc');
-            dataManager.sortered[$(this).index() - shift] = 'asc';
-            dataManager.reload();
-          } else if ($(this).hasClass('sorted-asc')) {
-            $(this).removeClass('sorted-asc');
-            delete dataManager.sortered[$(this).index() - shift];
+            delete dataManager.sortered[colname];
             dataManager.reload();
           }
           return false;
@@ -403,12 +367,12 @@ DataManager.prototype.load = function (options) {
           $(instance.element).find('.categoryTree ul').sortable({
             stop: function (event, ui) {
               ids = $(instance.element).find('li');
-              console.log(instance.element,ids)
+              console.log(instance.element, ids)
               i = 0;
               while (ids[i]) {
                 var key = $(ids[i]).find('>a').data('id');
                 var model = $(ids[i]).find('>a').data('model');
-                console.log(key , model)
+                console.log(key, model)
                 if (key && model) {
                   inji.Server.request({
                     url: 'ui/dataManager/updateRow',
