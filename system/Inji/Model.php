@@ -222,6 +222,14 @@ class Model {
           $value = '<img src="/static/system/images/no-image.png?resize=60x120" />';
         }
         break;
+      case 'file':
+        $file = Files\File::get($item->$colName);
+        if ($file) {
+          $value = '<a href="' . $file->path . '">' . $file->name . '.' . $file->type->ext . '</a>';
+        } else {
+          $value = 'Файл не загружен';
+        }
+        break;
       case 'bool':
         $value = $item->$colName ? 'Да' : 'Нет';
         break;
@@ -267,28 +275,28 @@ class Model {
                     $uid = Tools::randomString();
                     ?>
                     <div id='map<?= $uid; ?>_container' style="display:none;"><script>/*
-                     <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
-                     <script>
-                     var myMap<?= $uid; ?>;
-                     var myMap<?= $uid; ?>CurPin;
-                     inji.onLoad(function () {
-                     ymaps.ready(init<?= $uid; ?>);
-                     function init<?= $uid; ?>() {
-                     var myPlacemark;
-                     myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
-                     center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
-                     zoom: 13
-                     });
-                     myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
-                     myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
-                     {iconContent: "<?= $addres['address']; ?>"},
-                     {preset: 'islands#greenStretchyIcon'}
-                     );
-                     myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
-                     }
-                     window['init<?= $uid; ?>'] = init<?= $uid; ?>;
-                     });
-                     */</script>
+                                         <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
+                                         <script>
+                                         var myMap<?= $uid; ?>;
+                                         var myMap<?= $uid; ?>CurPin;
+                                         inji.onLoad(function () {
+                                         ymaps.ready(init<?= $uid; ?>);
+                                         function init<?= $uid; ?>() {
+                                         var myPlacemark;
+                                         myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+                                         center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
+                                         zoom: 13
+                                         });
+                                         myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
+                                         myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                                         {iconContent: "<?= $addres['address']; ?>"},
+                                         {preset: 'islands#greenStretchyIcon'}
+                                         );
+                                         myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+                                         }
+                                         window['init<?= $uid; ?>'] = init<?= $uid; ?>;
+                                         });
+                                         */</script>
                     </div>
                     <?php
                     $content = ob_get_contents();
