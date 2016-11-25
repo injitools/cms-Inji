@@ -248,7 +248,7 @@ DataManager.prototype.load = function (options) {
       if (this.options.sortable.indexOf(colname) == -1) {
         continue;
       }
-      var th = $('.' + dataManager.element.attr('id') + '_colname_' + colname);
+      var th = $('.' + dataManager.element.attr('id') + '_colname_' + colname.replace(/\:/g, '\\:'));
       if (!th.hasClass('sortable')) {
         th.html('<a href = "#">' + th.html() + '</a>');
         th.addClass('sortable');
