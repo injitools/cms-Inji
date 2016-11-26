@@ -238,6 +238,50 @@ class Model {
           return \App::$cur->{$colInfo['colParams']['value']['module']}->{$colInfo['colParams']['value']['method']}($item, $colName, $colInfo['colParams']);
         }
         break;
+      case 'map':
+        if ($item->$colName && json_decode($item->$colName, true)) {
+          $addres = json_decode($item->$colName, true);
+          $name = $addres['address'] ? $addres['address'] : 'lat:' . $addres['lat'] . ': lng:' . $addres['lng'];
+          \App::$cur->libs->loadLib('yandexMap');
+          ob_start();
+          $uid = Tools::randomString();
+          ?>
+          <div id='map<?= $uid; ?>_container' style="display:none;"><script>/*
+           <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
+           <script>
+           var myMap<?= $uid; ?>;
+           var myMap<?= $uid; ?>CurPin;
+           inji.onLoad(function () {
+           ymaps.ready(init<?= $uid; ?>);
+           function init<?= $uid; ?>() {
+           var myPlacemark;
+           myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+           center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
+           zoom: 13
+           });
+           myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
+           myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+           {iconContent: "<?= $addres['address']; ?>"},
+           {preset: 'islands#greenStretchyIcon'}
+           );
+           myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+           }
+           window['init<?= $uid; ?>'] = init<?= $uid; ?>;
+           });
+           */</script>
+          </div>
+          <?php
+          $content = ob_get_contents();
+          ob_end_clean();
+          $onclick = 'inji.Ui.modals.show("' . addcslashes($addres['address'], '"') . '", $("#map' . $uid . '_container script").html().replace(/^\/\*/g, "").replace(/\*\/$/g, "")+"</script>","mapmodal' . $uid . '","modal-lg");';
+          $onclick .= 'return false;';
+          $value = "<a href ='#' onclick='{$onclick}' >{$name}</a>";
+          $value .= $content;
+        } else {
+          $value = 'Местоположение не заданно';
+        }
+
+        break;
       case 'dynamicType':
         switch ($colInfo['colParams']['typeSource']) {
           case'selfMethod':
@@ -275,28 +319,28 @@ class Model {
                     $uid = Tools::randomString();
                     ?>
                     <div id='map<?= $uid; ?>_container' style="display:none;"><script>/*
-                                         <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
-                                         <script>
-                                         var myMap<?= $uid; ?>;
-                                         var myMap<?= $uid; ?>CurPin;
-                                         inji.onLoad(function () {
-                                         ymaps.ready(init<?= $uid; ?>);
-                                         function init<?= $uid; ?>() {
-                                         var myPlacemark;
-                                         myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
-                                         center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
-                                         zoom: 13
-                                         });
-                                         myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
-                                         myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
-                                         {iconContent: "<?= $addres['address']; ?>"},
-                                         {preset: 'islands#greenStretchyIcon'}
-                                         );
-                                         myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
-                                         }
-                                         window['init<?= $uid; ?>'] = init<?= $uid; ?>;
-                                         });
-                                         */</script>
+                     <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
+                     <script>
+                     var myMap<?= $uid; ?>;
+                     var myMap<?= $uid; ?>CurPin;
+                     inji.onLoad(function () {
+                     ymaps.ready(init<?= $uid; ?>);
+                     function init<?= $uid; ?>() {
+                     var myPlacemark;
+                     myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+                     center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
+                     zoom: 13
+                     });
+                     myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
+                     myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                     {iconContent: "<?= $addres['address']; ?>"},
+                     {preset: 'islands#greenStretchyIcon'}
+                     );
+                     myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+                     }
+                     window['init<?= $uid; ?>'] = init<?= $uid; ?>;
+                     });
+                     */</script>
                     </div>
                     <?php
                     $content = ob_get_contents();
@@ -557,6 +601,7 @@ class Model {
       case 'json':
       case 'password':
       case 'dynamicType':
+      case 'map':
         $params = 'text NOT NULL';
         break;
       case 'bool':
@@ -1382,7 +1427,7 @@ class Model {
       Inji::$inst->event('modelItemParamsChanged-' . get_called_class(), $this);
     }
     $this->beforeSave();
-
+    $this->logChanges();
     $values = [];
 
     foreach ($this->cols() as $col => $param) {
