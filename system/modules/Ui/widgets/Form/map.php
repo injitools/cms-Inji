@@ -2,6 +2,9 @@
 echo empty($options['noContainer']) ? '<div class="form-group">' : '';
 echo $label !== false ? "<label>{$label}</label>" : '';
 $uid = Tools::randomString();
+if (!empty($options['value'])) {
+  $options['value'] = json_decode($options['value'], true);
+}
 ?>
 <div id='map<?= $uid; ?>' class="formMap"  style="width: 100%; height: 400px"></div>
 <script>
@@ -19,12 +22,21 @@ $uid = Tools::randomString();
         center: ["<?= !empty($options['value']['lat']) ? $options['value']['lat'] : '56.01'; ?>", "<?= !empty($options['value']['lng']) ? $options['value']['lng'] : '92.85'; ?>"],
         zoom: 13
       });
+<?php
+if ($options['value']) {
+  ?>
+        myMap<?= $uid; ?>CurPin = new ymaps.Placemark(["<?= !empty($options['value']['lat']) ? $options['value']['lat'] : '56.01'; ?>", "<?= !empty($options['value']['lng']) ? $options['value']['lng'] : '92.85'; ?>"],
+                {iconContent: "<?= !empty($options['value']['address']) ? $options['value']['address'] : implode(',', $options['value']); ?>"},
+                {preset: 'islands#greenStretchyIcon'}
+        );
+        myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+  <?php
+}
+?>
       myMap<?= $uid; ?>.events.add('click', function (e) {
-        console.log(e.get('coords'));
         var myCoords = e.get('coords');
         $('[name="<?= $name; ?>[lat]"]').val(myCoords[0]);
         $('[name="<?= $name; ?>[lng]"]').val(myCoords[1]);
-        console.log($('[name="<?= $name; ?>[lng]"]').val());
         var myGeocoder = ymaps.geocode(myCoords, {kind: 'house'});
         if (myMap<?= $uid; ?>CurPin) {
           myMap<?= $uid; ?>.geoObjects.remove(myMap<?= $uid; ?>CurPin);

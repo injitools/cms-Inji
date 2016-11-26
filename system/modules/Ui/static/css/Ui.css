@@ -36,15 +36,23 @@ span.nav-toggle-icon{
   background-position:0 -56px
 }
 .dataManager-bottomFloat-container {
-  height: 37px;
+  
 }
 .dataManager .dataManager-bottomFloat {
-  position: fixed;
+  padding: 10px;
   bottom:0;
   right:0;
 }
+.dataManager .dataManager-bottomFloat.floated {
+  position: fixed;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
+box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
+}
 .dataManager .dataManager-bottomFloat .pagination {
   margin:0;
+  margin-left: 15px;
 }
 .form-search-results {
   position: absolute;
