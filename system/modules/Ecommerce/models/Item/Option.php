@@ -54,7 +54,8 @@ class Option extends \Model {
           'name' => 'Свойства товаров',
           'cols' => [
               'name', 'code', 'type', 'item', 'view', 'searchable', 'user_id', 'date_create'
-          ]
+          ],
+          'sortMode' => true
       ]
   ];
   public static $forms = [

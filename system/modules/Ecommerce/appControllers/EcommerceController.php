@@ -176,7 +176,7 @@ class ecommerceController extends Controller {
 
     //params 
     if (empty(App::$cur->ecommerce->config['filtersInLast'])) {
-      $options = \Ecommerce\Item\Option::getList(['where' => ['item_option_searchable', 1]]);
+      $options = \Ecommerce\Item\Option::getList(['where' => ['item_option_searchable', 1], 'order' => ['weight', 'asc']]);
     } else {
       $params = $this->ecommerce->getItemsParams([
           'parent' => $category_id,
@@ -188,7 +188,7 @@ class ecommerceController extends Controller {
         $ids[] = $param->item_option_id;
       }
       if ($ids) {
-        $options = \Ecommerce\Item\Option::getList(['where' => ['id', $ids, 'IN']]);
+        $options = \Ecommerce\Item\Option::getList(['where' => ['id', $ids, 'IN'], 'order' => ['weight', 'asc']]);
       } else {
         $options = [];
       }
