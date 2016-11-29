@@ -175,192 +175,6 @@ class Ecommerce extends Module {
         return $cart;
     }
 
-    public function parseOptions($options = []) {
-        $selectOptions = [
-            'where' => !empty($options['where']) ? $options['where'] : [],
-            'distinct' => false,
-            'join' => [],
-            'order' => [],
-            'start' => isset($options['start']) ? (int) $options['start'] : 0,
-            'key' => isset($options['key']) ? $options['key'] : null,
-            'limit' => !empty($options['count']) ? (int) $options['count'] : 0,
-        ];
-        if (!empty($options['sort']) && is_array($options['sort'])) {
-            foreach ($options['sort'] as $col => $direction) {
-                switch ($col) {
-                    case 'price':
-                        $selectOptions['order'][] = [Ecommerce\Item\Offer\Price::colPrefix() . 'price', strtolower($direction) == 'desc' ? 'desc' : 'asc'];
-                        break;
-                    case 'name':
-                        $selectOptions['order'][] = ['name', strtolower($direction) == 'desc' ? 'desc' : 'asc'];
-                        break;
-                    case 'sales':
-                        $selectOptions['order'][] = ['sales', strtolower($direction) == 'desc' ? 'desc' : 'asc'];
-                        break;
-                    case 'weight':
-                        $selectOptions['order'][] = ['weight', strtolower($direction) == 'desc' ? 'desc' : 'asc'];
-                        break;
-                    case 'new':
-                        $selectOptions['order'][] = ['date_create', strtolower($direction) == 'desc' ? 'desc' : 'asc'];
-                        break;
-                }
-            }
-        }
-        $selectOptions['where'][] = ['deleted', 0];
-        if (empty($this->config['view_empty_image'])) {
-            $selectOptions['where'][] = ['image_file_id', 0, '!='];
-        }
-
-        $selectOptions['join'][] = [Ecommerce\Item\Offer::table(), Ecommerce\Item::index() . ' = ' . Ecommerce\Item\Offer::colPrefix() . Ecommerce\Item::index(), 'inner'];
-
-        $selectOptions['join'][] = [Ecommerce\Item\Offer\Price::table(),
-            Ecommerce\Item\Offer::index() . ' = ' . Ecommerce\Item\Offer\Price::colPrefix() . Ecommerce\Item\Offer::index() .
-            (empty($this->config['show_zero_price']) ? ' and ' . Ecommerce\Item\Offer\Price::colPrefix() . 'price>0' : ''),
-            empty($this->config['show_without_price']) ? 'inner' : 'left'];
-
-        $selectOptions['join'][] = [
-            Ecommerce\Item\Offer\Price\Type::table(), Ecommerce\Item\Offer\Price::colPrefix() . Ecommerce\Item\Offer\Price\Type::index() . ' = ' . Ecommerce\Item\Offer\Price\Type::index()
-        ];
-
-        $selectOptions['where'][] = [
-            [Ecommerce\Item\Offer\Price\Type::index(), NULL, 'is'],
-            [
-                [Ecommerce\Item\Offer\Price\Type::colPrefix() . 'roles', '', '=', 'OR'],
-                [Ecommerce\Item\Offer\Price\Type::colPrefix() . 'roles', '%|' . \Users\User::$cur->role_id . '|%', 'LIKE', 'OR'],
-            ],
-        ];
-
-
-        if (!empty($this->config['view_filter'])) {
-            if (!empty($this->config['view_filter']['options'])) {
-                foreach ($this->config['view_filter']['options'] as $optionId => $optionValue) {
-                    $selectOptions['join'][] = [Ecommerce\Item\Param::table(), Ecommerce\Item::index() . ' = ' . 'option' . $optionId . '.' . Ecommerce\Item\Param::colPrefix() . Ecommerce\Item::index() . ' AND ' .
-                        'option' . $optionId . '.' . Ecommerce\Item\Param::colPrefix() . Ecommerce\Item\Option::index() . ' = "' . (int) $optionId . '" AND ' .
-                        'option' . $optionId . '.' . Ecommerce\Item\Param::colPrefix() . 'value = "' . (int) $optionValue . '"',
-                        'inner', 'option' . $optionId];
-                }
-            }
-        }
-        //filters
-        if (!empty($options['filters'])) {
-            foreach ($options['filters'] as $col => $filter) {
-                switch ($col) {
-                    case 'price':
-                        if (!empty($filter['min'])) {
-                            $selectOptions['where'][] = [Ecommerce\Item\Offer\Price::colPrefix() . 'price', (float) $filter['min'], '>='];
-                        }
-                        if (!empty($filter['max'])) {
-                            $selectOptions['where'][] = [Ecommerce\Item\Offer\Price::colPrefix() . 'price', (float) $filter['max'], '<='];
-                        }
-                        break;
-                    case 'options':
-                        foreach ($filter as $optionId => $optionValue) {
-                            $optionId = (int) $optionId;
-                            if (is_array($optionValue)) {
-                                $optionValueArr = [];
-                                foreach ($optionValue as $val) {
-                                    $optionValueArr[] = \App::$cur->db->connection->pdo->quote($val);
-                                }
-                                $qstr = 'IN (' . implode(',', $optionValueArr) . ')';
-                            } else {
-                                $qstr = '= ' . \App::$cur->db->connection->pdo->quote($optionValue);
-                            }
-                            $selectOptions['join'][] = [Ecommerce\Item\Param::table(), Ecommerce\Item::index() . ' = ' . 'option' . $optionId . '.' . Ecommerce\Item\Param::colPrefix() . Ecommerce\Item::index() . ' AND ' .
-                                'option' . $optionId . '.' . Ecommerce\Item\Param::colPrefix() . Ecommerce\Item\Option::index() . ' = "' . (int) $optionId . '" AND ' .
-                                'option' . $optionId . '.' . Ecommerce\Item\Param::colPrefix() . 'value ' . $qstr . '',
-                                'inner', 'option' . $optionId];
-                        }
-                        break;
-                    case 'offerOptions':
-                        //$selectOptions['join'][] = [Ecommerce\Item\Offer::table(), Ecommerce\Item::index() . ' = offer.' . Ecommerce\Item\Offer::colPrefix() . Ecommerce\Item::index(), 'left', 'offer'];
-                        foreach ($filter as $optionId => $optionValue) {
-                            $optionId = (int) $optionId;
-                            if (is_array($optionValue)) {
-                                $optionValueArr = [];
-                                foreach ($optionValue as $val) {
-                                    $optionValueArr[] = \App::$cur->db->connection->pdo->quote($val);
-                                }
-                                $qstr = 'IN (' . implode(',', $optionValueArr) . ')';
-                            } else {
-                                $qstr = '= ' . \App::$cur->db->connection->pdo->quote($optionValue);
-                            }
-                            $selectOptions['join'][] = [Ecommerce\Item\Offer\Param::table(), Ecommerce\Item\Offer::index() . ' = ' . 'offerOption' . $optionId . '.' . Ecommerce\Item\Offer\Param::colPrefix() . Ecommerce\Item\Offer::index() . ' AND ' .
-                                'offerOption' . $optionId . '.' . Ecommerce\Item\Offer\Param::colPrefix() . Ecommerce\Item\Offer\Option::index() . ' = "' . (int) $optionId . '" AND ' .
-                                'offerOption' . $optionId . '.' . Ecommerce\Item\Offer\Param::colPrefix() . 'value ' . $qstr,
-                                'inner', 'offerOption' . $optionId];
-                        }
-                        break;
-                }
-            }
-        }
-        //parents
-        if (!empty($options['parent']) && strpos($options['parent'], ',') !== false) {
-            $first = true;
-            $where = [];
-            foreach (explode(',', $options['parent']) as $categoryId) {
-                if (!$categoryId) {
-                    continue;
-                }
-                $category = \Ecommerce\Category::get($categoryId);
-                $where[] = ['tree_path', $category->tree_path . (int) $categoryId . '/%', 'LIKE', $first ? 'AND' : 'OR'];
-                $first = false;
-            }
-            $selectOptions['where'][] = $where;
-        } elseif (!empty($options['parent'])) {
-            $category = \Ecommerce\Category::get($options['parent']);
-            $selectOptions['where'][] = ['tree_path', $category->tree_path . (int) $options['parent'] . '/%', 'LIKE'];
-        }
-
-        //search
-        if (!empty($options['search'])) {
-            $searchStr = preg_replace('![^A-zА-я0-9 ]!iSu', ' ', $options['search']);
-            $searchArr = [];
-            foreach (explode(' ', $searchStr) as $part) {
-                $part = trim($part);
-                if ($part && strlen($part) > 2) {
-                    $searchArr[] = ['search_index', '%' . $part . '%', 'LIKE'];
-                }
-            }
-            if (!empty($searchArr)) {
-                $selectOptions['where'][] = $searchArr;
-            }
-        }
-        if (empty($this->config['view_empty_warehouse'])) {
-            $warehouseIds = [];
-            if (App::$cur->geography && \Geography\City::$cur) {
-                $warehouses = \Geography\City\Data::get([['code', 'warehouses'], ['city_id', \Geography\City::$cur->id]]);
-                if ($warehouses && $warehouses->data) {
-                    foreach (explode(',', $warehouses->data) as $id) {
-                        $warehouseIds[$id] = $id;
-                    }
-                }
-            }
-            $selectOptions['where'][] = [
-                '(
-          (SELECT COALESCE(sum(`' . \Ecommerce\Item\Offer\Warehouse::colPrefix() . 'count`),0) 
-            FROM ' . \App::$cur->db->table_prefix . \Ecommerce\Item\Offer\Warehouse::table() . ' iciw 
-            WHERE iciw.' . \Ecommerce\Item\Offer\Warehouse::colPrefix() . \Ecommerce\Item\Offer::index() . ' = ' . \Ecommerce\Item\Offer::index() . '
-                ' . ($warehouseIds ? ' AND iciw.' . \Ecommerce\Item\Offer\Warehouse::colPrefix() . \Ecommerce\Warehouse::index() . ' IN(' . implode(',', $warehouseIds) . ')' : '') . '
-            )
-          -
-          (SELECT COALESCE(sum(' . \Ecommerce\Warehouse\Block::colPrefix() . 'count) ,0)
-            FROM ' . \App::$cur->db->table_prefix . \Ecommerce\Warehouse\Block::table() . ' iewb
-            inner JOIN ' . \App::$cur->db->table_prefix . \Ecommerce\Cart::table() . ' icc ON icc.' . \Ecommerce\Cart::index() . ' = iewb.' . \Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Cart::index() . ' AND (
-                (`' . \Ecommerce\Cart::colPrefix() . 'warehouse_block` = 1 and `' . \Ecommerce\Cart::colPrefix() . 'cart_status_id` in(2,3,6)) ||
-                (`' . \Ecommerce\Cart::colPrefix() . \Ecommerce\Cart\Status::index() . '` in(0,1) and `' . \Ecommerce\Cart::colPrefix() . 'date_last_activ` >=subdate(now(),INTERVAL 30 MINUTE))
-            )
-            WHERE iewb.' . \Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Item\Offer::index() . ' = ' . \Ecommerce\Item\Offer::index() . ')
-          )',
-                0,
-                '>'
-            ];
-        }
-
-        $selectOptions['group'] = Ecommerce\Item::index();
-
-        return $selectOptions;
-    }
-
     /**
      * Getting items params with params
      * 
@@ -368,8 +182,8 @@ class Ecommerce extends Module {
      * @return array
      */
     public function getItemsParams($params = []) {
-        $selectOptions = $this->parseOptions($params);
-
+        $params['filters'] = [];
+        $selectOptions = Ecommerce\OptionsParser::parse($params);
         $items = Ecommerce\Item::getList($selectOptions);
         if (!$items) {
             return [];
@@ -389,7 +203,7 @@ class Ecommerce extends Module {
      * @return array
      */
     public function getItems($params = []) {
-        $selectOptions = $this->parseOptions($params);
+        $selectOptions = Ecommerce\OptionsParser::parse($params);
         $items = Ecommerce\Item::getList($selectOptions);
         return $items;
     }
@@ -401,7 +215,7 @@ class Ecommerce extends Module {
      * @return int
      */
     public function getItemsCount($params = []) {
-        $selectOptions = $this->parseOptions($params);
+        $selectOptions = Ecommerce\OptionsParser::parse($params);
         $selectOptions['distinct'] = \Ecommerce\Item::index();
         $counts = Ecommerce\Item::getCount($selectOptions);
         if (is_array($counts)) {
