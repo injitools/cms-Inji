@@ -135,10 +135,17 @@ class OptionsParser extends \Object {
                     break;
                 case 'options':
                 case 'offerOptions':
-                    $paramPrefix = $col == 'options' ? Item\Param::colPrefix() : Item\Offer\Param::colPrefix();
-                    $itemIndex = $col == 'options' ? Item::index() : Item\Offer::index();
-                    $optionIndex = $col == 'options' ? Item\Option::index() : Item\Offer\Option::index();
-                    $table = $col == 'options' ? Item\Param::table() : Item\Offer\Param::table();
+                    if ($col == 'offerOptions') {
+                        $paramPrefix = Item\Offer\Param::colPrefix();
+                        $itemIndex = Item\Offer::index();
+                        $optionIndex = Item\Offer\Option::index();
+                        $table = Item\Offer\Param::table();
+                    } else {
+                        $paramPrefix = Item\Param::colPrefix();
+                        $itemIndex = Item::index();
+                        $optionIndex = Item\Option::index();
+                        $table = Item\Param::table();
+                    }
                     foreach ($filter as $optionId => $optionValue) {
                         $optionId = (int) $optionId;
                         if (is_array($optionValue)) {
@@ -202,15 +209,8 @@ class OptionsParser extends \Object {
         if (!empty(\App::$cur->Ecommerce->config['view_empty_warehouse'])) {
             return;
         }
-        $warehouseIds = [];
-        if (\App::$cur->geography && \Geography\City::$cur) {
-            $warehouses = \Geography\City\Data::get([['code', 'warehouses'], ['city_id', \Geography\City::$cur->id]]);
-            if ($warehouses && $warehouses->data) {
-                foreach (explode(',', $warehouses->data) as $id) {
-                    $warehouseIds[$id] = $id;
-                }
-            }
-        }
+        $warehouseIds = self::getWarehouses();
+
         $selectOptions['where'][] = [
             '(
           (SELECT COALESCE(sum(`' . Item\Offer\Warehouse::colPrefix() . 'count`),0) 
@@ -230,6 +230,20 @@ class OptionsParser extends \Object {
             0,
             '>'
         ];
+    }
+
+    public static function getWarehouses() {
+        if (!\App::$cur->geography || !\Geography\City::$cur) {
+            return [];
+        }
+        $warehouseIds = [];
+        $warehouses = \Geography\City\Data::get([['code', 'warehouses'], ['city_id', \Geography\City::$cur->id]]);
+        if ($warehouses && $warehouses->data) {
+            foreach (explode(',', $warehouses->data) as $id) {
+                $warehouseIds[$id] = $id;
+            }
+        }
+        return $warehouseIds;
     }
 
 }
