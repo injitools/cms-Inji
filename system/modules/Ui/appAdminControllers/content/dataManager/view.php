@@ -13,7 +13,6 @@ if ($aform->checkAccess()) {
 $row = [];
 $cols = !empty($modelName::$views['manager']['cols']) ? $modelName::$views['manager']['cols'] : array_keys($modelName::$cols);
 foreach ($cols as $colName) {
-  $modelName = get_class($item);
   $colInfo = $modelName::getColInfo($colName);
   $type = !empty($colInfo['colParams']['type']) ? $colInfo['colParams']['type'] : 'string';
   if ($type != 'dataManager') {
@@ -63,8 +62,18 @@ foreach ($cols as $colName) {
 <div>
   <?php
   $form = new \Ui\Form();
-  $form->begin();
+  $form->begin('Оставить комментарий');
   $form->input('textarea', 'comment', 'Комментарий');
   $form->end();
+  ?>
+</div>
+<div>
+  <h1>Хронология</h1>
+  <?php
+  $dataManager = new \Ui\DataManager('Dashboard\Activity');
+  $dataManager->draw(['filters' => [
+          'item_id' => ['max' => $item->id, 'min' => $item->id],
+          'model' => ['compareType' => 'equals', 'value' => $modelName]
+  ]]);
   ?>
 </div>

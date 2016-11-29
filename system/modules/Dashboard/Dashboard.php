@@ -19,4 +19,26 @@ class Dashboard extends Module {
     return 'Ресурс удален';
   }
 
+  public function moduleHref($item, $col, $colParam) {
+    if (!$item->$col) {
+      return 'Модуль не задан';
+    }
+    if (!Module::installed($item->$col, \App::$primary)) {
+      return 'Модуль ' . $item->$col . ' не установлен';
+    }
+    $moduleInfo = Module::getInfo($item->$col);
+    return !empty($moduleInfo['name']) ? $moduleInfo['name'] : $item->$col;
+  }
+
+  public function modelHref($item, $col, $colParam) {
+    if (!$item->$col) {
+      return 'Модель не задана';
+    }
+    if (!class_exists($item->$col)) {
+      return 'Модель ' . $item->$col . ' несуществует';
+    }
+    $modelName = $item->$col;
+    return $modelName::$objectName ? $modelName::$objectName : $modelName;
+  }
+
 }
