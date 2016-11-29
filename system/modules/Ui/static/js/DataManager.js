@@ -339,7 +339,7 @@ DataManager.prototype.load = function (options) {
             ids = $(instance.element).find('.datamanagertable tbody tr');
             i = 0;
             while (ids[i]) {
-              var key = $(ids[i++]).find('td').get(1).innerHTML;
+              var key = $($(ids[i++]).find('td').get(1)).text();
               inji.Server.request({
                 url: 'ui/dataManager/updateRow',
                 data: {params: instance.params, modelName: instance.modelName, key: key, col: 'weight', col_value: i, managerName: instance.managerName, silence: true},
