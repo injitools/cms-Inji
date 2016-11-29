@@ -14,11 +14,11 @@ namespace Db;
 class Mysql extends \Object {
 
     public $config = [];       // настройки подключения выбраной базы
-    public $connect = FALSE;        // ярлык соединения с MySQL
+    public $connect = false;        // ярлык соединения с MySQL
     public $encoding = 'utf-8';        // установленная кодировка
     public $db_name = 'test';         // выбраная в данный момент база
     public $table_prefix = 'inji_';   // префикс названий таблиц
-    public $pdo = NULL;
+    public $pdo = null;
     public $lastQuery = '';
     public $last_error = '';
     public $noConnectAbort = false;
@@ -29,14 +29,18 @@ class Mysql extends \Object {
      */
     public function init($connect_options) {
         extract($connect_options);
-        if (isset($db_name))
-            $this->db_name = $db_name;
-        if (isset($encoding))
-            $this->encoding = $encoding;
-        if (isset($table_prefix))
-            $this->table_prefix = $table_prefix;
-        if (isset($noConnectAbort))
-            $this->noConnectAbort = $noConnectAbort;
+        if (isset($db_name)) {
+                    $this->db_name = $db_name;
+        }
+        if (isset($encoding)) {
+                    $this->encoding = $encoding;
+        }
+        if (isset($table_prefix)) {
+                    $this->table_prefix = $table_prefix;
+        }
+        if (isset($noConnectAbort)) {
+                    $this->noConnectAbort = $noConnectAbort;
+        }
 
         $dsn = "mysql:host=$host;port=$port;dbname=$db_name;charset=$encoding";
         $dt = new \DateTime();

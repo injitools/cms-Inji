@@ -87,12 +87,12 @@ class Offer extends \Model {
     public function changeWarehouse($count) {
         $warehouse = Offer\Warehouse::get([['count', '0', '>'], ['item_offer_id', $this->id]]);
         if ($warehouse) {
-            $warehouse->count +=(float) $count;
+            $warehouse->count += (float) $count;
             $warehouse->save();
         } else {
             $warehouse = Offer\Warehouse::get([['item_offer_id', $this->id]]);
             if ($warehouse) {
-                $warehouse->count +=(float) $count;
+                $warehouse->count += (float) $count;
                 $warehouse->save();
             }
         }

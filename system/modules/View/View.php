@@ -243,7 +243,7 @@ class View extends \Module {
 
         $this->checkNeedLibs();
         $this->parseCss();
-        echo "\n        <script src='" . Statics::file(($this->app->type != 'app' ? '/' . $this->app->name : '' ) . "/static/system/js/Inji.js") . "'></script>";
+        echo "\n        <script src='" . Statics::file(($this->app->type != 'app' ? '/' . $this->app->name : '') . "/static/system/js/Inji.js") . "'></script>";
     }
 
     public function parseCss() {
@@ -266,7 +266,7 @@ class View extends \Module {
             if (file_exists($path)) {
                 $this->loadedCss[$href] = $href;
                 $urls[$href] = $path;
-                $timeStr.=filemtime($path);
+                $timeStr .= filemtime($path);
             } else {
                 echo "\n        <link href='{$href}' rel='stylesheet' type='text/css' />";
             }
@@ -314,7 +314,7 @@ class View extends \Module {
                     if (strpos($css, '//') !== false)
                         $href = $css;
                     else
-                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $css;
+                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $css;
                     $hrefs[$href] = $href;
                 }
                 break;
@@ -337,10 +337,11 @@ class View extends \Module {
                         $this->ResolveCssHref($css, $type, $hrefs);
                         continue;
                     }
-                    if (strpos($css, '//') !== false)
-                        $href = $css;
-                    else
-                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $css;
+                    if (strpos($css, '//') !== false) {
+                                            $href = $css;
+                    } else {
+                                            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $css;
+                    }
                     $hrefs[$href] = $href;
                 }
                 break;
@@ -391,20 +392,22 @@ class View extends \Module {
         $noParsedScripts = [];
         foreach ($scripts as $script) {
             if (is_string($script)) {
-                if (!empty($urls[$script]))
-                    continue;
+                if (!empty($urls[$script])) {
+                                    continue;
+                }
 
                 $path = $this->app->staticLoader->parsePath($script);
                 if (file_exists($path)) {
                     $nativeUrl[$script] = $script;
                     $urls[$script] = $path;
-                    $timeStr.=filemtime($path);
+                    $timeStr .= filemtime($path);
                 } else {
                     $noParsedScripts[$script] = $script;
                 }
             } elseif (!empty($script['file'])) {
-                if (!empty($urls[$script['file']]))
-                    continue;
+                if (!empty($urls[$script['file']])) {
+                                    continue;
+                }
 
                 $path = $this->app->staticLoader->parsePath($script['file']);
                 if (file_exists($path)) {
@@ -413,7 +416,7 @@ class View extends \Module {
                     if (!empty($script['name'])) {
                         $onLoadModules[$script['name']] = $script['name'];
                     }
-                    $timeStr.=filemtime($path);
+                    $timeStr .= filemtime($path);
                 } else {
                     $noParsedScripts[$script] = $script;
                 }
@@ -461,12 +464,14 @@ class View extends \Module {
                         $this->genScriptArray($js, $type, $resultArray);
                         continue;
                     }
-                    if (strpos($js, '//') !== false)
-                        $href = $js;
-                    else
-                        $href = $this->getHref('js', $js);
-                    if (!$href)
-                        continue;
+                    if (strpos($js, '//') !== false) {
+                                            $href = $js;
+                    } else {
+                                            $href = $this->getHref('js', $js);
+                    }
+                    if (!$href) {
+                                            continue;
+                    }
 
                     $resultArray[] = $href;
                 }
@@ -477,10 +482,11 @@ class View extends \Module {
                         $this->genScriptArray($js, $type, $resultArray);
                         continue;
                     }
-                    if (strpos($js, '//') !== false)
-                        $href = $js;
-                    else
-                        $href = $this->app->templatesPath . "/{$this->template->name}/js/{$js}";
+                    if (strpos($js, '//') !== false) {
+                                            $href = $js;
+                    } else {
+                                            $href = $this->app->templatesPath . "/{$this->template->name}/js/{$js}";
+                    }
                     $resultArray[] = $href;
                 }
                 break;
@@ -496,8 +502,9 @@ class View extends \Module {
                         $asset = [];
                     }
                     $asset['file'] = $this->getHref('js', $js);
-                    if (!$asset['file'])
-                        continue;
+                    if (!$asset['file']) {
+                                            continue;
+                    }
                     $resultArray[] = $asset;
                 }
                 break;
@@ -542,8 +549,9 @@ class View extends \Module {
                         $paramArray = true;
                     }
                 }
-                if (!$paramArray)
-                    $lineParams = ':' . implode(':', $_params);
+                if (!$paramArray) {
+                                    $lineParams = ':' . implode(':', $_params);
+                }
             }
         }
         echo "<!--start:{WIDGET:{$_widgetName}{$lineParams}}-->\n";

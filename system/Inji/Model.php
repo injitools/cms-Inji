@@ -437,6 +437,9 @@ class Model {
         }
     }
 
+    /**
+     * @param boolean $new
+     */
     public function logChanges($new) {
         if (!App::$cur->db->connect || !App::$cur->dashboard) {
             return false;
@@ -898,22 +901,27 @@ class Model {
         if (!$query) {
             return [];
         }
-        if (!empty($options['where']))
-            $query->where($options['where']);
-        if (!empty($options['cols']))
-            $query->cols = $options['cols'];
+        if (!empty($options['where'])) {
+                    $query->where($options['where']);
+        }
+        if (!empty($options['cols'])) {
+                    $query->cols = $options['cols'];
+        }
         if (!empty($options['group'])) {
             $query->group($options['group']);
         }
         if (!empty($options['having'])) {
             $query->having($options['having']);
         }
-        if (!empty($options['order']))
-            $query->order($options['order']);
-        if (!empty($options['join']))
-            $query->join($options['join']);
-        if (!empty($options['distinct']))
-            $query->distinct = $options['distinct'];
+        if (!empty($options['order'])) {
+                    $query->order($options['order']);
+        }
+        if (!empty($options['join'])) {
+                    $query->join($options['join']);
+        }
+        if (!empty($options['distinct'])) {
+                    $query->distinct = $options['distinct'];
+        }
 
         foreach (static::$relJoins as $join) {
             $query->join($join[0], $join[1]);
@@ -939,14 +947,14 @@ class Model {
         }
         static::$needJoin = [];
 
-        if (!empty($options['limit']))
-            $limit = (int) $options['limit'];
-        else {
+        if (!empty($options['limit'])) {
+                    $limit = (int) $options['limit'];
+        } else {
             $limit = 0;
         }
-        if (!empty($options['start']))
-            $start = (int) $options['start'];
-        else {
+        if (!empty($options['start'])) {
+                    $start = (int) $options['start'];
+        } else {
             $start = 0;
         }
         if ($limit || $start) {
@@ -1221,21 +1229,23 @@ class Model {
         if (!empty($options['group'])) {
             static::fixPrefix($options['group'], 'first');
         }
-        if (!empty($options['where']))
-            $query->where($options['where']);
-        if (!empty($options['join']))
-            $query->join($options['join']);
+        if (!empty($options['where'])) {
+                    $query->where($options['where']);
+        }
+        if (!empty($options['join'])) {
+                    $query->join($options['join']);
+        }
         if (!empty($options['order'])) {
             $query->order($options['order']);
         }
-        if (!empty($options['limit']))
-            $limit = (int) $options['limit'];
-        else {
+        if (!empty($options['limit'])) {
+                    $limit = (int) $options['limit'];
+        } else {
             $limit = 0;
         }
-        if (!empty($options['start']))
-            $start = (int) $options['start'];
-        else {
+        if (!empty($options['start'])) {
+                    $start = (int) $options['start'];
+        } else {
             $start = 0;
         }
         if ($limit || $start) {
@@ -1312,8 +1322,9 @@ class Model {
 
         $values = [];
         foreach ($cols as $col => $param) {
-            if (isset($params[$col]))
-                $values[$col] = $params[$col];
+            if (isset($params[$col])) {
+                            $values[$col] = $params[$col];
+            }
         }
         if (empty($values)) {
             return false;
@@ -1650,10 +1661,11 @@ class Model {
     public static function findRelation($col) {
 
         foreach (static::relations() as $relName => $rel) {
-            if ($rel['col'] == $col)
-                return $relName;
+            if ($rel['col'] == $col) {
+                            return $relName;
+            }
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -1765,7 +1777,7 @@ class Model {
                     $options = [$relation['col'], $this->pk()];
                     break;
                 default:
-                    if ($this->$relation['col'] === NULL) {
+                    if ($this->$relation['col'] === null) {
                         return null;
                     }
                     $getType = 'get';
@@ -1786,7 +1798,7 @@ class Model {
             }
             return $this->loadedRelations[$name][json_encode($params)];
         }
-        return NULL;
+        return null;
     }
 
     /**

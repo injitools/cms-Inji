@@ -19,7 +19,7 @@ class Query extends \Object {
     public $having = [];
     public $havingString = '';
     public $cols = [];
-    public $order = NULL;
+    public $order = null;
     public $join = [];
     public $group = [];
     public $limit = '';
@@ -125,12 +125,14 @@ class Query extends \Object {
         if (!is_array($order)) {
             $this->order[] = "{$order} {$type}";
         } else {
-            foreach ($order as $item)
-                if (!is_array($item)) {
+            foreach ($order as $item) {
+                            if (!is_array($item)) {
                     call_user_func_array(array($this, 'order'), $order);
+            }
                     break;
-                } else
-                    $this->order($item);
+                } else {
+                                    $this->order($item);
+                }
         }
     }
 
@@ -138,8 +140,9 @@ class Query extends \Object {
         $start = intval($start);
         $len = intval($len);
         $this->limit = "LIMIT {$start}";
-        if ($len !== 0)
-            $this->limit .= ",{$len}";
+        if ($len !== 0) {
+                    $this->limit .= ",{$len}";
+        }
     }
 
     public function buildJoin($table, $where = false, $type = 'LEFT', $alias = '') {
@@ -151,10 +154,12 @@ class Query extends \Object {
             }
         } else {
             $join .= " {$type} JOIN {$this->curInstance->table_prefix}{$table}";
-            if ($alias)
-                $join .= " AS `{$alias}`";
-            if ($where)
-                $join .= " ON {$where}";
+            if ($alias) {
+                            $join .= " AS `{$alias}`";
+            }
+            if ($where) {
+                            $join .= " ON {$where}";
+            }
         }
         return $join;
     }
@@ -173,25 +178,27 @@ class Query extends \Object {
                 $operation = '=';
             }
 
-            if ($concatenation === false)
-                $concatenation = 'AND';
-            elseif ($concatenation === true)
-                $concatenation = '';
+            if ($concatenation === false) {
+                            $concatenation = 'AND';
+            } elseif ($concatenation === true) {
+                            $concatenation = '';
+            }
 
-            if ($this->whereString == NULL)
-                $this->whereString = ' WHERE ';
+            if ($this->whereString == NULL) {
+                            $this->whereString = ' WHERE ';
+            }
 
             if (stristr($operation, 'IN') || stristr($operation, 'NOT IN')) {
                 if (is_array($value)) {
                     $newValue = '';
                     foreach ($value as $item) {
                         if ($newValue) {
-                            $newValue.=',';
+                            $newValue .= ',';
                         }
                         if (is_string($item)) {
-                            $newValue .='"' . $item . '"';
+                            $newValue .= '"' . $item . '"';
                         } else {
-                            $newValue .=$item;
+                            $newValue .= $item;
                         }
                     }
                     $value = '(' . $newValue . ')';
@@ -205,17 +212,17 @@ class Query extends \Object {
                 $value = "?";
             }
 
-            if (substr($this->whereString, -1, 1) == '(' || substr($this->whereString, -2, 2) == 'E ')
-                $this->whereString .= " {$where} {$operation} {$value} ";
-            else
-                $this->whereString .= "{$concatenation} {$where} {$operation} {$value} ";
-        }
-        else {
+            if (substr($this->whereString, -1, 1) == '(' || substr($this->whereString, -2, 2) == 'E ') {
+                            $this->whereString .= " {$where} {$operation} {$value} ";
+            } else {
+                            $this->whereString .= "{$concatenation} {$where} {$operation} {$value} ";
+            }
+        } else {
             $i = -1;
             while (isset($where[++$i])) {
                 $item = $where[$i];
                 if (isset($where[$i + 1]) && !isset($where[$i - 1]) && is_array($where[$i])) {
-                    if ($this->whereString != NULL && substr($this->whereString, -1, 1) != '(' && $this->whereString != 'WHERE ') {
+                    if ($this->whereString != null && substr($this->whereString, -1, 1) != '(' && $this->whereString != 'WHERE ') {
                         if (!isset($item[3])) {
                             $concatenation = 'AND';
                         } else {
@@ -225,10 +232,11 @@ class Query extends \Object {
                         $this->whereString .= "{$concatenation} ";
                     }
 
-                    if ($this->whereString != NULL)
-                        $this->whereString .= '(';
-                    else
-                        $this->whereString = 'WHERE (';
+                    if ($this->whereString != NULL) {
+                                            $this->whereString .= '(';
+                    } else {
+                                            $this->whereString = 'WHERE (';
+                    }
                 }
 
                 if (!is_array($item)) {
@@ -257,25 +265,27 @@ class Query extends \Object {
             if (empty($operation)) {
                 $operation = '=';
             }
-            if ($concatenation === false)
-                $concatenation = 'AND';
-            elseif ($concatenation === true)
-                $concatenation = '';
+            if ($concatenation === false) {
+                            $concatenation = 'AND';
+            } elseif ($concatenation === true) {
+                            $concatenation = '';
+            }
 
-            if ($this->havingString == NULL)
-                $this->havingString = ' HAVING ';
+            if ($this->havingString == NULL) {
+                            $this->havingString = ' HAVING ';
+            }
 
             if (stristr($operation, 'IN') || stristr($operation, 'NOT IN')) {
                 if (is_array($value)) {
                     $newValue = '';
                     foreach ($value as $item) {
                         if ($newValue) {
-                            $newValue.=',';
+                            $newValue .= ',';
                         }
                         if (is_string($item)) {
-                            $newValue .='"' . $item . '"';
+                            $newValue .= '"' . $item . '"';
                         } else {
-                            $newValue .=$item;
+                            $newValue .= $item;
                         }
                     }
                     $value = '(' . $newValue . ')';
@@ -289,17 +299,17 @@ class Query extends \Object {
                 $value = "?";
             }
 
-            if (substr($this->havingString, -1, 1) == '(' || substr($this->havingString, -2, 2) == 'E ')
-                $this->havingString .= " {$where} {$operation} {$value} ";
-            else
-                $this->havingString .= "{$concatenation} {$where} {$operation} {$value} ";
-        }
-        else {
+            if (substr($this->havingString, -1, 1) == '(' || substr($this->havingString, -2, 2) == 'E ') {
+                            $this->havingString .= " {$where} {$operation} {$value} ";
+            } else {
+                            $this->havingString .= "{$concatenation} {$where} {$operation} {$value} ";
+            }
+        } else {
             $i = -1;
             while (isset($where[++$i])) {
                 $item = $where[$i];
                 if (isset($where[$i + 1]) && !isset($where[$i - 1]) && is_array($where[$i])) {
-                    if ($this->havingString != NULL && substr($this->havingString, -1, 1) != '(' && $this->havingString != 'HAVING ') {
+                    if ($this->havingString != null && substr($this->havingString, -1, 1) != '(' && $this->havingString != 'HAVING ') {
                         if (!isset($item[3])) {
                             $concatenation = 'AND';
                         } else {
@@ -309,10 +319,11 @@ class Query extends \Object {
                         $this->havingString .= "{$concatenation} ";
                     }
 
-                    if ($this->havingString != NULL)
-                        $this->havingString .= '(';
-                    else
-                        $this->havingString = 'HAVING (';
+                    if ($this->havingString != NULL) {
+                                            $this->havingString .= '(';
+                    } else {
+                                            $this->havingString = 'HAVING (';
+                    }
                 }
 
                 if (!is_array($item)) {
@@ -381,7 +392,7 @@ class Query extends \Object {
                     }
                 }
                 $update = implode(',', $updates);
-                $query .=" SET {$update}";
+                $query .= " SET {$update}";
             case 'SELECT':
             case 'DELETE':
                 $this->buildWhere($this->where);

@@ -20,14 +20,15 @@ class Access extends Module {
         if (!$app) {
             $app = $this->app->type;
         }
-        if (!empty($this->config['access']['accessTree'][$app]['deniedUrl']))
-            return $this->config['access']['accessTree'][$app]['deniedUrl'];
+        if (!empty($this->config['access']['accessTree'][$app]['deniedUrl'])) {
+                    return $this->config['access']['accessTree'][$app]['deniedUrl'];
+        }
 
         return '/';
     }
 
     public function checkAccess($element, $user = null) {
-        $access = NULL;
+        $access = null;
         foreach ($this->accessCheckers as $getter) {
             foreach ($getter['classes'] as $className) {
                 if ($element instanceof $className) {
@@ -46,8 +47,9 @@ class Access extends Module {
             return true;
         }
 
-        if ((!$user->group_id && !empty($access)) || ($user->group_id && !empty($access) && !in_array($user->group_id, $access)))
-            return false;
+        if ((!$user->group_id && !empty($access)) || ($user->group_id && !empty($access) && !in_array($user->group_id, $access))) {
+                    return false;
+        }
 
         return true;
     }
@@ -69,7 +71,7 @@ class Access extends Module {
         } elseif (!$path) {
             return $array;
         } else {
-            return NULL;
+            return null;
         }
     }
 

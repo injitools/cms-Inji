@@ -221,7 +221,7 @@ class Ecommerce extends Module {
         if (is_array($counts)) {
             $sum = 0;
             foreach ($counts as $count) {
-                $sum +=$count['count'];
+                $sum += $count['count'];
             }
             return $sum;
         }
