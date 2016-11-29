@@ -3,6 +3,7 @@
 return [
     'autoloadModules' => [],
     'modules' => [
+        'Dashboard',
         'StaticLoader',
         'Ui',
         'Db',

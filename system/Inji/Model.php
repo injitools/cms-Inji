@@ -117,6 +117,8 @@ class Model {
     $this->setParams($params);
   }
 
+  public static $logging = true;
+
   /**
    * return object name
    * 
@@ -433,6 +435,62 @@ class Model {
         }
         break;
     }
+  }
+
+  public function logChanges($new) {
+    if (!App::$cur->db->connect || !App::$cur->dashboard) {
+      return false;
+    }
+    $class = get_class($this);
+    if (!$class::$logging) {
+      return false;
+    }
+    if (!$new && !empty($this->_changedParams)) {
+      $activity = new Dashboard\Activity([
+          'user_id' => \Users\User::$cur->id,
+          'module' => substr($class, 0, strpos($class, '\\')),
+          'model' => $class,
+          'item_id' => $this->pk(),
+          'type' => 'changes'
+      ]);
+      $changes_text = [];
+      foreach ($this->_changedParams as $fullColName => $oldValue) {
+        $colName = substr($fullColName, strlen($class::colPrefix()));
+        if(isset($class::$cols[$colName]['logging']) && !$class::$cols[$colName]['logging']){
+          continue;
+        }
+        if (strlen($oldValue) + strlen($this->_params[$fullColName]) < 200) {
+          $changes_text[] = (!empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName) . ": \"{$oldValue}\" => \"{$this->$colName}\"";
+        } else {
+          $changes_text[] = !empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName;
+        }
+      }
+      if (!$changes_text) {
+        return false;
+      }
+      $activity->changes_text = implode(', ', $changes_text);
+      $activity->save();
+      foreach ($this->_changedParams as $fullColName => $oldValue) {
+        $colName = substr($fullColName, strlen($class::colPrefix()));
+        $change = new Dashboard\Activity\Change([
+            'activity_id' => $activity->id,
+            'col' => $colName,
+            'old' => $oldValue,
+            'new' => $this->$colName
+        ]);
+        $change->save();
+      }
+    } elseif ($new) {
+      $activity = new Dashboard\Activity([
+          'user_id' => \Users\User::$cur->id,
+          'module' => substr($class, 0, strpos($class, '\\')),
+          'model' => $class,
+          'item_id' => $this->pk(),
+          'type' => 'new'
+      ]);
+      $activity->save();
+    }
+    return true;
   }
 
   /**
@@ -1427,7 +1485,6 @@ class Model {
       Inji::$inst->event('modelItemParamsChanged-' . get_called_class(), $this);
     }
     $this->beforeSave();
-    $this->logChanges();
     $values = [];
 
     foreach ($this->cols() as $col => $param) {
@@ -1458,6 +1515,7 @@ class Model {
       $new = true;
       $this->_params[$this->index()] = App::$cur->db->insert($this->table(), $values);
     }
+    $this->logChanges($new);
     App::$cur->db->where($this->index(), $this->_params[$this->index()]);
     try {
       $result = App::$cur->db->select($this->table());
