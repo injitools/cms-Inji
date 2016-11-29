@@ -269,13 +269,14 @@ class CartController extends Controller {
             $result->send();
         }
 
-        $item->sales ++;
+        $item->sales++;
         $item->save();
 
-        if (empty($_GET['count']))
-            $count = 1;
-        else
-            $count = (float) $_GET['count'];
+        if (empty($_GET['count'])) {
+                    $count = 1;
+        } else {
+                    $count = (float) $_GET['count'];
+        }
 
         $cart = $this->ecommerce->getCurCart();
         $stages = Ecommerce\Cart\Stage::getList();

@@ -23,7 +23,7 @@ class Html {
         $html = "<{$tag}";
         if (!empty($attributes) && is_array($attributes)) {
             foreach ($attributes as $key => $value) {
-                $html .=" {$key} = '";
+                $html .= " {$key} = '";
                 if (!is_array($value)) {
                     $html .= addcslashes($value, "'");
                 } else {

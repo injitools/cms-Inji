@@ -44,7 +44,7 @@ class Price extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['price', 'currency_id',],
+                ['price', 'currency_id', ],
                 ['item_offer_price_type_id', 'item_offer_id']
             ]
     ]];

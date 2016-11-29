@@ -15,8 +15,9 @@ class Db extends Module {
             $param = isset($this->config['default']) ? $this->config['default'] : 'local';
         }
         if (!is_array($param)) {
-            if (!($dbOption = Db\Options::get($param, 'connect_alias', ['array' => true])))
-                return false;
+            if (!($dbOption = Db\Options::get($param, 'connect_alias', ['array' => true]))) {
+                            return false;
+            }
 
             $db = $dbOption;
         } else {

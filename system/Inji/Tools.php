@@ -36,7 +36,7 @@ class Tools extends Model {
      */
     public static function uriParse($uri) {
         $answerPos = strpos($uri, '?');
-        $params = array_slice(explode('/', substr($uri, 0, $answerPos ? $answerPos : strlen($uri) )), 1);
+        $params = array_slice(explode('/', substr($uri, 0, $answerPos ? $answerPos : strlen($uri))), 1);
 
         foreach ($params as $key => $param) {
             if ($param != '') {
@@ -81,7 +81,7 @@ class Tools extends Model {
      */
     public static function resizeImage($img_path, $max_width = 1000, $max_height = 1000, $crop = false, $pos = 'center') {
         ini_set("gd.jpeg_ignore_warning", 1);
-        list( $img_width, $img_height, $img_type, $img_tag ) = getimagesize($img_path);
+        list($img_width, $img_height, $img_type, $img_tag) = getimagesize($img_path);
         switch ($img_type) {
             case 1:
                 $img_type = 'gif';
@@ -100,21 +100,22 @@ class Tools extends Model {
             return false;
         }
 
-        if ($img_width / $max_width > $img_height / $max_height)
-            $separator = $img_width / $max_width;
-        else
-            $separator = $img_height / $max_height;
+        if ($img_width / $max_width > $img_height / $max_height) {
+                    $separator = $img_width / $max_width;
+        } else {
+                    $separator = $img_height / $max_height;
+        }
 
         if ($crop === true || $crop == 'q') {
             if ($img_width > $img_height) {
-                $imgX = floor(( $img_width - $img_height ) / 2);
+                $imgX = floor(($img_width - $img_height) / 2);
                 $imgY = 0;
                 $img_width = $img_height;
                 $new_width = $max_width;
                 $new_height = $max_height;
             } else {
                 $imgX = 0;
-                $imgY = floor(( $img_height - $img_width ) / 2);
+                $imgY = floor(($img_height - $img_width) / 2);
                 $img_height = $img_width;
                 $new_width = $max_width;
                 $new_height = $max_height;
@@ -135,7 +136,7 @@ class Tools extends Model {
             $new_width = $max_width;
             $new_height = $max_height;
 //Находим начальные координаты (центрируем новое изображение)
-            $imgX = (int) (($ow / 2) - ($img_width / 2) );
+            $imgX = (int) (($ow / 2) - ($img_width / 2));
             if ($pos == 'center') {
                 $imgY = (int) (($oh / 2) - ($img_height / 2));
             } else {
