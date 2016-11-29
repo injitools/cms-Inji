@@ -110,9 +110,11 @@ function DataManager(element) {
     return false;
   });
   self = this;
+  //TODO: miltiple handlers
   $(document).on('scroll', function () {
     self.flowPanel();
   });
+  //TODO: miltiple handlers
   $(window).on('resize', function () {
     self.flowPanel();
   });
@@ -397,21 +399,24 @@ DataManager.prototype.switchCategory = function (categoryBtn) {
 }
 DataManager.prototype.flowPanel = function () {
 
-  var elHeight = $(this.element).offset().top + $(this.element).height();
+  var managerHeight = $(this.element).height();
+  var managerTop = $(this.element).offset().top;
+  var managerBottom = managerTop + managerHeight;
+
   var scrollHeight = $(document).scrollTop() + $(window).height();
-  var floaterContainer = $(this.element).find('.dataManager-bottomFloat-container');
   var floater = $(this.element).find('.dataManager-bottomFloat');
 
-  if (elHeight > scrollHeight && scrollHeight < scrollHeight + floater.outerHeight()) {
+  if (managerBottom > scrollHeight && managerTop < scrollHeight && scrollHeight < scrollHeight + floater.outerHeight()) {
     if (!floater.hasClass('floated')) {
+      var floaterContainer = $(this.element).find('.dataManager-bottomFloat-container');
       floaterContainer.css('height', floater.outerHeight());
       floater.css('right', $(window).width() - ($(this.element).offset().left + $(this.element).width()) + 'px');
       floater.css('position', 'fixed');
       floater.addClass('floated');
-      
     }
   } else {
     if (floater.hasClass('floated')) {
+      var floaterContainer = $(this.element).find('.dataManager-bottomFloat-container');
       floater.css('right', 'auto');
       floater.css('position', 'relative');
       floater.removeClass('floated');
