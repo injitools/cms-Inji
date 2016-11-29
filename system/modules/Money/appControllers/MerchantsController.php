@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MerchantsController extends Controller
-{
-    public function testPayAction()
-    {
+class MerchantsController extends Controller {
+
+    public function testPayAction() {
 
         $this->module->goToMerchant([
             'data' => 'test',
@@ -26,8 +25,7 @@ class MerchantsController extends Controller
         ]);
     }
 
-    public function reciverAction($system = '', $status = '')
-    {
+    public function reciverAction($system = '', $status = '') {
         $postData = [];
         foreach ($_POST as $key => $text) {
             if (!is_array($text) && !mb_detect_encoding($text, array('UTF-8'), TRUE)) {
@@ -62,8 +60,7 @@ class MerchantsController extends Controller
         $this->module->reciver($postData, $system, $status, $request);
     }
 
-    public function payAction($pay_id = 0)
-    {
+    public function payAction($pay_id = 0) {
         $pay = Money\Pay::get([['id', $pay_id], ['user_id', Users\User::$cur->id]]);
         if (!$pay) {
             $this->view->setTitle('Выбор счета для оплаты');
@@ -86,8 +83,7 @@ class MerchantsController extends Controller
         }
     }
 
-    public function cancelPayAction($pay_id = 0)
-    {
+    public function cancelPayAction($pay_id = 0) {
         $pay = Money\Pay::get([['id', $pay_id], ['user_id', Users\User::$cur->id]]);
         if (!$pay) {
             Tools::redirect('/users/cabinet/wallets', 'Такой платеж несуществует');
@@ -97,8 +93,7 @@ class MerchantsController extends Controller
         Tools::redirect('/users/cabinet/wallets', 'Платеж был отменен');
     }
 
-    public function goAction($pay_id, $merchant_id, $currency_id)
-    {
+    public function goAction($pay_id, $merchant_id, $currency_id) {
         $pay = Money\Pay::get($pay_id);
         if (!$pay) {
             Tools::redirect('/', 'Такой платеж не найден', 'danger');

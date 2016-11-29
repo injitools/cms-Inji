@@ -31,8 +31,7 @@ function toggleEditor(btn) {
     });
     isEditingEnabled = true;
     $(btn).text('Отключить редактирование');
-  }
-  else {
+  } else {
     $.each($('.fastEdit'), function () {
       $(this).ckeditor().editor.destroy();
       $(this).removeAttr('contenteditable');

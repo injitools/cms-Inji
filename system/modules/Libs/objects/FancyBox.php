@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class FancyBox extends \Object
-{
+class FancyBox extends \Object {
+
     public static $name = 'Fancy Box';
     public static $files = [
         'js' => [

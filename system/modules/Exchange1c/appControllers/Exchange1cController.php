@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Exchange1cController extends Controller
-{
-    public function indexAction()
-    {
+class Exchange1cController extends Controller {
+
+    public function indexAction() {
         ini_set('memory_limit', '2000M');
         ignore_user_abort(true);
         set_time_limit(0);

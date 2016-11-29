@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Offer;
 
-class Bonus extends \Model
-{
+class Bonus extends \Model {
+
     public static $cols = [
         //Основные параметры
         'item_offer_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'offer'],
@@ -25,8 +25,7 @@ class Bonus extends \Model
         'date_create' => ['type' => 'dateTime']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'offer' => [
                 'model' => 'Ecommerce\Item\Offer',

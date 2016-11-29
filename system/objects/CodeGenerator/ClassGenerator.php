@@ -11,15 +11,14 @@
 
 namespace CodeGenerator;
 
-class ClassGenerator extends \Object
-{
+class ClassGenerator extends \Object {
+
     public $propertys = [];
     public $methods = [];
     public $name = 'class';
     public $extends = '';
 
-    public function addProperty($name, $value = null, $static = false, $security = 'public')
-    {
+    public function addProperty($name, $value = null, $static = false, $security = 'public') {
         $this->propertys[$name] = new Property();
         $this->propertys[$name]->name = $name;
         $this->propertys[$name]->value = $value;
@@ -27,8 +26,7 @@ class ClassGenerator extends \Object
         $this->propertys[$name]->security = $security;
     }
 
-    public function addMethod($name, $body = '', $propertys = [], $static = false, $security = 'public')
-    {
+    public function addMethod($name, $body = '', $propertys = [], $static = false, $security = 'public') {
         $this->methods[$name] = new Method();
         $this->methods[$name]->name = $name;
         $this->methods[$name]->body = $body;
@@ -37,8 +35,7 @@ class ClassGenerator extends \Object
         $this->methods[$name]->security = $security;
     }
 
-    public function generate()
-    {
+    public function generate() {
         $code = 'class ' . $this->name . ' ';
         if ($this->extends) {
             $code .= 'extends ' . $this->extends . ' ';

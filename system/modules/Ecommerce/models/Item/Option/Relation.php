@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Option;
 
-class Relation extends \Model
-{
+class Relation extends \Model {
+
     public static $objectName = 'Связь каталога и опций';
     public static $labels = [
         'category_id' => 'Категория',
@@ -42,8 +42,7 @@ class Relation extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'category' => [
                 'model' => 'Ecommerce\Category',

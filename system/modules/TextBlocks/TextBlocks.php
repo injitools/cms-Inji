@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Text blocks module
  *
@@ -7,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class TextBlocks extends Module
-{
-    public function init()
-    {
+class TextBlocks extends Module {
+
+    public function init() {
         
     }
 

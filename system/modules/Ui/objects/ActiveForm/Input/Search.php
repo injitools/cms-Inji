@@ -11,10 +11,9 @@
 
 namespace Ui\ActiveForm\Input;
 
-class Search extends \Ui\ActiveForm\Input
-{
-    public function draw()
-    {
+class Search extends \Ui\ActiveForm\Input {
+
+    public function draw() {
         $inputName = $this->colName();
         $inputLabel = $this->colLabel();
         $modelName = $this->activeForm->modelName;

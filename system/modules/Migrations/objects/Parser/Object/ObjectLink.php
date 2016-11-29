@@ -11,10 +11,9 @@
 
 namespace Migrations\Parser\Object;
 
-class ObjectLink extends \Migrations\Parser
-{
-    public function parse()
-    {
+class ObjectLink extends \Migrations\Parser {
+
+    public function parse() {
         $object = \App::$cur->migrations->getMigrationObject($this->param->value);
         $objectId = \App::$cur->migrations->findObject((string) $this->data, $object->model);
         $modelName = $object->model;

@@ -11,8 +11,8 @@
 
 namespace Ui;
 
-class Table extends \Object
-{
+class Table extends \Object {
+
     public $cols = [];
     public $rows = [];
     public $buttons = [];
@@ -23,28 +23,23 @@ class Table extends \Object
     public $attributes = [];
     public $indexCol = null;
 
-    public function setCols($cols)
-    {
+    public function setCols($cols) {
         $this->cols = $cols;
     }
 
-    public function draw()
-    {
+    public function draw() {
         \App::$cur->view->widget('Ui\Table/body', ['table' => $this]);
     }
 
-    public static function drawRow($row)
-    {
+    public static function drawRow($row) {
         \App::$cur->view->widget('Ui\Table/row', ['row' => $row]);
     }
 
-    public function addRow($row)
-    {
+    public function addRow($row) {
         $this->rows[] = $row;
     }
 
-    public function addButton($button)
-    {
+    public function addButton($button) {
         $this->buttons[] = $button;
     }
 

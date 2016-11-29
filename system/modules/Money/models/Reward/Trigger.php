@@ -11,8 +11,8 @@
 
 namespace Money\Reward;
 
-class Trigger extends \Model
-{
+class Trigger extends \Model {
+
     public static $cols = [
         'reward_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'reward'],
         'type' => ['type' => 'text'],
@@ -21,8 +21,7 @@ class Trigger extends \Model
         'date_create' => ['type' => 'dateTime'],
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'params' => [
                 'type' => 'many',

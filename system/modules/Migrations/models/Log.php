@@ -11,8 +11,8 @@
 
 namespace Migrations;
 
-class Log extends \Model
-{
+class Log extends \Model {
+
     public static $objectName = 'История миграции';
     public static $labels = [
         'result' => 'Результат',
@@ -45,8 +45,7 @@ class Log extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'events' => [
                 'type' => 'many',

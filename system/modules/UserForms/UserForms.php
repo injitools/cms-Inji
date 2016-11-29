@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class UserForms extends \Module
-{
-    public function init()
-    {
+class UserForms extends \Module {
+
+    public function init() {
         \App::$cur->view->customAsset('js', '/static/moduleAsset/UserForms/js/formCatcher.js');
         if (!empty($_POST['UserForms'])) {
             foreach ($_POST['UserForms'] as $form_id => $inputs) {
@@ -55,8 +54,7 @@ class UserForms extends \Module
         }
     }
 
-    public function formData($item)
-    {
+    public function formData($item) {
         $inputs = json_decode($item->data, true);
         $text = '';
         foreach ($item->form->inputs as $input) {

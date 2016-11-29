@@ -8,26 +8,24 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Value
-{
+class Value {
+
     public $valueKey = '';
     public $model = null;
     public $type = 'string';
 
-    public function __construct($model, $key)
-    {
+    public function __construct($model, $key) {
         $this->model = $model;
         $this->valueKey = $key;
     }
 
-    public function forView($options = [])
-    {
+    public function forView($options = []) {
         $modelName = get_class($this->model);
         $colInfo = $modelName::getColInfo($this->valueKey);
         $type = !empty($colInfo['colParams']['type']) ? $colInfo['colParams']['type'] : 'string';
         switch ($type) {
             case 'dateTime':
-                //fall
+            //fall
             case 'date':
                 $yy = (int) substr($this->model->{$this->valueKey}, 0, 4);
                 $mm = (int) substr($this->model->{$this->valueKey}, 5, 2);

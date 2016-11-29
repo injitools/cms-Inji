@@ -11,18 +11,16 @@
 
 namespace Users;
 
-class SocialHelper extends \Object
-{
-    public static function getObject()
-    {
+class SocialHelper extends \Object {
+
+    public static function getObject() {
         $class = get_called_class();
         $class = substr($class, strrpos($class, '\\') + 1);
         $object = Social::get($class, 'object_name');
         return $object;
     }
 
-    public static function getConfig()
-    {
+    public static function getConfig() {
         $object = static::getObject();
         $configs = [];
         foreach ($object->configs as $config) {
@@ -31,8 +29,7 @@ class SocialHelper extends \Object
         return $configs;
     }
 
-    public static function checkAppAccess()
-    {
+    public static function checkAppAccess() {
         return false;
     }
 

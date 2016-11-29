@@ -2,25 +2,25 @@
     <h1>
       <?= $table->name ? $table->name : ($table->buttons ? '&nbsp;' : ''); ?>
       <?php if ($table->buttons) { ?>
-          <div class ='pull-right'>
-            <div class="btn-group">
-              <?php
-              $html = '';
-              foreach ($table->buttons as $button) {
-                  $html .= '<a class = "btn btn-primary btn-sm"';
-                  if (!empty($button['href'])) {
-                      $html .= " href = '{$button['href']}'";
-                  }
-                  if (!empty($button['onclick'])) {
-                      $html .= " onclick = '{$button['onclick']}'";
-                  }
-                  $html .= ">{$button['text']}</a> ";
-              }
-              echo $html;
-              ?>
+            <div class ='pull-right'>
+                <div class="btn-group">
+                    <?php
+                    $html = '';
+                    foreach ($table->buttons as $button) {
+                        $html .= '<a class = "btn btn-primary btn-sm"';
+                        if (!empty($button['href'])) {
+                            $html .= " href = '{$button['href']}'";
+                        }
+                        if (!empty($button['onclick'])) {
+                            $html .= " onclick = '{$button['onclick']}'";
+                        }
+                        $html .= ">{$button['text']}</a> ";
+                    }
+                    echo $html;
+                    ?>
+                </div>
             </div>
-          </div>
-      <?php } ?>
+        <?php } ?>
     </h1>
 <?php } ?>
 <?= $table->afterHeader; ?>

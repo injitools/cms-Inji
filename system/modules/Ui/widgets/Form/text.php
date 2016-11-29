@@ -9,16 +9,16 @@ $attributes = [
     'value' => !empty($options['value']) ? addcslashes($options['value'], "'") : (!empty($form->userDataTree[$name]) ? addcslashes($form->userDataTree[$name], "'") : '')
 ];
 if (!empty($options['disabled'])) {
-  $attributes['disabled'] = 'disabled';
+    $attributes['disabled'] = 'disabled';
 }
 if (!empty($options['placeholder'])) {
-  $attributes['placeholder'] = $options['placeholder'];
+    $attributes['placeholder'] = $options['placeholder'];
 }
 if (!empty($options['checked'])) {
-  $attributes['checked'] = 'checked';
+    $attributes['checked'] = 'checked';
 }
 if (!empty($options['attributes'])) {
-  $attributes = array_merge($attributes, $options['attributes']);
+    $attributes = array_merge($attributes, $options['attributes']);
 }
 echo Html::el('input', $attributes, '', null);
 echo!empty($options['helpText']) ? "<div class='help-block'>{$options['helpText']}</div>" : '';

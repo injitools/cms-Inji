@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class Bootstrap extends \Object
-{
+class Bootstrap extends \Object {
+
     public static $name = 'BootStrap';
     public static $composerPacks = [
         'twbs/bootstrap' => '3.*'

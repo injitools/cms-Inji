@@ -11,10 +11,9 @@
 
 namespace Money;
 
-class Pay extends \Model
-{
-    public static function relations()
-    {
+class Pay extends \Model {
+
+    public static function relations() {
         return [
             'currency' => [
                 'model' => 'Money\Currency',

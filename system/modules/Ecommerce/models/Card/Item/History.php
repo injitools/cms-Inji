@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Card\Item;
 
-class History extends \Model
-{
+class History extends \Model {
+
     public static $cols = [
         //Основные параметры
         'card_item_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'cardItem'],
@@ -21,8 +21,7 @@ class History extends \Model
         'date_create' => ['type' => 'dateTime'],
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'cardItem' => [
                 'model' => 'Ecommerce\Card\Item',

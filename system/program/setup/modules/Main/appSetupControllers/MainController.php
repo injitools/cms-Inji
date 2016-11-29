@@ -8,16 +8,14 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MainController extends Controller
-{
-    public function indexAction()
-    {
+class MainController extends Controller {
+
+    public function indexAction() {
         $this->view->setTitle('Система');
         $this->view->page();
     }
 
-    public function enterAction()
-    {
+    public function enterAction() {
         $config = Config::share();
         if (!empty($_POST['systemPass'])) {
             if (empty($config['systemPass'])) {

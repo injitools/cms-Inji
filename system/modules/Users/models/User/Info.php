@@ -11,8 +11,8 @@
 
 namespace Users\User;
 
-class Info extends \Model
-{
+class Info extends \Model {
+
     public static $objectName = "Расширенная информация";
     public static $cols = [
         'first_name' => ['type' => 'text'],
@@ -73,8 +73,7 @@ class Info extends \Model
         'user_id' => 'Пользователь'
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',
@@ -87,8 +86,7 @@ class Info extends \Model
         ];
     }
 
-    public function name()
-    {
+    public function name() {
         if ($this->first_name . $this->last_name . $this->middle_name) {
             $name = '';
             if ($this->first_name) {

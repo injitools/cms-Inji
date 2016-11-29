@@ -11,8 +11,8 @@
 
 namespace Files;
 
-class Folder extends \Model
-{
+class Folder extends \Model {
+
     public static $cols = [
         'dir' => ['type' => 'text'],
         'name' => ['type' => 'text'],
@@ -21,15 +21,13 @@ class Folder extends \Model
         'date_create' => ['type' => 'dateTime'],
     ];
 
-    public function beforeDelete()
-    {
+    public function beforeDelete() {
         foreach ($this->files as $file) {
             $file->delete();
         }
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'files' => [
                 'type' => 'many',

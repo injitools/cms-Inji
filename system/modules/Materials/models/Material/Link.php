@@ -11,8 +11,8 @@
 
 namespace Materials\Material;
 
-class Link extends \Model
-{
+class Link extends \Model {
+
     public static $objectName = 'Связь с материалом';
     public static $labels = [
         'name' => 'Название',
@@ -56,8 +56,7 @@ class Link extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'material' => [
                 'model' => '\Materials\Material',

@@ -11,8 +11,8 @@
 
 namespace Exchange1c\Exchange;
 
-class Log extends \Model
-{
+class Log extends \Model {
+
     public static $cols = [
         'type' => ['type' => 'text'],
         'info' => ['type' => 'text'],

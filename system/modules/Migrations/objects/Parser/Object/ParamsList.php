@@ -11,14 +11,13 @@
 
 namespace Migrations\Parser\Object;
 
-class ParamsList extends \Migrations\Parser
-{
-    public function parse()
-    {
+class ParamsList extends \Migrations\Parser {
+
+    public function parse() {
         $walked = [];
-        $params = \Migrations\Migration\Object\Param::getList(['where'=>[
-                    ['parent_id', $this->param->id],
-                    ['object_id', $this->object->object->id],
+        $params = \Migrations\Migration\Object\Param::getList(['where' => [
+                        ['parent_id', $this->param->id],
+                        ['object_id', $this->object->object->id],
         ]]);
         foreach ($params as $param) {
             if ($this->model) {
@@ -62,8 +61,7 @@ class ParamsList extends \Migrations\Parser
         }
     }
 
-    public function editor()
-    {
+    public function editor() {
         return [
             '' => 'Выберите',
             'param' => 'Параметр',

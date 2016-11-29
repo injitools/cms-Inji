@@ -8,7 +8,6 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class EventsController extends adminController
-{
+class EventsController extends adminController {
     
 }

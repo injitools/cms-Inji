@@ -11,13 +11,12 @@
 
 namespace Ui\DataManager\Action;
 
-class ChangeParams extends \Ui\DataManager\Action
-{
+class ChangeParams extends \Ui\DataManager\Action {
+
     public static $name = 'Изменить параметр';
     public static $groupAction = true;
 
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo)
-    {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
         $count = 0;
         if ($ids) {
             $modelName = $dataManager->modelName;

@@ -11,8 +11,8 @@
 
 namespace Users;
 
-class User extends \Model
-{
+class User extends \Model {
+
     public static $cur;
     public static $objectName = "Пользователь";
     public static $labels = [
@@ -130,8 +130,7 @@ class User extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'group' => [
                 'model' => 'Users\Group',
@@ -168,8 +167,7 @@ class User extends \Model
         ];
     }
 
-    public function name()
-    {
+    public function name() {
         if ($this->info) {
             return trim($this->info->name());
         } else {
@@ -177,16 +175,14 @@ class User extends \Model
         }
     }
 
-    public function isAdmin()
-    {
+    public function isAdmin() {
         if ($this->group_id == 3) {
             return true;
         }
         return false;
     }
 
-    public function beforeSave()
-    {
+    public function beforeSave() {
         if (isset($this->_changedParams['user_parent_id'])) {
             $parenthistory = new User\ParentHistory([
                 'user_id' => $this->id,
@@ -197,8 +193,7 @@ class User extends \Model
         }
     }
 
-    public function beforeDelete()
-    {
+    public function beforeDelete() {
         if ($this->info) {
             $this->info->delete();
         }

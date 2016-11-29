@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class Ckeditor extends \Object
-{
+class Ckeditor extends \Object {
+
     public static $name = 'CKEditor';
     public static $composerPacks = [
         'ckeditor/ckeditor' => '4.*'

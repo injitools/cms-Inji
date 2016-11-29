@@ -11,8 +11,8 @@
 
 namespace Money\Wallet;
 
-class Block extends \Model
-{
+class Block extends \Model {
+
     public static $objectName = 'Блокировка кошелька';
     public static $cols = [
         'wallet_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'wallet'],
@@ -23,7 +23,6 @@ class Block extends \Model
         'date_expired' => ['type' => 'dateTime'],
         'date_create' => ['type' => 'dateTime'],
     ];
-    
     public static $labels = [
         'wallet:user' => 'Пользователь',
         'amount' => 'Сумма',
@@ -31,7 +30,6 @@ class Block extends \Model
         'date_create' => 'Дата',
         'date_expired' => 'Истекает'
     ];
-
     public static $dataManagers = [
         'manager' => [
             'name' => 'Блокировки кошельков',
@@ -65,8 +63,8 @@ class Block extends \Model
             'actions' => []
         ]
     ];
-    public static function relations()
-    {
+
+    public static function relations() {
         return [
             'wallet' => [
                 'model' => 'Money\Wallet',

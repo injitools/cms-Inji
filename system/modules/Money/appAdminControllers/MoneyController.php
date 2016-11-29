@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MoneyController extends adminController
-{
-    public function manualClosePayAction($payId)
-    {
+class MoneyController extends adminController {
+
+    public function manualClosePayAction($payId) {
         $pay = \Money\Pay::get((int) $payId);
         $result = new Server\Result();
         if ($pay && $pay->pay_status_id == 1) {
@@ -28,8 +27,7 @@ class MoneyController extends adminController
         $result->send();
     }
 
-    public function cancelTransferAction($transferId)
-    {
+    public function cancelTransferAction($transferId) {
         $transfer = Money\Transfer::get($transferId);
         $result = new Server\Result();
 
@@ -40,8 +38,7 @@ class MoneyController extends adminController
         $result->send();
     }
 
-    public function completeTransferAction($transferId)
-    {
+    public function completeTransferAction($transferId) {
         $transfer = Money\Transfer::get($transferId);
 
         $result = new Server\Result();

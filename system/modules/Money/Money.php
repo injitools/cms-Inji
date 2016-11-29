@@ -8,19 +8,17 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Money extends Module
-{
+class Money extends Module {
+
     public $currentMerchant = '';
 
-    public function init()
-    {
+    public function init() {
         if (!empty($this->config['defaultMerchant'])) {
             $this->currentMerchant = $this->config['defaultMerchant'];
         }
     }
 
-    public function refillPayRecive($data)
-    {
+    public function refillPayRecive($data) {
         $wallets = $this->getUserWallets($data['pay']->user_id);
         foreach ($wallets as $wallet) {
             if ($wallet->currency_id == $data['pay']->currency_id) {
@@ -30,8 +28,7 @@ class Money extends Module
         }
     }
 
-    public function goToMerchant($pay, $merchant, $method, $merchantOptions)
-    {
+    public function goToMerchant($pay, $merchant, $method, $merchantOptions) {
         $objectName = $merchant->object_name;
 
         if (is_array($pay)) {
@@ -49,8 +46,7 @@ class Money extends Module
         return $className::goToMerchant($pay->id, $sum, $method['currency'], $merchantOptions['description'], $merchantOptions['success'], $merchantOptions['false']);
     }
 
-    public function reciver($data, $system, $status, $mr)
-    {
+    public function reciver($data, $system, $status, $mr) {
         if ($system) {
             $merchant = \Money\Merchant::get($system, 'object_name');
         } else {
@@ -87,8 +83,7 @@ class Money extends Module
         $mr->save();
     }
 
-    public function getUserBlocks($userId = null)
-    {
+    public function getUserBlocks($userId = null) {
         $userId = $userId ? $userId : \Users\User::$cur->id;
         $blocked = \Money\Wallet\Block::getList(['where' => [
                         ['wallet:user_id', $userId],
@@ -108,8 +103,7 @@ class Money extends Module
         return $blocks;
     }
 
-    public function getUserWallets($userId = null, $walletIdasKey = false, $forSelect = false, $transferOnly = false)
-    {
+    public function getUserWallets($userId = null, $walletIdasKey = false, $forSelect = false, $transferOnly = false) {
         $userId = $userId ? $userId : \Users\User::$cur->id;
         if (!$userId) {
             return [];
@@ -136,8 +130,7 @@ class Money extends Module
         return $result;
     }
 
-    public function rewardTrigger($event)
-    {
+    public function rewardTrigger($event) {
         $triggers = Money\Reward\Trigger::getList(['where' => [['type', 'event'], ['value', $event['eventName']]]]);
         foreach ($triggers as $trigger) {
             $handlers = $this->getSnippets('rewardTriggerHandler');
@@ -148,8 +141,7 @@ class Money extends Module
         return $event['eventObject'];
     }
 
-    public function rewardConditionTrigger($event)
-    {
+    public function rewardConditionTrigger($event) {
         $items = Money\Reward\Condition\Item::getList(['where' => [['type', 'event'], ['value', $event['eventName']]]]);
         foreach ($items as $item) {
             $recivers = $this->getSnippets('rewardConditionItemReciver');
@@ -165,8 +157,7 @@ class Money extends Module
         return $event['eventObject'];
     }
 
-    public function reward($reward_id, $sums = [], $rootUser = null)
-    {
+    public function reward($reward_id, $sums = [], $rootUser = null) {
         $rootUser = $rootUser ? $rootUser : \Users\User::$cur;
         $reward = \Money\Reward::get($reward_id);
         if (!$reward->active) {

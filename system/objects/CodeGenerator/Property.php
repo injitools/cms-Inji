@@ -11,15 +11,14 @@
 
 namespace CodeGenerator;
 
-class Property extends \Object
-{
+class Property extends \Object {
+
     public $security = 'public';
     public $static = false;
     public $name = 'property';
     public $value = 'value';
 
-    public function generate()
-    {
+    public function generate() {
         $code = $this->security . ' ';
         $code .= $this->static ? 'static ' : '';
         $code .= '$' . $this->name . ' = ';

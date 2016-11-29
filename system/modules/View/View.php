@@ -10,8 +10,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class View extends \Module
-{
+class View extends \Module {
+
     public $title = 'No title';
     public $template = null;
     public $libAssets = ['css' => [], 'js' => []];
@@ -23,16 +23,14 @@ class View extends \Module
     public $loadedCss = [];
     public $loadedJs = [];
 
-    public function init()
-    {
+    public function init() {
         if (!empty($this->app->config['site']['name'])) {
             $this->title = $this->app->config['site']['name'];
         }
         $this->resolveTemplate();
     }
 
-    public function resolveTemplate()
-    {
+    public function resolveTemplate() {
         $templateName = 'default';
         if (!empty($this->config[$this->app->type]['current'])) {
             $templateName = $this->config[$this->app->type]['current'];
@@ -53,8 +51,7 @@ class View extends \Module
         }
     }
 
-    public function page($params = [])
-    {
+    public function page($params = []) {
         $this->paramsParse($params);
         if (file_exists($this->template->pagePath)) {
             $source = file_get_contents($this->template->pagePath);
@@ -67,8 +64,7 @@ class View extends \Module
         }
     }
 
-    public function paramsParse($params)
-    {
+    public function paramsParse($params) {
         // set template
         if (!empty($params['template']) && $params['template'] != 'current') {
             $this->template = \View\Template::get($params['template']);
@@ -93,8 +89,7 @@ class View extends \Module
         }
     }
 
-    public function content($params = [])
-    {
+    public function content($params = []) {
 
         $this->paramsParse($params);
 
@@ -109,8 +104,7 @@ class View extends \Module
         }
     }
 
-    public function parentContent($contentName = '')
-    {
+    public function parentContent($contentName = '') {
         if (!$contentName) {
             $contentName = $this->template->content;
         }
@@ -138,8 +132,7 @@ class View extends \Module
         }
     }
 
-    private function parseRaw($source)
-    {
+    private function parseRaw($source) {
         if (!$source)
             return [];
 
@@ -147,8 +140,7 @@ class View extends \Module
         return $result[1];
     }
 
-    public function parseSource($source)
-    {
+    public function parseSource($source) {
         $tags = $this->parseRaw($source);
         foreach ($tags as $rawTag) {
             $tag = explode(':', $rawTag);
@@ -183,15 +175,13 @@ class View extends \Module
         echo $source;
     }
 
-    public function cutTag($source, $rawTag)
-    {
+    public function cutTag($source, $rawTag) {
         $pos = strpos($source, $rawTag) - 1;
         echo substr($source, 0, $pos);
         return substr($source, ( $pos + strlen($rawTag) + 2));
     }
 
-    public function getHref($type, $params)
-    {
+    public function getHref($type, $params) {
         $href = '';
         if (is_string($params)) {
             $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $params;
@@ -203,8 +193,7 @@ class View extends \Module
         return $href;
     }
 
-    public function checkNeedLibs()
-    {
+    public function checkNeedLibs() {
         if (!empty($this->template->config['libs'])) {
             foreach ($this->template->config['libs'] as $libName => $libOptions) {
                 if (!is_array($libOptions)) {
@@ -230,8 +219,7 @@ class View extends \Module
         }
     }
 
-    public function head()
-    {
+    public function head() {
 
         echo "<title>{$this->title}</title>\n";
 
@@ -258,8 +246,7 @@ class View extends \Module
         echo "\n        <script src='" . Statics::file(($this->app->type != 'app' ? '/' . $this->app->name : '' ) . "/static/system/js/Inji.js") . "'></script>";
     }
 
-    public function parseCss()
-    {
+    public function parseCss() {
         $css = $this->getCss();
         $urls = [];
         $timeStr = '';
@@ -302,8 +289,7 @@ class View extends \Module
         echo "\n        <link href='/{$cacheDir}/all{$timeMd5}.css' rel='stylesheet' type='text/css' />";
     }
 
-    public function getCss()
-    {
+    public function getCss() {
         $css = [];
         if (!empty($this->libAssets['css'])) {
             $this->ResolveCssHref($this->libAssets['css'], 'libs', $css);
@@ -317,8 +303,7 @@ class View extends \Module
         return $css;
     }
 
-    public function ResolveCssHref($cssArray, $type = 'custom', &$hrefs)
-    {
+    public function ResolveCssHref($cssArray, $type = 'custom', &$hrefs) {
         switch ($type) {
             case'libs':
                 foreach ($cssArray as $css) {
@@ -362,8 +347,7 @@ class View extends \Module
         }
     }
 
-    public function getMetaTags()
-    {
+    public function getMetaTags() {
         $metas = [];
 
         if (!empty($this->app->config['site']['keywords'])) {
@@ -387,8 +371,7 @@ class View extends \Module
         return $metas;
     }
 
-    public function addMetaTag($meta)
-    {
+    public function addMetaTag($meta) {
         if (!empty($meta['name'])) {
             $this->dynMetas['metaName:' . $meta['name']] = $meta;
         } elseif (!empty($meta['property'])) {
@@ -396,8 +379,7 @@ class View extends \Module
         }
     }
 
-    public function bodyEnd()
-    {
+    public function bodyEnd() {
         $this->checkNeedLibs();
         $this->parseCss();
         $scripts = $this->getScripts();
@@ -457,8 +439,7 @@ class View extends \Module
         $this->widget('View\bodyEnd', compact('options'));
     }
 
-    public function getScripts()
-    {
+    public function getScripts() {
         $scripts = [];
         if (!empty($this->libAssets['js'])) {
             $this->genScriptArray($this->libAssets['js'], 'libs', $scripts);
@@ -472,8 +453,7 @@ class View extends \Module
         return $scripts;
     }
 
-    public function genScriptArray($jsArray, $type = 'custom', &$resultArray)
-    {
+    public function genScriptArray($jsArray, $type = 'custom', &$resultArray) {
         switch ($type) {
             case 'libs':
                 foreach ($jsArray as $js) {
@@ -524,8 +504,7 @@ class View extends \Module
         }
     }
 
-    public function customAsset($type, $asset, $lib = false)
-    {
+    public function customAsset($type, $asset, $lib = false) {
         if (!$lib) {
             $this->dynAssets[$type][] = $asset;
         } else {
@@ -533,8 +512,7 @@ class View extends \Module
         }
     }
 
-    public function setTitle($title, $add = true)
-    {
+    public function setTitle($title, $add = true) {
         if ($add && !empty($this->app->config['site']['name'])) {
             if ($title) {
                 $this->title = $title . ' - ' . $this->app->config['site']['name'];
@@ -546,8 +524,7 @@ class View extends \Module
         }
     }
 
-    public function widget($_widgetName, $_params = [], $lineParams = null)
-    {
+    public function widget($_widgetName, $_params = [], $lineParams = null) {
         $_paths = $this->getWidgetPaths($_widgetName);
         $find = false;
         foreach ($_paths as $_path) {
@@ -579,8 +556,7 @@ class View extends \Module
         echo "<!--end:{WIDGET:{$_widgetName}{$lineParams}}-->\n";
     }
 
-    public function getWidgetPaths($widgetName)
-    {
+    public function getWidgetPaths($widgetName) {
         $paths = [];
         if (strpos($widgetName, '\\')) {
             $widgetName = explode('\\', $widgetName);

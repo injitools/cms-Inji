@@ -8,10 +8,9 @@
  * @copyright 2016 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class SitemapController extends Controller
-{
-    function indexAction()
-    {
+class SitemapController extends Controller {
+
+    function indexAction() {
         var_dump($this->module->scanModules());
     }
 

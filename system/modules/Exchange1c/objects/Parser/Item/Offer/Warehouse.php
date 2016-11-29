@@ -11,10 +11,9 @@
 
 namespace Exchange1c\Parser\Item\Offer;
 
-class Warehouse extends \Migrations\Parser
-{
-    public function parse()
-    {
+class Warehouse extends \Migrations\Parser {
+
+    public function parse() {
         if (is_array($this->data) && empty($this->data['@attributes'])) {
             foreach ($this->data as $warehouseCount) {
                 $count = $warehouseCount['@attributes']['КоличествоНаСкладе'];

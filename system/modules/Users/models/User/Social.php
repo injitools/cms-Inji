@@ -11,8 +11,8 @@
 
 namespace Users\User;
 
-class Social extends \Model
-{
+class Social extends \Model {
+
     public static $objectName = "Связь с соц.сетью";
     public static $cols = [
         'uid' => ['type' => 'text'],
@@ -27,8 +27,7 @@ class Social extends \Model
         'date_create' => 'Дата создания'
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',

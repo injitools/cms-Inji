@@ -13,41 +13,41 @@ namespace Ecommerce\Delivery;
 
 class DeliveryFieldLink extends \Model {
 
-  public static $labels = [
-      'delivery_id' => 'Тип доставки',
-      'delivery_field_id' => 'Поле доставки'
-  ];
-  public static $cols = [
-      'delivery_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'delivery'],
-      'delivery_field_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'field'],
-      'weight' => ['type' => 'number'],
-      'date_create' => ['type' => 'dateTime']
-  ];
-  public static $dataManagers = [
-      'manager' => [
-          'name' => 'Поля для доставки',
-          'cols' => ['delivery_id', 'delivery_field_id', 'date_create'],
-      ]
-  ];
-  public static $forms = [
-      'manager' => [
-          'map' => [
-              ['delivery_id', 'delivery_field_id'],
-          ]
-      ]
-  ];
-
-  public static function relations() {
-    return [
-        'field' => [
-            'model' => 'Ecommerce\Delivery\Field',
-            'col' => 'delivery_field_id'
-        ],
-        'delivery' => [
-            'model' => 'Ecommerce\Delivery',
-            'col' => 'delivery_id'
-        ],
+    public static $labels = [
+        'delivery_id' => 'Тип доставки',
+        'delivery_field_id' => 'Поле доставки'
     ];
-  }
+    public static $cols = [
+        'delivery_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'delivery'],
+        'delivery_field_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'field'],
+        'weight' => ['type' => 'number'],
+        'date_create' => ['type' => 'dateTime']
+    ];
+    public static $dataManagers = [
+        'manager' => [
+            'name' => 'Поля для доставки',
+            'cols' => ['delivery_id', 'delivery_field_id', 'date_create'],
+        ]
+    ];
+    public static $forms = [
+        'manager' => [
+            'map' => [
+                ['delivery_id', 'delivery_field_id'],
+            ]
+        ]
+    ];
+
+    public static function relations() {
+        return [
+            'field' => [
+                'model' => 'Ecommerce\Delivery\Field',
+                'col' => 'delivery_field_id'
+            ],
+            'delivery' => [
+                'model' => 'Ecommerce\Delivery',
+                'col' => 'delivery_id'
+            ],
+        ];
+    }
 
 }

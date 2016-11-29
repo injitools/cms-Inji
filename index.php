@@ -36,11 +36,11 @@ foreach ($_SERVER as $key => $item) {
 }
 
 require_once( INJI_SYSTEM_DIR . '/init.php' );
+
 /**
  * System error messages
  */
-function INJI_SYSTEM_ERROR($msg, $fatal = false)
-{
+function INJI_SYSTEM_ERROR($msg, $fatal = false) {
     if ($fatal) {
         exit("<div style = 'text-align:center;font-size:20px;margin-top:25%;'>{$msg}</div>");
     } else {

@@ -11,10 +11,9 @@
 
 namespace Exchange1c\Parser\Item\Offer;
 
-class WarehouseSum extends \Migrations\Parser
-{
-    public function parse()
-    {
+class WarehouseSum extends \Migrations\Parser {
+
+    public function parse() {
         $count = (string) $this->data;
         $warehouse = \Ecommerce\Warehouse::get(['name', 'Общий склад 1с']);
         if (!$warehouse) {

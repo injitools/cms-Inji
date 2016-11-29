@@ -11,7 +11,6 @@
 
 namespace Ui\ActiveForm\Input;
 
-class Email extends \Ui\ActiveForm\Input
-{
+class Email extends \Ui\ActiveForm\Input {
     
 }

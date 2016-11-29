@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Merchant currency
  *
@@ -7,10 +8,11 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+
 namespace Money\Merchant;
 
-class Currency extends \Model
-{
+class Currency extends \Model {
+
     public static $objectName = 'Валюта системы оплаты';
     public static $cols = [
         'code' => ['type' => 'text'],
@@ -39,8 +41,7 @@ class Currency extends \Model
             ]
     ]];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'currency' => [
                 'model' => 'Money\Currency',

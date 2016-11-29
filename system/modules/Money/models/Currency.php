@@ -11,8 +11,8 @@
 
 namespace Money;
 
-class Currency extends \Model
-{
+class Currency extends \Model {
+
     public static $objectName = 'Валюта';
     public static $labels = [
         'name' => 'Название',
@@ -49,13 +49,11 @@ class Currency extends \Model
         ]
     ];
 
-    public function acronym()
-    {
+    public function acronym() {
         return "<acronym title='{$this->name()}'>{$this->code}</acronym>";
     }
 
-    public function beforeDelete()
-    {
+    public function beforeDelete() {
         if ($this->id) {
             $wallets = Wallet::getList(['where' => ['currency_id', $this->id]]);
             foreach ($wallets as $wallet) {

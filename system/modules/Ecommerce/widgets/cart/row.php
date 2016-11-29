@@ -13,13 +13,13 @@ $itemName = $cartItem->item->name();
         <a href="/ecommerce/view/<?= $cartItem->item->id; ?>"><?= $itemName; ?></a>
     </td>
     <td class="text-left">
-        <?php
-        if (!empty($cartItem->item->options['7fc7a4d1-b26a-11e4-9490-80c16e818121']) && $cartItem->item->options['7fc7a4d1-b26a-11e4-9490-80c16e818121']->cip_value) {
-            echo '<div style="min-width:200px;">';
-            $price = $cartItem->price->price;
-            $max = $cartItem->price->offer->warehouseCount((!empty($_SESSION['cart']['cart_id']) ? $_SESSION['cart']['cart_id'] : 0)) * 1000;
-            $step = preg_replace('![^0-9]!', '', $cartItem->item->options['7fc7a4d1-b26a-11e4-9490-80c16e818121']->cip_value);
-            ?>
+      <?php
+      if (!empty($cartItem->item->options['7fc7a4d1-b26a-11e4-9490-80c16e818121']) && $cartItem->item->options['7fc7a4d1-b26a-11e4-9490-80c16e818121']->cip_value) {
+          echo '<div style="min-width:200px;">';
+          $price = $cartItem->price->price;
+          $max = $cartItem->price->offer->warehouseCount((!empty($_SESSION['cart']['cart_id']) ? $_SESSION['cart']['cart_id'] : 0)) * 1000;
+          $step = preg_replace('![^0-9]!', '', $cartItem->item->options['7fc7a4d1-b26a-11e4-9490-80c16e818121']->cip_value);
+          ?>
             Примерный вес
             <input name="items[<?php echo $cartItem->id; ?>]" type = "text" class ="combineRanger item-counter cart-couner rangerCount" data-step ="<?= $step; ?>" data-max="<?= $max; ?>" data-price ="<?= $price; ?>" value="<?php echo (float) $cartItem->count * 1000; ?>" />
             <?php

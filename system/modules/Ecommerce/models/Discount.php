@@ -11,8 +11,8 @@
 
 namespace Ecommerce;
 
-class Discount extends \Model
-{
+class Discount extends \Model {
+
     public static $objectName = 'Скидка';
     public static $cols = [
         'name' => ['type' => 'text'],

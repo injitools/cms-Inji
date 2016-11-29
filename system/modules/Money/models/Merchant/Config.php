@@ -11,8 +11,8 @@
 
 namespace Money\Merchant;
 
-class Config extends \Model
-{
+class Config extends \Model {
+
     public static $objectName = 'Опция системы оплаты';
     public static $cols = [
         'name' => ['type' => 'text'],
@@ -41,8 +41,7 @@ class Config extends \Model
             ]
     ]];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'merchant' => [
                 'model' => 'Money\Merchant',

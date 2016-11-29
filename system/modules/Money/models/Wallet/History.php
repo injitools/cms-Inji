@@ -11,8 +11,8 @@
 
 namespace Money\Wallet;
 
-class History extends \Model
-{
+class History extends \Model {
+
     public static $objectName = 'История кошелька';
     public static $cols = [
         'wallet_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'wallet'],
@@ -31,8 +31,7 @@ class History extends \Model
         'date_create' => 'Дата'
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'wallet' => [
                 'model' => 'Money\Wallet',

@@ -11,8 +11,8 @@
 
 namespace Money;
 
-class Wallet extends \Model
-{
+class Wallet extends \Model {
+
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'currency_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'currency'],
@@ -25,8 +25,7 @@ class Wallet extends \Model
         'amount' => 'Сумма',
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'currency' => [
                 'model' => 'Money\Currency',
@@ -47,8 +46,7 @@ class Wallet extends \Model
         ]
     ];
 
-    public function beforeSave()
-    {
+    public function beforeSave() {
         if ($this->pk()) {
             $cur = Wallet::get($this->pk());
             if ($cur->amount != $this->amount) {
@@ -62,8 +60,7 @@ class Wallet extends \Model
         }
     }
 
-    public function diff($amount, $comment = '')
-    {
+    public function diff($amount, $comment = '') {
         $amount = (float) $amount;
         $query = \App::$cur->db->newQuery();
         $string = 'UPDATE ' . \App::$cur->db->table_prefix . $this->table() . ' SET `' . $this->colPrefix() . 'amount`=`' . $this->colPrefix() . 'amount`+' . $amount . ' where `' . $this->index() . '` = ' . $this->id;
@@ -77,13 +74,11 @@ class Wallet extends \Model
         $history->save();
     }
 
-    public function name()
-    {
+    public function name() {
         return $this->currency->name();
     }
 
-    public function showAmount()
-    {
+    public function showAmount() {
         switch ($this->currency->round_type) {
             case 'floor':
                 $dif = (float) ('1' . str_repeat('0', $this->currency->round_precision));
@@ -93,8 +88,7 @@ class Wallet extends \Model
         }
     }
 
-    public function beforeDelete()
-    {
+    public function beforeDelete() {
         if ($this->id) {
             Wallet\History::deleteList(['wallet_id', $this->id]);
             Wallet\Block::deleteList(['wallet_id', $this->id]);

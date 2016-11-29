@@ -11,7 +11,6 @@
 
 namespace Ui\ActiveForm\Input;
 
-class Decimal extends \Ui\ActiveForm\Input
-{
+class Decimal extends \Ui\ActiveForm\Input {
     
 }

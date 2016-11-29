@@ -8,11 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+class FilesController extends adminController {
 
-class FilesController extends adminController
-{
-    public function managerForEditorAction()
-    {
+    public function managerForEditorAction() {
         $this->view->page(['page' => 'blank']);
     }
 

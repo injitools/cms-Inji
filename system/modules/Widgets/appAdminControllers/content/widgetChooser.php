@@ -27,13 +27,13 @@
     }
 </script>
 <select class ='form-control' id = 'widgetChooser' onchange="selectChange(this);">
-  <option value = ''>Выберите виджет</option>
-  <?php
-  foreach ($widgets as $code => $options) {
-      $name = is_string($options) ? $options : $options['name'];
-      echo "<option value = '{$code}' data-filename='{$code}'>{$name}</option>";
-  }
-  ?>
+    <option value = ''>Выберите виджет</option>
+    <?php
+    foreach ($widgets as $code => $options) {
+        $name = is_string($options) ? $options : $options['name'];
+        echo "<option value = '{$code}' data-filename='{$code}'>{$name}</option>";
+    }
+    ?>
 </select>
 <?php
 foreach ($widgets as $code => $options) {

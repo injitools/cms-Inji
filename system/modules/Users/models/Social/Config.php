@@ -11,8 +11,8 @@
 
 namespace Users\Social;
 
-class Config extends \Model
-{
+class Config extends \Model {
+
     public static $objectName = "Опция коннектора с социальной сетью";
     public static $cols = [
         'name' => ['type' => 'text'],
@@ -42,8 +42,7 @@ class Config extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'social' => [
                 'model' => 'Users\Social',

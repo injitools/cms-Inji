@@ -8,14 +8,13 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class LibsController extends Controller
-{
-    public function vendorAction()
-    {
+class LibsController extends Controller {
+
+    public function vendorAction() {
         $args = func_get_args();
         $path = $this->module->getPath($args);
-        if($path){
-             $this->StaticLoader->giveFile($path);
+        if ($path) {
+            $this->StaticLoader->giveFile($path);
         }
     }
 

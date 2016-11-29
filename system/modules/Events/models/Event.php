@@ -11,8 +11,8 @@
 
 namespace Events;
 
-class Event extends \Model
-{
+class Event extends \Model {
+
     public static $objectName = 'Событие системы';
     public static $labels = [
         'name' => 'Название',
@@ -38,8 +38,7 @@ class Event extends \Model
         ]
     ];
 
-    public static function index()
-    {
+    public static function index() {
         return 'id';
     }
 

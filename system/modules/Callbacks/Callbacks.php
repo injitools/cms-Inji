@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Callbacks extends Module
-{
-    public function init()
-    {
+class Callbacks extends Module {
+
+    public function init() {
         $callbacksData = filter_input(INPUT_POST, 'Callbacks', FILTER_REQUIRE_ARRAY);
         if (!empty($callbacksData)) {
             $callback = new \Callbacks\Callback();
@@ -55,8 +54,7 @@ class Callbacks extends Module
         }
     }
 
-    public function viewsCategoryList($inherit = true)
-    {
+    public function viewsCategoryList($inherit = true) {
         $return = [];
         if ($inherit) {
             $return['inherit'] = 'Как у родителя';
@@ -73,8 +71,7 @@ class Callbacks extends Module
         return $return;
     }
 
-    public function templatesCategoryList()
-    {
+    public function templatesCategoryList() {
         $return = [
             'inherit' => 'Как у родителя',
             'current' => 'Текущая тема'

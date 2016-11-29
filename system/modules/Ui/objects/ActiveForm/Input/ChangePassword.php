@@ -11,10 +11,9 @@
 
 namespace Ui\ActiveForm\Input;
 
-class ChangePassword extends \Ui\ActiveForm\Input
-{
-    public function parseRequest($request)
-    {
+class ChangePassword extends \Ui\ActiveForm\Input {
+
+    public function parseRequest($request) {
         if (!empty($request[$this->colName]['pass']) && !empty($request[$this->colName]['pass'])) {
             if (empty($request[$this->colName]['pass'])) {
                 \Msg::add('Вы не ввели пароль в первое поле', 'danger');

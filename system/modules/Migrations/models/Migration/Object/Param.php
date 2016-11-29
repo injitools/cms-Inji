@@ -11,8 +11,8 @@
 
 namespace Migrations\Migration\Object;
 
-class Param extends \Model
-{
+class Param extends \Model {
+
     public static $objectName = 'Параметр объекта миграции';
     public static $labels = [
         'code' => 'Код',
@@ -42,8 +42,7 @@ class Param extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'object' => [
                 'model' => 'Migrations\Migration\Object',

@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Cart;
 
-class Info extends \Model
-{
+class Info extends \Model {
+
     public static $objectName = 'Информация';
     public static $labels = [
         'name' => 'Название',
@@ -45,8 +45,7 @@ class Info extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'cart' => [
                 'model' => 'Ecommerce\Cart',

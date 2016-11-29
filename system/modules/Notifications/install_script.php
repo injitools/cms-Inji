@@ -29,7 +29,7 @@ return function ($step = NULL, $params = []) {
         'subscriber_device_subscriber_id' => 'int(11) UNSIGNED NOT NULL',
         'subscriber_device_date_last_check' => 'timestamp NOT NULL DEFAULT 0',
         'subscriber_device_date_create' => 'timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP',
-    ],[
+            ], [
         'UNIQUE INDEX ' . App::$cur->db->table_prefix . 'notifications_subscriber_device_subscriber_device_key (subscriber_device_key)'
     ]);
     App::$cur->db->createTable('notifications_subscribe', [

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Group
  *
@@ -7,10 +8,11 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+
 namespace Users;
 
-class Group extends \Model
-{
+class Group extends \Model {
+
     public static $objectName = 'Группа пользователей';
     public static $labels = [
         'name' => 'Название',
@@ -38,8 +40,7 @@ class Group extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'roles' => [
                 'type' => 'many',

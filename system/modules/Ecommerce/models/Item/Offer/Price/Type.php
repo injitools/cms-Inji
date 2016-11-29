@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Offer\Price;
 
-class Type extends \Model
-{
+class Type extends \Model {
+
     public static $objectName = 'Тип цены';
     public static $cols = [
         //Основные параметры

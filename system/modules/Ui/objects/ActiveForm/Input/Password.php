@@ -11,7 +11,6 @@
 
 namespace Ui\ActiveForm\Input;
 
-class Password extends \Ui\ActiveForm\Input
-{
+class Password extends \Ui\ActiveForm\Input {
     
 }

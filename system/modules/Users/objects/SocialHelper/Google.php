@@ -11,10 +11,9 @@
 
 namespace Users\SocialHelper;
 
-class Google extends \Users\SocialHelper
-{
-    public static function auth()
-    {
+class Google extends \Users\SocialHelper {
+
+    public static function auth() {
 
         $config = static::getConfig();
         if (empty($_GET['code']) && empty($_GET['error'])) {

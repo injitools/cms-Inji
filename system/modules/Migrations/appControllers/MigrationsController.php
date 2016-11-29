@@ -8,10 +8,9 @@
  * @copyright 2016 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MigrationsController extends Controller
-{
-    public function exportAction($migrationName = '', $mapName = '', $secret = '')
-    {
+class MigrationsController extends Controller {
+
+    public function exportAction($migrationName = '', $mapName = '', $secret = '') {
         $migration = \Migrations\Migration::get($migrationName, 'alias');
         if (!$migration) {
             exit('migration not select');

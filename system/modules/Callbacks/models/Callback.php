@@ -11,8 +11,8 @@
 
 namespace Callbacks;
 
-class Callback extends \Model
-{
+class Callback extends \Model {
+
     public static $objectName = "Отзыв";
     public static $categoryModel = 'Callbacks\Category';
     public static $cols = [
@@ -47,8 +47,7 @@ class Callback extends \Model
         'date_create' => 'Дата создания'
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',

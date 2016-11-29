@@ -11,22 +11,22 @@ return [
                 $dataSets = Geography\City\Data::getList(['order' => ['code']]);
                 ?>
                 <div class="form-group">
-                  <label>Группа данных</label>
-                  <select class ="form-control groupSelect" onchange="changeGroupSelect(this);">
-                    <option value = 0>Выберите группу</option>
-                    <?php
-                    $isset = [];
-                    $datas = [];
-                    foreach ($dataSets as $set) {
-                        $datas[$set->code][$set->city_id] = $set->data;
-                        if (empty($isset[$set->code])) {
-                            $isset[$set->code] = true;
-                            echo "<option value = '{$set->code}'>{$set->code}</option>";
+                    <label>Группа данных</label>
+                    <select class ="form-control groupSelect" onchange="changeGroupSelect(this);">
+                        <option value = 0>Выберите группу</option>
+                        <?php
+                        $isset = [];
+                        $datas = [];
+                        foreach ($dataSets as $set) {
+                            $datas[$set->code][$set->city_id] = $set->data;
+                            if (empty($isset[$set->code])) {
+                                $isset[$set->code] = true;
+                                echo "<option value = '{$set->code}'>{$set->code}</option>";
+                            }
                         }
-                    }
-                    ?>
-                    <option value = -1>Создать</option>
-                  </select>
+                        ?>
+                        <option value = -1>Создать</option>
+                    </select>
                 </div>
                 <script>
                     var changerData = <?= json_encode($datas); ?>;
@@ -62,22 +62,22 @@ return [
                     }
                 </script>
                 <div class="form-group newGroup" style="display: none;">
-                  <label>Код группы</label>
-                  <input class="form-control" data-skip=1 />
+                    <label>Код группы</label>
+                    <input class="form-control" data-skip=1 />
                 </div>
                 <div class="form-group citySelect">
-                  <label>Город</label>
-                  <select class ="form-control" onchange="changeCitySelect(this);">
-                    <option value = 0>Выберите город</option>
-                    <?php
-                    foreach (Geography\City::getList() as $city) {
-                        echo "<option value = '{$city->id}'>{$city->name}</option>";
-                    }
-                    ?>
-                  </select>
+                    <label>Город</label>
+                    <select class ="form-control" onchange="changeCitySelect(this);">
+                        <option value = 0>Выберите город</option>
+                        <?php
+                        foreach (Geography\City::getList() as $city) {
+                            echo "<option value = '{$city->id}'>{$city->name}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
                 <div class="form-group">
-                  <textarea class="htmleditor"></textarea>
+                    <textarea class="htmleditor"></textarea>
                 </div>
                 <?php
             }

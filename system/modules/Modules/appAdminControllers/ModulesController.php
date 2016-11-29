@@ -8,24 +8,21 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class ModulesController extends Controller
-{
-    public function indexAction()
-    {
+class ModulesController extends Controller {
+
+    public function indexAction() {
         $this->view->setTitle('Управление модулями');
         $this->view->page();
     }
 
-    public function setDefaultAction($module)
-    {
+    public function setDefaultAction($module) {
         $config = App::$primary->config;
         $config['defaultModule'] = $module;
         Config::save('app', $config);
         Tools::redirect('/admin/modules', 'Модулем по умолчанию установлен: ' . $module, 'success');
     }
 
-    public function installAction()
-    {
+    public function installAction() {
         if (!empty($_GET['modules'])) {
             foreach ($_GET['modules'] as $module) {
                 $this->modules->install($module);
@@ -35,8 +32,7 @@ class ModulesController extends Controller
         $this->view->page();
     }
 
-    public function createAction()
-    {
+    public function createAction() {
         $codeName = filter_input(INPUT_POST, 'codeName');
         if ($codeName && filter_input(INPUT_POST, 'name')) {
             $codeName = ucfirst($codeName);
@@ -53,16 +49,14 @@ class ModulesController extends Controller
         $this->view->page();
     }
 
-    public function editorAction($module)
-    {
+    public function editorAction($module) {
         if (!file_exists(Module::getModulePath($module) . '/generatorHash.php')) {
             Msg::add('Этот модуль был создан без помощи генератора. Возможности его изменения ограничены и могут привести к порче модуля', 'danger');
         }
         $this->view->page(['data' => compact('module')]);
     }
 
-    public function editModelAction($module, $modelName)
-    {
+    public function editModelAction($module, $modelName) {
         $path = Modules::getModulePath($module) . '/models/' . $modelName . '.php';
         if (!file_exists($path)) {
             Tools::redirect('/admin/modules/edit/' . $module, 'Модель ' . $modelName . ' не найдена', 'danger');
@@ -79,8 +73,7 @@ class ModulesController extends Controller
         $this->view->page(['content' => 'modelEditor', 'data' => compact('module', 'modelName', 'modelFullName', 'model')]);
     }
 
-    public function createModelAction($module)
-    {
+    public function createModelAction($module) {
         if (filter_input(INPUT_POST, 'codeName') && filter_input(INPUT_POST, 'name')) {
             $this->modules->generateModel($module, filter_input(INPUT_POST, 'name'), filter_input(INPUT_POST, 'codeName'), [
                 'cols' => $_POST['cols']
@@ -90,8 +83,7 @@ class ModulesController extends Controller
         $this->view->page(['content' => 'modelEditor', 'data' => compact('module')]);
     }
 
-    public function delModelAction($module, $modelName)
-    {
+    public function delModelAction($module, $modelName) {
         unlink(App::$primary->path . '/modules/' . $module . '/models/' . $modelName . '.php');
         $config = Config::custom(App::$primary->path . '/modules/' . $module . '/generatorHash.php');
         if (isset($config['models/' . $modelName . '.php'])) {
@@ -101,8 +93,7 @@ class ModulesController extends Controller
         Tools::redirect('/admin/modules/editor/' . $module, 'Модель ' . $modelName . ' была удалена');
     }
 
-    public function createControllerAction($module)
-    {
+    public function createControllerAction($module) {
         $controllerType = filter_input(INPUT_POST, 'type');
         if ($controllerType) {
             $this->modules->createController($module, $controllerType);
@@ -111,13 +102,11 @@ class ModulesController extends Controller
         $this->view->page();
     }
 
-    public function controllerEditorAction($module, $type, $controller)
-    {
+    public function controllerEditorAction($module, $type, $controller) {
         $this->view->page(['data' => compact('module', 'type', 'controller')]);
     }
 
-    public function createControllerMethodAction($module, $type, $controller)
-    {
+    public function createControllerMethodAction($module, $type, $controller) {
         $url = filter_input(INPUT_POST, 'url');
         if ($url) {
             $this->modules->addActionToController($module, $type, $controller, $url);
@@ -126,8 +115,7 @@ class ModulesController extends Controller
         $this->view->page(['data' => compact('module', 'type', 'controller')]);
     }
 
-    public function editControllerMethodAction($module, $type, $controller, $method)
-    {
+    public function editControllerMethodAction($module, $type, $controller, $method) {
         $this->view->page(['data' => compact('module', 'type', 'controller', 'method')]);
     }
 

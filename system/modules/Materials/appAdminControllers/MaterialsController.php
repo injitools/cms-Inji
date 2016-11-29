@@ -8,7 +8,6 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MaterialsController extends adminController
-{
+class MaterialsController extends adminController {
     
 }

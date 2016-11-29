@@ -11,8 +11,8 @@
 
 namespace Money;
 
-class Transfer extends \Model
-{
+class Transfer extends \Model {
+
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'to_user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'toUser'],
@@ -36,8 +36,7 @@ class Transfer extends \Model
         'date_create' => 'Дата создания',
     ];
 
-    public static function itemName($item)
-    {
+    public static function itemName($item) {
         return $item->pk() . '. ' . $item->name();
     }
 
@@ -48,16 +47,16 @@ class Transfer extends \Model
             ],
             'name' => 'Переводы',
             'cols' => [
-                'user_id', 'to_user_id', 'currency_id', 'amount', 'comment', 'complete', 'canceled','date_create'
+                'user_id', 'to_user_id', 'currency_id', 'amount', 'comment', 'complete', 'canceled', 'date_create'
             ],
             'actions' => [
                 'Money\CancelTransfer', 'Money\CompleteTransfer'
             ],
             'sortable' => [
-                'user_id', 'to_user_id', 'currency_id', 'amount', 'comment', 'complete', 'canceled','date_create'
+                'user_id', 'to_user_id', 'currency_id', 'amount', 'comment', 'complete', 'canceled', 'date_create'
             ],
             'filters' => [
-                'user_id', 'to_user_id', 'currency_id', 'amount', 'comment', 'complete', 'canceled','date_create'
+                'user_id', 'to_user_id', 'currency_id', 'amount', 'comment', 'complete', 'canceled', 'date_create'
             ]
         ]
     ];
@@ -110,8 +109,7 @@ class Transfer extends \Model
         ]
     ];
 
-    public static function validators()
-    {
+    public static function validators() {
         return [
             'userSearch' => function($activeForm, $request) {
                 if (empty($request['userSearch'])) {
@@ -162,8 +160,7 @@ class Transfer extends \Model
         ];
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',
@@ -180,13 +177,11 @@ class Transfer extends \Model
         ];
     }
 
-    public function name()
-    {
+    public function name() {
         return 'Перевод на сумму ' . $this->amount . ' ' . $this->currency->name . ' от ' . $this->user->name() . ' для ' . $this->toUser->name();
     }
 
-    public function cancel()
-    {
+    public function cancel() {
         if ($this->canceled || $this->complete) {
             return false;
         }
@@ -204,8 +199,7 @@ class Transfer extends \Model
         return true;
     }
 
-    public function complete()
-    {
+    public function complete() {
         if ($this->canceled || $this->complete) {
             return false;
         }

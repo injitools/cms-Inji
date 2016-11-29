@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class ActiveFormController extends Controller
-{
-    public function searchAction()
-    {
+class ActiveFormController extends Controller {
+
+    public function searchAction() {
         $result = new Server\Result();
         $searchString = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING);
         $searchString = trim(preg_replace('![^A-zА-я0-9@-_\. ]!iSu', ' ', urldecode($searchString)));

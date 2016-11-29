@@ -11,8 +11,8 @@
 
 namespace Ecommerce;
 
-class Card extends \Model
-{
+class Card extends \Model {
+
     public static $objectName = 'Карта';
     public static $cols = [
         //Основные параметры
@@ -20,7 +20,7 @@ class Card extends \Model
         'price' => ['type' => 'text'],
         'image_file_id' => ['type' => 'image'],
         //Системные параметры
-        'date_create' =>['type' => 'dateTime'],
+        'date_create' => ['type' => 'dateTime'],
         //Менеджеры
         'level' => ['type' => 'dataManager', 'relation' => 'levels'],
     ];
@@ -49,8 +49,7 @@ class Card extends \Model
             ]
     ]];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'levels' => [
                 'type' => 'many',

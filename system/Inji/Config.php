@@ -8,8 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Config
-{
+class Config {
+
     /**
      * Static config storage
      * 
@@ -22,8 +22,7 @@ class Config
      * 
      * @return array
      */
-    public static function system()
-    {
+    public static function system() {
         if (isset(self::$_configs['system'])) {
             return self::$_configs['system'];
         }
@@ -41,8 +40,7 @@ class Config
      * @param string $path
      * @return array
      */
-    public static function custom($path)
-    {
+    public static function custom($path) {
         if (isset(self::$_configs['custom'][$path])) {
             return self::$_configs['custom'][$path];
         }
@@ -59,8 +57,7 @@ class Config
      * @param \App $app
      * @return array
      */
-    public static function app($app = null)
-    {
+    public static function app($app = null) {
         if (!$app) {
             $app = App::$primary;
         }
@@ -82,8 +79,7 @@ class Config
      * @param string $module
      * @return array
      */
-    public static function share($module = '')
-    {
+    public static function share($module = '') {
         if ($module) {
             if (isset(self::$_configs['shareModules'][$module])) {
                 return self::$_configs['shareModules'][$module];
@@ -118,8 +114,7 @@ class Config
      * @param \App $app
      * @return array
      */
-    public static function module($module_name, $system = false, $app = null)
-    {
+    public static function module($module_name, $system = false, $app = null) {
 
         if (!$app) {
             $app = App::$primary;
@@ -156,8 +151,7 @@ class Config
      * @param string $module
      * @param \App $app
      */
-    public static function save($type, $data, $module = '', $app = null)
-    {
+    public static function save($type, $data, $module = '', $app = null) {
         if (!$app) {
             $app = App::$primary;
         }

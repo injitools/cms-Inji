@@ -11,19 +11,17 @@
 
 namespace Ui\DataManager;
 
-class Action extends \Object
-{
+class Action extends \Object {
+
     public static $name = '';
     public static $groupAction = false;
     public static $rowAction = false;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         return '';
     }
 
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo)
-    {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
         return 'empty action';
     }
 

@@ -6,19 +6,19 @@ echo $label !== false ? "<label>{$label}" . (!empty($options['required']) ? ' <s
 <div class="row">
     <div class="col-xs-6">
         <input <?= !empty($options['required']) ? 'required' : ''; ?> 
-            type ="password" 
-            placeholder="Новый пароль" 
-            class="form-control" 
-            name = '<?= $name; ?>[pass]' 
-            />
+          type ="password" 
+          placeholder="Новый пароль" 
+          class="form-control" 
+          name = '<?= $name; ?>[pass]' 
+          />
     </div>
     <div class="col-xs-6">
         <input <?= !empty($options['required']) ? 'required' : ''; ?> 
-            type ="password" 
-            placeholder="Повторите пароль" 
-            class="form-control" 
-            name = '<?= $name; ?>[repeat]' 
-            />
+          type ="password" 
+          placeholder="Повторите пароль" 
+          class="form-control" 
+          name = '<?= $name; ?>[repeat]' 
+          />
     </div>
 </div>
 <div class="help-block">Для сменя пароля, введите новый пароль в первом поле и повторите его во втором</div>

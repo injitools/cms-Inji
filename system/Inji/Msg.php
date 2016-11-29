@@ -8,16 +8,15 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Msg extends Module
-{
+class Msg extends Module {
+
     /**
      * Add message to query
      * 
      * @param string $text
      * @param string $status
      */
-    public static function add($text = false, $status = 'info')
-    {
+    public static function add($text = false, $status = 'info') {
         if ($text !== false) {
             if (!empty($_SESSION['_INJI_MSG'])) {
                 foreach ($_SESSION['_INJI_MSG'] as $key => $msg) {
@@ -39,8 +38,7 @@ class Msg extends Module
     /**
      * Show messages query
      */
-    public static function show()
-    {
+    public static function show() {
         App::$cur->view->widget('msgList');
     }
 
@@ -50,8 +48,7 @@ class Msg extends Module
      * @param boolean $clean
      * @return array
      */
-    public static function get($clean = false)
-    {
+    public static function get($clean = false) {
         if (empty($_SESSION['_INJI_MSG']))
             return [];
         $msgs = $_SESSION['_INJI_MSG'];
@@ -64,8 +61,7 @@ class Msg extends Module
     /**
      * Clean messages query
      */
-    public static function flush()
-    {
+    public static function flush() {
         $_SESSION['_INJI_MSG'] = [];
     }
 

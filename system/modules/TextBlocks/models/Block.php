@@ -11,8 +11,8 @@
 
 namespace TextBlocks;
 
-class Block extends \Model
-{
+class Block extends \Model {
+
     public static $objectName = "Текстовый блок";
     public static $cols = [
         'code' => [
@@ -66,8 +66,7 @@ class Block extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
         ];
     }

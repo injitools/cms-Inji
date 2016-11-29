@@ -11,8 +11,8 @@
 
 namespace Users;
 
-class Passre extends \Model
-{
+class Passre extends \Model {
+
     public static $cols = [
         'hash' => ['type' => 'textarea'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -20,8 +20,7 @@ class Passre extends \Model
         'date_create' => ['type' => 'dateTime']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return[
             'user' => [
                 'col' => 'user_id',

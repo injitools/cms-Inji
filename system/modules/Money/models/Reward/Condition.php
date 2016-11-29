@@ -11,8 +11,8 @@
 
 namespace Money\Reward;
 
-class Condition extends \Model
-{
+class Condition extends \Model {
+
     static $cols = [
         'reward_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'reward'],
         'name' => ['type' => 'text'],
@@ -40,8 +40,7 @@ class Condition extends \Model
         ]
     ];
 
-    public function checkComplete($userId = 0)
-    {
+    public function checkComplete($userId = 0) {
         $userId = $userId ? $userId : \Users\User::$cur->id;
         if (!$userId) {
             return false;
@@ -54,12 +53,11 @@ class Condition extends \Model
         return true;
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'rewards' => [
                 'type' => 'relModel',
-                'relModel'=>'Money\Reward\ConditionRewardLnk',
+                'relModel' => 'Money\Reward\ConditionRewardLnk',
                 'model' => 'Money\Reward',
             ],
             'items' => [

@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class ChatsController extends Controller
-{
-    public function eventsAction($chatId = 0)
-    {
+class ChatsController extends Controller {
+
+    public function eventsAction($chatId = 0) {
         $chatId = (int) $chatId;
         $result = new Server\Result();
         if (!$chatId || !($chat = \Chats\Chat::get($chatId))) {
@@ -65,8 +64,7 @@ class ChatsController extends Controller
         $result->send();
     }
 
-    function deleteMsgAction($messageId)
-    {
+    function deleteMsgAction($messageId) {
         $result = new Server\Result();
         if (!\Users\User::$cur->isAdmin()) {
             $result->success = false;
@@ -85,8 +83,7 @@ class ChatsController extends Controller
         $result->send();
     }
 
-    function banUserAction($messageId)
-    {
+    function banUserAction($messageId) {
         $result = new Server\Result();
         if (!\Users\User::$cur->isAdmin()) {
             $result->success = false;
@@ -114,8 +111,7 @@ class ChatsController extends Controller
         $result->send();
     }
 
-    public function sendFormAction($chatId = 0)
-    {
+    public function sendFormAction($chatId = 0) {
         $chatId = (int) $chatId;
         $result = new Server\Result();
         if (!$chatId || !($chat = \Chats\Chat::get($chatId))) {

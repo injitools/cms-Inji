@@ -11,8 +11,8 @@
 
 namespace Users;
 
-class Social extends \Model
-{
+class Social extends \Model {
+
     public static $objectName = "Коннектор с социальной сетью";
     public static $cols = [
         'name' => ['type' => 'text'],
@@ -50,8 +50,7 @@ class Social extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'configs' => [
                 'type' => 'many',

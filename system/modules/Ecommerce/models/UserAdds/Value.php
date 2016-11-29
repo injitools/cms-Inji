@@ -11,8 +11,8 @@
 
 namespace Ecommerce\UserAdds;
 
-class Value extends \Model
-{
+class Value extends \Model {
+
     public static $labels = [
         'useradds_field_id' => 'Поле',
         'value' => 'Значение'
@@ -42,8 +42,7 @@ class Value extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'field' => [
                 'model' => 'Ecommerce\UserAdds\Field',

@@ -10,8 +10,8 @@
 
 namespace Ecommerce\Cart;
 
-class DeliveryInfo extends \Model
-{
+class DeliveryInfo extends \Model {
+
     public static $objectName = 'Информация о доставке';
     public static $labels = [
         'name' => 'Название',
@@ -45,8 +45,7 @@ class DeliveryInfo extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'field' => [
                 'model' => 'Ecommerce\Delivery\Field',

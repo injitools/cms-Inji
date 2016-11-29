@@ -11,22 +11,22 @@
           echo '<hr />';
       }
       ?>
-      <script>
-          var userAddsValues = <?= json_encode($values); ?>;
-          inji.onLoad(function () {
-            $('[name="userAddsId"]').change(function () {
-              var values = userAddsValues[$(this).val()];
-              for (key in values) {
-                var value = values[key];
-                $('[name="userAdds[fields][' + value.useradds_value_useradds_field_id + ']"]').val(value.useradds_value_value);
-              }
-            });
-          })
-      </script>
-      <?php
-  }
-  foreach (Ecommerce\UserAdds\Field::getList(['order' => ['weight', 'asc']]) as $field) {
-      $form->input($field->type, "userAdds[fields][{$field->id}]", $field->name, ['required' => $field->required]);
-  }
-  ?>
+        <script>
+            var userAddsValues = <?= json_encode($values); ?>;
+            inji.onLoad(function () {
+              $('[name="userAddsId"]').change(function () {
+                var values = userAddsValues[$(this).val()];
+                for (key in values) {
+                  var value = values[key];
+                  $('[name="userAdds[fields][' + value.useradds_value_useradds_field_id + ']"]').val(value.useradds_value_value);
+                }
+              });
+            })
+        </script>
+        <?php
+    }
+    foreach (Ecommerce\UserAdds\Field::getList(['order' => ['weight', 'asc']]) as $field) {
+        $form->input($field->type, "userAdds[fields][{$field->id}]", $field->name, ['required' => $field->required]);
+    }
+    ?>
 </fieldset>

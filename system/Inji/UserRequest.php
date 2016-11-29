@@ -8,10 +8,9 @@
  * @copyright 2016 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class UserRequest
-{
-    public static function get($key, $type, $default)
-    {
+class UserRequest {
+
+    public static function get($key, $type, $default) {
         if (!isset($_GET[$key])) {
             return $default;
         }

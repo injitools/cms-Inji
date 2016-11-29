@@ -11,14 +11,13 @@
 
 namespace Ui\DataManager\Action;
 
-class Edit extends \Ui\DataManager\Action
-{
+class Edit extends \Ui\DataManager\Action {
+
     public static $name = 'Редактировать';
     public static $groupAction = false;
     public static $rowAction = true;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         $formParams = [
             'dataManagerParams' => $params,
             'formName' => !empty($dataManager->managerOptions['editForm']) ? $dataManager->managerOptions['editForm'] : 'manager'

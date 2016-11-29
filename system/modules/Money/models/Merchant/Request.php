@@ -11,8 +11,8 @@
 
 namespace Money\Merchant;
 
-class Request extends \Model
-{
+class Request extends \Model {
+
     public static $cols = [
         'post' => ['type' => 'textarea'],
         'get' => ['type' => 'textarea'],
@@ -24,8 +24,7 @@ class Request extends \Model
         'date_create' => ['type' => 'dateTime']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'pay' => [
                 'model' => 'Money\Pay',

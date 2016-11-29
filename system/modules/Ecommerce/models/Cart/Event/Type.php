@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Cart\Event;
 
-class Type extends \Model
-{
+class Type extends \Model {
+
     public static $cols = [
         'name' => ['type' => 'text']
     ];

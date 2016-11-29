@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Option;
 
-class Item extends \Model
-{
+class Item extends \Model {
+
     public static $objectName = 'Элемент коллекции опции';
     public static $cols = [
         //Основные параметры
@@ -38,13 +38,11 @@ class Item extends \Model
         ]
     ];
 
-    function name()
-    {
+    function name() {
         return $this->value;
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'option' => [
                 'model' => 'Ecommerce\Item\Option',

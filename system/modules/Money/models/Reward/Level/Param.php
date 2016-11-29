@@ -11,8 +11,8 @@
 
 namespace Money\Reward\Level;
 
-class Param extends \Model
-{
+class Param extends \Model {
+
     public static $cols = [
         'reward_level_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'level'],
         'param' => ['type' => 'text'],
@@ -38,8 +38,7 @@ class Param extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'level' => [
                 'model' => 'Money\Reward\Level',

@@ -2,5 +2,5 @@
 
 return[
     'name' => 'История заказов',
-    'fullWidget'=>'Ecommerce\cart/history'
+    'fullWidget' => 'Ecommerce\cart/history'
 ];

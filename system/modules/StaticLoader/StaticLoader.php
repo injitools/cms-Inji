@@ -8,24 +8,22 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class StaticLoader extends Module
-{
+class StaticLoader extends Module {
+
     public $mimes = [];
 
-    public function init()
-    {
+    public function init() {
         $this->mimes = $this->config['mimes'];
     }
 
-    public function parsePath($path)
-    {
+    public function parsePath($path) {
         $path = Tools::parsePath($path);
 
         if (strpos($path, '/') === 0) {
             $path = substr($path, 1);
         }
         $app = substr($path, 0, strpos($path, '/'));
-       
+
         if ($app && file_exists(INJI_SYSTEM_DIR . '/program/' . $app)) {
             $path = substr($path, strpos($path, '/') + 1);
             if (\App::$cur->name != $app) {
@@ -53,7 +51,7 @@ class StaticLoader extends Module
         $type = substr($path, 0, strpos($path, '/'));
         switch ($type) {
             case 'libs':
-                return App::$cur->Libs->getPath(array_slice(explode('/', $path),2));
+                return App::$cur->Libs->getPath(array_slice(explode('/', $path), 2));
             case 'templates':
                 $path = substr($path, strpos($path, '/') + 1);
                 return $scriptApp->view->templatesPath . '/' . $path;
@@ -80,8 +78,7 @@ class StaticLoader extends Module
         }
     }
 
-    public function giveFile($file)
-    {
+    public function giveFile($file) {
         if (!file_exists($file) && file_exists(mb_convert_encoding($file, 'Windows-1251', 'UTF-8'))) {
             $file = mb_convert_encoding($file, 'Windows-1251', 'UTF-8');
         }

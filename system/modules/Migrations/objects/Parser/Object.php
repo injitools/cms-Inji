@@ -11,16 +11,15 @@
 
 namespace Migrations\Parser;
 
-class Object extends \Object
-{
+class Object extends \Object {
+
     public $object;
     public $parentObject;
     public $parentModel;
     public $parentParam;
     public $data;
 
-    public function parse($preset = [])
-    {
+    public function parse($preset = []) {
         $ids = [];
         if (!\Tools::isAssoc($this->data)) {
             foreach ($this->data as &$data) {
@@ -38,8 +37,7 @@ class Object extends \Object
         return $ids;
     }
 
-    private function parseData($data, $preset)
-    {
+    private function parseData($data, $preset) {
         $model = $this->setModel($data);
         if ($model) {
             foreach ($preset as $col => $value) {
@@ -74,7 +72,7 @@ class Object extends \Object
                 }
                 $walked[$param->code] = true;
             }
-            
+
             //check unparsed params
             foreach ($data as $key => $item) {
                 //skip parsed and attribtes
@@ -98,8 +96,7 @@ class Object extends \Object
         return 0;
     }
 
-    public function setModel($data)
-    {
+    public function setModel($data) {
         $model = null;
         $keyCol = null;
         $uniques = [];

@@ -11,8 +11,8 @@
 
 namespace Money\Pay;
 
-class Status extends \Model
-{
+class Status extends \Model {
+
     public static $cols = [
 
         'name' => ['type' => 'text'],

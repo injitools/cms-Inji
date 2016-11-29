@@ -6,32 +6,32 @@
   $rates = Money\Currency\ExchangeRate::getList();
   foreach ($wallets as $wallet) {
       ?>
-      <div class="col-sm-4">
-        <h4><?= $wallet->currency->name(); ?></h4>
-        <b><?= $wallet->showAmount(); ?></b> <?= $wallet->currency->acronym(); ?><br />
-        <?php
-        if (!empty($blocked[$wallet->currency_id])) {
-            echo "Заблокировано: {$blocked[$wallet->currency_id]} " . $wallet->currency->acronym() . "<br />";
-        }
-        if ($wallet->currency->refill) {
-            echo "<a href = '/money/refill?currency_id={$wallet->currency_id}'>Пополнить</a> ";
-        }
-        foreach ($rates as $rate) {
-            if ($rate->currency_id == $wallet->currency_id && !empty($wallets[$rate->target_currency_id])) {
-                echo "<a href = '/money/exchange?currency_id={$wallet->currency_id}'>Обменять</a>";
-                break;
+        <div class="col-sm-4">
+            <h4><?= $wallet->currency->name(); ?></h4>
+            <b><?= $wallet->showAmount(); ?></b> <?= $wallet->currency->acronym(); ?><br />
+            <?php
+            if (!empty($blocked[$wallet->currency_id])) {
+                echo "Заблокировано: {$blocked[$wallet->currency_id]} " . $wallet->currency->acronym() . "<br />";
             }
-        }
-        if ($wallet->currency->transfer) {
-            echo " <a href ='/money/transfer?currency_id={$wallet->currency_id}'>Перевести</a><br />";
-        }
-        echo " <a href ='/users/cabinet/walletHistory?currency_id={$wallet->currency_id}'>История</a>";
-        echo " <a href ='/users/cabinet/walletBlocked?currency_id={$wallet->currency_id}'>Блокировки</a>";
-        ?>
-      </div>
-      <?php
-  }
-  ?>
+            if ($wallet->currency->refill) {
+                echo "<a href = '/money/refill?currency_id={$wallet->currency_id}'>Пополнить</a> ";
+            }
+            foreach ($rates as $rate) {
+                if ($rate->currency_id == $wallet->currency_id && !empty($wallets[$rate->target_currency_id])) {
+                    echo "<a href = '/money/exchange?currency_id={$wallet->currency_id}'>Обменять</a>";
+                    break;
+                }
+            }
+            if ($wallet->currency->transfer) {
+                echo " <a href ='/money/transfer?currency_id={$wallet->currency_id}'>Перевести</a><br />";
+            }
+            echo " <a href ='/users/cabinet/walletHistory?currency_id={$wallet->currency_id}'>История</a>";
+            echo " <a href ='/users/cabinet/walletBlocked?currency_id={$wallet->currency_id}'>Блокировки</a>";
+            ?>
+        </div>
+        <?php
+    }
+    ?>
 </div>
 <?php
 $transfers = Money\Transfer::getList(['where' => [

@@ -11,8 +11,8 @@
 
 namespace Exchange1c;
 
-class Mode extends \Object
-{
+class Mode extends \Object {
+
     /**
      * @var \Exchange1c\Exchange
      */
@@ -23,13 +23,11 @@ class Mode extends \Object
      */
     public $log;
 
-    public function process()
-    {
+    public function process() {
         $this->end();
     }
 
-    public function end($status = 'success')
-    {
+    public function end($status = 'success') {
         $this->log->status = $status;
         $this->log->date_end = date('Y-m-d H:i:s');
         $this->log->save();

@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MoneyController extends Controller
-{
-    public function transferAction()
-    {
+class MoneyController extends Controller {
+
+    public function transferAction() {
         $transfer = new Money\Transfer();
         $form = new Ui\ActiveForm($transfer, 'transfer');
         $transferId = $form->checkRequest();
@@ -44,8 +43,7 @@ class MoneyController extends Controller
         $this->view->page(['data' => compact('form')]);
     }
 
-    public function confirmTransferAction($transferId = 0)
-    {
+    public function confirmTransferAction($transferId = 0) {
         $transfer = Money\Transfer::get((int) $transferId);
         if (!$transfer || $transfer->user_id != \Users\User::$cur->id || $transfer->complete || $transfer->canceled) {
             Tools::redirect('/', 'Такой перевод не найден');
@@ -69,8 +67,7 @@ class MoneyController extends Controller
         $this->view->page(['data' => compact('transfer')]);
     }
 
-    public function cancelTransferAction($transferId = 0)
-    {
+    public function cancelTransferAction($transferId = 0) {
         $transfer = Money\Transfer::get((int) $transferId);
         if (!$transfer || $transfer->user_id != \Users\User::$cur->id || $transfer->complete || $transfer->canceled) {
             Tools::redirect('/', 'Такой перевод не найден');
@@ -79,8 +76,7 @@ class MoneyController extends Controller
         Tools::redirect('/users/cabinet', 'Перевод был успешно отменен', 'success');
     }
 
-    public function refillAction($currencyId = 0)
-    {
+    public function refillAction($currencyId = 0) {
         $currency = null;
         if (!empty($_POST['currency_id'])) {
             $currency = Money\Currency::get((int) $_POST['currency_id']);
@@ -105,8 +101,7 @@ class MoneyController extends Controller
         }
     }
 
-    public function exchangeAction()
-    {
+    public function exchangeAction() {
         $wallets = $this->module->getUserWallets();
         $currency = !empty($_GET['currency_id']) ? \Money\Currency::get((int) $_GET['currency_id']) : null;
         if ($currency && empty($wallets[$currency->id])) {
@@ -155,8 +150,7 @@ class MoneyController extends Controller
         $this->view->page(['data' => compact('rates', 'currency', 'targetCurrency', 'wallets')]);
     }
 
-    public function walletPayAction($payId, $walletId)
-    {
+    public function walletPayAction($payId, $walletId) {
         $pay = Money\Pay::get((int) $payId);
         if (!$pay || $pay->user_id != \Users\User::$cur->id) {
             Tools::redirect('/money/merchants/pay/', 'Такой счет не найден');
@@ -190,8 +184,7 @@ class MoneyController extends Controller
         Tools::redirect('/users/cabinet', 'Вы успешно оплатили счет', 'success');
     }
 
-    public function primaryPayAction($payId, $currencyId)
-    {
+    public function primaryPayAction($payId, $currencyId) {
         $pay = Money\Pay::get((int) $payId);
         if (!$pay || $pay->user_id != \Users\User::$cur->id) {
             Tools::redirect('/money/merchants/pay/', 'Такой счет не найден');

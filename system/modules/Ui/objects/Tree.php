@@ -10,10 +10,9 @@
 
 namespace Ui;
 
-class Tree extends \Object
-{
-    public static function ul($objectRoot, $maxDeep = 0, $hrefFunc = null, $order = [])
-    {
+class Tree extends \Object {
+
+    public static function ul($objectRoot, $maxDeep = 0, $hrefFunc = null, $order = []) {
         $count = 0;
         if (!$hrefFunc) {
             $hrefFunc = function($object) {
@@ -22,25 +21,24 @@ class Tree extends \Object
         }
         ?>
         <ul class="treeview" data-col='tree_path'>
-          <?php
-          if (is_string($objectRoot)) {
-              $items = $objectRoot::getList(['where' => ['parent_id', 0]]);
-          } else {
-              $class = get_class($objectRoot);
-              $items = $class::getList(['where' => ['parent_id', $objectRoot->pk()], 'order' => $order]);
-          }
-          $count += count($items);
-          foreach ($items as $objectChild) {
-              $count+=static::showLi($objectChild, 1, $maxDeep, $hrefFunc, $order);
-          }
-          ?>
+            <?php
+            if (is_string($objectRoot)) {
+                $items = $objectRoot::getList(['where' => ['parent_id', 0]]);
+            } else {
+                $class = get_class($objectRoot);
+                $items = $class::getList(['where' => ['parent_id', $objectRoot->pk()], 'order' => $order]);
+            }
+            $count += count($items);
+            foreach ($items as $objectChild) {
+                $count+=static::showLi($objectChild, 1, $maxDeep, $hrefFunc, $order);
+            }
+            ?>
         </ul>
         <?php
         return $count;
     }
 
-    public static function showLi($object, $deep = 1, $maxDeep = 0, $hrefFunc = null, $order = [])
-    {
+    public static function showLi($object, $deep = 1, $maxDeep = 0, $hrefFunc = null, $order = []) {
         $count = 0;
         $isset = false;
         $class = get_class($object);

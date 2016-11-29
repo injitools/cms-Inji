@@ -11,7 +11,6 @@
 
 namespace Notifications;
 
-class Notification extends \Model
-{
+class Notification extends \Model {
     
 }

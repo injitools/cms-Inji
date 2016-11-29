@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Menu module
  *
@@ -7,7 +8,6 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Menu extends Module
-{
+class Menu extends Module {
     
 }

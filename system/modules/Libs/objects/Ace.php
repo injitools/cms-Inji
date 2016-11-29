@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class Ace extends \Object
-{
+class Ace extends \Object {
+
     public static $name = 'Ace editor';
     public static $files = [
         'js' => [

@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Libs extends Module
-{
-    public function loadLib($libName, $options = [])
-    {
+class Libs extends Module {
+
+    public function loadLib($libName, $options = []) {
 
         $className = 'Libs\\' . ucfirst($libName);
         if (class_exists($className)) {
@@ -46,8 +45,7 @@ class Libs extends Module
         }
     }
 
-    public function staticCalled($file, $dir)
-    {
+    public function staticCalled($file, $dir) {
         $libPath = preg_replace('!^libs/!', '', $file);
         $libName = substr($libPath, 0, strpos($libPath, '/'));
         $className = 'Libs\\' . ucfirst($libName);
@@ -65,8 +63,7 @@ class Libs extends Module
         return $dir . $file;
     }
 
-    public function getPath($args)
-    {
+    public function getPath($args) {
         if (!empty($args[0])) {
             $libName = 'Libs\\' . ucfirst($args[0]);
             if (class_exists($libName)) {

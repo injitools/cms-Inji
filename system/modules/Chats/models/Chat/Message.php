@@ -11,8 +11,8 @@
 
 namespace Chats\Chat;
 
-class Message extends \Model
-{
+class Message extends \Model {
+
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'text' => ['type' => 'textarea'],
@@ -21,8 +21,7 @@ class Message extends \Model
         'delete' => ['type' => 'bool']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return[
             'user' => [
                 'model' => 'Users\User',

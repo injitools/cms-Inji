@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MenuController extends adminController
-{
-    public function indexAction($appType = 'app')
-    {
+class MenuController extends adminController {
+
+    public function indexAction($appType = 'app') {
         $this->view->setTitle('Меню сайта');
         if (!$appType) {
             $appType = App::$cur->type;

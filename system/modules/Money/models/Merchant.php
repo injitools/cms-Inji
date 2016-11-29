@@ -11,8 +11,8 @@
 
 namespace Money;
 
-class Merchant extends \Model
-{
+class Merchant extends \Model {
+
     public static $objectName = 'Система оплаты';
     public static $cols = [
         'name' => ['type' => 'text'],
@@ -59,8 +59,7 @@ class Merchant extends \Model
             ]
     ]];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'configs' => [
                 'type' => 'many',
@@ -83,8 +82,7 @@ class Merchant extends \Model
         ];
     }
 
-    public function allowCurrencies($pay)
-    {
+    public function allowCurrencies($pay) {
         $allowCurrencies = [];
         foreach ($this->currencies as $merchantCurrency) {
             if ($merchantCurrency->currency_id == $pay->currency_id) {

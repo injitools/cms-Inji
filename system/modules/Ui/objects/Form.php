@@ -11,8 +11,8 @@
 
 namespace Ui;
 
-class Form extends \Object
-{
+class Form extends \Object {
+
     public $id = null;
     public $method = 'POST';
     public $action = '';
@@ -21,14 +21,12 @@ class Form extends \Object
     public $userDataTree = [];
     public $options = ['widgetsDir' => 'Form'];
 
-    public function __construct($options = [])
-    {
+    public function __construct($options = []) {
         $this->options = array_merge($this->options, $options);
         $this->genUserDataTree($_POST);
     }
 
-    public function genUserDataTree($data, $treeKey = '')
-    {
+    public function genUserDataTree($data, $treeKey = '') {
         foreach ($data as $key => $item) {
             if (is_array($item)) {
                 $this->genUserDataTree($item, $treeKey ? $treeKey . "[{$key}]" : $key);
@@ -38,8 +36,7 @@ class Form extends \Object
         }
     }
 
-    public function begin($header = '', $options = [], $params = [])
-    {
+    public function begin($header = '', $options = [], $params = []) {
         $params = compact('header', 'options', 'params');
         $params['form'] = $this;
         \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/begin', $params);
@@ -53,8 +50,7 @@ class Form extends \Object
      * @param string|boolean $label
      * @param array $options
      */
-    public function input($type, $name, $label = '', $options = [])
-    {
+    public function input($type, $name, $label = '', $options = []) {
         switch ($type) {
             case 'html':
                 \App::$cur->libs->loadLib('ckeditor');
@@ -86,8 +82,7 @@ class Form extends \Object
      * @param boolean|string $btnText
      * @param array $attributs
      */
-    public function end($btnText = 'Отправить', $attributs = [], $options = [])
-    {
+    public function end($btnText = 'Отправить', $attributs = [], $options = []) {
         $params = compact('btnText', 'attributs', 'options');
         $params['form'] = $this;
         \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/end', $params);

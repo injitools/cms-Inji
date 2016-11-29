@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class UserFormsController extends Controller
-{
-    public function getFormHtmlAction($userForm_id)
-    {
+class UserFormsController extends Controller {
+
+    public function getFormHtmlAction($userForm_id) {
         $this->view->widget('UserForms\userForm', ['form_id' => $userForm_id]);
     }
 

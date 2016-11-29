@@ -11,8 +11,8 @@
 
 namespace Money;
 
-class Reward extends \Model
-{
+class Reward extends \Model {
+
     public static $cols = [
         'name' => ['type' => 'text'],
         'active' => ['type' => 'bool'],
@@ -60,8 +60,7 @@ class Reward extends \Model
         ]
     ];
 
-    public function checkBlocked()
-    {
+    public function checkBlocked() {
         $blocked = Wallet\Block::getList(['where' => [
                         ['data', 'reward:' . $this->id],
                         [
@@ -93,8 +92,7 @@ class Reward extends \Model
         }
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'levels' => [
                 'type' => 'many',
@@ -104,7 +102,7 @@ class Reward extends \Model
             'conditions' => [
                 'type' => 'relModel',
                 'model' => 'Money\Reward\Condition',
-                'relModel'=>'Money\Reward\ConditionRewardLnk'
+                'relModel' => 'Money\Reward\ConditionRewardLnk'
             ]
         ];
     }

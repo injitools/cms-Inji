@@ -24,7 +24,7 @@ $cols = [
 ?>
 <div class = "row">
     <div class = "col-md-6">
-        <?php $form->input('text', 'name', 'Название', ['placeholder' => 'Например: Статья', 'value' => !empty($modelFullName) ? $modelFullName::$objectName : '']); ?>
+      <?php $form->input('text', 'name', 'Название', ['placeholder' => 'Например: Статья', 'value' => !empty($modelFullName) ? $modelFullName::$objectName : '']); ?>
     </div>
     <div class = "col-md-6">
         <?php $form->input('text', 'codeName', 'Кодовое обозначение', ['placeholder' => 'Например: Article', 'value' => !empty($modelName) ? $modelName : '', 'helpText' => 'Используйте имена на английском языке. Это обозначение используется для обращения к модели из скрипта']); ?>

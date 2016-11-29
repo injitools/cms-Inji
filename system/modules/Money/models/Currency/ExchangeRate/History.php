@@ -11,8 +11,8 @@
 
 namespace Money\Currency\ExchangeRate;
 
-class History extends \Model
-{
+class History extends \Model {
+
     public static $cols = [
         'currency_exchangerate_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'rate'],
         'old' => ['type' => 'decimal'],
@@ -20,8 +20,7 @@ class History extends \Model
         'date_create' => ['type' => 'dateTime']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'rate' => [
                 'model' => 'Money\Currency\ExchangeRate\History',

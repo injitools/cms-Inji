@@ -36,7 +36,7 @@ span.nav-toggle-icon{
   background-position:0 -56px
 }
 .dataManager-bottomFloat-container {
-  
+
 }
 .dataManager .dataManager-bottomFloat {
   padding: 10px;
@@ -47,8 +47,8 @@ span.nav-toggle-icon{
   position: fixed;
   background: #fff;
   -webkit-box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
-box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 12px -1px rgba(0,0,0,0.75);
 }
 .dataManager .dataManager-bottomFloat .pagination {
   margin:0;

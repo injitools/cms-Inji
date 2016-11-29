@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item;
 
-class Type extends \Model
-{
+class Type extends \Model {
+
     public static $objectName = 'Тип товара';
     public static $cols = [
         'name' => ['type' => 'text'],
@@ -43,7 +43,7 @@ class Type extends \Model
         'manager' => [
             'map' => [
                 ['name', 'code'],
-                ['delivery', 'electronic','discount']
+                ['delivery', 'electronic', 'discount']
             ]
         ]
     ];

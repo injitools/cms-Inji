@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class Jquery extends \Object
-{
+class Jquery extends \Object {
+
     public static $name = 'jQuery';
     public static $composerPacks = [
         'components/jquery' => '2.1.*'

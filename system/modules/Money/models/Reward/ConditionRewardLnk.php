@@ -11,8 +11,8 @@
 
 namespace Money\Reward;
 
-class ConditionRewardLnk extends \Model
-{
+class ConditionRewardLnk extends \Model {
+
     public static $cols = [
         'reward_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'reward'],
         'reward_condition_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'condition'],
@@ -23,15 +23,14 @@ class ConditionRewardLnk extends \Model
         ]
     ];
     public static $forms = [
-        'manager'=>[
-            'map'=>[
+        'manager' => [
+            'map' => [
                 ['reward_id', 'reward_condition_id']
             ]
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'reward' => [
                 'model' => 'Money\Reward',

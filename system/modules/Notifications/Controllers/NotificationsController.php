@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class NotificationsController extends \Controller
-{
-    public function checkAction()
-    {
+class NotificationsController extends \Controller {
+
+    public function checkAction() {
         $result = new Server\Result();
         $device = $this->Notifications->getCurDevice();
         $subscriber = $this->Notifications->getCurSubscriber();

@@ -11,7 +11,6 @@
 
 namespace Notifications;
 
-class Chanel extends \Model
-{
+class Chanel extends \Model {
     
 }

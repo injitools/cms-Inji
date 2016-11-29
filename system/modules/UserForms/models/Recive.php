@@ -11,8 +11,8 @@
 
 namespace UserForms;
 
-class Recive extends \Model
-{
+class Recive extends \Model {
+
     public static $objectName = 'Полученная форма';
     public static $labels = [
         'form_title' => 'Название',
@@ -53,8 +53,7 @@ class Recive extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => '\Users\User',

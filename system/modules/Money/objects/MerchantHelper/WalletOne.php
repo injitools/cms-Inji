@@ -11,16 +11,15 @@
 
 namespace Money\MerchantHelper;
 
-class WalletOne extends \Money\MerchantHelper
-{
-    public static function reciver($data, $status)
-    {
+class WalletOne extends \Money\MerchantHelper {
+
+    public static function reciver($data, $status) {
         $config = static::getConfig();
         $skey = $config['secret'];
+
         // Функция, которая возвращает результат в Единую кассу
 
-        function print_answer($result, $description)
-        {
+        function print_answer($result, $description) {
             $print = "WMI_RESULT=" . strtoupper($result) . "&";
             $print .= "WMI_DESCRIPTION=" . urlencode($description);
             return $print;
@@ -81,11 +80,10 @@ class WalletOne extends \Money\MerchantHelper
         return $result;
     }
 
-    public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/')
-    {
+    public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/') {
         $config = static::getConfig();
         $merchantCurrency = static::getMerchantCurrency($currency);
-        
+
         if (!$description)
             $description = "Оплата заказа на сайте " . idn_to_utf8(INJI_DOMAIN_NAME);
 

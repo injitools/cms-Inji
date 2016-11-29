@@ -11,8 +11,8 @@
 
 namespace Materials;
 
-class Category extends \Model
-{
+class Category extends \Model {
+
     public static $objectName = 'Категория';
     public static $treeCategory = 'Materials\Material';
     public static $labels = [
@@ -76,15 +76,13 @@ class Category extends \Model
         ]
     ];
 
-    public function beforeDelete()
-    {
+    public function beforeDelete() {
         foreach ($this->childs as $child) {
             $child->delete();
         }
     }
 
-    public function getRoot()
-    {
+    public function getRoot() {
         $treePath = array_values(array_filter(explode('/', $this->tree_path)));
         if (!empty($treePath[0])) {
             $category = Category::get($treePath[0]);
@@ -95,8 +93,7 @@ class Category extends \Model
         return $this;
     }
 
-    public function getHref()
-    {
+    public function getHref() {
         $href = !empty(\App::$primary->config['defaultModule']) && \App::$primary->config['defaultModule'] == 'Materials' ? '/category' : '/materials/category';
         $treePath = array_filter(explode('/', $this->tree_path));
         if ($treePath) {
@@ -108,8 +105,7 @@ class Category extends \Model
         return $href . "/" . ($this->alias ? $this->alias : $this->pk());
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'parent' => [
                 'model' => 'Materials\Category',
@@ -136,8 +132,7 @@ class Category extends \Model
         ];
     }
 
-    public function resolveTemplate($material = false)
-    {
+    public function resolveTemplate($material = false) {
         $param = $material ? 'material_template' : 'template';
         if ($this->$param !== 'inherit') {
             return $this->$param;
@@ -148,8 +143,7 @@ class Category extends \Model
         }
     }
 
-    public function resolveViewer($material = false)
-    {
+    public function resolveViewer($material = false) {
         $param = $material ? 'material_viewer' : 'viewer';
         if ($this->$param !== 'inherit') {
             return $this->$param;

@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Cart;
 
-class Extra extends \Model
-{
+class Extra extends \Model {
+
     public static $labels = [
         'name' => 'Название',
         'price' => 'Цена',
@@ -51,13 +51,11 @@ class Extra extends \Model
         ]
     ];
 
-    public function afterSave()
-    {
+    public function afterSave() {
         $this->cart->calc();
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'cart' => [
                 'model' => 'Ecommerce\Cart',

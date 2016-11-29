@@ -11,7 +11,7 @@ $actions = $dataManager->getActions();
 $buttons = [];
 foreach ($actions as $action => $actionParams) {
     if (class_exists($actionParams['className']) && $actionParams['className']::$rowAction) {
-        $buttons[]= $actionParams['className']::rowButton($dataManager, $item, $params, $actionParams);
+        $buttons[] = $actionParams['className']::rowButton($dataManager, $item, $params, $actionParams);
     }
 }
 echo implode('&nbsp;', $buttons);

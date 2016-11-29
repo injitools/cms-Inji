@@ -11,16 +11,15 @@
 
 namespace CodeGenerator;
 
-class Method extends \Object
-{
+class Method extends \Object {
+
     public $security = 'public';
     public $static = false;
     public $name = 'property';
     public $propertys = [];
     public $body = '';
 
-    public function generate()
-    {
+    public function generate() {
         $code = $this->security . ' ';
         $code .= $this->static ? 'static ' : '';
         $code .= 'function ' . $this->name . '(';

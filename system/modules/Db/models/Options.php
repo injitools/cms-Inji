@@ -11,8 +11,8 @@
 
 namespace Db;
 
-class Options extends \Model
-{
+class Options extends \Model {
+
     /**
      * Model options
      */
@@ -81,13 +81,11 @@ class Options extends \Model
         ]
     ];
 
-    public function name()
-    {
+    public function name() {
         return $this->connect_name;
     }
 
-    public static function index()
-    {
+    public static function index() {
         return 'id';
     }
 

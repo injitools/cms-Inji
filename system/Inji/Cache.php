@@ -8,8 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Cache
-{
+class Cache {
+
     /**
      * Connection to a set of memcache servers
      * 
@@ -34,8 +34,7 @@ class Cache
     /**
      * Try connect to memcache server
      */
-    public static function connect()
-    {
+    public static function connect() {
         if (!self::$connectTrying && class_exists('Memcache', false)) {
             self::$server = new Memcache();
             self::$connected = @self::$server->connect('localhost', 11211);
@@ -53,8 +52,7 @@ class Cache
      * @param callable $callback
      * @return boolean
      */
-    public static function get($name, $params = [], $callback = null)
-    {
+    public static function get($name, $params = [], $callback = null) {
         if (!self::$connected) {
             self::connect();
         }
@@ -86,8 +84,7 @@ class Cache
      * @param int $lifeTime
      * @return boolean
      */
-    public static function set($name, $params = [], $val = '', $lifeTime = 3600)
-    {
+    public static function set($name, $params = [], $val = '', $lifeTime = 3600) {
         if (!self::$connected) {
             self::connect();
         }
@@ -106,8 +103,7 @@ class Cache
      * @param array $options
      * @return string
      */
-    public static function file($file, $options = [])
-    {
+    public static function file($file, $options = []) {
         $sizes = !empty($options['resize']) ? $options['resize'] : [];
         $crop = !empty($options['crop']) ? $options['crop'] : '';
         $pos = !empty($options['pos']) ? $options['pos'] : 'center';
@@ -134,8 +130,7 @@ class Cache
      * @param App $app
      * @return string
      */
-    public static function getDir($dirname, $app = null)
-    {
+    public static function getDir($dirname, $app = null) {
         if (!$app) {
             $app = App::$primary;
         }

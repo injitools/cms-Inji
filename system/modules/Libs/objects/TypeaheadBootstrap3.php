@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class TypeaheadBootstrap3 extends \Object
-{
+class TypeaheadBootstrap3 extends \Object {
+
     public static $name = 'Typeahead Bootstrap 3';
     public static $composerPacks = [
         'bassjobsen/bootstrap-3-typeahead' => '4.*'

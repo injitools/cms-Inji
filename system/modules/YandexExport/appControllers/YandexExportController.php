@@ -7,12 +7,11 @@
  * @copyright 2016 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class YandexExportController extends Controller
-{
-    function indexAction()
-    {
-        function addToXml($xml, $parent, $nodeName, $text)
-        {
+class YandexExportController extends Controller {
+
+    function indexAction() {
+
+        function addToXml($xml, $parent, $nodeName, $text) {
             $node = $parent->appendChild($xml->createElement($nodeName));
             $node->appendChild($xml->createTextNode($text));
             return $node;

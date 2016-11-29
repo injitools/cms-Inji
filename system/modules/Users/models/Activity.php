@@ -11,8 +11,8 @@
 
 namespace Users;
 
-class Activity extends \Model
-{
+class Activity extends \Model {
+
     public static $objectName = 'Activity';
     public static $labels = [
         'text' => 'Текст',
@@ -42,8 +42,7 @@ class Activity extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',

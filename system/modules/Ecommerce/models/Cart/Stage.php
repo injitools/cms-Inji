@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Cart;
 
-class Stage extends \Model
-{
+class Stage extends \Model {
+
     public static $objectName = 'Этап наполнения корзины';
     public static $cols = [
         'sum' => ['type' => 'decimal'],
@@ -42,8 +42,7 @@ class Stage extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'currency' => [
                 'model' => 'Money\Currency',

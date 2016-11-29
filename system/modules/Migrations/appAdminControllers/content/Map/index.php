@@ -2,8 +2,8 @@
 
 $form = new Ui\Form();
 $form->begin('Карта миграции');
-function drawPath($path, $form, $models, $objects)
-{
+
+function drawPath($path, $form, $models, $objects) {
     $form->input('select', 'type[' . $path->id . ']', $path->item, [
         'values' => [
     '' => 'Выберите',
@@ -31,8 +31,8 @@ function drawPath($path, $form, $models, $objects)
 foreach ($map->paths(['where' => ['parent_id', 0]]) as $path) {
     drawPath($path, $form, $models, $objects);
 }
-function drawParam($param, $form, $models, $objects, $parent = 0)
-{
+
+function drawParam($param, $form, $models, $objects, $parent = 0) {
     $selectArrays = [];
     $objectsCols = [];
 
@@ -49,7 +49,7 @@ function drawParam($param, $form, $models, $objects, $parent = 0)
     if (empty($objectsCols[$param->object_id])) {
         $modelName = $param->object->model;
         foreach (array_keys($modelName::$cols) as $colName) {
-            $objectsCols[$param->object_id][$colName] = !empty($modelName::$labels[$colName])?$modelName::$labels[$colName]:$colName;
+            $objectsCols[$param->object_id][$colName] = !empty($modelName::$labels[$colName]) ? $modelName::$labels[$colName] : $colName;
         }
     }
     $modelName = $param->object->model;

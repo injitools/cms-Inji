@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Ui extends Module
-{
-    public function init()
-    {
+class Ui extends Module {
+
+    public function init() {
         $this->app->view->customAsset('js', ['file' => '/static/moduleAsset/Ui/js/Ui.js']);
         $this->app->view->customAsset('js', ['file' => '/static/moduleAsset/Ui/js/DataManager.js']);
         if ((!$this->app->users || \Users\User::$cur->isAdmin()) && $this->app->type == 'app') {
@@ -20,8 +19,7 @@ class Ui extends Module
         $this->app->view->customAsset('css', '/static/moduleAsset/Ui/css/Ui.css');
     }
 
-    public function getModelForm($modelName, $formName = '')
-    {
+    public function getModelForm($modelName, $formName = '') {
         if (!$formName) {
             $formName = 'manager';
         }

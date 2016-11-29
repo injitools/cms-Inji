@@ -11,8 +11,8 @@
 
 namespace Migrations\Migration\Map;
 
-class Path extends \Model
-{
+class Path extends \Model {
+
     public static $cols = [
         'migration_map_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'map'],
         'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent'],
@@ -23,8 +23,7 @@ class Path extends \Model
         'date_create' => ['type' => 'dateTime'],
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'map' => [
                 'model' => 'Migrations\Migration\Map',

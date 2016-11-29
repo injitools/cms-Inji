@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Exchange1c extends Module
-{
-    public function response($code, $text = '', $exit = true)
-    {
+class Exchange1c extends Module {
+
+    public function response($code, $text = '', $exit = true) {
         echo $code;
         if ($text) {
             echo "\n";

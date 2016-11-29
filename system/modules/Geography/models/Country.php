@@ -11,8 +11,8 @@
 
 namespace Geography;
 
-class Country extends \Model
-{
+class Country extends \Model {
+
     public static $objectName = 'Страна';
     public static $labels = [
         'name' => 'Название',
@@ -37,8 +37,7 @@ class Country extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'citys' => [
                 'type' => 'many',

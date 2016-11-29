@@ -11,8 +11,8 @@
 
 namespace Dashboard;
 
-class Comment extends \Model
-{
+class Comment extends \Model {
+
     public static $objectName = 'Комментарии';
     public static $labels = [
         'model' => 'Тип ресурса',
@@ -23,7 +23,7 @@ class Comment extends \Model
     public static $cols = [
         'user_id' => [
             'type' => 'select',
-            'source'=>'relation',
+            'source' => 'relation',
             'relation' => 'user',
         ],
         'model' => ['type' => 'text'],
@@ -58,8 +58,7 @@ class Comment extends \Model
         ],
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',

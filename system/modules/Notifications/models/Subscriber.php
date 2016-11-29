@@ -11,7 +11,6 @@
 
 namespace Notifications;
 
-class Subscriber extends \Model
-{
+class Subscriber extends \Model {
     //put your code here
 }

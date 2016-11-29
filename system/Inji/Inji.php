@@ -8,8 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Inji
-{
+class Inji {
+
     /**
      * Static storage for core object
      * 
@@ -46,8 +46,7 @@ class Inji
      * @param array|closure $callback
      * @param boolean $save
      */
-    public function listen($eventName, $listenCode, $callback, $save = false)
-    {
+    public function listen($eventName, $listenCode, $callback, $save = false) {
         if ($save) {
             $config = Config::custom(App::$primary->path . '/config/events.php');
             $config[$eventName][$listenCode] = serialize($callback);
@@ -64,8 +63,7 @@ class Inji
      * @param mixed $eventObject
      * @return mixed
      */
-    public function event($eventName, $eventObject = null)
-    {
+    public function event($eventName, $eventObject = null) {
         $event = [
             'eventName' => $eventName,
             'eventObject' => $eventObject,
@@ -107,8 +105,7 @@ class Inji
      * @param string $listenCode
      * @param boolean $save
      */
-    public function unlisten($eventName, $listenCode, $save = false)
-    {
+    public function unlisten($eventName, $listenCode, $save = false) {
         if ($save) {
             $config = Config::custom(App::$primary->path . '/config/events.php');
             if (!empty($config[$eventName][$listenCode])) {

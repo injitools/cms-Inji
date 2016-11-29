@@ -11,8 +11,8 @@
 
 namespace Ecommerce;
 
-class UserAdds extends \Model
-{
+class UserAdds extends \Model {
+
     public static $labels = [
         'value' => 'Информация'
     ];
@@ -26,8 +26,7 @@ class UserAdds extends \Model
         'value' => ['type' => 'dataManager', 'relation' => 'values'],
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'values' => [
                 'type' => 'many',

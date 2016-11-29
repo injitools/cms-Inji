@@ -11,8 +11,8 @@
 
 namespace Users\User;
 
-class ParentHistory extends \Model
-{
+class ParentHistory extends \Model {
+
     public static $cols = [
         'user_id' => ['type' => 'number'],
         'old' => ['type' => 'number'],

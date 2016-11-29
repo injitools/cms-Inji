@@ -11,16 +11,15 @@
 
 namespace Server;
 
-class Result extends \Object
-{
+class Result extends \Object {
+
     public $content = null;
     public $success = true;
     public $successMsg = '';
     public $commands = [];
     public $scripts = [];
 
-    public function send()
-    {
+    public function send() {
         $return = [];
         $return['success'] = $this->success;
         if ($this->success) {

@@ -11,8 +11,8 @@
 
 namespace Geography\City;
 
-class Data extends \Model
-{
+class Data extends \Model {
+
     public static $objectName = 'Данные города';
     public static $labels = [
         'code' => 'Код',
@@ -42,8 +42,7 @@ class Data extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'city' => [
                 'model' => 'Geography\City',

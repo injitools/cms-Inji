@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class JsCookie extends \Object
-{
+class JsCookie extends \Object {
+
     public static $name = 'JavaScript Cookie';
     public static $files = [
         'js' => [

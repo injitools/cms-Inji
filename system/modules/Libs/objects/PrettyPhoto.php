@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class PrettyPhoto extends \Object
-{
+class PrettyPhoto extends \Object {
+
     public static $name = 'PrettyPhoto';
     public static $files = [
         'js' => [

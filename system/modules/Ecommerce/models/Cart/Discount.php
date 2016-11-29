@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Cart;
 
-class Discount extends \Model
-{
+class Discount extends \Model {
+
     public static $objectName = 'Скидка корзины';
     public static $cols = [
         'cart_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'cart'],
@@ -40,8 +40,7 @@ class Discount extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'cart' => [
                 'model' => 'Ecommerce\Cart',

@@ -8,7 +8,6 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class CallbacksController extends adminController
-{
+class CallbacksController extends adminController {
     
 }

@@ -11,10 +11,9 @@
 
 namespace Notifications;
 
-class Subscribe extends \Model
-{
-    public static function relations()
-    {
+class Subscribe extends \Model {
+
+    public static function relations() {
         return [
             'chanel' => [
                 'model' => 'Notifications\Chanel',
@@ -22,4 +21,5 @@ class Subscribe extends \Model
             ]
         ];
     }
+
 }

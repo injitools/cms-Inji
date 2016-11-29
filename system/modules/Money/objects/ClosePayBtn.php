@@ -12,14 +12,13 @@
 
 namespace Money;
 
-class ClosePayBtn extends \Ui\DataManager\Action
-{
+class ClosePayBtn extends \Ui\DataManager\Action {
+
     public static $name = 'Оплачено';
     public static $groupAction = true;
     public static $rowAction = true;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         if ($item->pay_status_id != 1) {
             return '';
         }
@@ -38,8 +37,7 @@ class ClosePayBtn extends \Ui\DataManager\Action
         return $btn;
     }
 
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo)
-    {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
         $pays = Pay::getList(['where' => [['id', $ids, 'IN'], ['pay_status_id', 1]]]);
         foreach ($pays as $pay) {
             $pay->pay_status_id = 2;

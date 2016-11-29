@@ -8,25 +8,22 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class ViewController extends Controller
-{
-    public function indexAction()
-    {
+class ViewController extends Controller {
+
+    public function indexAction() {
         $templates = App::$primary->view->config;
         App::$cur->view->setTitle('Шаблоны сайта');
         App::$cur->view->page(['data' => compact('templates')]);
     }
 
-    public function setDefaultAction($name)
-    {
+    public function setDefaultAction($name) {
         $templates = App::$primary->view->config;
         $templates['app']['current'] = $name;
         Config::save('module', $templates, 'View', App::$primary);
         Tools::redirect('/admin/View');
     }
 
-    public function createTemplateAction()
-    {
+    public function createTemplateAction() {
         $this->view->setTitle('Создание шаблона');
         App::$cur->view->customAsset('css', '/static/moduleAsset/View/css/blockDrop.css');
         App::$cur->view->customAsset('js', ['file' => '/static/moduleAsset/View/js/blockDrop.js', 'libs' => ['JqueryUi']]);
@@ -64,8 +61,7 @@ class ViewController extends Controller
         $this->view->page();
     }
 
-    public function editTemplateAction($templateName)
-    {
+    public function editTemplateAction($templateName) {
         $this->view->setTitle('Редактирование шаблона');
         App::$cur->view->customAsset('css', '/static/moduleAsset/View/css/blockDrop.css');
         App::$cur->view->customAsset('js', '/static/moduleAsset/View/js/blockDrop.js');

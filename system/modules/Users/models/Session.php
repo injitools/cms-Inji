@@ -11,8 +11,8 @@
 
 namespace Users;
 
-class Session extends \Model
-{
+class Session extends \Model {
+
     public static $cols = [
         'hash' => ['type' => 'text'],
         'ip' => ['type' => 'text'],
@@ -21,8 +21,7 @@ class Session extends \Model
         'date_create' => ['type' => 'dateTime']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => '\Users\User',

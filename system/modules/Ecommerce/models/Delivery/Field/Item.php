@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Delivery\Field;
 
-class Item extends \Model
-{
+class Item extends \Model {
+
     public static $objectName = 'Элемент коллекции поля доставки';
     public static $cols = [
         //Основные параметры
@@ -38,13 +38,11 @@ class Item extends \Model
         ]
     ];
 
-    function name()
-    {
+    function name() {
         return $this->value;
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'field' => [
                 'model' => 'Ecommerce\Delivery\Field',

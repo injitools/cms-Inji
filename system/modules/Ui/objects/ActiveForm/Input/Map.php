@@ -13,14 +13,14 @@ namespace Ui\ActiveForm\Input;
 
 class Map extends \Ui\ActiveForm\Input {
 
-  public function parseRequest($request) {
-    $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
-    if (isset($request[$this->colName])) {
-      $this->activeForm->model->{$colName} = json_encode($request[$this->colName]);
-    } else {
-      $this->activeForm->model->{$colName} = 0;
-      $this->activeForm->model->{$colName} = '';
+    public function parseRequest($request) {
+        $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
+        if (isset($request[$this->colName])) {
+            $this->activeForm->model->{$colName} = json_encode($request[$this->colName]);
+        } else {
+            $this->activeForm->model->{$colName} = 0;
+            $this->activeForm->model->{$colName} = '';
+        }
     }
-  }
 
 }

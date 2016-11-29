@@ -8,17 +8,15 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Access extends Module
-{
+class Access extends Module {
+
     public $accessCheckers = [];
 
-    public function init()
-    {
+    public function init() {
         $this->accessCheckers = $this->getSnippets('accessGetter');
     }
 
-    public function getDeniedRedirect($app = false)
-    {
+    public function getDeniedRedirect($app = false) {
         if (!$app) {
             $app = $this->app->type;
         }
@@ -28,8 +26,7 @@ class Access extends Module
         return '/';
     }
 
-    public function checkAccess($element, $user = null)
-    {
+    public function checkAccess($element, $user = null) {
         $access = NULL;
         foreach ($this->accessCheckers as $getter) {
             foreach ($getter['classes'] as $className) {
@@ -55,8 +52,7 @@ class Access extends Module
         return true;
     }
 
-    public function resolvePath($array, $path, $element)
-    {
+    public function resolvePath($array, $path, $element) {
         while ($path) {
             $result = $this->pathWalker($array, array_merge($path, [$element]));
             if ($result !== null) {
@@ -67,8 +63,7 @@ class Access extends Module
         return null;
     }
 
-    public function pathWalker($array, $path)
-    {
+    public function pathWalker($array, $path) {
         if ($path && isset($array[$path[0]])) {
             return $this->pathWalker($array[$path[0]], array_slice($path, 1));
         } elseif (!$path) {

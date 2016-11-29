@@ -11,8 +11,8 @@
 
 namespace Callbacks;
 
-class Category extends \Model
-{
+class Category extends \Model {
+
     public static $objectName = 'Категория отзывов';
     public static $treeCategory = 'Callbacks\Callback';
     public static $cols = [
@@ -43,8 +43,7 @@ class Category extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'callbacks' => [
                 'type' => 'many',
@@ -67,8 +66,7 @@ class Category extends \Model
         ];
     }
 
-    public function resolveTemplate()
-    {
+    public function resolveTemplate() {
         if ($this->template !== 'inherit') {
             return $this->template;
         } elseif ($this->template == 'inherit' && $this->category) {
@@ -78,8 +76,7 @@ class Category extends \Model
         }
     }
 
-    public function resolveViewer()
-    {
+    public function resolveViewer() {
         if ($this->viewer !== 'inherit') {
             return $this->viewer;
         } elseif ($this->viewer == 'inherit' && $this->category) {

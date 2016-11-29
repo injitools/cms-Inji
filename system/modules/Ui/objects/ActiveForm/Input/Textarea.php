@@ -11,7 +11,6 @@
 
 namespace Ui\ActiveForm\Input;
 
-class Textarea extends \Ui\ActiveForm\Input
-{
+class Textarea extends \Ui\ActiveForm\Input {
     
 }

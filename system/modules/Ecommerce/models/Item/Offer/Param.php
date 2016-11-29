@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Offer;
 
-class Param extends \Model
-{
+class Param extends \Model {
+
     public static $objectName = 'Параметр товара';
     public static $labels = [
         'item_offer_option_id' => 'Параметр предложения',
@@ -28,8 +28,7 @@ class Param extends \Model
         'date_create' => ['type' => 'dateTime']
     ];
 
-    public static function indexes()
-    {
+    public static function indexes() {
         return [
             'ecommerce_itemOfferOptionRelation' => [
                 'type' => 'INDEX',
@@ -53,9 +52,8 @@ class Param extends \Model
         ];
     }
 
-    public function realType()
-    {
-        if ($this->option && $this->option->type)  {
+    public function realType() {
+        if ($this->option && $this->option->type) {
             $type = $this->option->type;
 
             if ($type == 'select') {
@@ -89,13 +87,11 @@ class Param extends \Model
             ]
     ]];
 
-    function name()
-    {
+    function name() {
         return $this->value;
     }
 
-    public function value($default = '')
-    {
+    public function value($default = '') {
         if ($this->option->type != 'select') {
             return $this->value;
         } elseif ($this->optionItem) {
@@ -104,8 +100,7 @@ class Param extends \Model
         return $default;
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'file' => [
                 'model' => 'Files\File',

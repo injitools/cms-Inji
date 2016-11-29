@@ -11,8 +11,8 @@
 
 namespace Chats\Chat;
 
-class Member extends \Model
-{
+class Member extends \Model {
+
     public static $cols = [
         'chat_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'chat'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -20,8 +20,7 @@ class Member extends \Model
         'date_last_active' => ['type' => 'dateTime']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return[
             'user' => [
                 'model' => 'Users\User',

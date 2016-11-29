@@ -83,8 +83,7 @@ BlockDrop.prototype.changeCols = function (btn, count) {
     parts += part;
     if (parts > 12) {
       part = parts - 12;
-    }
-    else if (i == count && parts < 12) {
+    } else if (i == count && parts < 12) {
       part = part + 12 - parts;
     }
     rowselector.find('.colsSelect').append('<div class = "blockCol col-xs-' + part + '">' + part + '</div>');

@@ -11,8 +11,8 @@
 
 namespace Users;
 
-class Role extends \Model
-{
+class Role extends \Model {
+
     public static $objectName = 'Роль пользователей';
     public static $labels = [
         'name' => 'Название',
@@ -40,8 +40,7 @@ class Role extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'group' => [
                 'model' => 'Users\Group',

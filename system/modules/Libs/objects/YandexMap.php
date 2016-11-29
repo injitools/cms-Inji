@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class YandexMap extends \Object
-{
+class YandexMap extends \Object {
+
     public static $name = 'YandexMap';
     public static $files = [
         'js' => [

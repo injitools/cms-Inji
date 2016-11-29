@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class CodeGenerator
-{
-    public static function genArray($data, $level = 0)
-    {
+class CodeGenerator {
+
+    public static function genArray($data, $level = 0) {
         $return = '';
         if ($level == 0)
             $return = "[";
@@ -31,8 +30,7 @@ class CodeGenerator
         return $return;
     }
 
-    public static function parseClass($path)
-    {
+    public static function parseClass($path) {
         $code = file_get_contents($path);
 
         $parser = new PhpParser\Parser(new PhpParser\Lexer\Emulative);

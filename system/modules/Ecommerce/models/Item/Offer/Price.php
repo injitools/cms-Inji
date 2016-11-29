@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Offer;
 
-class Price extends \Model
-{
+class Price extends \Model {
+
     public static $objectName = 'Цена';
     public static $cols = [
         //Основные параметры
@@ -49,8 +49,7 @@ class Price extends \Model
             ]
     ]];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'offer' => [
                 'model' => 'Ecommerce\Item\Offer',

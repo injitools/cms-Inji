@@ -8,8 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Statics
-{
+class Statics {
+
     /**
      * Cached static file and return absolute url for client side use
      * 
@@ -19,8 +19,7 @@ class Statics
      * @param string $resizePos
      * @return string
      */
-    public static function file($path, $resize = '', $resizeCrop = '', $resizePos = '')
-    {
+    public static function file($path, $resize = '', $resizeCrop = '', $resizePos = '') {
         $absolutePath = App::$cur->staticLoader->parsePath($path);
         $convet = FALSE;
         if (!file_exists($absolutePath) && file_exists(mb_convert_encoding($absolutePath, 'Windows-1251', 'UTF-8'))) {

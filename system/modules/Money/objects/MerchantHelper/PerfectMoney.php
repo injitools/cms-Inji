@@ -11,10 +11,9 @@
 
 namespace Money\MerchantHelper;
 
-class PerfectMoney extends \Money\MerchantHelper
-{
-    public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/')
-    {
+class PerfectMoney extends \Money\MerchantHelper {
+
+    public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/') {
         $config = static::getConfig();
 
         $merchantCurrency = static::getMerchantCurrency($currency);
@@ -41,8 +40,7 @@ class PerfectMoney extends \Money\MerchantHelper
         //\Tools::redirect('https://perfectmoney.is/api/step1.asp?' . http_build_query($request));
     }
 
-    public static function reciver($data, $status)
-    {
+    public static function reciver($data, $status) {
         $result = ['status' => 'error'];
         if (empty($_POST['PAYMENT_ID'])) {
             return $result;

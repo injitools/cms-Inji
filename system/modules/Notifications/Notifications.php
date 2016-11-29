@@ -8,17 +8,15 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Notifications extends Module
-{
-    public function init()
-    {
+class Notifications extends Module {
+
+    public function init() {
         if (\Notifications\Subscribe::get($this->getCurSubscriber()->id, 'subscriber_id')) {
             App::$cur->view->customAsset('js', '/moduleAsset/Notifications/js/Notifications.js');
         }
     }
 
-    public function subscribe($chanelAlias)
-    {
+    public function subscribe($chanelAlias) {
         $chanel = $this->getChanel($chanelAlias);
         $subscriber = $this->getCurSubscriber();
         $subscribe = Notifications\Subscribe::get([['subscriber_id', $subscriber->id], ['chanel_id', $chanel->id]]);
@@ -36,8 +34,7 @@ class Notifications extends Module
         $response->send();
     }
 
-    public function getChanel($alias)
-    {
+    public function getChanel($alias) {
         $chanel = \Notifications\Chanel::get($alias, 'alias');
         if (!$chanel) {
             $chanel = new \Notifications\Chanel();
@@ -48,8 +45,7 @@ class Notifications extends Module
         return $chanel;
     }
 
-    public function getCurSubscriber()
-    {
+    public function getCurSubscriber() {
         $device = $this->getCurDevice();
         if (!$device->subscriber) {
             $subscriber = null;
@@ -71,8 +67,7 @@ class Notifications extends Module
         return $device->subscriber;
     }
 
-    public function getCurDevice()
-    {
+    public function getCurDevice() {
         if (empty($_COOKIE['notification-device'])) {
             $deviceKey = Tools::randomString(70);
             setcookie("notification-device", $deviceKey, time() + 360000, "/");

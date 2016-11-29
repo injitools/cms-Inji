@@ -11,8 +11,8 @@
 
 namespace Exchange1c;
 
-class Exchange extends \Model
-{
+class Exchange extends \Model {
+
     public static $labels = [
         'type' => 'Тип',
         'session' => 'Сессия',
@@ -56,8 +56,7 @@ class Exchange extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return[
             'logs' => [
                 'type' => 'many',

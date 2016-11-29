@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Modules extends Module
-{
-    public function createBlankModule($name, $codeName)
-    {
+class Modules extends Module {
+
+    public function createBlankModule($name, $codeName) {
         $codeName = ucfirst($codeName);
         Tools::createDir(App::$primary->path . '/modules/' . $codeName);
         ob_start();
@@ -23,8 +22,7 @@ class Modules extends Module
         file_put_contents(App::$primary->path . '/modules/' . $codeName . '/generatorHash.php', "<?php\nreturn " . CodeGenerator::genArray([$codeName . '.php' => md5($moduleCode)]));
     }
 
-    public function parseColsForModel($cols = [])
-    {
+    public function parseColsForModel($cols = []) {
         $modelCols = [ 'labels' => [], 'cols' => [], 'relations' => []];
         foreach ($cols as $col) {
             $modelCols['labels'][$col['code']] = $col['label'];
@@ -45,8 +43,7 @@ class Modules extends Module
         return $modelCols;
     }
 
-    public function parseColsForTable($cols, $colPrefix, $tableName)
-    {
+    public function parseColsForTable($cols, $colPrefix, $tableName) {
 
         $colsExist = App::$cur->db->getTableCols($tableName);
         $tableCols = [];
@@ -85,8 +82,7 @@ class Modules extends Module
         return $tableCols;
     }
 
-    public function generateModel($module, $name, $codeName, $options)
-    {
+    public function generateModel($module, $name, $codeName, $options) {
         $codeName = ucfirst($codeName);
         $class = new CodeGenerator\ClassGenerator();
         $class->name = $codeName;
@@ -118,8 +114,7 @@ class Modules extends Module
         Config::save($modulePath . '/generatorHash.php', $config);
     }
 
-    public function install($module, $params = [])
-    {
+    public function install($module, $params = []) {
         $installed = Module::getInstalled(App::$primary);
         if (in_array($module, $installed)) {
             return true;
@@ -154,8 +149,7 @@ class Modules extends Module
         }
     }
 
-    public function addInMenu($items, $appType, $parent = 0)
-    {
+    public function addInMenu($items, $appType, $parent = 0) {
         foreach ($items as $item) {
             $menuItem = new \Menu\Item();
             $menuItem->name = $item['name'];
@@ -169,8 +163,7 @@ class Modules extends Module
         }
     }
 
-    public function getSelectListModels($module = '')
-    {
+    public function getSelectListModels($module = '') {
         $models = [];
         if ($module) {
             $modelsNames = $this->getModelsList($module);
@@ -198,8 +191,7 @@ class Modules extends Module
         return $models;
     }
 
-    public function getModelsList($module, $dir = '')
-    {
+    public function getModelsList($module, $dir = '') {
         $modulePath = Module::getModulePath($module);
         $path = rtrim($modulePath . '/models/' . $dir, '/');
         $models = [];
@@ -216,8 +208,7 @@ class Modules extends Module
         return $models;
     }
 
-    public function createController($module, $controllerType)
-    {
+    public function createController($module, $controllerType) {
         $modulePath = Module::getModulePath($module);
         $path = $modulePath . '/' . $controllerType . '/' . $module . 'Controller.php';
         $class = new CodeGenerator\ClassGenerator();
@@ -231,8 +222,7 @@ class Modules extends Module
         Config::save($modulePath . '/generatorHash.php', $config);
     }
 
-    public function addActionToController($module, $type, $controller, $url)
-    {
+    public function addActionToController($module, $type, $controller, $url) {
         $modulePath = Module::getModulePath($module);
         $path = Modules::getModulePath($module) . '/' . $type . '/' . $controller . '.php';
         $class = CodeGenerator::parseClass($path);

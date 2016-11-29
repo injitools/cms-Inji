@@ -8,16 +8,15 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Log
-{
+class Log {
+
     public $log = [];
     public $lastLog = 0;
     public $run = true;
     public $startTime = 0;
     public $template_parsed = false;
 
-    public function __construct()
-    {
+    public function __construct() {
         if (!empty($_SERVER['REQUEST_TIME_FLOAT'])) {
             $this->startTime = $_SERVER['REQUEST_TIME_FLOAT'];
         } elseif (!empty($_SERVER['REQUEST_TIME'])) {
@@ -28,8 +27,7 @@ class Log
         $this->log[] = array('name' => 'System init', 'start' => $this->startTime, 'end' => microtime(true));
     }
 
-    public function start($name)
-    {
+    public function start($name) {
         if ($this->run) {
             $this->log[] = array('name' => $name, 'start' => microtime(true));
             end($this->log);
@@ -37,8 +35,7 @@ class Log
         }
     }
 
-    public function end($key = false)
-    {
+    public function end($key = false) {
         if ($this->run) {
             if ($key === false) {
                 $this->log[$this->lastLog]['end'] = microtime(true);
@@ -48,30 +45,25 @@ class Log
         }
     }
 
-    public function event($name, $status = 'info')
-    {
+    public function event($name, $status = 'info') {
         if ($this->run) {
             $this->log[] = array('name' => $name, 'status' => $status, 'time' => microtime(true));
         }
     }
 
-    public function clean()
-    {
+    public function clean() {
         $this->log = [];
     }
 
-    public function stop()
-    {
+    public function stop() {
         $this->run = false;
     }
 
-    public function run()
-    {
+    public function run() {
         $this->run = true;
     }
 
-    public function view()
-    {
+    public function view() {
         echo '<div onclick="var image = document.getElementById(\'Inji_debug_window\');
     image.style.display = (image.style.display == \'none\') ? \'block\' : \'none\';" style = "background:#fff;position:fixed;bottom:0;right:0;opacity:0.3;z-index:1000001;cursor:pointer;">debug</div>';
         echo '<div id = "Inji_debug_window" style = "background:#fff;position:absolute;top:0;left:0;display:none;z-index:1000000;"><table class="table table-striped table-bordered"><tr><th>Name</th><th>Time</th></tr>';
@@ -90,8 +82,7 @@ class Log
         echo '<tr><th>Memory</th><th>' . $this->convertSize(memory_get_peak_usage()) . ' of ' . ini_get('memory_limit') . '</th></tr></table></div>';
     }
 
-    public function convertSize($size)
-    {
+    public function convertSize($size) {
 
         if ($size < 1024)
             return $size . "B";
@@ -101,8 +92,7 @@ class Log
             return round($size / 1048576, 2) . "MB";
     }
 
-    public function __destruct()
-    {
+    public function __destruct() {
         if ($this->run && $_SERVER['REMOTE_ADDR'] == '127.0.0.1' && $this->template_parsed) {
             $this->view();
         }

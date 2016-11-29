@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Cart;
 
-class Event extends \Model
-{
+class Event extends \Model {
+
     public static $cols = [
         //Основные параметры
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -23,8 +23,7 @@ class Event extends \Model
         'date_create' => ['type' => 'dateTime'],
     ];
 
-    public static function indexes()
-    {
+    public static function indexes() {
         return [
             'ecommerce_cartEventCart' => [
                 'type' => 'INDEX',
@@ -41,8 +40,7 @@ class Event extends \Model
         ];
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'type' => [
                 'model' => 'Ecommerce\Cart\Event\Type',
@@ -59,8 +57,7 @@ class Event extends \Model
         ];
     }
 
-    public function afterSave()
-    {
+    public function afterSave() {
         $this->cart->date_last_activ = $this->date_create;
         $this->cart->save();
     }

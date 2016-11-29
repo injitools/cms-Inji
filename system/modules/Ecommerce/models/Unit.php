@@ -11,8 +11,8 @@
 
 namespace Ecommerce;
 
-class Unit extends \Model
-{
+class Unit extends \Model {
+
     public static $objectName = 'Единица измерения';
     public static $labels = [
         'name' => 'Название',

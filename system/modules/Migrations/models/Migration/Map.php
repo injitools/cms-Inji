@@ -11,8 +11,8 @@
 
 namespace Migrations\Migration;
 
-class Map extends \Model
-{
+class Map extends \Model {
+
     public static $objectName = 'Карта миграции данных';
     public static $labels = [
         'name' => 'Название',
@@ -49,8 +49,7 @@ class Map extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'migration' => [
                 'model' => 'Migrations\Migration',

@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class ComposerCmd
-{
-    public static function check()
-    {
+class ComposerCmd {
+
+    public static function check() {
         if (!file_exists('composer/vendor/autoload.php')) {
             self::installComposer();
         }
@@ -24,8 +23,7 @@ class ComposerCmd
         }
     }
 
-    public static function installComposer()
-    {
+    public static function installComposer() {
         if (!file_exists('composer/bin/composer')) {
             Tools::createDir('composer');
             if (!file_exists('composer/composer.phar')) {
@@ -39,8 +37,7 @@ class ComposerCmd
         }
     }
 
-    public static function initComposer($path = '')
-    {
+    public static function initComposer($path = '') {
         if (!$path) {
             $path = App::$primary->path . '/';
         }
@@ -66,8 +63,7 @@ class ComposerCmd
         self::command('install', false, $path);
     }
 
-    public static function command($command, $needOutput = true, $path = null)
-    {
+    public static function command($command, $needOutput = true, $path = null) {
         ini_set('memory_limit', '2000M');
         include_once 'composer/vendor/autoload.php';
         if ($needOutput) {
@@ -84,8 +80,7 @@ class ComposerCmd
         chdir($dir);
     }
 
-    public static function requirePackage($packageName, $version = '', $path = '')
-    {
+    public static function requirePackage($packageName, $version = '', $path = '') {
         if (!$path) {
             $path = App::$primary->path . '/';
         }

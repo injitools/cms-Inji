@@ -11,8 +11,8 @@
 
 namespace Chats\Chat;
 
-class Ban extends \Model
-{
+class Ban extends \Model {
+
     public static $cols = [
         'chat_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'chat'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -20,8 +20,7 @@ class Ban extends \Model
         'comment' => ['type' => 'textarea']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return[
             'user' => [
                 'model' => 'Users\User',

@@ -11,8 +11,8 @@
 
 namespace Users\User\Invite;
 
-class History extends \Model
-{
+class History extends \Model {
+
     public static $objectName = "История кода пришлашения";
     public static $labels = [
         'user_invite_id' => 'Приглашение',
@@ -45,8 +45,7 @@ class History extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',
@@ -59,8 +58,7 @@ class History extends \Model
         ];
     }
 
-    public function name()
-    {
+    public function name() {
         return $this->code;
     }
 

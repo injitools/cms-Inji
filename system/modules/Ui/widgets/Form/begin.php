@@ -7,8 +7,8 @@ if (empty($params['activeForm']) || $params['activeForm']->parent === null) {
         echo " {$attribute} = '{$value}' ";
     }
     ?>>
-      <?php
-  }
-  ?>
-  <?= !empty($header) ? "<h1>{$header}</h1>" : ''; ?>
+        <?php
+    }
+    ?>
+    <?= !empty($header) ? "<h1>{$header}</h1>" : ''; ?>
     

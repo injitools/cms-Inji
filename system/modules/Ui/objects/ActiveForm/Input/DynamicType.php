@@ -11,10 +11,9 @@
 
 namespace Ui\ActiveForm\Input;
 
-class DynamicType extends \Ui\ActiveForm\Input
-{
-    public function draw()
-    {
+class DynamicType extends \Ui\ActiveForm\Input {
+
+    public function draw() {
         $inputName = $this->colName();
         $inputLabel = $this->colLabel();
         $inputOptions = [

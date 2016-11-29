@@ -16,6 +16,6 @@
 </div>
 <style>
     .codeConstructor .numCol{
-        width:40px;
+      width:40px;
     }
 </style>

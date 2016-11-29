@@ -11,8 +11,8 @@
 
 namespace Migrations\Migration;
 
-class Object extends \Model
-{
+class Object extends \Model {
+
     public static $objectName = 'Объект миграции';
     public static $labels = [
         'name' => 'Название',
@@ -41,8 +41,7 @@ class Object extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'migration' => [
                 'model' => 'Migrations\Migration',

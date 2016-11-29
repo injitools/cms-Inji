@@ -11,8 +11,8 @@
 
 namespace UserForms;
 
-class Input extends \Model
-{
+class Input extends \Model {
+
     public static $objectName = 'Поле формы';
     public static $labels = [
         'label' => 'Название',
@@ -48,8 +48,7 @@ class Input extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => '\Users\User',

@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Cart;
 
-class Status extends \Model
-{
+class Status extends \Model {
+
     public static $objectName = 'Статус корзины';
     public static $cols = [
         //Основные параметры

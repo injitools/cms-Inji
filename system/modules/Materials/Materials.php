@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Materials extends Module
-{
-    public function viewsList()
-    {
+class Materials extends Module {
+
+    public function viewsList() {
         $return = [
             'inherit' => 'Как у родителя',
             'default' => 'Стандартная страница',
@@ -30,8 +29,7 @@ class Materials extends Module
         return $return;
     }
 
-    public function templatesList()
-    {
+    public function templatesList() {
         $return = [
             'inherit' => 'Как у родителя',
             'current' => 'Текущая тема'
@@ -47,8 +45,7 @@ class Materials extends Module
         return $return;
     }
 
-    public function viewsCategoryList()
-    {
+    public function viewsCategoryList() {
         $return = [
             'inherit' => 'Как у родителя',
             'category' => 'Стандартная категория',
@@ -66,8 +63,7 @@ class Materials extends Module
         return $return;
     }
 
-    public function templatesCategoryList()
-    {
+    public function templatesCategoryList() {
         $return = [
             'inherit' => 'Как у родителя',
             'current' => 'Текущая тема'
@@ -83,8 +79,7 @@ class Materials extends Module
         return $return;
     }
 
-    function sitemap()
-    {
+    function sitemap() {
         $map = [];
         $zeroMaterials = \Materials\Material::getList(['where' => ['category_id', 0]]);
         foreach ($zeroMaterials as $mat) {
@@ -95,11 +90,11 @@ class Materials extends Module
                 ],
             ];
         }
-        
+
         $categorys = \Materials\Category::getList(['where' => ['parent_id', 0]]);
         $scan = function($category, $scan) {
             $map = [];
-            
+
             foreach ($category->items as $mat) {
                 $map[] = [
                     'name' => $mat->name,

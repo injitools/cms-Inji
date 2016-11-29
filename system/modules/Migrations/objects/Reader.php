@@ -11,24 +11,21 @@
 
 namespace Migrations;
 
-class Reader extends \Object
-{
+class Reader extends \Object {
+
     public $data = NULL;
     public $source = '';
 
-    public function loadData($source = '')
-    {
+    public function loadData($source = '') {
         $this->source = $source;
         return FALSE;
     }
 
-    public function readPath($path = '/')
-    {
+    public function readPath($path = '/') {
         return [];
     }
 
-    public function __toString()
-    {
+    public function __toString() {
         return '';
     }
 

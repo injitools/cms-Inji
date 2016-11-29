@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item;
 
-class Offer extends \Model
-{
+class Offer extends \Model {
+
     public static $objectName = 'Торговое предложение';
     public static $cols = [
         //Основные параметры
@@ -52,8 +52,7 @@ class Offer extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'warehouses' => [
                 'type' => 'many',
@@ -85,8 +84,7 @@ class Offer extends \Model
         ];
     }
 
-    public function changeWarehouse($count)
-    {
+    public function changeWarehouse($count) {
         $warehouse = Offer\Warehouse::get([['count', '0', '>'], ['item_offer_id', $this->id]]);
         if ($warehouse) {
             $warehouse->count +=(float) $count;
@@ -100,8 +98,7 @@ class Offer extends \Model
         }
     }
 
-    public function warehouseCount($cart_id = 0)
-    {
+    public function warehouseCount($cart_id = 0) {
         $warehouseIds = [];
         if (\App::$cur->geography && \Geography\City::$cur) {
             $warehouses = \Geography\City\Data::get([['code', 'warehouses'], ['city_id', \Geography\City::$cur->id]]);
@@ -135,8 +132,7 @@ class Offer extends \Model
         return (float) $warehouse['sum'] - (float) $blocked['sum'];
     }
 
-    public function beforeDelete()
-    {
+    public function beforeDelete() {
         if ($this->id) {
             if ($this->warehouses) {
                 foreach ($this->warehouses as $warehouse) {

@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class CallbacksController extends Controller
-{
-    public function indexAction($categoryCode = '')
-    {
+class CallbacksController extends Controller {
+
+    public function indexAction($categoryCode = '') {
         $category = null;
         if ($categoryCode) {
             $category = Callbacks\Category::get($categoryCode, 'alias');
@@ -32,8 +31,7 @@ class CallbacksController extends Controller
         ]);
     }
 
-    public function viewAction($callbackId)
-    {
+    public function viewAction($callbackId) {
         $callback = Callbacks\Callback::get((int) $callbackId);
         if (!$callback) {
             Tools::header(404);

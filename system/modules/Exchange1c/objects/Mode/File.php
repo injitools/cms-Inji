@@ -13,37 +13,37 @@ namespace Exchange1c\Mode;
 
 class File extends \Exchange1c\Mode {
 
-  public function process() {
-    $dir = $this->exchange->path;
-    \Tools::createDir($dir);
-    $file = new \Exchange1c\Exchange\File();
-    $file->name = $_GET['filename'];
-    $file->exchange_id = $this->exchange->id;
-    $file->status = 'pending';
-    $file->save();
+    public function process() {
+        $dir = $this->exchange->path;
+        \Tools::createDir($dir);
+        $file = new \Exchange1c\Exchange\File();
+        $file->name = $_GET['filename'];
+        $file->exchange_id = $this->exchange->id;
+        $file->status = 'pending';
+        $file->save();
 
-    $filename = \Tools::parsePath($_GET['filename']);
-    if (strpos($filename, '/') !== false) {
-      $subDir = substr($filename, 0, strrpos($filename, "/") + 1);
-      \Tools::createDir($dir . '/' . $subDir);
+        $filename = \Tools::parsePath($_GET['filename']);
+        if (strpos($filename, '/') !== false) {
+            $subDir = substr($filename, 0, strrpos($filename, "/") + 1);
+            \Tools::createDir($dir . '/' . $subDir);
+        }
+        $text = '';
+        if (false === file_put_contents($dir . '/' . $filename, file_get_contents("php://input"))) {
+            $text = 'Fail on save file: ' . $filename;
+            $file->status = 'failure';
+        } else {
+            $file->size = ceil(filesize($dir . '/' . $filename));
+            $file->name = $filename;
+            $file->status = 'success';
+        }
+        $file->save();
+        if (strpos($filename, '1cbitrix') !== false) {
+            $data = new \SimpleXMLElement(file_get_contents($dir . '/' . $filename));
+            $orders = new \Exchange1c\Parser\Orders($data);
+            $orders->process();
+        }
+        \App::$cur->exchange1c->response($file->status, $text, false);
+        $this->end($file->status);
     }
-    $text = '';
-    if (false === file_put_contents($dir . '/' . $filename, file_get_contents("php://input"))) {
-      $text = 'Fail on save file: ' . $filename;
-      $file->status = 'failure';
-    } else {
-      $file->size = ceil(filesize($dir . '/' . $filename));
-      $file->name = $filename;
-      $file->status = 'success';
-    }
-    $file->save();
-    if (strpos($filename, '1cbitrix') !== false) {
-      $data = new \SimpleXMLElement(file_get_contents($dir . '/' . $filename));
-      $orders = new \Exchange1c\Parser\Orders($data);
-      $orders->process();
-    }
-    \App::$cur->exchange1c->response($file->status, $text, false);
-    $this->end($file->status);
-  }
 
 }

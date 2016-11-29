@@ -11,8 +11,8 @@
 
 namespace Users\User\Inventory;
 
-class Item extends \Model
-{
+class Item extends \Model {
+
     public static $cols = [
         'name' => ['type' => 'text'],
         'about' => ['type' => 'textarea'],

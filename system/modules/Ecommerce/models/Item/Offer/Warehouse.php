@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Offer;
 
-class Warehouse extends \Model
-{
+class Warehouse extends \Model {
+
     public static $objectName = 'Товар на складе';
     public static $labels = [
         'count' => 'Количество',
@@ -44,8 +44,7 @@ class Warehouse extends \Model
             ]
     ]];
 
-    public static function indexes()
-    {
+    public static function indexes() {
         return [
             'ecommerce_warehousePriceIndex' => [
                 'type' => 'INDEX',
@@ -56,8 +55,7 @@ class Warehouse extends \Model
         ];
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'warehouse' => [
                 'model' => 'Ecommerce\Warehouse',

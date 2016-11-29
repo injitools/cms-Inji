@@ -11,8 +11,8 @@
 
 namespace Money\Currency;
 
-class ExchangeRate extends \Model
-{
+class ExchangeRate extends \Model {
+
     public static $objectName = 'Курс обмена';
     public static $labels = [
         'currency_id' => 'Валюта',
@@ -40,8 +40,7 @@ class ExchangeRate extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'currency' => [
                 'model' => 'Money\Currency',
@@ -54,8 +53,7 @@ class ExchangeRate extends \Model
         ];
     }
 
-    public function beforeSave()
-    {
+    public function beforeSave() {
         if ($this->pk()) {
             $cur = ExchangeRate::get($this->pk());
             if ($cur->rate != $this->rate) {

@@ -1,5 +1,6 @@
 <?php
-if(!Users\Social::getList(['where' => ['active', 1]])){
+
+if (!Users\Social::getList(['where' => ['active', 1]])) {
     return false;
 }
 return [

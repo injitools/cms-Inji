@@ -11,8 +11,8 @@
 
 namespace Chats;
 
-class Chat extends \Model
-{
+class Chat extends \Model {
+
     public static $cols = [
         'name' => ['type' => 'text'],
         'code' => ['type' => 'text'],
@@ -30,8 +30,7 @@ class Chat extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'events' => [
                 'type' => 'many',

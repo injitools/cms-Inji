@@ -8,16 +8,15 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Router
-{
+class Router {
+
     /**
      * Find class by name
      * 
      * @param string $className
      * @return boolean
      */
-    public static function findClass($className)
-    {
+    public static function findClass($className) {
         if (strpos($className, '\\')) {
             $classPath = explode('\\', $className);
             $moduleName = $classPath[0];
@@ -39,8 +38,7 @@ class Router
      * @param string $className
      * @return boolean
      */
-    public static function loadClass($className)
-    {
+    public static function loadClass($className) {
         $folders = [];
         if (strpos($className, '\\')) {
             $classPath = explode('\\', $className);
@@ -94,8 +92,7 @@ class Router
      * @param string $classPath
      * @return string
      */
-    public static function genFolderPaths($code, $folder, $classPath)
-    {
+    public static function genFolderPaths($code, $folder, $classPath) {
         $paths = [];
         if (strpos($classPath, '/') === false) {
             $paths[$code . '_Object'] = $folder . '/objects/' . $classPath . '.php';
@@ -120,8 +117,7 @@ class Router
      * @param string $className
      * @return string
      */
-    public static function getLoadedClassPath($className)
-    {
+    public static function getLoadedClassPath($className) {
         $rc = new ReflectionClass($className);
         return dirname($rc->getFileName());
     }

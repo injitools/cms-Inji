@@ -8,8 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Html
-{
+class Html {
+
     /**
      * Generate html element
      * 
@@ -19,8 +19,7 @@ class Html
      * @param boolean|null $noCloseTag
      * @return string
      */
-    public static function el($tag, $attributes = [], $body = '', $noCloseTag = false)
-    {
+    public static function el($tag, $attributes = [], $body = '', $noCloseTag = false) {
         $html = "<{$tag}";
         if (!empty($attributes) && is_array($attributes)) {
             foreach ($attributes as $key => $value) {

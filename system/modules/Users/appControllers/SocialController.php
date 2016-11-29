@@ -8,11 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+class SocialController extends Controller {
 
-class SocialController extends Controller
-{
-    public function authAction($socialCode = '')
-    {
+    public function authAction($socialCode = '') {
         if (!$socialCode) {
             Tools::redirect('/', 'Не указана соц сеть');
         }
@@ -24,8 +22,7 @@ class SocialController extends Controller
         $helper::auth();
     }
 
-    public function disconnectAction($socialCode = '')
-    {
+    public function disconnectAction($socialCode = '') {
         if (!$socialCode) {
             Tools::redirect('/', 'Не указана соц сеть');
         }

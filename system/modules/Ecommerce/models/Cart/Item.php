@@ -11,10 +11,9 @@
 
 namespace Ecommerce\Cart;
 
-class Item extends \Model
-{
-    public function beforeSave()
-    {
+class Item extends \Model {
+
+    public function beforeSave() {
         if (!$this->id) {
             $event = new Event(['cart_id' => $this->cart_id, 'user_id' => \Users\User::$cur->id, 'cart_event_type_id' => 1, 'info' => $this->item_offer_price_id]);
             $event->save();
@@ -38,8 +37,7 @@ class Item extends \Model
         }
     }
 
-    public function afterSave()
-    {
+    public function afterSave() {
         $block = \Ecommerce\Warehouse\Block::get([['cart_id', $this->cart->id], ['item_offer_id', $this->price->item_offer_id]]);
         if (in_array($this->cart_status_id, [0, 1, 2, 3, 6])) {
             if (in_array($this->cart_status_id, [0, 1])) {
@@ -71,16 +69,14 @@ class Item extends \Model
         $this->cart->checkStage();
     }
 
-    public function afterDelete()
-    {
+    public function afterDelete() {
         $event = new Event(['cart_id' => $this->cart_id, 'user_id' => \Users\User::$cur->id, 'cart_event_type_id' => 2, 'info' => $this->item_offer_price_id]);
         $event->save();
         \Ecommerce\Warehouse\Block::deleteList([['cart_id', $this->cart->id], ['item_offer_id', $this->price->item_offer_id]]);
         $this->cart->checkStage();
     }
 
-    public function discount()
-    {
+    public function discount() {
         $discountSum = 0;
         if ($this->item->type && $this->item->type->discount) {
             foreach ($this->cart->discounts as $discount) {
@@ -116,8 +112,7 @@ class Item extends \Model
         'date_create' => ['type' => 'dateTime'],
     ];
 
-    public static function indexes()
-    {
+    public static function indexes() {
         return [
             'ecommerce_cartItemCart' => [
                 'type' => 'INDEX',
@@ -155,8 +150,7 @@ class Item extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'item' => [
                 'model' => 'Ecommerce\Item',

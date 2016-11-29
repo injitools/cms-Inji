@@ -11,21 +11,19 @@
 
 namespace Migrations;
 
-class Parser
-{
+class Parser {
+
     public $data;
     public $param;
     public $model;
     public $object;
     public $walker;
 
-    public function parse()
-    {
+    public function parse() {
         
     }
 
-    public function editor()
-    {
+    public function editor() {
         return [
             '' => 'Выберите',
         ];

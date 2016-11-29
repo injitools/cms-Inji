@@ -11,20 +11,18 @@
 
 namespace Ui\DataManager\Action;
 
-class Delete extends \Ui\DataManager\Action
-{
+class Delete extends \Ui\DataManager\Action {
+
     public static $name = 'Удалить';
     public static $groupAction = true;
     public static $rowAction = true;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         return '<a href ="#" onclick=\'inji.Ui.dataManagers.get(this).delRow(' . $item->pk() . ');
                                       return false;\'><i class="glyphicon glyphicon-remove"></i></a>';
     }
 
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo)
-    {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
         $count = 0;
         if ($ids) {
             $modelName = $dataManager->modelName;

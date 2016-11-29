@@ -8,8 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Module
-{
+class Module {
+
     /**
      * Storage of cur requested module
      * 
@@ -64,8 +64,7 @@ class Module
      * 
      * @param \App $app
      */
-    public function __construct($app)
-    {
+    public function __construct($app) {
         $this->app = $app;
         $this->moduleName = get_class($this);
         $this->path = Router::getLoadedClassPath($this->moduleName);
@@ -84,8 +83,7 @@ class Module
      * @param string $moduleName
      * @return array
      */
-    public static function getModulePaths($moduleName)
-    {
+    public static function getModulePaths($moduleName) {
         $moduleName = ucfirst($moduleName);
         $paths = [];
         if (App::$cur !== App::$primary) {
@@ -102,8 +100,7 @@ class Module
      * @param string $moduleName
      * @return string
      */
-    public static function getModulePath($moduleName)
-    {
+    public static function getModulePath($moduleName) {
         $moduleName = ucfirst($moduleName);
         $paths = Module::getModulePaths($moduleName);
         foreach ($paths as $path) {
@@ -120,8 +117,7 @@ class Module
      * @param \App $app
      * @return boolean
      */
-    public static function installed($moduleName, $app)
-    {
+    public static function installed($moduleName, $app) {
         if (in_array($moduleName, self::getInstalled($app))) {
             return true;
         }
@@ -135,8 +131,7 @@ class Module
      * @param boolean|\App $primary
      * @return array
      */
-    public static function getInstalled($app, $primary = false)
-    {
+    public static function getInstalled($app, $primary = false) {
         if (!$primary) {
             $primary = \App::$primary;
         }
@@ -153,8 +148,7 @@ class Module
      * @param string $moduleName
      * @return array
      */
-    public static function getModuleControllers($moduleName)
-    {
+    public static function getModuleControllers($moduleName) {
         $controllers = [];
         $moduleDirs = static::getModulePaths($moduleName);
         foreach ($moduleDirs as $moduleDir) {
@@ -181,8 +175,7 @@ class Module
      * @param \App $app
      * @return \Module
      */
-    public static function resolveModule($app)
-    {
+    public static function resolveModule($app) {
         if (!empty($app->params[0]) && $app->{$app->params[0]}) {
             $module = $app->{$app->params[0]};
             $module->params = array_slice($app->params, 1);
@@ -207,8 +200,7 @@ class Module
      * 
      * @return array
      */
-    public function getControllerPaths()
-    {
+    public function getControllerPaths() {
         $paths = [];
         if (App::$cur != App::$primary) {
             if (!empty($this->params[0]) && strtolower($this->params[0]) != strtolower($this->moduleName)) {
@@ -246,8 +238,7 @@ class Module
      * 
      * @return \Controller
      */
-    public function findController()
-    {
+    public function findController() {
         $paths = $this->getControllerPaths();
         foreach ($paths as $pathName => $path) {
             if (file_exists($path)) {
@@ -276,8 +267,7 @@ class Module
      * @param string $moduleName
      * @return array
      */
-    public static function getInfo($moduleName = '')
-    {
+    public static function getInfo($moduleName = '') {
         if (!$moduleName && get_called_class()) {
             $moduleName = get_called_class();
         } elseif (!$moduleName) {
@@ -301,8 +291,7 @@ class Module
      * @param string $moduleName
      * @return array
      */
-    public function getSnippets($snippetsPath, $extensions = true, $dir = '/snippets', $moduleName = '')
-    {
+    public function getSnippets($snippetsPath, $extensions = true, $dir = '/snippets', $moduleName = '') {
         $moduleName = $moduleName ? $moduleName : $this->moduleName;
         $modulePaths = Module::getModulePaths($moduleName);
         $modulePaths = array_reverse($modulePaths);
@@ -333,8 +322,7 @@ class Module
      * @param string $request
      * @return array
      */
-    public function getExtensions($extensionType, $request)
-    {
+    public function getExtensions($extensionType, $request) {
         $extensions = [];
         $modules = Module::getInstalled(App::$cur);
         $method = 'get' . ucfirst($extensionType);
@@ -344,8 +332,7 @@ class Module
         return $extensions;
     }
 
-    function sitemap()
-    {
+    function sitemap() {
         return [];
     }
 

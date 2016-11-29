@@ -11,10 +11,9 @@
 
 namespace Money\MerchantHelper;
 
-class Robokassa extends \Money\MerchantHelper
-{
-    public static function reciver($data, $status)
-    {
+class Robokassa extends \Money\MerchantHelper {
+
+    public static function reciver($data, $status) {
         $config = static::getConfig();
         $result = [];
         $result['status'] = 'error';
@@ -31,8 +30,7 @@ class Robokassa extends \Money\MerchantHelper
         return $result;
     }
 
-    public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/')
-    {
+    public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/') {
         $config = static::getConfig();
 
         $amount = (float) $amount;

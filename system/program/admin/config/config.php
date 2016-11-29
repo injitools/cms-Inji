@@ -3,7 +3,7 @@
 return [
     'name' => 'Админ панель',
     'defaultModule' => 'Dashboard',
-    'modules'=>[
+    'modules' => [
         'Dashboard'
     ],
     'autoloadModules' => [

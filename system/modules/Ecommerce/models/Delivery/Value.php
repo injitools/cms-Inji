@@ -10,8 +10,8 @@
 
 namespace Ecommerce\Delivery;
 
-class Value extends \Model
-{
+class Value extends \Model {
+
     public static $cols = [
         //Основные параметры
         'delivery_save_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'save'],
@@ -37,8 +37,7 @@ class Value extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'field' => [
                 'model' => 'Ecommerce\Delivery\Field',

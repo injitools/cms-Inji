@@ -11,8 +11,8 @@
 
 namespace Geography;
 
-class City extends \Model
-{
+class City extends \Model {
+
     public static $cur = null;
     public static $objectName = 'Город';
     public static $labels = [
@@ -45,8 +45,7 @@ class City extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'country' => [
                 'model' => 'Geography\Country',

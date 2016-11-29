@@ -8,8 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class App
-{
+class App {
+
     /**
      * static instances
      */
@@ -38,8 +38,7 @@ class App
      * 
      * @param array $preSet
      */
-    public function __construct($preSet = [])
-    {
+    public function __construct($preSet = []) {
         foreach ($preSet as $key => $value) {
             $this->{$key} = $value;
         }
@@ -51,8 +50,7 @@ class App
      * @param string $className
      * @return object
      */
-    public function getObject($className, $params = [])
-    {
+    public function getObject($className, $params = []) {
         $paramsStr = serialize($params);
         $className = ucfirst($className);
         if (isset($this->_objects[$className][$paramsStr])) {
@@ -67,8 +65,7 @@ class App
      * @param string $moduleName
      * @return mixed
      */
-    public function findModuleClass($moduleName)
-    {
+    public function findModuleClass($moduleName) {
         $paths = Module::getModulePaths($moduleName);
         foreach ($paths as $path) {
             if (file_exists($path . '/' . $moduleName . '.php')) {
@@ -93,8 +90,7 @@ class App
         return false;
     }
 
-    public function isLoaded($moduleName)
-    {
+    public function isLoaded($moduleName) {
         return !empty($this->_objects[$moduleName]);
     }
 
@@ -104,8 +100,7 @@ class App
      * @param string $className
      * @return mixed
      */
-    public function loadObject($className, $params = [])
-    {
+    public function loadObject($className, $params = []) {
         $paramsStr = serialize($params);
         $moduleClassName = $this->findModuleClass($className);
         if (!is_bool($moduleClassName) && $moduleClassName != $className) {
@@ -128,8 +123,7 @@ class App
      * @param string $className
      * @return object|null
      */
-    public function __get($className)
-    {
+    public function __get($className) {
         return $this->getObject($className);
     }
 
@@ -140,8 +134,7 @@ class App
      * @param array $params
      * @return object|null
      */
-    public function __call($className, $params)
-    {
+    public function __call($className, $params) {
         return $this->getObject($className, $params);
     }
 

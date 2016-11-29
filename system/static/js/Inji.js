@@ -63,7 +63,7 @@ Inji.prototype.start = function (options) {
       }
     }, true)
   }
-  if (options.scripts.length>0) {
+  if (options.scripts.length > 0) {
     this.loadScripts(options.scripts, 0);
   } else {
     inji.startCallbacks();

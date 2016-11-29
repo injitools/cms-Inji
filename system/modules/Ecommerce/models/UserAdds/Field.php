@@ -11,8 +11,8 @@
 
 namespace Ecommerce\UserAdds;
 
-class Field extends \Model
-{
+class Field extends \Model {
+
     public static $objectName = 'Поле информации при заказе';
     public static $cols = [
         //Основные параметры

@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class JqueryUi extends \Object
-{
+class JqueryUi extends \Object {
+
     public static $name = 'jQuery Ui';
     public static $composerPacks = [
         'components/jqueryui' => '1.11.*'

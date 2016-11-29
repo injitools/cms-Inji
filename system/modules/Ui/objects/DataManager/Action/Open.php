@@ -11,14 +11,13 @@
 
 namespace Ui\DataManager\Action;
 
-class Open extends \Ui\DataManager\Action
-{
+class Open extends \Ui\DataManager\Action {
+
     public static $name = 'Просмотр';
     public static $groupAction = false;
     public static $rowAction = true;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         if (\App::$cur->name != 'admin') {
             return '';
         }

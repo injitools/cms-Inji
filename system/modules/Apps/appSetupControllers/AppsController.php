@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class AppsController extends Controller
-{
-    public function configureAction()
-    {
+class AppsController extends Controller {
+
+    public function configureAction() {
         $appOptions = Apps\App::get(filter_input(INPUT_GET, 'item_pk', FILTER_SANITIZE_NUMBER_INT));
         $app = new App();
         $app->name = $appOptions->name;

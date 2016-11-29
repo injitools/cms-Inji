@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MaterialsController extends Controller
-{
-    public function indexAction()
-    {
+class MaterialsController extends Controller {
+
+    public function indexAction() {
         $args = func_get_args();
         $category = null;
         $material = null;
@@ -69,8 +68,7 @@ class MaterialsController extends Controller
         }
     }
 
-    public function categoryAction()
-    {
+    public function categoryAction() {
         $args = func_get_args();
         $path = trim(implode('/', $args));
         $category = null;
@@ -104,8 +102,7 @@ class MaterialsController extends Controller
         }
     }
 
-    public function viewAction()
-    {
+    public function viewAction() {
         $args = func_get_args();
         $alias = trim(implode('/', $args));
         $material = false;

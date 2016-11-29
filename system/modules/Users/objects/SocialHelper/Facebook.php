@@ -11,10 +11,9 @@
 
 namespace Users\SocialHelper;
 
-class Facebook extends \Users\SocialHelper
-{
-    public static function auth()
-    {
+class Facebook extends \Users\SocialHelper {
+
+    public static function auth() {
         $config = static::getConfig();
         if (empty($_GET['code']) && empty($_GET['error'])) {
             $query = [

@@ -11,8 +11,8 @@
 
 namespace Migrations;
 
-class Migration extends \Model
-{
+class Migration extends \Model {
+
     public static $objectName = 'Миграция данных';
     public static $labels = [
         'name' => 'Название',
@@ -43,8 +43,7 @@ class Migration extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'maps' => [
                 'type' => 'many',

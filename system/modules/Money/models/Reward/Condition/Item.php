@@ -11,10 +11,9 @@
 
 namespace Money\Reward\Condition;
 
-class Item extends \Model
-{
-    public function recivedCount($userId = 0)
-    {
+class Item extends \Model {
+
+    public function recivedCount($userId = 0) {
         $userId = $userId ? $userId : \Users\User::$cur->id;
         if (!$userId) {
             return 0;
@@ -63,13 +62,11 @@ class Item extends \Model
         ]
     ];
 
-    public function checkComplete($userId = 0)
-    {
+    public function checkComplete($userId = 0) {
         return $this->count <= $this->recivedCount($userId);
     }
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'condition' => [
                 'model' => 'Money\Reward\Condition',

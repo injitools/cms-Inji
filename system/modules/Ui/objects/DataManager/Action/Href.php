@@ -13,14 +13,13 @@
 
 namespace Ui\DataManager\Action;
 
-class Href extends \Ui\DataManager\Action
-{
+class Href extends \Ui\DataManager\Action {
+
     public static $name = 'Ссылка';
     public static $groupAction = false;
     public static $rowAction = true;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         $query = [
             'item_pk' => $item->pk(),
             'time' => time()

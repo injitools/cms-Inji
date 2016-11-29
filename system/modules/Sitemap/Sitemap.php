@@ -8,10 +8,9 @@
  * @copyright 2016 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Sitemap extends Module
-{
-    function scanModules()
-    {
+class Sitemap extends Module {
+
+    function scanModules() {
         $modules = Module::getInstalled(App::$primary);
         $map = [];
         foreach ($modules as $module) {
@@ -23,8 +22,7 @@ class Sitemap extends Module
         return $map;
     }
 
-    function generate($map)
-    {
+    function generate($map) {
         header("Content-Type: text/xml");
         header("Expires: Thu, 19 Feb 1998 13:24:18 GMT");
         header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");

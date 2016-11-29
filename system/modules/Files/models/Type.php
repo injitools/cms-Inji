@@ -13,13 +13,13 @@ namespace Files;
 
 class Type extends \Model {
 
-  public static $cols = [
-      'dir' => ['type' => 'text'],
-      'ext' => ['type' => 'text'],
-      'group' => ['type' => 'text'],
-      'allow_resize' => ['type' => 'bool'],
-      'options' => ['type' => 'textarea'],
-      'date_create' => ['type' => 'dateTime'],
-  ];
+    public static $cols = [
+        'dir' => ['type' => 'text'],
+        'ext' => ['type' => 'text'],
+        'group' => ['type' => 'text'],
+        'allow_resize' => ['type' => 'bool'],
+        'options' => ['type' => 'textarea'],
+        'date_create' => ['type' => 'dateTime'],
+    ];
 
 }

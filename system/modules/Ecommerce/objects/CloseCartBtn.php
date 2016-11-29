@@ -12,14 +12,13 @@
 
 namespace Ecommerce;
 
-class CloseCartBtn extends \Ui\DataManager\Action
-{
+class CloseCartBtn extends \Ui\DataManager\Action {
+
     public static $name = 'Завершить';
     public static $groupAction = true;
     public static $rowAction = true;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         if (\App::$cur->Exchange1c) {
             return '';
         }
@@ -38,8 +37,7 @@ class CloseCartBtn extends \Ui\DataManager\Action
         return $btn;
     }
 
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo)
-    {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
         if (\App::$cur->Exchange1c) {
             throw new \Exception('Недоступно при подключенной 1с');
         }

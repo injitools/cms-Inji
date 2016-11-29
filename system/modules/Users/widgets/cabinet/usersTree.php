@@ -36,62 +36,62 @@ App::$cur->libs->loadLib('typeahead');
 ?>
 
 <div class ='row'>
-  <div class ='col-md-6'>
-    <div class="users-cabinet-userTree">
-      <h3>Ваши партнеры</h3>
-      <h4>Партнеров в 8 поколениях: <b><?= $partners['count']; ?></b></h4>
-      <div class ='form-group'>
-        <input autocomplete="off" id ='partnersCabinetSearch' type="text" class ='form-control' placeholder="Поиск" />
-      </div>
-      <?php \Ui\Tree::ul(Users\User::$cur, 8); ?>
-    </div>
-    <script>
-        inji.onLoad(function () {
-          $('.users-cabinet-userTree li a').popover({
-            trigger: 'click',
-            placement: 'top',
-            html: true,
-            container: 'body',
-            title: function () {
-              return '<span class="text-info"><strong>' + $(this).text() + '</strong></span>' +
-                      '<button type="button" class="close" onclick="$(\'#' + $(this).parents('li').attr('id') + '\').find(\'>a\').popover(\'hide\');">&times;</button>'
-            },
-            content: function () {
-              var html = '';
-              var id = $(this).parents('li').attr('id').replace('Users_User-', '');
-              inji.Server.request({
-                url: '/Users/getPartnerInfo/' + id,
-                async: false,
-                success: function (result) {
-                  html = result;
+    <div class ='col-md-6'>
+        <div class="users-cabinet-userTree">
+            <h3>Ваши партнеры</h3>
+            <h4>Партнеров в 8 поколениях: <b><?= $partners['count']; ?></b></h4>
+            <div class ='form-group'>
+                <input autocomplete="off" id ='partnersCabinetSearch' type="text" class ='form-control' placeholder="Поиск" />
+            </div>
+            <?php \Ui\Tree::ul(Users\User::$cur, 8); ?>
+        </div>
+        <script>
+            inji.onLoad(function () {
+              $('.users-cabinet-userTree li a').popover({
+                trigger: 'click',
+                placement: 'top',
+                html: true,
+                container: 'body',
+                title: function () {
+                  return '<span class="text-info"><strong>' + $(this).text() + '</strong></span>' +
+                          '<button type="button" class="close" onclick="$(\'#' + $(this).parents('li').attr('id') + '\').find(\'>a\').popover(\'hide\');">&times;</button>'
+                },
+                content: function () {
+                  var html = '';
+                  var id = $(this).parents('li').attr('id').replace('Users_User-', '');
+                  inji.Server.request({
+                    url: '/Users/getPartnerInfo/' + id,
+                    async: false,
+                    success: function (result) {
+                      html = result;
+                    }
+                  });
+                  return html;
                 }
               });
-              return html;
-            }
-          });
-          $('.users-cabinet-userTree li a').click(function () {
-            return false;
-          })
-        });
-    </script>
-  </div>
-  <div class="col-md-6">
-    <h3>Пригласить партнера</h3>
-    <?php
-    $form = new \Ui\Form();
-    $form->begin();
-    $form->input('text', 'partnerInvite[name]', 'Имя');
-    $form->input('text', 'partnerInvite[email]', 'E-mail', ['required' => true]);
-    $form->end('Пригласить');
-    ?>
-    <h3>Постоянные ссылки</h3>
-    <?php
-    $links = App::$cur->users->getSnippets('partnerLink');
-    foreach ($links as $link) {
-        echo "{$link['name']}:<pre>{$link['href']}</pre><br/>";
-    }
-    ?>
-  </div>
+              $('.users-cabinet-userTree li a').click(function () {
+                return false;
+              })
+            });
+        </script>
+    </div>
+    <div class="col-md-6">
+        <h3>Пригласить партнера</h3>
+        <?php
+        $form = new \Ui\Form();
+        $form->begin();
+        $form->input('text', 'partnerInvite[name]', 'Имя');
+        $form->input('text', 'partnerInvite[email]', 'E-mail', ['required' => true]);
+        $form->end('Пригласить');
+        ?>
+        <h3>Постоянные ссылки</h3>
+        <?php
+        $links = App::$cur->users->getSnippets('partnerLink');
+        foreach ($links as $link) {
+            echo "{$link['name']}:<pre>{$link['href']}</pre><br/>";
+        }
+        ?>
+    </div>
 </div>
 <?php
 if ($usersSearch) {

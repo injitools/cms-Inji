@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Pages
  *
@@ -7,16 +8,16 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+
 namespace Ui;
 
-class Pages extends \Object
-{
+class Pages extends \Object {
+
     public $data = [];
     public $options = [];
     public $params = [];
 
-    public function __construct($data, $options = [])
-    {
+    public function __construct($data, $options = []) {
         $this->data = $data;
         $this->options = $options;
 
@@ -48,8 +49,7 @@ class Pages extends \Object
         }
     }
 
-    public function draw($class = 'pagination pagination-centered margin-none pagination-sm')
-    {
+    public function draw($class = 'pagination pagination-centered margin-none pagination-sm') {
         $getArr = $this->data;
         $getArr['limit'] = $this->params['limit'];
         \App::$cur->view->widget('Ui\Pages/pages', ['class' => $class, 'pagesInstance' => $this, 'getArr' => $getArr]);

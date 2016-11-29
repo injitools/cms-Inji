@@ -41,11 +41,11 @@
                         <label class="control-label col-lg-2">Роль</label>
                         <div class="col-lg-10">
                             <select class="form-control" name = 'user_role_id'>
-                                <?php
-                                foreach ($roles as $role) {
-                                    echo "<option value = '{$role['role_id']}'>{$role['role_name']}</option>";
-                                }
-                                ?>
+                              <?php
+                              foreach ($roles as $role) {
+                                  echo "<option value = '{$role['role_id']}'>{$role['role_name']}</option>";
+                              }
+                              ?>
                             </select>
                         </div>
                     </div>

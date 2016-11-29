@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Item\Offer;
 
-class Option extends \Model
-{
+class Option extends \Model {
+
     public static $objectName = 'Свойство предложения';
     public static $cols = [
         //Основные параметры
@@ -69,8 +69,7 @@ class Option extends \Model
         ]
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',
@@ -88,8 +87,7 @@ class Option extends \Model
         ];
     }
 
-    public function beforeSave()
-    {
+    public function beforeSave() {
         if (!isset($this->id)) {
             $this->user_id = \Users\User::$cur->id;
         }

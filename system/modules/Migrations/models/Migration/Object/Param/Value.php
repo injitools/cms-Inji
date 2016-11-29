@@ -11,8 +11,8 @@
 
 namespace Migrations\Migration\Object\Param;
 
-class Value extends \Model
-{
+class Value extends \Model {
+
     public static $cols = [
         'origianl' => ['type' => 'textarea'],
         'replace' => ['type' => 'textarea'],
@@ -20,8 +20,7 @@ class Value extends \Model
         'date_create' => ['type' => 'dateTime'],
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'param' => [
                 'col' => 'param_id',

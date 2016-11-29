@@ -11,8 +11,8 @@
 
 namespace Ecommerce\Warehouse;
 
-class Block extends \Model
-{
+class Block extends \Model {
+
     public static $cols = [
         //Основные параметры
         'cart_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'cart'],
@@ -22,8 +22,7 @@ class Block extends \Model
         'date_create' => ['type' => 'dateTime']
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'cart' => [
                 'model' => 'Ecommerce\Cart',
@@ -36,8 +35,7 @@ class Block extends \Model
         ];
     }
 
-    public static function indexes()
-    {
+    public static function indexes() {
         return [
             'ecommerce_warehousesBlockCart' => [
                 'type' => 'INDEX',

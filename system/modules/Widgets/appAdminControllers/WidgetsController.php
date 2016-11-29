@@ -8,10 +8,9 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class WidgetsController extends Controller
-{
-    public function widgetChooserAction()
-    {
+class WidgetsController extends Controller {
+
+    public function widgetChooserAction() {
         $widgets = [];
         foreach (App::$primary->config['modules'] as $module) {
             $info = Module::getInfo($module);
@@ -22,8 +21,7 @@ class WidgetsController extends Controller
         $this->view->page(['page' => 'blank', 'data' => compact('widgets')]);
     }
 
-    public function widgetImageAction()
-    {
+    public function widgetImageAction() {
         if (!empty($_GET['text'])) {
             $widgetCode = explode(':', preg_replace('!^{WIDGET:!isU', '', preg_replace('!}$!isU', '', urldecode($_GET['text']))));
             $text = 'Виджет: ';

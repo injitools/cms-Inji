@@ -11,8 +11,8 @@
 
 namespace Apps;
 
-class App extends \Model
-{
+class App extends \Model {
+
     /**
      * Model options
      */
@@ -80,8 +80,7 @@ class App extends \Model
         ]
     ];
 
-    public static function index()
-    {
+    public static function index() {
         return 'id';
     }
 

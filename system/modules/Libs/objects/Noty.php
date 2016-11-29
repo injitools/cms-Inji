@@ -11,8 +11,8 @@
 
 namespace Libs;
 
-class Noty extends \Object
-{
+class Noty extends \Object {
+
     public static $name = 'Noty';
     public static $composerPacks = [
         'needim/noty' => '2.3.*'

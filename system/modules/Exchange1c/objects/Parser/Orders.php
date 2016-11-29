@@ -11,24 +11,21 @@
 
 namespace Exchange1c\Parser;
 
-class Orders extends \Object
-{
+class Orders extends \Object {
+
     public $xml = null;
 
-    public function __construct($xml)
-    {
+    public function __construct($xml) {
         $this->xml = $xml;
     }
 
-    public function process()
-    {
+    public function process() {
         if ($this->xml->Документ) {
             $this->parseOrders($this->xml->Документ);
         }
     }
 
-    public function parseOrders($orders)
-    {
+    public function parseOrders($orders) {
         foreach ($orders as $order) {
 
             $cart = \Ecommerce\Cart::get((string) $order->Номер);
@@ -79,8 +76,7 @@ class Orders extends \Object
         }
     }
 
-    public function updateCartItems($cart, $items)
-    {
+    public function updateCartItems($cart, $items) {
         $itemIds = [];
         $cItems = [];
         foreach ($items as $item) {

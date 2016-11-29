@@ -11,7 +11,6 @@
 
 namespace Ui\ActiveForm\Input;
 
-class Hidden extends \Ui\ActiveForm\Input
-{
+class Hidden extends \Ui\ActiveForm\Input {
     
 }

@@ -10,25 +10,24 @@
 
 namespace Money;
 
-class CancelTransfer extends \Ui\DataManager\Action
-{
+class CancelTransfer extends \Ui\DataManager\Action {
+
     public static $name = 'Отменить';
     public static $groupAction = true;
     public static $rowAction = true;
 
-    public static function rowButton($dataManager, $item, $params, $actionParams)
-    {
+    public static function rowButton($dataManager, $item, $params, $actionParams) {
         if ($item->canceled || $item->complete) {
             return '';
         }
         ob_start();
         ?>
         <a onclick="inji.Server.request({
-                url: '/admin/money/cancelTransfer/<?= $item->id; ?>',
-                success: function () {
-                  inji.Ui.dataManagers.reloadAll();
-                }});
-              return false;
+                        url: '/admin/money/cancelTransfer/<?= $item->id; ?>',
+                        success: function () {
+                          inji.Ui.dataManagers.reloadAll();
+                        }});
+                      return false;
            " href ='#' class="btn btn-xs btn-primary">Отменить</a>
         <?php
         $btn = ob_get_contents();
@@ -36,8 +35,7 @@ class CancelTransfer extends \Ui\DataManager\Action
         return $btn;
     }
 
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo)
-    {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
         $transfers = \Money\Transfer::getList(['where' => [['id', $ids, 'IN'], ['canceled', 0], ['complete', 0]]]);
         foreach ($transfers as $transfer) {
             $transfer->cancel();

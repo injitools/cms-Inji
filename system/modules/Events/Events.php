@@ -8,7 +8,6 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Events extends Module
-{
+class Events extends Module {
     
 }

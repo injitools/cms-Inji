@@ -8,10 +8,9 @@
  * @copyright 2016 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Geography extends Module
-{
-    function init()
-    {
+class Geography extends Module {
+
+    function init() {
         if (!empty(App::$primary->config['site']['domain'])) {
             $domain = App::$primary->config['site']['domain'];
         } else {

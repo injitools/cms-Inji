@@ -11,8 +11,8 @@
 
 namespace Users\User;
 
-class Inventory extends \Model
-{
+class Inventory extends \Model {
+
     public static $objectName = "Инвентарь";
     public static $cols = [
         'public' => ['type' => 'bool'],
@@ -30,8 +30,7 @@ class Inventory extends \Model
         'user_id' => 'Пользователь'
     ];
 
-    public static function relations()
-    {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',
@@ -44,8 +43,7 @@ class Inventory extends \Model
         ];
     }
 
-    public function name()
-    {
+    public function name() {
         if ($this->first_name . $this->last_name . $this->middle_name) {
             $name = '';
             if ($this->first_name) {
