@@ -164,7 +164,7 @@ class Money extends Module {
             return false;
         }
         $reward->checkBlocked();
-        $reward_count = \Money\Reward\Recive::getCount([ 'where' => [ 'reward_id', $reward_id]]);
+        $reward_count = \Money\Reward\Recive::getCount(['where' => ['reward_id', $reward_id]]);
         if ($reward_count >= $reward->quantity && $reward->quantity) {
             return false;
         }

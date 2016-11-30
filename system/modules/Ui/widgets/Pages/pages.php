@@ -5,7 +5,7 @@
     }
 
     for ($i = 1; $i <= $pagesInstance->params['pages']; $i++) {
-        if (( $i >= $pagesInstance->params['page'] - 3 && $i <= $pagesInstance->params['page'] + 3) || $i == 1 || $i == $pagesInstance->params['pages']) {
+        if (($i >= $pagesInstance->params['page'] - 3 && $i <= $pagesInstance->params['page'] + 3) || $i == 1 || $i == $pagesInstance->params['pages']) {
             echo '<li ';
             if ($pagesInstance->params['page'] == $i)
                 echo 'class = "active"';
