@@ -134,7 +134,7 @@ class Material extends \Model {
             $categorys = Category::getList(['where' => ['id', implode(',', $treePath), 'IN']]);
             foreach ($categorys as $category) {
                 if ($category->alias) {
-                    $href .="/{$category->alias}";
+                    $href .= "/{$category->alias}";
                 }
             }
         }

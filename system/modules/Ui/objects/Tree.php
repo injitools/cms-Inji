@@ -30,7 +30,7 @@ class Tree extends \Object {
             }
             $count += count($items);
             foreach ($items as $objectChild) {
-                $count+=static::showLi($objectChild, 1, $maxDeep, $hrefFunc, $order);
+                $count += static::showLi($objectChild, 1, $maxDeep, $hrefFunc, $order);
             }
             ?>
         </ul>
@@ -61,7 +61,7 @@ class Tree extends \Object {
                     echo \Html::el('li', $attributes, $item, true);
                     echo '<ul>';
                 }
-                $count+=static::showLi($objectChild, $deep + 1, $maxDeep, $hrefFunc, $order);
+                $count += static::showLi($objectChild, $deep + 1, $maxDeep, $hrefFunc, $order);
             }
         }
         if ($isset) {

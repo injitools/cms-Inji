@@ -116,6 +116,9 @@ class Users extends Module {
         }
     }
 
+    /**
+     * @param string $user_mail
+     */
     public function passre($user_mail) {
         $user = $this->get($user_mail, 'mail');
         if (!$user) {
@@ -350,7 +353,7 @@ class Users extends Module {
             $to = $data['user_mail'];
             $subject = 'Регистрация на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
             $text = 'Вы были зарегистрированы на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />для входа используйте ваш почтовый ящик в качестве логина и пароль: ' . $pass;
-            $text .='<br />';
+            $text .= '<br />';
             $text .= '<br />';
             $text .= 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . $user->id . '/' . $user->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . $user->id . '/' . $user->activation . '</a>';
             Tools::sendMail($from, $to, $subject, $text);
@@ -400,6 +403,9 @@ class Users extends Module {
         return $return;
     }
 
+    /**
+     * @param integer $cat_id
+     */
     public function addUserActivity($user_id, $cat_id, $text = '') {
         $ua = new Users\Activity([
             'user_id' => $user_id,

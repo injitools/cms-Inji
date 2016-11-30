@@ -11,7 +11,7 @@
 return [
     'classes' => ['Ui\DataManager'],
     'get' => function($element) {
-$access = NULL;
+$access = null;
 $path = [
     'models',
     $element->modelName,

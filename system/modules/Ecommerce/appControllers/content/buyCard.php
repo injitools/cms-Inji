@@ -1,10 +1,10 @@
 <div class="ecommerce">
     <div class="cart-order_page">
       <?php
-      $form = new Ui\Form;
-      $form->action = "/ecommerce/buyCard";
-      $form->begin();
-      ?>
+        $form = new Ui\Form;
+        $form->action = "/ecommerce/buyCard";
+        $form->begin();
+        ?>
         <div class="row">
             <div class="col-sm-4">
                 <div class="order_page-info">
@@ -34,11 +34,11 @@
                             </thead>
                             <tbody class="cartitems">
                               <?php
-                              $first = true;
-                              foreach (\Ecommerce\Card::getList() as $card) {
-                                  $checked = $first;
-                                  $first = false;
-                                  ?>
+                                $first = true;
+                                foreach (\Ecommerce\Card::getList() as $card) {
+                                    $checked = $first;
+                                    $first = false;
+                                    ?>
                                     <tr>
                                         <td>
                                             <input id ="cardId" type="radio" name ="card_id" value ="<?= $card->id; ?>" <?= $checked ? 'checked' : ''; ?> />
@@ -50,8 +50,8 @@
                                         <td>
                                             <ul>
                                               <?php
-                                              foreach ($card->levels as $level) {
-                                                  ?>
+                                                foreach ($card->levels as $level) {
+                                                    ?>
                                                     <li><?= $level->name; ?> - <?= $level->discount->name; ?></li>
                                                     <?php
                                                 }

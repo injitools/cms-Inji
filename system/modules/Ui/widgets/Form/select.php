@@ -23,7 +23,7 @@ foreach ($options['values'] as $key => $value) {
             $showedInput = count($aditionalInputs) - 1;
             $aditionValue = !empty($options['aditionalValue']) ? $options['aditionalValue'] : '';
         }
-        $optionsHtml .= "<option data-aditionalInput='" . ( count($aditionalInputs) - 1) . "' value ='{$key}'{$selected}>{$value['text']}</option>";
+        $optionsHtml .= "<option data-aditionalInput='" . (count($aditionalInputs) - 1) . "' value ='{$key}'{$selected}>{$value['text']}</option>";
     } else {
         $optionsHtml .= "<option value ='{$key}'{$selected}>{$value}</option>";
     }

@@ -82,7 +82,7 @@ class ActiveForm extends \Object {
                             $this->model->_params[$modelName::index()] = 0;
                         }
                         $relOptions['model']::fixPrefix($relOptions['col']);
-                        $inputs[$col] = new ActiveForm(new $relOptions['model']([ $relOptions['col'] => &$this->model->_params[$modelName::index()]]), $colPath[2]);
+                        $inputs[$col] = new ActiveForm(new $relOptions['model']([$relOptions['col'] => &$this->model->_params[$modelName::index()]]), $colPath[2]);
                     }
                     $inputs[$col]->parent = $this;
                 } elseif (!empty($modelName::$cols[$col])) {

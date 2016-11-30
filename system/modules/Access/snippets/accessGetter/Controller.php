@@ -11,7 +11,7 @@
 return [
     'classes' => ['Controller'],
     'get' => function($element) {
-$access = NULL;
+$access = null;
 $path = [
     'accessTree',
     $element->module->app->type,

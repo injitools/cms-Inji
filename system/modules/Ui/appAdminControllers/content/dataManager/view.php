@@ -35,13 +35,13 @@ foreach ($cols as $colName) {
 ?>
 <div>
     <h3>Комментарии (<?=
-      \Dashboard\Comment::getCount(['where' => [
-              ['item_id', $item->id],
-              ['model', $modelName],
-      ]]);
-      ?>)</h3>
+        \Dashboard\Comment::getCount(['where' => [
+                ['item_id', $item->id],
+                ['model', $modelName],
+        ]]);
+        ?>)</h3>
     <?php
-    foreach (\Dashboard\Comment::getList([ 'where' => [
+    foreach (\Dashboard\Comment::getList(['where' => [
             ['item_id', $item->id],
             ['model', $modelName],
         ], 'order' => ['date_create', 'desc']]) as $comment) {
@@ -61,11 +61,11 @@ foreach ($cols as $colName) {
 </div>
 <div>
   <?php
-  $form = new \Ui\Form();
-  $form->begin('Оставить комментарий');
-  $form->input('textarea', 'comment', 'Комментарий');
-  $form->end();
-  ?>
+    $form = new \Ui\Form();
+    $form->begin('Оставить комментарий');
+    $form->input('textarea', 'comment', 'Комментарий');
+    $form->end();
+    ?>
 </div>
 <div>
     <h1>Хронология</h1>

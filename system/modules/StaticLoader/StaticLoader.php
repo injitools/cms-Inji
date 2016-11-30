@@ -107,10 +107,11 @@ class StaticLoader extends Module {
 
                 $sizes = explode('x', $_GET['resize']);
                 $sizes[0] = intval($sizes[0]);
-                if (isset($sizes[1]))
-                    $sizes[1] = intval($sizes[1]);
-                else
-                    $sizes[1] = 0;
+                if (isset($sizes[1])) {
+                                    $sizes[1] = intval($sizes[1]);
+                } else {
+                                    $sizes[1] = 0;
+                }
 
                 if (!$sizes[0] || !$sizes[1]) {
                     header('HTTP/1.1 404 Not Found');
@@ -122,15 +123,16 @@ class StaticLoader extends Module {
                     $dir = App::$primary->path;
 
                     if (!empty($_GET['resize_crop'])) {
-                        if (in_array($_GET['resize_crop'], array('q', 'c')))
-                            $crop = $_GET['resize_crop'];
-                        else
-                            $crop = 'c';
+                        if (in_array($_GET['resize_crop'], array('q', 'c'))) {
+                                                    $crop = $_GET['resize_crop'];
+                        } else {
+                                                    $crop = 'c';
+                        }
+                    } elseif (!empty($_GET['resize_quadro'])) {
+                                            $crop = 'q';
+                    } else {
+                                            $crop = '';
                     }
-                    elseif (!empty($_GET['resize_quadro']))
-                        $crop = 'q';
-                    else
-                        $crop = '';
                     $pos = 'center';
                     if (!empty($_GET['resize_pos']) && in_array($_GET['resize_pos'], array('top', 'center'))) {
                         $pos = $_GET['resize_pos'];
@@ -183,7 +185,7 @@ class StaticLoader extends Module {
 
             $fileName = $fileinfo['filename'] . '.' . $fileinfo['extension'];
             if (App::$cur->db->connect) {
-                $fileObj = Files\File::get([ 'path', '%/' . $fileinfo['filename'] . '.' . $fileinfo['extension'], 'LIKE']);
+                $fileObj = Files\File::get(['path', '%/' . $fileinfo['filename'] . '.' . $fileinfo['extension'], 'LIKE']);
                 if ($fileObj) {
                     $fileName = $fileObj->original_name;
                 }

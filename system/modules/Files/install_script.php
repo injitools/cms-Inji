@@ -1,6 +1,6 @@
 <?php
 
-return function($step = NULL, $params = []) {
+return function($step = null, $params = []) {
     $options = ['max_height' => 1200, 'max_width' => 1200];
     $types = [
         [

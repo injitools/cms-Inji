@@ -41,14 +41,14 @@
                         <div class="col-lg-10">
                             <select class="form-control" name = 'user_role_id'>
                               <?php
-                              foreach ($roles as $role) {
-                                  if ($role['role_id'] == $user->user_role_id)
-                                      $selected = 'selected = "selected"';
-                                  else
-                                      $selected = '';
-                                  echo "<option {$selected} value = '{$role['role_id']}'>{$role['role_name']}</option>";
-                              }
-                              ?>
+                                foreach ($roles as $role) {
+                                    if ($role['role_id'] == $user->user_role_id)
+                                        $selected = 'selected = "selected"';
+                                    else
+                                        $selected = '';
+                                    echo "<option {$selected} value = '{$role['role_id']}'>{$role['role_name']}</option>";
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>

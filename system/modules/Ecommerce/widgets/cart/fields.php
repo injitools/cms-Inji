@@ -1,16 +1,16 @@
 <fieldset>
   <?php
-  if (\Users\User::$cur->id) {
-      $userAdds = Ecommerce\UserAdds::getList(['where' => ['user_id', \Users\User::$cur->id]]);
-      $values = [];
-      foreach ($userAdds as $userAdd) {
-          $values[$userAdd->id] = $userAdd->values(['array' => true]);
-      }
-      if ($userAdds) {
-          $form->input('select', 'userAddsId', 'Ваши контакты', ['values' => ['' => 'Выберите'] + Ecommerce\UserAdds::getList(['where' => ['user_id', \Users\User::$cur->id], 'forSelect' => true])]);
-          echo '<hr />';
-      }
-      ?>
+    if (\Users\User::$cur->id) {
+        $userAdds = Ecommerce\UserAdds::getList(['where' => ['user_id', \Users\User::$cur->id]]);
+        $values = [];
+        foreach ($userAdds as $userAdd) {
+            $values[$userAdd->id] = $userAdd->values(['array' => true]);
+        }
+        if ($userAdds) {
+            $form->input('select', 'userAddsId', 'Ваши контакты', ['values' => ['' => 'Выберите'] + Ecommerce\UserAdds::getList(['where' => ['user_id', \Users\User::$cur->id], 'forSelect' => true])]);
+            echo '<hr />';
+        }
+        ?>
         <script>
             var userAddsValues = <?= json_encode($values); ?>;
             inji.onLoad(function () {

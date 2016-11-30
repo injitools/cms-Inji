@@ -29,7 +29,7 @@ class MainController extends Controller {
                 if (empty($config['failTry'])) {
                     $config['failTry'] = 1;
                 } else {
-                    $config['failTry'] ++;
+                    $config['failTry']++;
                 }
                 Config::save('share', $config);
             }

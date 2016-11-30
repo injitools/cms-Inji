@@ -42,7 +42,7 @@ class UserForms extends \Module {
                 $text = '';
                 foreach ($form->inputs as $input) {
                     if (isset($inputs['input' . $input->id])) {
-                        $text .="<b>{$input->label}:</b> " . htmlspecialchars($inputs['input' . $input->id]) . "<br />";
+                        $text .= "<b>{$input->label}:</b> " . htmlspecialchars($inputs['input' . $input->id]) . "<br />";
                     }
                 }
                 if ($text) {

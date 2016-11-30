@@ -34,8 +34,9 @@ class WidgetsController extends Controller {
                     $params = json_decode($widget->widget_params, true);
                     if ($params) {
                         foreach ($params as $param) {
-                            if (!isset($widgetCode[$i]))
-                                break;
+                            if (!isset($widgetCode[$i])) {
+                                                            break;
+                            }
                             if ($param['type'] == 'select') {
                                 $item = $param['model']::get($widgetCode[$i++]);
                                 if ($item) {

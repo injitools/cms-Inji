@@ -35,10 +35,11 @@ class Pages extends \Object {
             $this->params['page'] = 1;
             if (!empty($this->data['page'])) {
                 $this->params['page'] = (int) $this->data['page'];
-                if ($this->params['page'] <= 0)
-                    $this->params['page'] = 1;
-                elseif ($this->params['page'] > ceil($this->options['count'] / $this->params['limit']))
-                    $this->params['page'] = ceil($this->options['count'] / $this->params['limit']);
+                if ($this->params['page'] <= 0) {
+                                    $this->params['page'] = 1;
+                } elseif ($this->params['page'] > ceil($this->options['count'] / $this->params['limit'])) {
+                                    $this->params['page'] = ceil($this->options['count'] / $this->params['limit']);
+                }
             }
 
             $this->params['start'] = $this->params['page'] * $this->params['limit'] - $this->params['limit'];
