@@ -37,7 +37,7 @@ class Sitemap extends Module {
         $root->setAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
         $root = $xml->appendChild($root);
 
-        $addToXml = function ($xml, $parent, $nodeName, $text) {
+        $addToXml = function($xml, $parent, $nodeName, $text) {
             $node = $parent->appendChild($xml->createElement($nodeName));
             $node->appendChild($xml->createTextNode($text));
             return $node;

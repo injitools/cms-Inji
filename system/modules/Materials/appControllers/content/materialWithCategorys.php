@@ -2,11 +2,11 @@
     <div class="row">
         <div class="col-md-3">
           <?php
-          $category = $material->category;
-          \Ui\Tree::ul($category->getRoot(), 0, function($category) {
-              echo "<a href='{$category->getHref()}'> {$category->name()}</a>";
-          });
-          ?>
+            $category = $material->category;
+            \Ui\Tree::ul($category->getRoot(), 0, function($category) {
+                echo "<a href='{$category->getHref()}'> {$category->name()}</a>";
+            });
+            ?>
         </div>
         <div class="col-md-9">
             <div class="content">

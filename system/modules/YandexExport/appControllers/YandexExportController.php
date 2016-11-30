@@ -11,6 +11,10 @@ class YandexExportController extends Controller {
 
     function indexAction() {
 
+        /**
+         * @param DOMDocument $xml
+         * @param string $nodeName
+         */
         function addToXml($xml, $parent, $nodeName, $text) {
             $node = $parent->appendChild($xml->createElement($nodeName));
             $node->appendChild($xml->createTextNode($text));

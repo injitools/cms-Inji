@@ -13,11 +13,11 @@ namespace Db;
 
 class Mysql extends \Object {
 
-    public $config = [];       // настройки подключения выбраной базы
-    public $connect = false;        // ярлык соединения с MySQL
-    public $encoding = 'utf-8';        // установленная кодировка
-    public $db_name = 'test';         // выбраная в данный момент база
-    public $table_prefix = 'inji_';   // префикс названий таблиц
+    public $config = []; // настройки подключения выбраной базы
+    public $connect = false; // ярлык соединения с MySQL
+    public $encoding = 'utf-8'; // установленная кодировка
+    public $db_name = 'test'; // выбраная в данный момент база
+    public $table_prefix = 'inji_'; // префикс названий таблиц
     public $pdo = null;
     public $lastQuery = '';
     public $last_error = '';

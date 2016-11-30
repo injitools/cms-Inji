@@ -12,8 +12,8 @@ foreach ($rewards as $reward) {
             <h3>Уровни начислений</h3>
             <ul>
               <?php
-              foreach ($reward->levels(['order' => ['level', 'asc']]) as $level) {
-                  ?>
+                foreach ($reward->levels(['order' => ['level', 'asc']]) as $level) {
+                    ?>
 
                     <li><?= !$level->level ? 'Личный' : $level->level; ?>. <?= $types[$level->type]['viewer']($level); ?></li>
                     <?php
@@ -34,14 +34,14 @@ foreach ($rewards as $reward) {
                 <h4 class="<?= $complete ? 'text-success' : 'text-danger'; ?>"><?= $condition->name(); ?></h4>
                 <ul>
                   <?php
-                  foreach ($condition->items as $item) {
-                      $itemComplete = $item->checkComplete();
-                      switch ($item->type) {
-                          case 'event':
+                    foreach ($condition->items as $item) {
+                        $itemComplete = $item->checkComplete();
+                        switch ($item->type) {
+                            case 'event':
                               $name = \Events\Event::get($item->value, 'event')->name();
-                              break;
-                      }
-                      ?>
+                                break;
+                        }
+                        ?>
                         <li> 
                             <b class="<?= $itemComplete ? 'text-success' : 'text-danger'; ?>"><?= $name; ?> <?= $item->recivedCount(); ?></b>/<?= $item->count; ?> <br />
                         </li>

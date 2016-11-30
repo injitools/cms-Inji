@@ -55,21 +55,21 @@ class Sums extends \Object {
             if ($first) {
                 $first = false;
             } else {
-                $string.= '<br />';
+                $string .= '<br />';
             }
-            $string.= '<span style="white-space:nowrap;">';
-            $string.= number_format($sum, 2, '.', ' ');
+            $string .= '<span style="white-space:nowrap;">';
+            $string .= number_format($sum, 2, '.', ' ');
             if (\App::$cur->money) {
                 $currency = \Money\Currency::get($currency_id);
                 if ($currency) {
-                    $string.= ' ' . $currency->acronym();
+                    $string .= ' ' . $currency->acronym();
                 } else {
-                    $string.= ' руб.';
+                    $string .= ' руб.';
                 }
             } else {
-                $string.= ' руб.';
+                $string .= ' руб.';
             }
-            $string.= '</span>';
+            $string .= '</span>';
         }
         return $string;
     }

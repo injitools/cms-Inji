@@ -71,25 +71,28 @@ class Log {
             if (!empty($log['status'])) {
                 echo "<tr class = '{$log['status']}'><td>{$log['name']}</td><td>{$log['status']}</td></tr>";
             } else {
-                if (empty($log['end']))
-                    $log['end'] = microtime(true);
-                if (empty($log['start']))
-                    $log['start'] = microtime(true);
+                if (empty($log['end'])) {
+                                    $log['end'] = microtime(true);
+                }
+                if (empty($log['start'])) {
+                                    $log['start'] = microtime(true);
+                }
                 echo "<tr><td>{$log['name']}</td><td" . (round(($log['end'] - $log['start']), 5) > 0.1 ? ' class ="danger"' : '') . ">" . round(($log['end'] - $log['start']), 5) . "</td></tr>";
             }
         }
-        echo '<tr><th>Summary</th><th>' . round(( microtime(true) - $this->startTime), 5) . '</th></tr>';
+        echo '<tr><th>Summary</th><th>' . round((microtime(true) - $this->startTime), 5) . '</th></tr>';
         echo '<tr><th>Memory</th><th>' . $this->convertSize(memory_get_peak_usage()) . ' of ' . ini_get('memory_limit') . '</th></tr></table></div>';
     }
 
     public function convertSize($size) {
 
-        if ($size < 1024)
-            return $size . "B";
-        elseif ($size < 1048576)
-            return round($size / 1024, 2) . "KB";
-        else
-            return round($size / 1048576, 2) . "MB";
+        if ($size < 1024) {
+                    return $size . "B";
+        } elseif ($size < 1048576) {
+                    return round($size / 1024, 2) . "KB";
+        } else {
+                    return round($size / 1048576, 2) . "MB";
+        }
     }
 
     public function __destruct() {

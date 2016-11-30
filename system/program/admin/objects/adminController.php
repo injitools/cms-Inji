@@ -43,7 +43,7 @@ class adminController extends Controller {
             Tools::redirect('/admin', 'У вас нет прав доступа для просмотра этого объекта', 'danger');
         }
         $item = $fullModelName::get($pk);
-        $this->view->setTitle(($fullModelName::$objectName ? $fullModelName::$objectName : $fullModelName) . ($item ? ( ' - ' . $item->name()) : ''));
+        $this->view->setTitle(($fullModelName::$objectName ? $fullModelName::$objectName : $fullModelName) . ($item ? (' - ' . $item->name()) : ''));
         if (!empty($_POST['comment'])) {
             $comment = new Dashboard\Comment();
             $comment->text = $_POST['comment'];

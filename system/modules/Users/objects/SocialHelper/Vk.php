@@ -145,7 +145,7 @@ class Vk extends \Users\SocialHelper {
         $auth_key = md5($config['appId'] . '_' . $viewer_id . '_' . $config['secret']);
 
         if ($auth_key !== $get_auth_key) {
-            return FALSE;
+            return false;
         }
         $userQuery = [
             'user_id' => $viewer_id,

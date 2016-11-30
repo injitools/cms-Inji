@@ -23,10 +23,10 @@
                     </td>
                     <td>
                       <?php
-                      foreach ($allowCurrencies as $allowCurrency) {
-                          $className = 'Money\MerchantHelper\\' . $merchant->object_name;
-                          $sum = $className::getFinalSum($pay, $allowCurrency);
-                          ?>
+                        foreach ($allowCurrencies as $allowCurrency) {
+                            $className = 'Money\MerchantHelper\\' . $merchant->object_name;
+                            $sum = $className::getFinalSum($pay, $allowCurrency);
+                            ?>
                             <b><?= $allowCurrency['currency']->name(); ?></b>
                             <a class="btn btn-primary" href ="/money/merchants/go/<?= $pay->id; ?>/<?= $merchant->id; ?>/<?= $allowCurrency['currency']->id; ?>">Оплатить <?= $sum; ?> <?= $allowCurrency['currency']->acronym(); ?></a>
                             <?php

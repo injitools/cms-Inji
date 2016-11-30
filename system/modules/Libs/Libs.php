@@ -24,7 +24,7 @@ class Libs extends Module {
                     $this->loadLib($rLib);
                 }
             }
-            if (!empty($className::$files['css']) && (!isset($options['loadCss']) || $options['loadCss'] )) {
+            if (!empty($className::$files['css']) && (!isset($options['loadCss']) || $options['loadCss'])) {
                 foreach ($className::$files['css'] as $file) {
                     if (strpos($file, '/') === 0 || strpos($file, 'http') === 0) {
                         App::$cur->view->customAsset('css', $file, $libName);

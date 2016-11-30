@@ -42,7 +42,7 @@ class Wallet extends \Model {
         'manager' => [
             'cols' => ['user:id', 'user_id', 'currency_id', 'amount'],
             'sortable' => ['user:id', 'user_id', 'currency_id', 'amount'],
-            'filters' => [ 'currency_id'],
+            'filters' => ['currency_id'],
         ]
     ];
 

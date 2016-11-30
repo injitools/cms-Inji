@@ -45,8 +45,9 @@ class Config {
             return self::$_configs['custom'][$path];
         }
 
-        if (!file_exists($path))
-            return [];
+        if (!file_exists($path)) {
+                    return [];
+        }
 
         return self::$_configs['custom'][$path] = include $path;
     }

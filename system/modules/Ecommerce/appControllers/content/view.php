@@ -17,20 +17,20 @@
                         <h1><?= $item->name(); ?></h1>
                         <ul class="item-options">
                           <?php
-                          foreach ($item->options as $param) {
-                              if (!$param->item_option_view || !$param->value)
-                                  continue;
-                              if ($param->item_option_type == 'select') {
-                                  if (empty($param->option->items[$param->value]))
-                                      continue;
-                                  $value = $param->option->items[$param->value]->value;
-                              } else {
-                                  $value = $param->value;
-                              }
-                              $paramName = $param->item_option_name;
-                              echo "<li>{$paramName}: {$value} {$param->item_option_postfix}</li>";
-                          }
-                          ?>
+                            foreach ($item->options as $param) {
+                                if (!$param->item_option_view || !$param->value)
+                                    continue;
+                                if ($param->item_option_type == 'select') {
+                                    if (empty($param->option->items[$param->value]))
+                                        continue;
+                                    $value = $param->option->items[$param->value]->value;
+                                } else {
+                                    $value = $param->value;
+                                }
+                                $paramName = $param->item_option_name;
+                                echo "<li>{$paramName}: {$value} {$param->item_option_postfix}</li>";
+                            }
+                            ?>
                         </ul>
                         <div class="item-actions">
                             <div class="item-price">

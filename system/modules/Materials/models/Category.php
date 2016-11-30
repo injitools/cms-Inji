@@ -99,7 +99,7 @@ class Category extends \Model {
         if ($treePath) {
             $categorys = Category::getList(['where' => ['id', implode(',', $treePath), 'IN']]);
             foreach ($categorys as $category) {
-                $href .="/{$category->alias}";
+                $href .= "/{$category->alias}";
             }
         }
         return $href . "/" . ($this->alias ? $this->alias : $this->pk());

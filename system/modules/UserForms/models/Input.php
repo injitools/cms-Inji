@@ -24,8 +24,8 @@ class Input extends \Model {
         'label' => ['type' => 'text'],
         'type' => ['type' => 'text'],
         'required' => ['type' => 'bool'],
-        'form_id' => [ 'type' => 'select', 'source' => 'relation', 'relation' => 'form'],
-        'user_id' => [ 'type' => 'select', 'source' => 'relation', 'relation' => 'user'],
+        'form_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'form'],
+        'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'input_params' => ['type' => 'textarea'],
         'weight' => ['type' => 'number']
     ];

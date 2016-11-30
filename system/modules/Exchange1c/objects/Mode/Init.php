@@ -25,7 +25,7 @@ class Init extends \Exchange1c\Mode {
             $query->table = \Exchange1c\Exchange\File::table();
             $query->cols = \Exchange1c\Exchange\File::colPrefix() . 'id';
             $queryArr = $query->buildQuery();
-            $queryArr['query'].=' where `' . \Exchange1c\Exchange\File::colPrefix() . 'deleted` = 0 AND  `' . \Exchange1c\Exchange\File::colPrefix() . 'date_create` < NOW() - INTERVAL ' . \App::$cur->exchange1c->config['maxSaveFilesInterval'];
+            $queryArr['query'] .= ' where `' . \Exchange1c\Exchange\File::colPrefix() . 'deleted` = 0 AND  `' . \Exchange1c\Exchange\File::colPrefix() . 'date_create` < NOW() - INTERVAL ' . \App::$cur->exchange1c->config['maxSaveFilesInterval'];
             try {
                 $ids = array_keys($query->query($queryArr)->getArray(\Exchange1c\Exchange\File::colPrefix() . 'id'));
             } catch (\PDOException $exc) {
