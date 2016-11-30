@@ -21,7 +21,7 @@ class Access extends Module {
             $app = $this->app->type;
         }
         if (!empty($this->config['access']['accessTree'][$app]['deniedUrl'])) {
-                    return $this->config['access']['accessTree'][$app]['deniedUrl'];
+            return $this->config['access']['accessTree'][$app]['deniedUrl'];
         }
 
         return '/';
@@ -48,7 +48,7 @@ class Access extends Module {
         }
 
         if ((!$user->group_id && !empty($access)) || ($user->group_id && !empty($access) && !in_array($user->group_id, $access))) {
-                    return false;
+            return false;
         }
 
         return true;

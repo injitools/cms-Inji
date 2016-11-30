@@ -16,7 +16,7 @@ class Db extends Module {
         }
         if (!is_array($param)) {
             if (!($dbOption = Db\Options::get($param, 'connect_alias', ['array' => true]))) {
-                            return false;
+                return false;
             }
 
             $db = $dbOption;

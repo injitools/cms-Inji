@@ -126,13 +126,13 @@ class Query extends \Object {
             $this->order[] = "{$order} {$type}";
         } else {
             foreach ($order as $item) {
-                            if (!is_array($item)) {
+                if (!is_array($item)) {
                     call_user_func_array(array($this, 'order'), $order);
-            }
                     break;
                 } else {
-                                    $this->order($item);
+                    $this->order($item);
                 }
+            }
         }
     }
 
@@ -141,7 +141,7 @@ class Query extends \Object {
         $len = intval($len);
         $this->limit = "LIMIT {$start}";
         if ($len !== 0) {
-                    $this->limit .= ",{$len}";
+            $this->limit .= ",{$len}";
         }
     }
 
@@ -155,10 +155,10 @@ class Query extends \Object {
         } else {
             $join .= " {$type} JOIN {$this->curInstance->table_prefix}{$table}";
             if ($alias) {
-                            $join .= " AS `{$alias}`";
+                $join .= " AS `{$alias}`";
             }
             if ($where) {
-                            $join .= " ON {$where}";
+                $join .= " ON {$where}";
             }
         }
         return $join;
@@ -179,13 +179,13 @@ class Query extends \Object {
             }
 
             if ($concatenation === false) {
-                            $concatenation = 'AND';
+                $concatenation = 'AND';
             } elseif ($concatenation === true) {
-                            $concatenation = '';
+                $concatenation = '';
             }
 
             if ($this->whereString == NULL) {
-                            $this->whereString = ' WHERE ';
+                $this->whereString = ' WHERE ';
             }
 
             if (stristr($operation, 'IN') || stristr($operation, 'NOT IN')) {
@@ -213,9 +213,9 @@ class Query extends \Object {
             }
 
             if (substr($this->whereString, -1, 1) == '(' || substr($this->whereString, -2, 2) == 'E ') {
-                            $this->whereString .= " {$where} {$operation} {$value} ";
+                $this->whereString .= " {$where} {$operation} {$value} ";
             } else {
-                            $this->whereString .= "{$concatenation} {$where} {$operation} {$value} ";
+                $this->whereString .= "{$concatenation} {$where} {$operation} {$value} ";
             }
         } else {
             $i = -1;
@@ -233,9 +233,9 @@ class Query extends \Object {
                     }
 
                     if ($this->whereString != NULL) {
-                                            $this->whereString .= '(';
+                        $this->whereString .= '(';
                     } else {
-                                            $this->whereString = 'WHERE (';
+                        $this->whereString = 'WHERE (';
                     }
                 }
 
@@ -266,13 +266,13 @@ class Query extends \Object {
                 $operation = '=';
             }
             if ($concatenation === false) {
-                            $concatenation = 'AND';
+                $concatenation = 'AND';
             } elseif ($concatenation === true) {
-                            $concatenation = '';
+                $concatenation = '';
             }
 
             if ($this->havingString == NULL) {
-                            $this->havingString = ' HAVING ';
+                $this->havingString = ' HAVING ';
             }
 
             if (stristr($operation, 'IN') || stristr($operation, 'NOT IN')) {
@@ -300,9 +300,9 @@ class Query extends \Object {
             }
 
             if (substr($this->havingString, -1, 1) == '(' || substr($this->havingString, -2, 2) == 'E ') {
-                            $this->havingString .= " {$where} {$operation} {$value} ";
+                $this->havingString .= " {$where} {$operation} {$value} ";
             } else {
-                            $this->havingString .= "{$concatenation} {$where} {$operation} {$value} ";
+                $this->havingString .= "{$concatenation} {$where} {$operation} {$value} ";
             }
         } else {
             $i = -1;
@@ -320,9 +320,9 @@ class Query extends \Object {
                     }
 
                     if ($this->havingString != NULL) {
-                                            $this->havingString .= '(';
+                        $this->havingString .= '(';
                     } else {
-                                            $this->havingString = 'HAVING (';
+                        $this->havingString = 'HAVING (';
                     }
                 }
 

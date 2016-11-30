@@ -902,10 +902,10 @@ class Model {
             return [];
         }
         if (!empty($options['where'])) {
-                    $query->where($options['where']);
+            $query->where($options['where']);
         }
         if (!empty($options['cols'])) {
-                    $query->cols = $options['cols'];
+            $query->cols = $options['cols'];
         }
         if (!empty($options['group'])) {
             $query->group($options['group']);
@@ -914,13 +914,13 @@ class Model {
             $query->having($options['having']);
         }
         if (!empty($options['order'])) {
-                    $query->order($options['order']);
+            $query->order($options['order']);
         }
         if (!empty($options['join'])) {
-                    $query->join($options['join']);
+            $query->join($options['join']);
         }
         if (!empty($options['distinct'])) {
-                    $query->distinct = $options['distinct'];
+            $query->distinct = $options['distinct'];
         }
 
         foreach (static::$relJoins as $join) {
@@ -948,12 +948,12 @@ class Model {
         static::$needJoin = [];
 
         if (!empty($options['limit'])) {
-                    $limit = (int) $options['limit'];
+            $limit = (int) $options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-                    $start = (int) $options['start'];
+            $start = (int) $options['start'];
         } else {
             $start = 0;
         }
@@ -1230,21 +1230,21 @@ class Model {
             static::fixPrefix($options['group'], 'first');
         }
         if (!empty($options['where'])) {
-                    $query->where($options['where']);
+            $query->where($options['where']);
         }
         if (!empty($options['join'])) {
-                    $query->join($options['join']);
+            $query->join($options['join']);
         }
         if (!empty($options['order'])) {
             $query->order($options['order']);
         }
         if (!empty($options['limit'])) {
-                    $limit = (int) $options['limit'];
+            $limit = (int) $options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-                    $start = (int) $options['start'];
+            $start = (int) $options['start'];
         } else {
             $start = 0;
         }
@@ -1323,7 +1323,7 @@ class Model {
         $values = [];
         foreach ($cols as $col => $param) {
             if (isset($params[$col])) {
-                            $values[$col] = $params[$col];
+                $values[$col] = $params[$col];
             }
         }
         if (empty($values)) {
@@ -1662,7 +1662,7 @@ class Model {
 
         foreach (static::relations() as $relName => $rel) {
             if ($rel['col'] == $col) {
-                            return $relName;
+                return $relName;
             }
         }
         return null;

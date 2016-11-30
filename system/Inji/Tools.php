@@ -101,9 +101,9 @@ class Tools extends Model {
         }
 
         if ($img_width / $max_width > $img_height / $max_height) {
-                    $separator = $img_width / $max_width;
+            $separator = $img_width / $max_width;
         } else {
-                    $separator = $img_height / $max_height;
+            $separator = $img_height / $max_height;
         }
 
         if ($crop === true || $crop == 'q') {

@@ -338,9 +338,9 @@ class View extends \Module {
                         continue;
                     }
                     if (strpos($css, '//') !== false) {
-                                            $href = $css;
+                        $href = $css;
                     } else {
-                                            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $css;
+                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $css;
                     }
                     $hrefs[$href] = $href;
                 }
@@ -393,7 +393,7 @@ class View extends \Module {
         foreach ($scripts as $script) {
             if (is_string($script)) {
                 if (!empty($urls[$script])) {
-                                    continue;
+                    continue;
                 }
 
                 $path = $this->app->staticLoader->parsePath($script);
@@ -406,7 +406,7 @@ class View extends \Module {
                 }
             } elseif (!empty($script['file'])) {
                 if (!empty($urls[$script['file']])) {
-                                    continue;
+                    continue;
                 }
 
                 $path = $this->app->staticLoader->parsePath($script['file']);
@@ -465,12 +465,12 @@ class View extends \Module {
                         continue;
                     }
                     if (strpos($js, '//') !== false) {
-                                            $href = $js;
+                        $href = $js;
                     } else {
-                                            $href = $this->getHref('js', $js);
+                        $href = $this->getHref('js', $js);
                     }
                     if (!$href) {
-                                            continue;
+                        continue;
                     }
 
                     $resultArray[] = $href;
@@ -483,9 +483,9 @@ class View extends \Module {
                         continue;
                     }
                     if (strpos($js, '//') !== false) {
-                                            $href = $js;
+                        $href = $js;
                     } else {
-                                            $href = $this->app->templatesPath . "/{$this->template->name}/js/{$js}";
+                        $href = $this->app->templatesPath . "/{$this->template->name}/js/{$js}";
                     }
                     $resultArray[] = $href;
                 }
@@ -503,7 +503,7 @@ class View extends \Module {
                     }
                     $asset['file'] = $this->getHref('js', $js);
                     if (!$asset['file']) {
-                                            continue;
+                        continue;
                     }
                     $resultArray[] = $asset;
                 }
@@ -550,7 +550,7 @@ class View extends \Module {
                     }
                 }
                 if (!$paramArray) {
-                                    $lineParams = ':' . implode(':', $_params);
+                    $lineParams = ':' . implode(':', $_params);
                 }
             }
         }

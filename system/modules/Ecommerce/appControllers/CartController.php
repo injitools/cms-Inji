@@ -273,9 +273,9 @@ class CartController extends Controller {
         $item->save();
 
         if (empty($_GET['count'])) {
-                    $count = 1;
+            $count = 1;
         } else {
-                    $count = (float) $_GET['count'];
+            $count = (float) $_GET['count'];
         }
 
         $cart = $this->ecommerce->getCurCart();

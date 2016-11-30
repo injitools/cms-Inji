@@ -30,16 +30,16 @@ class Mysql extends \Object {
     public function init($connect_options) {
         extract($connect_options);
         if (isset($db_name)) {
-                    $this->db_name = $db_name;
+            $this->db_name = $db_name;
         }
         if (isset($encoding)) {
-                    $this->encoding = $encoding;
+            $this->encoding = $encoding;
         }
         if (isset($table_prefix)) {
-                    $this->table_prefix = $table_prefix;
+            $this->table_prefix = $table_prefix;
         }
         if (isset($noConnectAbort)) {
-                    $this->noConnectAbort = $noConnectAbort;
+            $this->noConnectAbort = $noConnectAbort;
         }
 
         $dsn = "mysql:host=$host;port=$port;dbname=$db_name;charset=$encoding";
