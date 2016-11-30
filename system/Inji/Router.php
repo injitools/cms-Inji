@@ -81,7 +81,7 @@ class Router {
                 return true;
             }
         }
-        return FALSE;
+        return false;
     }
 
     /**

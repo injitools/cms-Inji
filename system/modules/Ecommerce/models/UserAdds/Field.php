@@ -44,7 +44,7 @@ class Field extends \Model {
             'map' => [
                 ['name', 'type'],
                 ['required', 'save'],
-                [ 'userfield']
+                ['userfield']
             ]
         ]
     ];

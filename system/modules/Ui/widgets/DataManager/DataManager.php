@@ -28,7 +28,7 @@ $mainCol = [
     'style' => ''
 ];
 if (!empty($dataManager->managerOptions['categorys'])) {
-    $mainCol['style'].='margin-left:260px;';
+    $mainCol['style'] .= 'margin-left:260px;';
     echo '<div class ="pull-left dataManager-categorys" style = "width:250px;">';
     $this->widget('Ui\DataManager/categorys', compact('dataManager'));
     echo '</div>';

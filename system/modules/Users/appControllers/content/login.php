@@ -5,15 +5,15 @@
                 <h3>Вход</h3>
                 <div class="form-group">
                   <?php
-                  $socials = Users\Social::getList(['where' => ['active', 1]]);
-                  if ($socials) {
-                      echo 'Войти через: ';
-                      foreach (Users\Social::getList(['where' => ['active', 1]]) as $social) {
-                          $text = $social->image ? '<img src ="' . Statics::file($social->image->path) . '">' : $social->name();
-                          echo "<a href = '/users/social/auth/{$social->code}'>{$text}</a> ";
-                      }
-                  }
-                  ?>
+                    $socials = Users\Social::getList(['where' => ['active', 1]]);
+                    if ($socials) {
+                        echo 'Войти через: ';
+                        foreach (Users\Social::getList(['where' => ['active', 1]]) as $social) {
+                            $text = $social->image ? '<img src ="' . Statics::file($social->image->path) . '">' : $social->name();
+                            echo "<a href = '/users/social/auth/{$social->code}'>{$text}</a> ";
+                        }
+                    }
+                    ?>
                 </div>
                 <form action = '' method = 'POST' >
                     <div class ='row'>

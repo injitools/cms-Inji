@@ -138,13 +138,13 @@ class UsersController extends Controller {
         $userId = (int) $userId;
         $result = new \Server\Result();
         if (!$userId) {
-            $result->success = FALSE;
+            $result->success = false;
             $result->content = 'Не указан пользователь';
             $result->send();
         }
         $partners = App::$cur->users->getUserPartners(Users\User::$cur, 8);
         if (empty($partners['users'][$userId])) {
-            $result->success = FALSE;
+            $result->success = false;
             $result->content = 'Этот пользователь не находится в вашей структуре';
             $result->send();
         }
@@ -167,14 +167,14 @@ class UsersController extends Controller {
                 <h5 class="<?= $complete ? 'text-success' : 'text-danger'; ?>"><?= $condition->name(); ?></h5>
                 <ul>
                   <?php
-                  foreach ($condition->items as $item) {
-                      $itemComplete = $item->checkComplete($userId);
-                      switch ($item->type) {
-                          case 'event':
+                    foreach ($condition->items as $item) {
+                        $itemComplete = $item->checkComplete($userId);
+                        switch ($item->type) {
+                            case 'event':
                               $name = \Events\Event::get($item->value, 'event')->name();
-                              break;
-                      }
-                      ?>
+                                break;
+                        }
+                        ?>
                         <li> 
                             <b class="<?= $itemComplete ? 'text-success' : 'text-danger'; ?>"><?= $name; ?> <?= $item->recivedCount($userId); ?></b>/<?= $item->count; ?> <br />
                         </li>

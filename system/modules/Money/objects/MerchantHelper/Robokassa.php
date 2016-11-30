@@ -24,8 +24,9 @@ class Robokassa extends \Money\MerchantHelper {
 
         $result['payId'] = $data["InvId"];
 
-        if (strtolower($data['SignatureValue']) == $hashGenerated)
-            $result['status'] = 'success';
+        if (strtolower($data['SignatureValue']) == $hashGenerated) {
+                    $result['status'] = 'success';
+        }
 
         return $result;
     }

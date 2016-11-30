@@ -129,7 +129,7 @@ class Orders extends \Object {
         foreach ($cart->cartItems as $cartItem) {
             $isset = false;
             foreach ($cItems as $key => $cItem) {
-                if (!($cItem['item_id'] == $cartItem->item_id )) {
+                if (!($cItem['item_id'] == $cartItem->item_id)) {
                     continue;
                 }
                 $isset = true;

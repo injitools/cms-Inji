@@ -28,14 +28,14 @@ class MerchantsController extends Controller {
     public function reciverAction($system = '', $status = '') {
         $postData = [];
         foreach ($_POST as $key => $text) {
-            if (!is_array($text) && !mb_detect_encoding($text, array('UTF-8'), TRUE)) {
+            if (!is_array($text) && !mb_detect_encoding($text, array('UTF-8'), true)) {
                 $postData[$key] = iconv('Windows-1251', 'UTF-8', $text);
             } else {
                 $postData[$key] = $text;
             }
         }
         foreach ($_GET as $key => $text) {
-            if (!is_array($text) && !mb_detect_encoding($text, array('UTF-8'), TRUE)) {
+            if (!is_array($text) && !mb_detect_encoding($text, array('UTF-8'), true)) {
                 $postData[$key] = iconv('Windows-1251', 'UTF-8', $text);
             } else {
                 $postData[$key] = $text;

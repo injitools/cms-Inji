@@ -97,7 +97,7 @@ class Money extends Module {
             if (empty($blocks[$block->wallet->currency_id])) {
                 $blocks[$block->wallet->currency_id] = $block->amount;
             } else {
-                $blocks[$block->wallet->currency_id]+= $block->amount;
+                $blocks[$block->wallet->currency_id] += $block->amount;
             }
         }
         return $blocks;
@@ -204,7 +204,7 @@ class Money extends Module {
                 $recives = \Money\Reward\Recive::getList(['where' => [['user_id', $user->id], ['reward_id', $reward->id]]]);
                 $amount = 0;
                 foreach ($recives as $recive) {
-                    $amount+=$recive->amount;
+                    $amount += $recive->amount;
                 }
                 if ($amount >= $reward->peruser) {
                     continue;

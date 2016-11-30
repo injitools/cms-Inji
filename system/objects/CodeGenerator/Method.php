@@ -27,9 +27,9 @@ class Method extends \Object {
             $code .= '$' . $param . ',';
         }
         $code = rtrim($code, ',');
-        $code.= ") {\n";
-        $code.= '    ' . str_replace("\n", "\n    ", $this->body);
-        $code .="\n}";
+        $code .= ") {\n";
+        $code .= '    ' . str_replace("\n", "\n    ", $this->body);
+        $code .= "\n}";
         return $code;
     }
 

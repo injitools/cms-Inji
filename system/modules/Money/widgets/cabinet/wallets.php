@@ -1,11 +1,11 @@
 <h3>Мои кошельки</h3>
 <div class="row">
   <?php
-  $blocked = App::$cur->money->getUserBlocks();
-  $wallets = App::$cur->money->getUserWallets();
-  $rates = Money\Currency\ExchangeRate::getList();
-  foreach ($wallets as $wallet) {
-      ?>
+    $blocked = App::$cur->money->getUserBlocks();
+    $wallets = App::$cur->money->getUserWallets();
+    $rates = Money\Currency\ExchangeRate::getList();
+    foreach ($wallets as $wallet) {
+        ?>
         <div class="col-sm-4">
             <h4><?= $wallet->currency->name(); ?></h4>
             <b><?= $wallet->showAmount(); ?></b> <?= $wallet->currency->acronym(); ?><br />

@@ -121,7 +121,7 @@ class Module {
         if (in_array($moduleName, self::getInstalled($app))) {
             return true;
         }
-        return FALSE;
+        return false;
     }
 
     /**

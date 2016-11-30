@@ -24,10 +24,10 @@ class Form extends \Model {
     public static $cols = [
         'name' => ['type' => 'text'],
         'description' => ['type' => 'html'],
-        'user_id' => [ 'type' => 'select', 'source' => 'relation', 'relation' => 'user'],
+        'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'date_create' => ['type' => 'dateTime'],
         //Менеджеры
-        'inputs' => [ 'type' => 'dataManager', 'relation' => 'inputs'],
+        'inputs' => ['type' => 'dataManager', 'relation' => 'inputs'],
     ];
     public static $dataManagers = [
         'manager' => [

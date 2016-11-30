@@ -35,7 +35,7 @@ class OptionsParser extends \Object {
 
         //add filter for item type user roles by current user role
         $selectOptions['where'][] = [
-            [Item\Offer\Price\Type::index(), NULL, 'is'],
+            [Item\Offer\Price\Type::index(), null, 'is'],
             [
                 [Item\Offer\Price\Type::colPrefix() . 'roles', '', '=', 'OR'],
                 [Item\Offer\Price\Type::colPrefix() . 'roles', '%|' . \Users\User::$cur->role_id . '|%', 'LIKE', 'OR'],

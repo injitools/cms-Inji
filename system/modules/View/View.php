@@ -133,8 +133,9 @@ class View extends \Module {
     }
 
     private function parseRaw($source) {
-        if (!$source)
-            return [];
+        if (!$source) {
+                    return [];
+        }
 
         preg_match_all("|{([^}]+)}|", $source, $result);
         return $result[1];
@@ -178,15 +179,15 @@ class View extends \Module {
     public function cutTag($source, $rawTag) {
         $pos = strpos($source, $rawTag) - 1;
         echo substr($source, 0, $pos);
-        return substr($source, ( $pos + strlen($rawTag) + 2));
+        return substr($source, ($pos + strlen($rawTag) + 2));
     }
 
     public function getHref($type, $params) {
         $href = '';
         if (is_string($params)) {
-            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $params;
+            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $params;
         } elseif (empty($params['template']) && !empty($params['file'])) {
-            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $params['file'];
+            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $params['file'];
         } elseif (!empty($params['template']) && !empty($params['file'])) {
             $href = $this->app->templatesPath . "/{$this->template->name}/{$type}/{$params['file']}";
         }
@@ -311,10 +312,11 @@ class View extends \Module {
                         $this->ResolveCssHref($css, $type, $hrefs);
                         continue;
                     }
-                    if (strpos($css, '//') !== false)
-                        $href = $css;
-                    else
-                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $css;
+                    if (strpos($css, '//') !== false) {
+                                            $href = $css;
+                    } else {
+                                            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $css;
+                    }
                     $hrefs[$href] = $href;
                 }
                 break;
@@ -324,10 +326,11 @@ class View extends \Module {
                         $this->ResolveCssHref($css, $type, $hrefs);
                         continue;
                     }
-                    if (strpos($css, '://') !== false)
-                        $href = $css;
-                    else
-                        $href = $this->app->templatesPath . "/{$this->template->name}/css/{$css}";
+                    if (strpos($css, '://') !== false) {
+                                            $href = $css;
+                    } else {
+                                            $href = $this->app->templatesPath . "/{$this->template->name}/css/{$css}";
+                    }
                     $hrefs[$href] = $href;
                 }
                 break;
@@ -340,7 +343,7 @@ class View extends \Module {
                     if (strpos($css, '//') !== false) {
                         $href = $css;
                     } else {
-                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '' ) . $css;
+                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $css;
                     }
                     $hrefs[$href] = $href;
                 }

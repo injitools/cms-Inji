@@ -3,9 +3,9 @@
         <div class="cart-order_page">
             <h2>Быстрое оформление заказа</h2>
             <?php
-            if (!$cart || !$cart->cartItems)
-                echo "<h1>Ваша корзина пуста</h1>";
-            else {
+            if (!$cart || !$cart->cartItems) {
+                            echo "<h1>Ваша корзина пуста</h1>";
+            } else {
                 $form = new Ui\Form;
                 $form->action = "/ecommerce/cart";
                 $form->begin();
@@ -86,14 +86,14 @@
                                     </thead>
                                     <tbody>
                                       <?php
-                                      if (class_exists('Money\Currency')) {
-                                          $defaultCurrency = Money\Currency::get(\App::$cur->ecommerce->config['defaultCurrency']);
-                                      } else {
-                                          $defaultCurrency = '';
-                                      }
-                                      foreach ($cart->cartItems as $cartItem) {
-                                          $path = $cartItem->item->image ? $cartItem->item->image->path : '/static/system/images/no-image.png';
-                                          ?>
+                                        if (class_exists('Money\Currency')) {
+                                            $defaultCurrency = Money\Currency::get(\App::$cur->ecommerce->config['defaultCurrency']);
+                                        } else {
+                                            $defaultCurrency = '';
+                                        }
+                                        foreach ($cart->cartItems as $cartItem) {
+                                            $path = $cartItem->item->image ? $cartItem->item->image->path : '/static/system/images/no-image.png';
+                                            ?>
                                             <tr class="cart_item_id<?= $cartItem->id; ?> item" data-cart_item_id = '<?php echo $cartItem->id; ?>' data-priceam = '<?php echo $cartItem->price->price; ?>' data-item_offer_price_id = '<?php echo $cartItem->price->id; ?>'>
                                                 <td class="text-center image">                            
                                                     <a href="/ecommerce/view/<?php echo $cartItem->item->id; ?>">
@@ -124,8 +124,8 @@
                                     </tbody>
                                     <tfoot>
                                       <?php
-                                      $colspan = $cart->hasDiscount() ? 5 : 4;
-                                      ?>
+                                        $colspan = $cart->hasDiscount() ? 5 : 4;
+                                        ?>
                                         <tr class="order_page-sum">
                                             <td colspan="<?= $colspan; ?>" class="text-right">Сумма:</td>
                                             <td colspan="2" class="text-right"><?= $cart->itemsSum(); ?></td>
@@ -144,12 +144,12 @@
                                             <tr class="order_page-deliverySum">
                                                 <td colspan="<?= $colspan; ?>" class="text-right"><?= $cart->delivery->name; ?>:</td>
                                                 <td colspan="2" class="text-right"><?php
-                                                  if ($cart->delivery && $cart->delivery->price_text) {
-                                                      echo $cart->delivery->price_text;
-                                                  } else {
-                                                      echo $cart->deliverySum();
-                                                  }
-                                                  ?></td>
+                                                    if ($cart->delivery && $cart->delivery->price_text) {
+                                                        echo $cart->delivery->price_text;
+                                                    } else {
+                                                        echo $cart->deliverySum();
+                                                    }
+                                                    ?></td>
                                             </tr>
                                             <?php
                                         }
@@ -165,8 +165,8 @@
                             <div class="clearfix"></div>
                             <div class="order_page-finish">
                               <?php
-                              $form->input('textarea', 'comment', 'Вы можете добавить комментарий к своему заказу', ['value' => (!empty($_POST['comment'])) ? $_POST['comment'] : '']);
-                              ?>
+                                $form->input('textarea', 'comment', 'Вы можете добавить комментарий к своему заказу', ['value' => (!empty($_POST['comment'])) ? $_POST['comment'] : '']);
+                                ?>
                                 <div class="order_page-orderBtn">
                                     <button name ="action" value ="order" data-loading-text="Подождите.." class="btn btn-primary">Подтверждение заказа</button>
                                 </div>

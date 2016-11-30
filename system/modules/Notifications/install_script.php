@@ -1,6 +1,6 @@
 <?php
 
-return function ($step = NULL, $params = []) {
+return function ($step = null, $params = []) {
     App::$cur->db->createTable('notifications_notification', [
         'notification_id' => 'pk',
         'notification_chanel_id' => 'int(11) UNSIGNED NOT NULL',

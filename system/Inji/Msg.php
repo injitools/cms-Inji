@@ -21,7 +21,7 @@ class Msg extends Module {
             if (!empty($_SESSION['_INJI_MSG'])) {
                 foreach ($_SESSION['_INJI_MSG'] as $key => $msg) {
                     if ($msg['text'] == $text) {
-                        $msg['count'] ++;
+                        $msg['count']++;
                         return true;
                     }
                 }

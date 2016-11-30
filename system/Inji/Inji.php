@@ -15,7 +15,7 @@ class Inji {
      * 
      * @var Inji
      */
-    public static $inst = NULL;
+    public static $inst = null;
 
     /**
      * Dynamic events listeners

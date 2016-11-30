@@ -473,7 +473,7 @@ class DataManager extends \Object {
                         return $item->$colName;
                 }
             } elseif (!empty($modelName::$cols[$colName]['type'])) {
-                if (\App::$cur->name == 'admin' && $originalCol == 'name' || ( $dataManager && !empty($dataManager->managerOptions['colToView']) && $dataManager->managerOptions['colToView'] == $originalCol)) {
+                if (\App::$cur->name == 'admin' && $originalCol == 'name' || ($dataManager && !empty($dataManager->managerOptions['colToView']) && $dataManager->managerOptions['colToView'] == $originalCol)) {
                     $formName = $dataManager && !empty($dataManager->managerOptions['editForm']) ? $dataManager->managerOptions['editForm'] : 'manager';
                     $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '/', get_class($originalItem));
                     return "<a href ='/admin/{$originalItem->genViewLink()}?formName={$formName}&redirectUrl={$redirectUrl}'>{$item->$colName}</a>";
@@ -684,7 +684,7 @@ class DataManager extends \Object {
             ];
         }
         $tableCols[] = '';
-        $this->table->class .=' datamanagertable';
+        $this->table->class .= ' datamanagertable';
         $this->table->setCols($tableCols);
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-return function ($step = NULL, $params = []) {
+return function($step = NULL, $params = []) {
 
     $currencies = [
         [

@@ -15,23 +15,23 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane fade in active" id="home">
       <?php
-      $form = new Ui\Form();
-      $form->begin();
-      $form->input('checkbox', 'config[view_empty_warehouse]', 'Показывать отсутствующие товары', ['value' => App::$cur->ecommerce->config['view_empty_warehouse']]);
-      $form->input('checkbox', 'config[view_empty_image]', 'Показывать товары без изображения', ['value' => App::$cur->ecommerce->config['view_empty_image']]);
-      $form->input('checkbox', 'config[sell_empty_warehouse]', 'Продавать отсутствующие товары', ['value' => App::$cur->ecommerce->config['sell_empty_warehouse']]);
-      $form->input('checkbox', 'config[sell_over_warehouse]', 'Продавать сверх остатоков на складе', ['value' => App::$cur->ecommerce->config['sell_over_warehouse']]);
-      $form->input('checkbox', 'config[show_zero_price]', 'Показывать товары с нулевой ценой', ['value' => App::$cur->ecommerce->config['show_zero_price']]);
-      $form->input('checkbox', 'config[show_without_price]', 'Показывать товары без цен', ['value' => App::$cur->ecommerce->config['show_without_price']]);
-      $form->input('select', 'config[defaultCategoryView]', 'Стандартный вид категории', ['value' => App::$cur->ecommerce->config['defaultCategoryView'], 'values' => App::$cur->ecommerce->viewsCategoryList()]);
-      if (App::$cur->money) {
-          $form->input('select', 'config[defaultCurrency]', 'Валюта по умолчанию', ['value' => App::$cur->ecommerce->config['defaultCurrency'], 'values' => ['' => 'Выберите'] + \Money\Currency::getList()]);
-      }
-      $form->input('text', 'config[orderPrefix]', 'Префикс для номеров заказов', ['value' => App::$cur->ecommerce->config['orderPrefix']]);
-      $form->input('text', 'config[notify_mail]', 'E-mail оповещений о новых заказах', ['value' => App::$cur->ecommerce->config['notify_mail']]);
-      $form->input('hidden', 'config[save]', '', ['value' => 1]);
-      $form->end('Сохранить');
-      ?>
+        $form = new Ui\Form();
+        $form->begin();
+        $form->input('checkbox', 'config[view_empty_warehouse]', 'Показывать отсутствующие товары', ['value' => App::$cur->ecommerce->config['view_empty_warehouse']]);
+        $form->input('checkbox', 'config[view_empty_image]', 'Показывать товары без изображения', ['value' => App::$cur->ecommerce->config['view_empty_image']]);
+        $form->input('checkbox', 'config[sell_empty_warehouse]', 'Продавать отсутствующие товары', ['value' => App::$cur->ecommerce->config['sell_empty_warehouse']]);
+        $form->input('checkbox', 'config[sell_over_warehouse]', 'Продавать сверх остатоков на складе', ['value' => App::$cur->ecommerce->config['sell_over_warehouse']]);
+        $form->input('checkbox', 'config[show_zero_price]', 'Показывать товары с нулевой ценой', ['value' => App::$cur->ecommerce->config['show_zero_price']]);
+        $form->input('checkbox', 'config[show_without_price]', 'Показывать товары без цен', ['value' => App::$cur->ecommerce->config['show_without_price']]);
+        $form->input('select', 'config[defaultCategoryView]', 'Стандартный вид категории', ['value' => App::$cur->ecommerce->config['defaultCategoryView'], 'values' => App::$cur->ecommerce->viewsCategoryList()]);
+        if (App::$cur->money) {
+            $form->input('select', 'config[defaultCurrency]', 'Валюта по умолчанию', ['value' => App::$cur->ecommerce->config['defaultCurrency'], 'values' => ['' => 'Выберите'] + \Money\Currency::getList()]);
+        }
+        $form->input('text', 'config[orderPrefix]', 'Префикс для номеров заказов', ['value' => App::$cur->ecommerce->config['orderPrefix']]);
+        $form->input('text', 'config[notify_mail]', 'E-mail оповещений о новых заказах', ['value' => App::$cur->ecommerce->config['notify_mail']]);
+        $form->input('hidden', 'config[save]', '', ['value' => 1]);
+        $form->end('Сохранить');
+        ?>
         <h3>Обслужвание</h3>
         <a href="/admin/ecommerce/reSearchIndex" class="btn btn-primary">Обновить поисковые индексы</a>
         <h3>Уведомления в браузере</h3>

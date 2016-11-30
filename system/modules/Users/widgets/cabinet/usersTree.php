@@ -2,7 +2,7 @@
 if (!empty($_POST['partnerInvite']['email'])) {
     $title = '';
     if (!empty($_POST['partnerInvite']['name'])) {
-        $title .='Ув. ' . htmlspecialchars($_POST['partnerInvite']['name']) . '. ';
+        $title .= 'Ув. ' . htmlspecialchars($_POST['partnerInvite']['name']) . '. ';
     }
     if (!filter_var($_POST['partnerInvite']['email'], FILTER_VALIDATE_EMAIL)) {
         Tools::redirect(null, 'Вы ввели не корректный E-mail', 'danger');
