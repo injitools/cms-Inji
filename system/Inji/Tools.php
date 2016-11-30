@@ -69,6 +69,14 @@ class Tools extends Model {
         return true;
     }
 
+    public static function delDir($dir) {
+        $files = array_diff(scandir($dir), array('.', '..'));
+        foreach ($files as $file) {
+            is_dir("$dir/$file") ? delTree("$dir/$file") : unlink("$dir/$file");
+        }
+        return rmdir($dir);
+    }
+
     /**
      * Resize image in path
      * 
@@ -425,5 +433,4 @@ class Tools extends Model {
     public static function isAssoc(&$arr) {
         return array_keys($arr) !== range(0, count($arr) - 1);
     }
-
 }

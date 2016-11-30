@@ -11,37 +11,48 @@
 class ComposerCmd {
 
     public static function check() {
-        if (!file_exists('composer/vendor/autoload.php')) {
-            self::installComposer();
+        if (!file_exists(getenv('COMPOSER_HOME') . '/composer/vendor/autoload.php')) {
+            self::installComposer(getenv('COMPOSER_HOME'));
         }
-        if (!file_exists('vendor/autoload.php')) {
-            ;
-            self::initComposer('./');
+        if (!file_exists(getenv('COMPOSER_HOME') . '/vendor/autoload.php')) {
+            self::initComposer(getenv('COMPOSER_HOME'));
         }
         if (!file_exists(App::$primary->path . '/vendor/autoload.php')) {
             self::initComposer();
         }
     }
 
-    public static function installComposer() {
-        if (!file_exists('composer/bin/composer')) {
-            Tools::createDir('composer');
-            if (!file_exists('composer/composer.phar')) {
-                file_put_contents('composer/composerInstall.php', file_get_contents('https://getcomposer.org/installer'));
-                $argv = ['install', '--install-dir', 'composer/'];
-                header("Location: " . filter_input(INPUT_SERVER, 'REQUEST_URI'));
-                include_once 'composer/composerInstall.php';
-            }
-            $composer = new Phar('composer/composer.phar');
-            $composer->extractTo('composer/');
+    public static function installComposer($path) {
+        if (file_exists($path . '/composer/bin/composer')) {
+            return true;
         }
+        Tools::createDir($path . '/composer');
+        if (!file_exists($path . '/composer/composer.phar')) {
+            file_put_contents($path . '/composer/composerInstall.php', str_replace('process(is_array($argv) ? $argv : array());', '', file_get_contents('https://getcomposer.org/installer')));
+            include_once $path . '/composer/composerInstall.php';
+
+            $check = false;
+            $help = false;
+            $force = false;
+            $quiet = false;
+            $channel = 'stable';
+            $disableTls = false;
+            $installDir = $path . '/composer/';
+            $version = false;
+            $filename = 'composer.phar';
+            $cafile = false;
+            setUseAnsi([]);
+            installComposer($version, $installDir, $filename, $quiet, $disableTls, $cafile, $channel);
+        }
+        $composer = new Phar($path . '/composer/composer.phar');
+        $composer->extractTo($path . '/composer/');
     }
 
     public static function initComposer($path = '') {
         if (!$path) {
             $path = App::$primary->path . '/';
         }
-        if (!file_exists($path . 'composer.json')) {
+        if (!file_exists($path . '/composer.json')) {
             $json = [
                 "name" => get_current_user() . "/" . App::$primary->name,
                 "config" => [
@@ -58,14 +69,14 @@ class ComposerCmd {
                 ]
             ];
             Tools::createDir($path);
-            file_put_contents($path . 'composer.json', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            file_put_contents($path . '/composer.json', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
         self::command('install', false, $path);
     }
 
     public static function command($command, $needOutput = true, $path = null) {
         ini_set('memory_limit', '2000M');
-        include_once 'composer/vendor/autoload.php';
+        include_once getenv('COMPOSER_HOME') . '/composer/vendor/autoload.php';
         if ($needOutput) {
             $output = new Symfony\Component\Console\Output\StreamOutput(fopen('php://output', 'w'));
         } else {
@@ -82,10 +93,10 @@ class ComposerCmd {
 
     public static function requirePackage($packageName, $version = '', $path = '') {
         if (!$path) {
-            $path = App::$primary->path . '/';
+            $path = App::$primary->path;
         }
-        if (file_exists($path . 'composer.lock')) {
-            $lockFile = json_decode(file_get_contents($path . 'composer.lock'), true);
+        if (file_exists($path . '/composer.lock')) {
+            $lockFile = json_decode(file_get_contents($path . '/composer.lock'), true);
         }
         if (!empty($lockFile['packages'])) {
             foreach ($lockFile['packages'] as $package) {
@@ -98,5 +109,4 @@ class ComposerCmd {
         ComposerCmd::command('require ' . $packageName . ($version ? ':' . $version : ''), false, $path);
         return true;
     }
-
 }

@@ -87,7 +87,7 @@ putenv('COMPOSER_HOME=' . getcwd());
 putenv('COMPOSER_CACHE_DIR=' . getcwd() . DIRECTORY_SEPARATOR . 'composerCache');
 ComposerCmd::check();
 if (!function_exists('idn_to_utf8')) {
-    ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", './');
+    ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", '.');
 
     function idn_to_utf8($domain) {
         if (empty(Inji::$storage['IdnaConvert'])) {

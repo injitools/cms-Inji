@@ -88,7 +88,7 @@ class Inji {
                 if (is_callable($callback)) {
                     $event['eventObject'] = $callback($event);
                 } elseif (is_array($callback) && isset($callback['callback'])) {
-                    $event['eventObject'] = $callback($event, $callback);
+                    $event['eventObject'] = $callback['callback']($event, $callback);
                 } else {
                     $event['eventObject'] = App::$cur->{$callback['module']}->{$callback['method']}($event, $callback);
                 }
