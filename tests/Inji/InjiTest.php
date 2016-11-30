@@ -1,6 +1,6 @@
 <?php
 
-class InjiTest extends PHPUnit\Framework\TestCase {
+class InjiTest extends PHPUnit_Framework_TestCase {
 
     function setUp() {
         

@@ -1,6 +1,6 @@
 <?php
 
-class UiTest extends PHPUnit\Framework\TestCase {
+class UiTest extends PHPUnit_Framework_TestCase {
     /**
      * @covers Modules::install
      */
