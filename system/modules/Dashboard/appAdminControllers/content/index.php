@@ -9,7 +9,7 @@
             }
 
             $widgetSize = !empty($section['size']) ? $section['size'] : 1;
-            $rowSum+=$widgetSize;
+            $rowSum += $widgetSize;
             ?>
             <div class="col-sm-<?= $widgetSize * 4; ?>" style="margin-bottom: 10px;"><?= $section['widget'](); ?></div>
             <?php
