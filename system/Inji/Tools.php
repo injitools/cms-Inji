@@ -216,9 +216,9 @@ class Tools extends Model {
 
     /**
      * Функция возвращает окончание для множественного числа слова на основании числа и массива окончаний
-     * @param  $number Integer Число на основе которого нужно сформировать окончание
-     * @param  $endingsArray  Array Массив слов или окончаний для чисел (1, 4, 5),
-     *         например array('яблоко', 'яблока', 'яблок')
+     * @param  Integer $number  Число на основе которого нужно сформировать окончание
+     * @param  String[] $endingsArray  Массив слов или окончаний для чисел (1, 4, 5),
+     *         например ['яблоко', 'яблока', 'яблок']
      * @return String
      */
     public static function getNumEnding($number, $endingArray) {

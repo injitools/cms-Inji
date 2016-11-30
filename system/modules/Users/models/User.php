@@ -37,7 +37,7 @@ class User extends \Model {
         'role_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'role'],
         'admin_text' => ['type' => 'html'],
         'activation' => ['type' => 'text'],
-        'blocked' => ['type' => 'bool',],
+        'blocked' => ['type' => 'bool'],
         'date_last_active' => ['type' => 'dateTime'],
         'date_create' => ['type' => 'dateTime']
     ];
@@ -100,7 +100,7 @@ class User extends \Model {
                 ]
             ],
             'map' => [
-                ['login', 'mail',],
+                ['login', 'mail'],
                 ['group_id', 'role_id'],
                 ['userSearch', 'blocked'],
                 ['pass'],
@@ -205,5 +205,4 @@ class User extends \Model {
             $social->delete();
         }
     }
-
 }

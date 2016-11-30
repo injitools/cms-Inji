@@ -45,7 +45,7 @@ class Invite extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['code', 'type',],
+                ['code', 'type'],
                 ['user_id'],
                 ['limit', 'count'],
             ]
