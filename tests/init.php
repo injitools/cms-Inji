@@ -55,7 +55,7 @@ if (!$dbConf) {
         'connect_name' => 'local',
         'connect_alias' => 'local',
         'driver' => 'Mysql',
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'user' => 'root',
         'pass' => '',
         'db_name' => 'test',
