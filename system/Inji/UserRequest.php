@@ -17,7 +17,7 @@ class UserRequest {
         if ($type == 'array') {
             return !is_array($_GET[$key]) ? [] : $_GET[$key];
         }
-        return eval('return (' . $type . ') $_GET[$key];');
+        settype($_GET[$key], $type);
+        return $_GET[$key];
     }
-
 }
