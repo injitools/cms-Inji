@@ -87,15 +87,17 @@ class Param extends \Model {
             ]
     ]];
 
-    function name() {
-        return $this->value;
-    }
-
-    public function value($default = '') {
-        if ($this->option->type != 'select') {
-            return $this->value;
-        } elseif ($this->optionItem) {
+    /**
+     * Return final param value
+     * 
+     * @param string $default
+     * @return string
+     */
+    public function valueText($default = '') {
+        if ($this->option->type == 'select' && $this->optionItem) {
             return $this->optionItem->value;
+        } elseif ($this->option->type !== 'select' && $this->value) {
+            return $this->value;
         }
         return $default;
     }
@@ -120,5 +122,4 @@ class Param extends \Model {
             ]
         ];
     }
-
 }

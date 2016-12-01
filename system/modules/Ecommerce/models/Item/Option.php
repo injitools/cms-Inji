@@ -89,12 +89,11 @@ class Option extends \Model {
     }
 
     public function beforeSave() {
-        if (!isset($this->id)) {
+        if (!isset($this->id) && class_exists('Users\User')) {
             $this->user_id = \Users\User::$cur->id;
         }
         if ($this->advance && is_array($this->advance)) {
             $this->advance = json_encode($this->advance);
         }
     }
-
 }
