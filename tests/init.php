@@ -65,7 +65,7 @@ if (!$dbConf) {
     ]);
     $dbConf->save();
 }
-//Tools::createDir(__DIR__ . '/tmp/program');
+App::$cur->db->init();
 putenv('COMPOSER_HOME=' . __DIR__ . '/tmp');
 putenv('COMPOSER_CACHE_DIR=' . __DIR__ . '/tmp/composerCache');
 ComposerCmd::check();
