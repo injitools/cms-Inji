@@ -30,7 +30,6 @@ Inji::$inst->listen('Config-change-system', 'systemConfig', function($event) {
 });
 spl_autoload_register('Router::findClass');
 
-$apps = Apps\App::getList();
 //Make default app params
 $appConfig = [
     'name' => INJI_DOMAIN_NAME,
@@ -46,8 +45,27 @@ App::$cur->path = INJI_PROGRAM_DIR . '/' . App::$cur->dir;
 App::$cur->params = [];
 App::$cur->config = Config::app(App::$cur);
 App::$primary = App::$cur;
-
-Tools::createDir(__DIR__ . '/tmp/program');
+Inji::$inst->listen('Config-change-app-' . App::$cur->name, 'curAppConfig', function($event) {
+    App::$cur->config = $event['eventObject'];
+    return $event['eventObject'];
+});
+$dbConf = Db\Options::get('local', 'connect_allias');
+if (!$dbConf) {
+    $dbConf = new Db\Options([
+        'connect_name' => 'local',
+        'connect_alias' => 'local',
+        'driver' => 'Mysql',
+        'host' => 'localhost',
+        'user' => 'root',
+        'pass' => '',
+        'db_name' => 'test',
+        'encoding' => 'utf8',
+        'table_prefix' => 'inji_',
+        'port' => ''
+    ]);
+    $dbConf->save();
+}
+//Tools::createDir(__DIR__ . '/tmp/program');
 putenv('COMPOSER_HOME=' . __DIR__ . '/tmp');
 putenv('COMPOSER_CACHE_DIR=' . __DIR__ . '/tmp/composerCache');
 ComposerCmd::check();
