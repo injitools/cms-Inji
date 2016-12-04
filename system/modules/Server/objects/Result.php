@@ -34,7 +34,7 @@ class Result extends \Object {
         $return['commands'] = $this->commands;
         $return['scripts'] = \App::$cur->view->getScripts();
         echo json_encode($return);
-        exit();
+        \Inji::$inst->stop();
+        return true;
     }
-
 }
