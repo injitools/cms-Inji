@@ -14,13 +14,13 @@ namespace Notifications;
 class Subscriber extends \Model {
 
     public static $logging = false;
-    static $cols = [
+    public static $cols = [
         'key' => ['type' => 'text'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'date_create' => ['type' => 'dateTime']
     ];
 
-    static function relations() {
+    public static function relations() {
         return [
             'user' => [
                 'model' => 'Users\User',

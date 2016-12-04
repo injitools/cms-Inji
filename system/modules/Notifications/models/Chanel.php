@@ -13,7 +13,7 @@ namespace Notifications;
 
 class Chanel extends \Model {
 
-    static $cols = [
+    public static $cols = [
         'name' => ['type' => 'text'],
         'alias' => ['type' => 'text'],
         'path' => ['type' => 'text'],
@@ -21,7 +21,7 @@ class Chanel extends \Model {
         'date_create' => ['type' => 'dateTime']
     ];
 
-    static function relations() {
+    public static function relations() {
         return [
             'parent' => [
                 'model' => 'Notifications\Chanel',

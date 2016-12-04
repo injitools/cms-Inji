@@ -14,7 +14,7 @@ namespace Notifications;
 class Notification extends \Model {
 
     public static $logging = false;
-    static $cols = [
+    public static $cols = [
         'name' => ['type' => 'text'],
         'text' => ['type' => 'textarea'],
         'action' => ['type' => 'textarea'],

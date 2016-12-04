@@ -13,7 +13,7 @@ namespace Notifications;
 
 class Subscribe extends \Model {
 
-    static $cols = [
+    public static $cols = [
         'chanel_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'chanel'],
         'subscriber_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'subscriber'],
         'date_create' => ['type' => 'dateTime']

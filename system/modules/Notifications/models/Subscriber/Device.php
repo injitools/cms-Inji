@@ -14,7 +14,7 @@ namespace Notifications\Subscriber;
 class Device extends \Model {
 
     public static $logging = false;
-    static $cols = [
+    public static $cols = [
         'key' => ['type' => 'text'],
         'subscriber_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'subscriber'],
         'date_last_check' => ['type' => 'dateTime'],

@@ -116,7 +116,6 @@ class NotificationsTest extends PHPUnit_Framework_TestCase {
     private function verifySubscriber($subscriber) {
         $this->assertTrue(is_object($subscriber));
         $this->assertEquals('Notifications\Subscriber', get_class($subscriber));
-        //$this->assertEquals($subscriber->key, App::$cur->Notifications->getDevicekey());
         $this->assertTrue((int) $subscriber->id > 0);
     }
 
@@ -125,9 +124,5 @@ class NotificationsTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('Notifications\Subscriber\Device', get_class($device));
         $this->assertEquals($device->key, App::$cur->Notifications->getDevicekey());
         $this->assertTrue((int) $device->id > 0);
-    }
-
-    private function purgeData() {
-        
     }
 }
