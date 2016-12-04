@@ -149,6 +149,41 @@ class Modules extends Module {
         }
     }
 
+    public function unInstall($module, $params = []) {
+        $installed = Module::getInstalled(App::$primary);
+        if (!in_array($module, $installed)) {
+            return true;
+        }
+        $info = Module::getInfo($module);
+
+        $config = Config::app();
+
+        $type = 'modules';
+
+        $path = INJI_SYSTEM_DIR . '/modules/';
+        $location = 'modules';
+
+        foreach ($config[$location] as $key => $moduleName) {
+            if ($moduleName == $module) {
+                unset($config[$location][$key]);
+                break;
+            }
+        }
+        if (!empty($config['autoload'])) {
+            foreach ($config['autoload'] as $key => $moduleName) {
+                if ($moduleName == $module) {
+                    unset($config['autoload'][$key]);
+                    break;
+                }
+            }
+        }
+        Config::save('app', $config, null, App::$primary);
+        if (file_exists($path . $module . '/uninstall_script.php')) {
+            $installFunction = include $path . $module . '/uninstall_script.php';
+            $installFunction(1, $params);
+        }
+    }
+
     public function addInMenu($items, $appType, $parent = 0) {
         foreach ($items as $item) {
             $menuItem = new \Menu\Item();
@@ -234,5 +269,4 @@ class Modules extends Module {
         $config[$type . '/' . $module . 'Controller.php'] = md5($controllerCode);
         Config::save($modulePath . '/generatorHash.php', $config);
     }
-
 }
