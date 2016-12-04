@@ -12,5 +12,21 @@
 namespace Notifications;
 
 class Chanel extends \Model {
-    
+
+    static $cols = [
+        'name' => ['type' => 'text'],
+        'alias' => ['type' => 'text'],
+        'path' => ['type' => 'text'],
+        'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent'],
+        'date_create' => ['type' => 'dateTime']
+    ];
+
+    static function relations() {
+        return [
+            'parent' => [
+                'model' => 'Notifications\Chanel',
+                'col' => 'parent_id'
+            ]
+        ];
+    }
 }

@@ -12,5 +12,25 @@
 namespace Notifications;
 
 class Subscriber extends \Model {
-    //put your code here
+
+    public static $logging = false;
+    static $cols = [
+        'key' => ['type' => 'text'],
+        'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
+        'date_create' => ['type' => 'dateTime']
+    ];
+
+    static function relations() {
+        return [
+            'user' => [
+                'model' => 'Users\User',
+                'col' => 'user_id'
+            ],
+            'subscribes' => [
+                'type' => 'many',
+                'Notifications\Subscribe',
+                'col' => 'subscriber_id'
+            ]
+        ];
+    }
 }

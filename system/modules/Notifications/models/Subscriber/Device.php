@@ -13,6 +13,25 @@ namespace Notifications\Subscriber;
 
 class Device extends \Model {
 
+    public static $logging = false;
+    static $cols = [
+        'key' => ['type' => 'text'],
+        'subscriber_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'subscriber'],
+        'date_last_check' => ['type' => 'dateTime'],
+        'date_create' => ['type' => 'dateTime'],
+    ];
+
+    public static function indexes() {
+        return [
+            'notifications_subscriber_device_subscriber_device_key' => [
+                'type' => 'UNIQUE INDEX',
+                'cols' => [
+                    'subscriber_device_key'
+                ]
+            ],
+        ];
+    }
+
     public static function relations() {
         return [
             'subscriber' => [
@@ -21,5 +40,4 @@ class Device extends \Model {
             ]
         ];
     }
-
 }
