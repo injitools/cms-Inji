@@ -79,8 +79,8 @@ if (!function_exists('idn_to_utf8')) {
         return Inji::$storage['IdnaConvert']->decode($domain);
     }
 }
-if (file_exists('vendor/autoload.php')) {
-    include_once 'vendor/autoload.php';
+if (file_exists(__DIR__ . '/tmp/vendor/autoload.php')) {
+    include_once __DIR__ . '/tmp/vendor/autoload.php';
 }
 if (file_exists(App::$primary->path . '/vendor/autoload.php')) {
     include_once App::$primary->path . '/vendor/autoload.php';
