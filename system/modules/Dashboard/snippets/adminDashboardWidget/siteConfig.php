@@ -1,6 +1,37 @@
 <?php
 return [
-    'widget' => function() {
+    'accessCheck' => function() {
+        $access = null;
+        $path = [
+            'accessTree',
+            'appAdmin',
+            'Dashboard',
+            'siteConfig'
+        ];
+        if (isset(App::$cur->Dashboard->config['access'])) {
+            $accesses = App::$cur->Dashboard->config['access'];
+            $access = App::$cur->Access->resolvePath($accesses, $path, '_access');
+        }
+        if (is_null($access) && isset(App::$cur->Access->config['access'])) {
+            $accesses = App::$cur->Access->config['access'];
+            $access = App::$cur->Access->resolvePath($accesses, $path, '_access');
+        }
+        if (is_null($access)) {
+            $access = [];
+        }
+
+        $user = Users\User::$cur;
+
+        if (empty($access)) {
+            return true;
+        }
+
+        if ((!$user->group_id && !empty($access)) || ($user->group_id && !empty($access) && !in_array($user->group_id, $access))) {
+            return false;
+        }
+        return true;
+    },
+            'widget' => function() {
         ?>
         <div class="panel panel-default">
             <div class="panel-heading">Общие настройки сайта</div>
@@ -14,4 +45,5 @@ return [
         </div>
         <?php
     }
-];
+        ];
+        

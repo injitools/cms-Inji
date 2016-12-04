@@ -1,5 +1,9 @@
 <?php
 return [
+    'accessCheck' => function() {
+        $dataManager = new \Ui\DataManager('Materials\Material');
+        return $dataManager->checkAccess();
+    },
     'widget' => function() {
         ?>
         <div class="panel panel-default">
@@ -13,6 +17,5 @@ return [
             </div>
         </div>
         <?php
-    }
-        ];
+    }];
         

@@ -1,5 +1,9 @@
 <?php
 return [
+    'accessCheck' => function() {
+        $dataManager = new \Ui\DataManager('Users\User');
+        return $dataManager->checkAccess();
+    },
     'widget' => function() {
         ?>
         <div class="panel panel-default">
