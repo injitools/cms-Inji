@@ -20,7 +20,7 @@
                 </div>
 
                 <div class = "col-xs-12">
-                    <a href = "#" onclick = "inji.Ui.forms.popUp('Users\\User:<?= Users\User::$cur->id; ?>');return false;">Редактировать</a> |
+                    <a href = "#" onclick = "inji.Ui.forms.popUp('Users\\User:<?= Users\User::$cur->id; ?>', {formName: 'profile'});return false;">Редактировать</a> |
                     <a href = "?logout">Выйти</a>
                 </div>
             </div>
@@ -34,17 +34,19 @@
                 $where[] = ['group_id', 0, '=', 'OR'];
             }
             $menu = Menu\Menu::get([['code', 'sidebarMenu'], $where]);
-            foreach ($menu->items(['where' => ['parent_id', 0], 'order' => ['weight', 'asc']]) as $item) {
-                echo "<li><a href = '{$item->href}'>{$item->name}</a>";
-                $childItems = Menu\Item::getList(['where' => ['parent_id', $item->id]]);
-                if ($childItems) {
-                    echo "<ul>";
-                    foreach ($childItems as $item) {
-                        echo "<li><a href = '{$item->href}'>{$item->name}</a>";
+            if ($menu) {
+                foreach ($menu->items(['where' => ['parent_id', 0], 'order' => ['weight', 'asc']]) as $item) {
+                    echo "<li><a href = '{$item->href}'>{$item->name}</a>";
+                    $childItems = Menu\Item::getList(['where' => ['parent_id', $item->id]]);
+                    if ($childItems) {
+                        echo "<ul>";
+                        foreach ($childItems as $item) {
+                            echo "<li><a href = '{$item->href}'>{$item->name}</a>";
+                        }
+                        echo "</ul>";
                     }
-                    echo "</ul>";
+                    echo "</li>";
                 }
-                echo "</li>";
             }
         }
         ?>

@@ -20,7 +20,11 @@
         <!-- Menu Toggle Script -->
         <script>
             inji.onLoad(function () {
+              if (localStorage.adminSidebarHide == 'true') {
+                $("#wrapper").addClass("toggled");
+              }
               $("#menu-toggle").click(function (e) {
+                localStorage.adminSidebarHide = localStorage.adminSidebarHide == 'true' ? 'false' : 'true';
                 e.preventDefault();
                 $("#wrapper").toggleClass("toggled");
               });
