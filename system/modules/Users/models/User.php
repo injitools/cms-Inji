@@ -38,7 +38,7 @@ class User extends \Model {
         'admin_text' => ['type' => 'html'],
         'activation' => ['type' => 'text'],
         'blocked' => ['type' => 'bool'],
-        'date_last_active' => ['type' => 'dateTime'],
+        'date_last_active' => ['type' => 'dateTime', 'logging' => false],
         'date_create' => ['type' => 'dateTime']
     ];
     public static $dataManagers = [

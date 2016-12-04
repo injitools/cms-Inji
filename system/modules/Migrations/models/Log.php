@@ -13,6 +13,7 @@ namespace Migrations;
 
 class Log extends \Model {
 
+    public static $logging = false;
     public static $objectName = 'История миграции';
     public static $labels = [
         'result' => 'Результат',
@@ -62,5 +63,4 @@ class Log extends \Model {
             ]
         ];
     }
-
 }

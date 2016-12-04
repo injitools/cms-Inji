@@ -13,6 +13,7 @@ namespace Exchange1c\Exchange;
 
 class File extends \Model {
 
+    public static $logging = false;
     public static $cols = [
         'name' => ['type' => 'text'],
         'exchange_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'exchange'],
@@ -45,5 +46,4 @@ class File extends \Model {
             ]
         ];
     }
-
 }

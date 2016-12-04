@@ -13,6 +13,7 @@ namespace Migrations;
 
 class Id extends \Model {
 
+    public static $logging = false;
     public static $cols = [
         'object_id' => ['type' => 'number'],
         'type' => ['type' => 'text'],

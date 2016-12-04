@@ -13,6 +13,7 @@ namespace Users;
 
 class Session extends \Model {
 
+    public static $logging = false;
     public static $cols = [
         'hash' => ['type' => 'text'],
         'ip' => ['type' => 'text'],
@@ -29,5 +30,4 @@ class Session extends \Model {
             ]
         ];
     }
-
 }
