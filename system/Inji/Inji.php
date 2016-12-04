@@ -39,6 +39,13 @@ class Inji {
     public static $storage = [];
 
     /**
+     * Stop executing code if this true after use Inji::$inst->stop() constuction in code
+     * 
+     * @var boolean
+     */
+    public $exitOnStop = true;
+
+    /**
      * Add event listener
      * 
      * @param string $eventName
@@ -118,4 +125,10 @@ class Inji {
         }
     }
 
+    public function stop() {
+        if ($this->exitOnStop) {
+            exit();
+        }
+        return false;
+    }
 }
