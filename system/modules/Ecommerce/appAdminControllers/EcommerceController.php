@@ -30,6 +30,7 @@ class EcommerceController extends adminController {
             $config['orderPrefix'] = $_POST['config']['orderPrefix'];
             $config['show_zero_price'] = empty($_POST['config']['show_zero_price']) ? false : true;
             $config['show_without_price'] = empty($_POST['config']['show_without_price']) ? false : true;
+            $config['filtersInLast'] = empty($_POST['config']['filtersInLast']) ? false : true;
             Config::save('module', $config, 'Ecommerce');
             Tools::redirect('/admin/ecommerce/configure', 'Настройки были изменены', 'success');
         }
