@@ -99,6 +99,19 @@ class Mysql extends \Object {
 
     public function getTables() {
         $query = new Mysql\Query($this);
-        return $query->query("SHOW TABLES")->getArray();
+        $data = $query->query("SHOW TABLES")->getArray();
+        $tables = [];
+        foreach ($data as $info) {
+            $tables[] = $info['Tables_in_' . $this->db_name];
+        }
+        return $tables;
+    }
+
+    public function deleteTable($tableName) {
+        if(!$tableName){
+            return true;
+        }
+        $query = new Mysql\Query($this);
+        return $query->query("DROP TABLE IF EXISTS {$tableName}")->fetch();
     }
 }
