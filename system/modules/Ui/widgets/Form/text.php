@@ -17,6 +17,9 @@ if (!empty($options['placeholder'])) {
 if (!empty($options['checked'])) {
     $attributes['checked'] = 'checked';
 }
+if (!empty($options['required'])) {
+    $attributes['required'] = 'required';
+}
 if (!empty($options['attributes'])) {
     $attributes = array_merge($attributes, $options['attributes']);
 }
