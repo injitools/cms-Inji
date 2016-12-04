@@ -28,7 +28,7 @@ class Subscriber extends \Model {
             ],
             'subscribes' => [
                 'type' => 'many',
-                'mode' => 'Notifications\Subscribe',
+                'model' => 'Notifications\Subscribe',
                 'col' => 'subscriber_id'
             ]
         ];
