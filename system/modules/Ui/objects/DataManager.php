@@ -432,6 +432,10 @@ class DataManager extends \Object {
                     return "<a class = 'btn btn-xs btn-primary' onclick = 'inji.Ui.dataManagers.popUp(\"" . str_replace('\\', '\\\\', $modelName) . ":" . $item->pk() . "\"," . json_encode(array_merge($params, $managerParams)) . ")'>{$count}</a>";
                 case 'many':
                     $managerParams = ['relation' => $modelName::$cols[$colName]['relation']];
+                    $managerParams = ['relation' => $modelName::$cols[$colName]['relation']];
+                    if (!empty($modelName::$cols[$colName]['manager'])) {
+                        $managerParams['managerName'] = $modelName::$cols[$colName]['manager'];
+                    }
                     $count = $item->{$modelName::$cols[$colName]['relation']}(array_merge($params, ['count' => 1]));
                     $count = $count ? $count : 'Нет';
                     return "<a class = 'btn btn-xs btn-primary' onclick = 'inji.Ui.dataManagers.popUp(\"" . str_replace('\\', '\\\\', $modelName) . ":" . $item->pk() . "\"," . json_encode(array_merge($params, $managerParams)) . ")'>{$count}</a>";
@@ -467,6 +471,9 @@ class DataManager extends \Object {
                         return \App::$cur->{$modelName::$cols[$colName]['view']['module']}->{$modelName::$cols[$colName]['view']['method']}($item, $colName, $modelName::$cols[$colName]);
                     case 'many':
                         $managerParams = ['relation' => $modelName::$cols[$colName]['relation']];
+                        if (!empty($modelName::$cols[$colName]['manager'])) {
+                            $managerParams['managerName'] = $modelName::$cols[$colName]['manager'];
+                        }
                         $count = $item->{$modelName::$cols[$colName]['relation']}(array_merge($params, ['count' => 1]));
                         return "<a class = 'btn btn-xs btn-primary' onclick = 'inji.Ui.dataManagers.popUp(\"" . str_replace('\\', '\\\\', $modelName) . ":" . $item->pk() . "\"," . json_encode(array_merge($params, $managerParams)) . ")'>{$count} " . \Tools::getNumEnding($count, ['Элемент', 'Элемента', 'Элементов']) . "</a>";
                     default:
@@ -751,5 +758,4 @@ class DataManager extends \Object {
         }
         return true;
     }
-
 }

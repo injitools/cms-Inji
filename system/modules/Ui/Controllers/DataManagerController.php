@@ -53,6 +53,9 @@ class DataManagerController extends Controller {
         $return['silence'] = UserRequest::get('silence', 'bool', false);
 
         $return['managerName'] = UserRequest::get('managerName', 'string', 'manager');
+        if (!empty($return['params']['managerName'])) {
+            $return['managerName'] = $return['params']['managerName'];
+        }
         if (!$return['managerName']) {
             $return['managerName'] = 'manager';
         }
@@ -252,5 +255,4 @@ class DataManagerController extends Controller {
         $result = new Server\Result();
         $result->send();
     }
-
 }
