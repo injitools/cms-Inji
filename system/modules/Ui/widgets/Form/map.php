@@ -23,7 +23,7 @@ if (!empty($options['value'])) {
           zoom: 13
         });
 <?php
-if ($options['value']) {
+if (!empty($options['value'])) {
     ?>
             myMap<?= $uid; ?>CurPin = new ymaps.Placemark(["<?= !empty($options['value']['lat']) ? $options['value']['lat'] : '56.01'; ?>", "<?= !empty($options['value']['lng']) ? $options['value']['lng'] : '92.85'; ?>"],
                     {iconContent: "<?= !empty($options['value']['address']) ? $options['value']['address'] : implode(',', $options['value']); ?>"},
