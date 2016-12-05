@@ -36,6 +36,7 @@ echo empty($options['noContainer']) ? '</div>' : '';
         dateFormat: 'yy-mm-dd',
         yearRange: "c-70:c+10",
         timeFormat: 'HH:mm:ss',
+<?= !empty($options['minDate']) ? 'minDate:"' . $options['minDate'] . '",' : ''; ?>
         beforeShow: function () {
           setTimeout(function () {
             $('.ui-datepicker').css('z-index', 99999999999999);
