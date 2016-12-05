@@ -121,10 +121,10 @@ if (!$dataManager->checkAccess()) {
                             <div class="row">
                                 <div class="col-xs-6">
                                     <select name="datamanagerFilters[<?= $col; ?>][compareType]" class="form-control input-sm">
-                                        <option value="contains" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'contains' ? 'checked' : ''; ?>>Содержит</option>
-                                        <option value="equals" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'equals' ? 'checked' : ''; ?>>=</option>
-                                        <option value="starts_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'starts_with' ? 'checked' : ''; ?>>Начинается с</option>
-                                        <option value="ends_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'ends_with' ? 'checked' : ''; ?>>Заканчивается</option>
+                                        <option value="contains" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'contains' ? 'selected' : ''; ?>>Содержит</option>
+                                        <option value="equals" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'equals' ? 'selected' : ''; ?>>=</option>
+                                        <option value="starts_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'starts_with' ? 'selected' : ''; ?>>Начинается с</option>
+                                        <option value="ends_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'ends_with' ? 'selected' : ''; ?>>Заканчивается</option>
                                     </select>
                                 </div>
                                 <div class="col-xs-6">
