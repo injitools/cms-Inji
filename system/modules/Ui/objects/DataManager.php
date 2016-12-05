@@ -69,8 +69,6 @@ class DataManager extends \Object {
     public function getButtons($params = [], $model = null) {
         $modelName = $this->modelName;
 
-
-
         $formParams = [
             'dataManagerParams' => $params,
             'formName' => !empty($this->managerOptions['editForm']) ? $this->managerOptions['editForm'] : 'manager'
@@ -115,26 +113,20 @@ class DataManager extends \Object {
             ];
         }
         $formParams['formName'] = !empty($this->managerOptions['editForm']) ? $this->managerOptions['editForm'] : 'manager';
-        $name = 'Элемент';
-        if ($modelName::$objectName) {
-            $name = $modelName::$objectName;
-        }
-        if (!empty($modelName::$forms[$formParams['formName']])) {
-            $aform = new ActiveForm(new $modelName, $formParams['formName']);
-            if ($aform->checkAccess()) {
-                $buttons[] = [
-                    'text' => 'Создать ' . $name,
-                    'onclick' => 'inji.Ui.dataManagers.get(this).newItem("' . str_replace('\\', '\\\\', $modelName) . '",' . json_encode($formParams) . ');',
-                ];
+        $actions = $this->getActions(false, true);
+        foreach ($actions as $action) {
+            $btn = $action['className']::managerButton($this, $formParams, $action);
+            if ($btn) {
+                $buttons[] = $btn;
             }
         }
 
         return $buttons;
     }
 
-    function getActions($onlyGroupActions = false) {
+    function getActions($groupActions = false, $managerActions = false) {
         $actions = [
-            'Open' => ['className' => 'Open'], 'Edit' => ['className' => 'Edit'], 'Delete' => ['className' => 'Delete']
+            'Open' => ['className' => 'Open'], 'Create' => ['className' => 'Create'], 'Edit' => ['className' => 'Edit'], 'Delete' => ['className' => 'Delete']
         ];
         if (isset($this->managerOptions['actions'])) {
             $actions = array_merge($actions, $this->managerOptions['actions']);
@@ -159,7 +151,7 @@ class DataManager extends \Object {
                 ];
             }
             $return[$key]['className'] = strpos($return[$key]['className'], '\\') === false && class_exists('Ui\DataManager\Action\\' . $return[$key]['className']) ? 'Ui\DataManager\Action\\' . $return[$key]['className'] : $return[$key]['className'];
-            if (!class_exists($return[$key]['className']) || ($onlyGroupActions && !$return[$key]['className']::$groupAction)) {
+            if (!class_exists($return[$key]['className']) || ($groupActions && !$return[$key]['className']::$groupAction) || ($managerActions && !$return[$key]['className']::$managerAction)) {
                 unset($return[$key]);
             }
         }
@@ -431,7 +423,6 @@ class DataManager extends \Object {
                     $count = $count ? $count : 'Нет';
                     return "<a class = 'btn btn-xs btn-primary' onclick = 'inji.Ui.dataManagers.popUp(\"" . str_replace('\\', '\\\\', $modelName) . ":" . $item->pk() . "\"," . json_encode(array_merge($params, $managerParams)) . ")'>{$count}</a>";
                 case 'many':
-                    $managerParams = ['relation' => $modelName::$cols[$colName]['relation']];
                     $managerParams = ['relation' => $modelName::$cols[$colName]['relation']];
                     if (!empty($modelName::$cols[$colName]['manager'])) {
                         $managerParams['managerName'] = $modelName::$cols[$colName]['manager'];
