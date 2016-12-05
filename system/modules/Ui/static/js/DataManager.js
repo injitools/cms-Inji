@@ -109,12 +109,10 @@ function DataManager(element) {
     instance.load();
     return false;
   });
-  self = this;
-  //TODO: miltiple handlers
+  var self = this;
   $(document).on('scroll', function () {
     self.flowPanel();
   });
-  //TODO: miltiple handlers
   $(window).on('resize', function () {
     self.flowPanel();
   });
