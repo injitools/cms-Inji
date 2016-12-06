@@ -9,7 +9,7 @@
  */
 class YandexExportController extends Controller {
 
-    function indexAction() {
+    public function indexAction() {
 
         /**
          * @param DOMDocument $xml

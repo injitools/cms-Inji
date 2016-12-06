@@ -124,7 +124,7 @@ class DataManager extends \Object {
         return $buttons;
     }
 
-    function getActions($groupActions = false, $managerActions = false) {
+    public function getActions($groupActions = false, $managerActions = false) {
         $actions = [
             'Open' => ['className' => 'Open'], 'Create' => ['className' => 'Create'], 'Edit' => ['className' => 'Edit'], 'Delete' => ['className' => 'Delete']
         ];

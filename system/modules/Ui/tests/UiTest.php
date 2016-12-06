@@ -4,7 +4,7 @@ class UiTest extends PHPUnit_Framework_TestCase {
     /**
      * @covers Modules::install
      */
-    function setUp() {
+    public function setUp() {
         \App::$cur->Modules->install('Ui');
     }
 

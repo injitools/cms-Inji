@@ -38,7 +38,7 @@ class Item extends \Model {
         ]
     ];
 
-    function name() {
+    public function name() {
         return $this->value;
     }
 

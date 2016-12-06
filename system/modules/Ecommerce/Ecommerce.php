@@ -322,7 +322,7 @@ class Ecommerce extends Module {
         return $cart;
     }
 
-    function sitemap() {
+    public function sitemap() {
         $map = [];
         $zeroItems = \Ecommerce\Item::getList(['where' => ['category_id', 0]]);
         foreach ($zeroItems as $item) {

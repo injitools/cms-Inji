@@ -56,7 +56,7 @@ class ChatsController extends Controller {
         $result->send();
     }
 
-    function deleteMsgAction($messageId) {
+    public function deleteMsgAction($messageId) {
         $result = new Server\Result();
         if (!\Users\User::$cur->isAdmin()) {
             $result->success = false;
@@ -75,7 +75,7 @@ class ChatsController extends Controller {
         $result->send();
     }
 
-    function banUserAction($messageId) {
+    public function banUserAction($messageId) {
         $result = new Server\Result();
         if (!\Users\User::$cur->isAdmin()) {
             $result->success = false;

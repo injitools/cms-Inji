@@ -1,1 +1,3 @@
-<?= $item->finalSum(); ?>
+<?php
+
+echo $item->finalSum();

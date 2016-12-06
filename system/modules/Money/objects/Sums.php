@@ -19,7 +19,7 @@ class Sums extends \Object {
         $this->sums = $sums;
     }
 
-    function plus(Sums $sums) {
+    public function plus(Sums $sums) {
         $newSums = $this->sums;
         foreach ($sums->sums as $currency_id => $sum) {
             $newSums[$currency_id] = isset($newSums[$currency_id]) ? $newSums[$currency_id] + $sum : $sum;
@@ -27,7 +27,7 @@ class Sums extends \Object {
         return new Sums($newSums);
     }
 
-    function minus(Sums $sums) {
+    public function minus(Sums $sums) {
         $newSums = $this->sums;
         foreach ($sums->sums as $currency_id => $sum) {
             $newSums[$currency_id] = isset($newSums[$currency_id]) ? $newSums[$currency_id] - $sum : -$sum;
@@ -48,7 +48,7 @@ class Sums extends \Object {
         }
     }
 
-    function __toString() {
+    public function __toString() {
         $string = '';
         $first = true;
         foreach ($this->sums as $currency_id => $sum) {

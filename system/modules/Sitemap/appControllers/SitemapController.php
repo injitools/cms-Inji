@@ -10,7 +10,7 @@
  */
 class SitemapController extends Controller {
 
-    function indexAction() {
+    public function indexAction() {
         $this->module->generate($this->module->scanModules());
     }
 

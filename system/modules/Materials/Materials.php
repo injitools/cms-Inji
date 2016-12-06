@@ -79,7 +79,7 @@ class Materials extends Module {
         return $return;
     }
 
-    function sitemap() {
+    public function sitemap() {
         $map = [];
         $zeroMaterials = \Materials\Material::getList(['where' => ['category_id', 0]]);
         foreach ($zeroMaterials as $mat) {

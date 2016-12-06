@@ -10,7 +10,7 @@
  */
 class Geography extends Module {
 
-    function init() {
+    public function init() {
         if (!empty(App::$primary->config['site']['domain'])) {
             $domain = App::$primary->config['site']['domain'];
         } else {

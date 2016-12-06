@@ -1934,7 +1934,7 @@ class Model {
         return [];
     }
 
-    function genViewLink() {
+    public function genViewLink() {
         $className = get_class($this);
         $link = substr($className, 0, strpos($className, '\\'));
         $link .= '/view/';

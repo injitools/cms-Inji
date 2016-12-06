@@ -332,7 +332,7 @@ class Module {
         return $extensions;
     }
 
-    function sitemap() {
+    public function sitemap() {
         return [];
     }
 
