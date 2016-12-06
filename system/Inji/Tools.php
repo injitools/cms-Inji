@@ -329,7 +329,7 @@ class Tools extends Model {
      * 
      * @param array $paths
      * @param string|boolean $default
-     * @return string|false
+     * @return string|boolean
      */
     public static function pathsResolve($paths = [], $default = false) {
         foreach ($paths as $path) {
