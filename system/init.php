@@ -95,8 +95,10 @@ if (!function_exists('idn_to_utf8')) {
         }
         return Inji::$storage['IdnaConvert']->decode($domain);
     }
-
 }
+
+BowerCmd::check();
+
 if (file_exists('vendor/autoload.php')) {
     include_once 'vendor/autoload.php';
 }
