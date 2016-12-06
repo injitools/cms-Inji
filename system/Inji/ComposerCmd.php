@@ -42,7 +42,9 @@ class ComposerCmd {
             $filename = 'composer.phar';
             $cafile = false;
             setUseAnsi([]);
+            ob_start();
             installComposer($version, $installDir, $filename, $quiet, $disableTls, $cafile, $channel);
+            ob_end_clean();
         }
         $composer = new Phar($path . '/composer/composer.phar');
         $composer->extractTo($path . '/composer/');
@@ -106,7 +108,7 @@ class ComposerCmd {
             }
         }
 
-        ComposerCmd::command('require ' . $packageName . ($version ? ':' . $version : ''), false, $path);
+        self::command('require ' . $packageName . ($version ? ':' . $version : ''), false, $path);
         return true;
     }
 }
