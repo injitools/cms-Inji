@@ -62,6 +62,7 @@ class BowerCmd {
         $app = new Bowerphp\Console\Application();
         $dir = getcwd();
         chdir($path);
+        putenv('HOME=' . getcwd());
         $app->doRun($input, $output);
         chdir($dir);
     }
