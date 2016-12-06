@@ -267,8 +267,8 @@ class Users extends Module {
         if (empty($data['last_name'])) {
             $data['last_name'] = '';
         }
-        if (!empty($user_name)) {
-            $data['first_name'] = '';
+        if (!empty($data['user_name'])) {
+            $data['first_name'] = $data['user_name'];
         }
         if (empty($data['user_city'])) {
             $data['user_city'] = '';
@@ -414,5 +414,4 @@ class Users extends Module {
         ]);
         $ua->save();
     }
-
 }
