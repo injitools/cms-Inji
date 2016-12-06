@@ -168,6 +168,7 @@ class CartController extends Controller {
         if ($cart->user_id != Users\User::$cur->id) {
             $this->url->redirect('/', 'Это не ваша корзина');
         }
+        $bread = [];
         $bread[] = [
             'text' => 'Каталог',
             'href' => '/ecommerce'

@@ -69,7 +69,7 @@ class Form extends \Object {
                 \App::$cur->libs->loadLib('yandexMap');
                 \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/map', $params);
                 break;
-            default :
+            default:
                 $params = compact('name', 'label', 'options');
                 $params['form'] = $this;
                 \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/' . $type, $params);

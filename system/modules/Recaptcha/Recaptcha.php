@@ -23,6 +23,7 @@ class Recaptcha extends Module {
     }
 
     public function check($gResponse) {
+        $data = [];
         $data['secret'] = $this->config['secret'];
         $data['response'] = $gResponse;
         $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?' . http_build_query($data));

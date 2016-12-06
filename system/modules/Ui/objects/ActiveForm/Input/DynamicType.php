@@ -29,7 +29,7 @@ class DynamicType extends \Ui\ActiveForm\Input {
         $inputType = 'text';
 
         switch ($this->colParams['typeSource']) {
-            case'selfMethod':
+            case 'selfMethod':
                 $type = $this->activeForm->model->{$this->colParams['selfMethod']}();
                 if (is_array($type)) {
                     $inputType = $type['type'];

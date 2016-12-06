@@ -13,7 +13,7 @@ namespace Exchange1c\Parser\Item;
 
 class Options extends \Migrations\Parser {
 
-    static $options;
+    public static $options;
 
     public function parse() {
         if (!Options::$options) {

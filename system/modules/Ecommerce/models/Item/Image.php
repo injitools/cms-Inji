@@ -13,14 +13,14 @@ namespace Ecommerce\Item;
 
 class Image extends \Model {
 
-    static $objectName = 'Фото товара';
-    static $labels = [
+    public static $objectName = 'Фото товара';
+    public static $labels = [
         'file_id' => 'Изображение',
         'item_id' => 'Товар',
         'name' => 'Название',
         'description' => 'Описание',
     ];
-    static $cols = [
+    public static $cols = [
         'file_id' => ['type' => 'image'],
         'item_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'item'],
         'name' => ['type' => 'text'],
@@ -28,7 +28,7 @@ class Image extends \Model {
         'weight' => ['type' => 'number'],
     ];
 
-    static function relations() {
+    public static function relations() {
         return [
             'item' => [
                 'col' => 'item_id',
@@ -41,7 +41,7 @@ class Image extends \Model {
         ];
     }
 
-    static $dataManagers = [
+    public static $dataManagers = [
         'manager' => [
             'name' => 'Фото товара',
             'cols' => [
@@ -49,7 +49,7 @@ class Image extends \Model {
             ]
         ]
     ];
-    static $forms = [
+    public static $forms = [
         'manager' => [
             'map' => [
                 ['name'],
@@ -59,7 +59,7 @@ class Image extends \Model {
         ]
     ];
 
-    function beforeDelete() {
+    public function beforeDelete() {
         if ($this->file) {
             $this->file->delete();
         }

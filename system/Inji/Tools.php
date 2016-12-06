@@ -236,13 +236,16 @@ class Tools extends Model {
         } else {
             $i = $number % 10;
             switch ($i) {
-                case (1): $ending = $endingArray[0];
+                case (1):
+                    $ending = $endingArray[0];
                     break;
                 case (2):
                 case (3):
-                case (4): $ending = $endingArray[1];
+                case (4):
+                    $ending = $endingArray[1];
                     break;
-                default: $ending = $endingArray[2];
+                default:
+                    $ending = $endingArray[2];
             }
         }
         return $ending;
@@ -310,7 +313,7 @@ class Tools extends Model {
                 case '404':
                     header('HTTP/1.1 404 Not Found');
                     break;
-                default :
+                default:
                     header($code);
             }
         }
@@ -349,8 +352,10 @@ class Tools extends Model {
         switch ($last) {
             case 'g':
                 $val *= 1024;
+            // no break
             case 'm':
                 $val *= 1024;
+            // no break
             case 'k':
                 $val *= 1024;
         }

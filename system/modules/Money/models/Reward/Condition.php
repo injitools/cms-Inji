@@ -13,13 +13,13 @@ namespace Money\Reward;
 
 class Condition extends \Model {
 
-    static $cols = [
+    public static $cols = [
         'reward_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'reward'],
         'name' => ['type' => 'text'],
         'active' => ['type' => 'bool'],
         'item' => ['type' => 'dataManager', 'relation' => 'items']
     ];
-    static $labels = [
+    public static $labels = [
         'reward_id' => 'Вознаграждение',
         'name' => 'Название',
         'active' => 'Активно',

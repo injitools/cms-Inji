@@ -286,7 +286,7 @@ class Model {
                 break;
             case 'dynamicType':
                 switch ($colInfo['colParams']['typeSource']) {
-                    case'selfMethod':
+                    case 'selfMethod':
                         $type = $item->{$colInfo['colParams']['selfMethod']}();
                         if (is_array($type)) {
                             if (strpos($type['relation'], ':')) {

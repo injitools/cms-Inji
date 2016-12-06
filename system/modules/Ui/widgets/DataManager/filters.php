@@ -51,7 +51,7 @@ if (!$dataManager->checkAccess()) {
           echo '<div class="col-md-6">';
           if (!empty($colInfo['colParams']['type'])) {
               switch ($colInfo['colParams']['type']) {
-                  case'select':
+                  case 'select':
                       switch ($colInfo['colParams']['source']) {
                           case 'array':
                               $values = ['' => 'Не важно'] + $colInfo['colParams']['sourceArray'];

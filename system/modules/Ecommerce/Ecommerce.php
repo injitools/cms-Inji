@@ -311,7 +311,7 @@ class Ecommerce extends Module {
                     $bonus->save();
                 }
                 switch ($bonus->type) {
-                    case'currency':
+                    case 'currency':
                         $currency = \Money\Currency::get($bonus->value);
                         $wallets = App::$cur->money->getUserWallets($cart->user->id);
                         $wallets[$currency->id]->diff($bonus->count, 'Бонус за покупку');

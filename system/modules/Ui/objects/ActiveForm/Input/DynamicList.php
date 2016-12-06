@@ -30,8 +30,7 @@ class DynamicList extends \Ui\ActiveForm\Input {
     public function parseRequest($request) {
         $modelName = $this->modelName;
         switch ($this->colParams['source']) {
-            case'options':
-
+            case 'options':
                 break;
             default:
                 $rels = [];
@@ -97,8 +96,7 @@ class DynamicList extends \Ui\ActiveForm\Input {
     public function value() {
         $values = [];
         switch ($this->colParams['source']) {
-            case'options':
-
+            case 'options':
                 break;
             default:
                 if ($this->activeForm->model) {
@@ -120,7 +118,7 @@ class DynamicList extends \Ui\ActiveForm\Input {
         $modelName = $this->modelName;
         $cols = [];
         switch ($this->colParams['source']) {
-            case'options':
+            case 'options':
                 foreach ($this->colParams['options']['inputs'] as $colName => $col) {
                     $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($col['type']);
                     $input = new $inputClassName();

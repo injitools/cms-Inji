@@ -139,6 +139,7 @@ class MaterialsController extends Controller {
             $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . idn_to_utf8(INJI_DOMAIN_NAME) . $logo->path]);
         }
         $this->view->setTitle($material->name);
+        $bread = [];
         $bread[] = ['text' => $material->name, 'href' => '/' . $material->alias];
         $this->view->page([
             'page' => $material->resolveTemplate(),

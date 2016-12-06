@@ -15,7 +15,7 @@ class Payeer extends \Money\MerchantHelper {
 
     public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/') {
         $config = static::getConfig();
-
+        $data = [];
         $data['m_shop'] = $config['shopId'];
         $data['m_orderid'] = $payId;
         $data['m_amount'] = number_format($amount, 2, '.', '');
@@ -38,7 +38,7 @@ class Payeer extends \Money\MerchantHelper {
 
     public static function reciver($data, $status) {
         $config = static::getConfig();
-
+        $result = [];
         $result['status'] = 'error';
         if (isset($_POST['m_operation_id']) && isset($_POST['m_sign'])) {
             $m_key = $config['secret'];
@@ -65,5 +65,4 @@ class Payeer extends \Money\MerchantHelper {
 
         return $result;
     }
-
 }

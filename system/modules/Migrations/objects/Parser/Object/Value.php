@@ -25,7 +25,7 @@ class Value extends \Migrations\Parser {
             $col = $cols[$this->param->value];
             if ($col['type'] == 'dynamicType') {
                 switch ($col['typeSource']) {
-                    case'selfMethod':
+                    case 'selfMethod':
                         $type = $this->model->{$col['selfMethod']}();
                         if (is_array($type)) {
                             if (strpos($type['relation'], ':')) {

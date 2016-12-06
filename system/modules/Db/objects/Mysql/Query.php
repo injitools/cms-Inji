@@ -347,6 +347,7 @@ class Query extends \Object {
             case 'SELECT':
                 $query .= ' ' . ($this->distinct ? 'DISTINCT' : '');
                 $query .= ' ' . (!$this->cols ? '*' : ((is_array($this->cols) ? implode(',', $this->cols) : $this->cols)));
+                // no break
             case 'DELETE':
                 $query .= ' FROM';
                 break;
@@ -393,6 +394,7 @@ class Query extends \Object {
                 }
                 $update = implode(',', $updates);
                 $query .= " SET {$update}";
+                // no break
             case 'SELECT':
             case 'DELETE':
                 $this->buildWhere($this->where);

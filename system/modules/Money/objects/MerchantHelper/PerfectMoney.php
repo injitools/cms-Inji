@@ -17,7 +17,7 @@ class PerfectMoney extends \Money\MerchantHelper {
         $config = static::getConfig();
 
         $merchantCurrency = static::getMerchantCurrency($currency);
-
+        $request = [];
         $request['PAYEE_ACCOUNT'] = $config['usdWallet'];
         $request['PAYEE_NAME'] = $config['usdWallet'];
         $request['PAYMENT_ID'] = $payId;
@@ -60,5 +60,4 @@ class PerfectMoney extends \Money\MerchantHelper {
         }
         return $result;
     }
-
 }

@@ -13,15 +13,17 @@ class MigrationsController extends Controller {
     public function exportAction($migrationName = '', $mapName = '', $secret = '') {
         $migration = \Migrations\Migration::get($migrationName, 'alias');
         if (!$migration) {
-            exit('migration not select');
+            echo 'migration not select';
+            return;
         }
         if ($migration->secret != $secret) {
-            exit('security error');
+            echo 'security error';
+            return;
         }
         $maps = $migration->maps(['key' => 'alias']);
         if (empty($maps[$mapName])) {
-            exit('map not select');
+            echo 'map not select';
+            return;
         }
     }
-
 }

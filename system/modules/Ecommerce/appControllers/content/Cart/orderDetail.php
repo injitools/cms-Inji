@@ -203,8 +203,8 @@
                         <td class="text-left">
                             <?php
                             switch ($status->cart_event_type_id) {
-                                case'1':
-                                case'2':
+                                case '1':
+                                case '2':
                                     $price = Ecommerce\Item\Offer\Price::get($status->info);
                                     if ($price) {
                                         echo "<a href = '/ecommerce/view/{$item->id}'>" . $price->offer->item->name() . "</a>";

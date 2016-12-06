@@ -63,14 +63,12 @@ class Value {
                 $file = Files\File::get($this->model->{$this->valueKey});
                 if ($file) {
                     return '<img src="' . $file->path . '?resize=60x120" />';
-                } else {
-                    return '<img src="/static/system/images/no-image.png?resize=60x120" />';
                 }
+                return '<img src="/static/system/images/no-image.png?resize=60x120" />';
             case 'bool':
                 return $this->model->{$this->valueKey} ? 'Да' : 'Нет';
             default:
                 return $this->model->{$this->valueKey};
         }
     }
-
 }

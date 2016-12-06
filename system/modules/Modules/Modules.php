@@ -36,7 +36,7 @@ class Modules extends Module {
                         'col' => $col['code']
                     ];
                     break;
-                default :
+                default:
                     $modelCols['cols'][$col['code']] = ['type' => $colType];
             }
         }

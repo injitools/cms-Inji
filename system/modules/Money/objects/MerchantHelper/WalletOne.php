@@ -24,26 +24,25 @@ class WalletOne extends \Money\MerchantHelper {
             $print .= "WMI_DESCRIPTION=" . urlencode($description);
             return $print;
         }
-
         // Проверка наличия необходимых параметров в POST-запросе
-
+        $result = [];
         if (!isset($data["WMI_SIGNATURE"])) {
-                    $result['callback'] = print_answer("Retry", "Отсутствует параметр WMI_SIGNATURE");
+            $result['callback'] = print_answer("Retry", "Отсутствует параметр WMI_SIGNATURE");
         }
 
         if (!isset($data["WMI_PAYMENT_NO"])) {
-                    $result['callback'] = print_answer("Retry", "Отсутствует параметр WMI_PAYMENT_NO");
+            $result['callback'] = print_answer("Retry", "Отсутствует параметр WMI_PAYMENT_NO");
         }
 
         if (!isset($data["WMI_ORDER_STATE"])) {
-                    $result['callback'] = print_answer("Retry", "Отсутствует параметр WMI_ORDER_STATE");
+            $result['callback'] = print_answer("Retry", "Отсутствует параметр WMI_ORDER_STATE");
         }
 
         // Извлечение всех параметров POST-запроса, кроме WMI_SIGNATURE
         $params = [];
         foreach ($data as $name => $value) {
             if ($name !== "WMI_SIGNATURE") {
-                            $params[$name] = $value;
+                $params[$name] = $value;
             }
         }
 
@@ -120,13 +119,13 @@ class WalletOne extends \Money\MerchantHelper {
 
         foreach ($fields as $value) {
             if (is_array($value)) {
-                            foreach ($value as $v) {
+                foreach ($value as $v) {
                     //Конвертация из текущей кодировки (UTF-8)
                     //необходима только если кодировка магазина отлична от Windows-1251
                     $v = iconv("utf-8", "windows-1251", $v);
-            }
-                    $fieldValues .= $v;
-                } else {
+                }
+                $fieldValues .= $v;
+            } else {
                 //Конвертация из текущей кодировки (UTF-8)
                 //необходима только если кодировка магазина отлична от Windows-1251
                 $value = iconv("utf-8", "windows-1251", $value);
@@ -145,5 +144,4 @@ class WalletOne extends \Money\MerchantHelper {
         $fields["WMI_SIGNATURE"] = $signature;
         \Tools::redirect('https://www.walletone.com/checkout/default.aspx?' . http_build_query($fields));
     }
-
 }

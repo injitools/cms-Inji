@@ -306,7 +306,7 @@ class View extends \Module {
 
     public function ResolveCssHref($cssArray, $type = 'custom', &$hrefs) {
         switch ($type) {
-            case'libs':
+            case 'libs':
                 foreach ($cssArray as $css) {
                     if (is_array($css)) {
                         $this->ResolveCssHref($css, $type, $hrefs);
@@ -320,7 +320,7 @@ class View extends \Module {
                     $hrefs[$href] = $href;
                 }
                 break;
-            case'template':
+            case 'template':
                 foreach ($cssArray as $css) {
                     if (is_array($css)) {
                         $this->ResolveCssHref($css, $type, $hrefs);
@@ -479,7 +479,7 @@ class View extends \Module {
                     $resultArray[] = $href;
                 }
                 break;
-            case'template':
+            case 'template':
                 foreach ($jsArray as $js) {
                     if (is_array($js)) {
                         $this->genScriptArray($js, $type, $resultArray);

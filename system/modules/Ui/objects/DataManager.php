@@ -292,7 +292,6 @@ class DataManager extends \Object {
                         $queryParams['where'][] = [$col, $params['filters'][$col]['value'], is_array($params['filters'][$col]['value']) ? 'IN' : '='];
                         break;
                     case 'bool':
-
                         if (!isset($params['filters'][$col]['value']) || $params['filters'][$col]['value'] === '') {
                             continue;
                         }
@@ -430,7 +429,7 @@ class DataManager extends \Object {
                     $count = $item->{$modelName::$cols[$colName]['relation']}(array_merge($params, ['count' => 1]));
                     $count = $count ? $count : 'Нет';
                     return "<a class = 'btn btn-xs btn-primary' onclick = 'inji.Ui.dataManagers.popUp(\"" . str_replace('\\', '\\\\', $modelName) . ":" . $item->pk() . "\"," . json_encode(array_merge($params, $managerParams)) . ")'>{$count}</a>";
-                default :
+                default:
                     if ($item->{$modelName::$cols[$colName]['relation']}) {
                         if (\App::$cur->name == 'admin') {
                             $href = "<a href ='/admin/" . $item->{$modelName::$cols[$colName]['relation']}->genViewLink() . "'>";
@@ -593,7 +592,6 @@ class DataManager extends \Object {
                         $queryParams['where'][] = [$col, $params['filters'][$col]['value'], is_array($params['filters'][$col]['value']) ? 'IN' : '='];
                         break;
                     case 'bool':
-
                         if (empty($params['filters'][$col]['value'])) {
                             continue;
                         }
