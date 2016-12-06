@@ -13,8 +13,9 @@ function toggleEditor(btn) {
     $.each($('.fastEdit'), function () {
       $(this).attr('contenteditable', true);
       $(this).css('position', 'relative');
-      html = $(this).html();
+      var html = $(this).html();
       var regex = /<!--start:(.*)-->([\s\S]*?)<!--end:\1-->/ig;
+      var match;
       while (match = regex.exec(html)) {
         if (match) {
           widgets[match[1]] = match[0];
@@ -37,7 +38,7 @@ function toggleEditor(btn) {
       $(this).removeAttr('contenteditable');
       $(this).css('position', 'static');
       //$(this).attr('class', 'fastEdit');
-      for (key in widgets) {
+      for (var key in widgets) {
         $(this).html($(this).html().replace(new RegExp(key, "gm"), widgets[key]));
       }
     });

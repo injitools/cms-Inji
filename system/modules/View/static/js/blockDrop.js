@@ -69,7 +69,7 @@ BlockDrop.prototype.submitMap = function (btn) {
   var form = $(btn).closest('form');
   var map = form.find('.rows');
   var reClasses = ['ui-state-hover', 'ui-draggable', 'ui-draggable-handle', 'ui-sortable-handle', 'ui-droppable', 'ui-sortable', 'ui-state-hover'];
-  for (key in reClasses) {
+  for (var key in reClasses) {
     map.removeClass(reClasses[key]);
     map.find('.' + reClasses[key]).removeClass(reClasses[key]);
   }

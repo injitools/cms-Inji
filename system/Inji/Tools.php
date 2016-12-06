@@ -328,7 +328,7 @@ class Tools extends Model {
      * If no exist path in array - return default
      * 
      * @param array $paths
-     * @param string|false $default
+     * @param string|boolean $default
      * @return string|false
      */
     public static function pathsResolve($paths = [], $default = false) {

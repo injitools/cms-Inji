@@ -122,14 +122,14 @@ class Twitter extends \Users\SocialHelper {
             $_SESSION['oauth_token_secret'] = $tokens['oauth_token_secret'];
             \Tools::redirect("https://api.twitter.com/oauth/authorize?oauth_token={$tokens['oauth_token']}");
         }
-        $verify = static::verify();
+        $verify = self::verify();
 
         if (!$verify['user_id']) {
             \Tools::redirect('/', 'Не удалось авторизоваться через twitter');
         }
-        $userDetail = static::getInfo($verify);
+        $userDetail = self::getInfo($verify);
 
-        $social = static::getObject();
+        $social = self::getObject();
         $userSocial = \Users\User\Social::get([['uid', $userDetail['id']], ['social_id', $social->id]]);
         if ($userSocial && $userSocial->user) {
             \App::$cur->users->newSession($userSocial->user);

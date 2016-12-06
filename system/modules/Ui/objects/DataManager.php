@@ -374,9 +374,13 @@ class DataManager extends \Object {
                 $item = $relation['relModel']::get([[$item->index(), $item->id], [$model->index(), $model->id]]);
             }
             $row = [];
-            $row[] = '<input type ="checkbox" name = "pk[]" value =' . $item->pk() . '>';
-            $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '%5C', get_class($originalItem));
-            $row[] = "<a href ='/admin/" . $item->genViewLink() . "?redirectUrl={$redirectUrl}'>{$item->pk()}</a>";
+            if (empty($params['download'])) {
+                $row[] = '<input type ="checkbox" name = "pk[]" value =' . $item->pk() . '>';
+                $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '%5C', get_class($this));
+                $row[] = "<a href ='/admin/" . $item->genViewLink() . "?redirectUrl={$redirectUrl}'>{$item->pk()}</a>";
+            } else {
+                $row[] = $item->pk();
+            }
             foreach ($this->managerOptions['cols'] as $key => $colName) {
                 if (!empty($params['download'])) {
                     $row[] = \Model::getColValue($item, is_array($colName) ? $key : $colName, true, false);
@@ -384,7 +388,9 @@ class DataManager extends \Object {
                     $row[] = DataManager::drawCol($item, is_array($colName) ? $key : $colName, $params, $this);
                 }
             }
-            $row[] = $this->rowButtons($item, $params);
+            if (empty($params['download'])) {
+                $row[] = $this->rowButtons($item, $params);
+            }
             $rows[] = $row;
         }
         return $rows;

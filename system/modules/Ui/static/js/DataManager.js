@@ -130,7 +130,7 @@ function DataManager(element) {
       if (hashData.filters && this.element.find('.dataManagerFilters [name^="datamanagerFilters"]').length > 0) {
         this.element.find('.dataManagerFilters [name^="datamanagerFilters"]').each(function () {
           var maths = $(this).attr('name').match(/\[([^\]]+)\]/g);
-          for (key in maths) {
+          for (var key in maths) {
             maths[key] = maths[key].replace(/([\[\]])/g, '');
           }
           if (hashData.filters[maths[0]]) {
@@ -213,11 +213,11 @@ DataManager.prototype.load = function (options) {
   params.limit = this.limit;
   params.page = this.page;
   params.categoryPath = this.categoryPath;
-  filters = this.filters;
+  var filters = this.filters;
   if (this.element.find('.dataManagerFilters [name^="datamanagerFilters"]').length > 0) {
     this.element.find('.dataManagerFilters [name^="datamanagerFilters"]').each(function () {
       var maths = $(this).attr('name').match(/\[([^\]]+)\]/g);
-      for (key in maths) {
+      for (var key in maths) {
         maths[key] = maths[key].replace(/([\[\]])/g, '');
       }
       if (!filters[maths[0]]) {
@@ -440,7 +440,7 @@ DataManager.prototype.groupAction = function (actionName) {
     if (action.aditionalInfo) {
       var id = inji.randomString();
       var html = '<form id ="' + id + '"><h3>Для этой груповой операции требуется дополнительная информация</h3>';
-      for (key in action.aditionalInfo) {
+      for (var key in action.aditionalInfo) {
         var input = action.aditionalInfo[key];
         html += '<div class = "form-group"><label>' + input.label + '</label><input type="' + input.type + '" name ="' + key + '" class = "form-control" value = "" /></div>';
       }

@@ -75,13 +75,6 @@ class BowerCmd {
         if (isset($bowerJson['dependencies'][$packageName]) && file_exists($path . '/static/bower/' . $packageName)) {
             return true;
         }
-        if (!empty($lockFile['dependencies'])) {
-            foreach ($lockFile['dependencies'] as $package) {
-                if ($package['name'] == $packageName) {
-                    return true;
-                }
-            }
-        }
 
         self::command('install ' . $packageName . ($version ? '#' . $version : '') . ' --save', false, $path);
         return true;

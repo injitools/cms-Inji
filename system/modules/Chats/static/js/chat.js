@@ -76,7 +76,7 @@ inji.Chats.init = function (chatIndex) {
       success: function (data) {
         inji.Chats.chats[chatIndex].members = data.members;
         inji.Chats.chats[chatIndex].checkoutMembers();
-        for (key in data.messages) {
+        for (var key in data.messages) {
           var msg = data.messages[key];
           inji.Chats.chats[chatIndex].lastEventDate = msg.message.chat_message_date_create;
           var template = inji.Chats.chats[chatIndex].element.find('.chats-chat-message-template').html();

@@ -29,6 +29,7 @@ Inji.prototype.onLoad = function (callback, start) {
 }
 Inji.prototype.startCallbacks = function () {
   console.log('inji start onload');
+  var callback;
   while (callback = this.onLoadCallbacks.shift()) {
     if (typeof callback == 'function') {
       callback();
@@ -46,13 +47,13 @@ Inji.prototype.startCallbacks = function () {
 }
 Inji.prototype.start = function (options) {
   console.log('Inji start');
-  for (key in options.compresedScripts) {
+  for (var key in options.compresedScripts) {
     inji.loadedScripts[options.compresedScripts[key]] = true;
   }
   this.options = options;
   if (options.onLoadModules) {
     this.onLoad(function () {
-      for (key in options.onLoadModules) {
+      for (var key in options.onLoadModules) {
         if (typeof inji[key] == 'undefined') {
           inji[key] = new window[key]();
           if (typeof (inji[key].init) == 'function') {
@@ -128,7 +129,7 @@ Inji.prototype.on = function (eventType, callback) {
 }
 Inji.prototype.event = function (eventType, object) {
   if (typeof this.listeners[eventType] != 'undefined') {
-    for (key in this.listeners[eventType]) {
+    for (var key in this.listeners[eventType]) {
       this.listeners[eventType][key](eventType, object);
     }
   }

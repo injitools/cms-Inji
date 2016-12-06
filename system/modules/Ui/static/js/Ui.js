@@ -51,7 +51,7 @@ inji.Ui = new function () {
  * Editors
  * 
  */
-Editors = function () {
+var Editors = function () {
   this.ckeditor = false;
   this.checkEditors();
   inji.on('loadScript', function () {
@@ -122,7 +122,7 @@ Editors.prototype.beforeSubmit = function (form) {
  * 
  * @returns {Modals}
  */
-Modals = function () {
+var Modals = function () {
   this.modals = 0;
 }
 Modals.prototype.show = function (title, body, code, size) {
@@ -249,7 +249,7 @@ Forms.prototype.addRowToList = function (btn) {
 Forms.prototype.checkAditionals = function (select) {
   var selectedInputAd = $(select).find('option:selected').attr('data-aditionalInput');
   var nextSelect = $(select).next();
-  i = 0;
+  var i = 0;
   if ($(select).data('aditionalEnabled') == 1) {
     $(select).data('aditionalEnabled', 0);
   }

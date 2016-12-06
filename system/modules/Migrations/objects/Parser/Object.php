@@ -17,6 +17,7 @@ class Object extends \Object {
     public $parentObject;
     public $parentModel;
     public $parentParam;
+    public $walker;
     public $data;
 
     public function parse($preset = []) {
@@ -186,5 +187,4 @@ class Object extends \Object {
         }
         return $model;
     }
-
 }

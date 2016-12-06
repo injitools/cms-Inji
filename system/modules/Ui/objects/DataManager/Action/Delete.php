@@ -34,5 +34,4 @@ class Delete extends \Ui\DataManager\Action {
         }
         return 'Удалено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['запись', 'записи', 'записей']);
     }
-
 }

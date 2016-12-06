@@ -124,7 +124,6 @@ class DataManagerController extends Controller {
         $rows = $dataManager->getRows($request['params'], $request['model']);
         foreach ($rows as $row) {
             if ($request['download']) {
-                $row = array_slice($row, 1, -1);
                 foreach ($row as $col) {
                     if (!$endRow) {
                         echo ";";

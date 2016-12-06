@@ -31,6 +31,6 @@ class Create extends \Ui\DataManager\Action {
                 ];
             }
         }
-        return false;
+        return [];
     }
 }

@@ -48,12 +48,12 @@ class Libs extends Module {
                 }
             }
             if (!empty($className::$files['bower'])) {
-                $this->bowerFiles($libName, $className::$files['bower']);
+                $this->bowerFiles($libName, $className::$files['bower'], $options);
             }
         }
     }
 
-    public function bowerFiles($libName, $files) {
+    public function bowerFiles($libName, $files, $options) {
         if (!empty($files['css']) && (!isset($options['loadCss']) || $options['loadCss'])) {
             foreach ($files['css'] as $file) {
                 App::$cur->view->customAsset('css', '/static/bower/' . $file, $libName);

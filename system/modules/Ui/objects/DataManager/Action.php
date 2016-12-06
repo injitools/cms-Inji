@@ -37,7 +37,7 @@ class Action extends \Object {
      * @param \Ui\DataManager $dataManager
      * @param array $formParams
      * @param array $actionParams
-     * @return array
+     * @return  array
      */
     public static function managerButton($dataManager, $formParams, $actionParams) {
         return '';
@@ -52,7 +52,7 @@ class Action extends \Object {
      * @param array $adInfo
      * @return string
      */
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo = []) {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
         return 'empty action';
     }
 }
