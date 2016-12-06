@@ -14,12 +14,17 @@ namespace Libs;
 class PrettyPhoto extends \Object {
 
     public static $name = 'PrettyPhoto';
+    public static $bowerPacks = [
+        'https://github.com/scaron/prettyphoto' => '*'
+    ];
     public static $files = [
-        'js' => [
-            '/static/moduleAsset/libs/libs/prettyPhoto/js/jquery.prettyPhoto.js',
-        ],
-        'css' => [
-            '/static/moduleAsset/libs/libs/prettyPhoto/css/prettyPhoto.css'
+        'bower' => [
+            'js' => [
+                'prettyphoto/js/jquery.prettyPhoto.js',
+            ],
+            'css' => [
+                'prettyphoto/css/prettyPhoto.css'
+            ]
         ]
     ];
     public static $requiredLibs = [

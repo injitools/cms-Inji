@@ -17,16 +17,24 @@ class JqueryUi extends \Object {
     public static $composerPacks = [
         'components/jqueryui' => '1.11.*'
     ];
+    public static $bowerPacks = [
+        'jqueryui-timepicker-addon' => '*',
+        'https://github.com/jquery-ui-bootstrap/jquery-ui-bootstrap' => '*'
+    ];
     public static $files = [
         'js' => [
             'components/jqueryui/jquery-ui.min.js',
             'components/jqueryui/ui/i18n/datepicker-ru.js',
-            '/static/moduleAsset/libs/libs/jqueryUi/timeAddon/jquery-ui-timepicker-addon.min.js',
-            '/static/moduleAsset/libs/libs/jqueryUi/timeAddon/i18n/jquery-ui-timepicker-ru.js'
         ],
-        'css' => [
-            '/static/moduleAsset/libs/libs/jqueryUi/custom-theme/jquery-ui-1.10.3.custom.css',
-            '/static/moduleAsset/libs/libs/jqueryUi/timeAddon/jquery-ui-timepicker-addon.min.css'
+        'bower' => [
+            'js' => [
+                'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
+                'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-ru.js'
+            ],
+            'css' => [
+                'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.10.3.custom.css',
+                'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css'
+            ],
         ]
     ];
     public static $staticDirs = [

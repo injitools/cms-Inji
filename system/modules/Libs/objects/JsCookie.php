@@ -14,10 +14,15 @@ namespace Libs;
 class JsCookie extends \Object {
 
     public static $name = 'JavaScript Cookie';
+    public static $bowerPacks = [
+        'js-cookie' => '*'
+    ];
     public static $files = [
-        'js' => [
-            '/static/moduleAsset/libs/libs/js-cookie/js.cookie-2.1.0.min.js',
-        ],
+        'bower' => [
+            'js' => [
+                'js-cookie/src/js.cookie.js',
+            ],
+        ]
     ];
 
 }

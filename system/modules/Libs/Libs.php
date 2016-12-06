@@ -19,6 +19,11 @@ class Libs extends Module {
                     ComposerCmd::requirePackage($packageName, $version);
                 }
             }
+            if (!empty($className::$bowerPacks)) {
+                foreach ($className::$bowerPacks as $packageName => $version) {
+                    BowerCmd::requirePackage($packageName, $version);
+                }
+            }
             if (!empty($className::$requiredLibs)) {
                 foreach ($className::$requiredLibs as $rLib) {
                     $this->loadLib($rLib);
@@ -41,6 +46,22 @@ class Libs extends Module {
                         App::$cur->view->customAsset('js', '/static/libs/vendor/' . ucfirst($libName) . '/' . $file, $libName);
                     }
                 }
+            }
+            if (!empty($className::$files['bower'])) {
+                $this->bowerFiles($libName, $className::$files['bower']);
+            }
+        }
+    }
+
+    public function bowerFiles($libName, $files) {
+        if (!empty($files['css']) && (!isset($options['loadCss']) || $options['loadCss'])) {
+            foreach ($files['css'] as $file) {
+                App::$cur->view->customAsset('css', '/static/bower/' . $file, $libName);
+            }
+        }
+        if (!empty($files['js'])) {
+            foreach ($files['js'] as $file) {
+                App::$cur->view->customAsset('js', '/static/bower/' . $file, $libName);
             }
         }
     }
@@ -77,5 +98,4 @@ class Libs extends Module {
         }
         return false;
     }
-
 }

@@ -14,16 +14,15 @@ namespace Libs;
 class Jquery extends \Object {
 
     public static $name = 'jQuery';
-    public static $composerPacks = [
-        'components/jquery' => '2.1.*'
+    public static $bowerPacks = [
+        'jquery' => '2.1.*'
     ];
     public static $files = [
-        'js' => [
-            'components/jquery/jquery.min.js'
+        'bower' => [
+            'js' => [
+                'jquery/dist/jquery.min.js'
+            ]
         ]
-    ];
-    public static $staticDirs = [
-        'components/jquery'
     ];
 
 }

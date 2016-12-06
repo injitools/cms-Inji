@@ -14,13 +14,18 @@ namespace Libs;
 class MalihuScrollbar extends \Object {
 
     public static $name = 'Malihu Scrollbar';
+    public static $bowerPacks = [
+        'malihu-custom-scrollbar-plugin' => '*'
+    ];
     public static $files = [
-        'css' => [
-            '/static/moduleAsset/libs/libs/malihuScrollbar/jquery.mCustomScrollbar.css'
-        ],
-        'js' => [
-            '/static/moduleAsset/libs/libs/malihuScrollbar/jquery.mCustomScrollbar.min.js'
-        ],
+        'bower' => [
+            'css' => [
+                'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css'
+            ],
+            'js' => [
+                'malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js'
+            ],
+        ]
     ];
 
 }

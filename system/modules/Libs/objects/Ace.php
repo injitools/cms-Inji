@@ -14,10 +14,15 @@ namespace Libs;
 class Ace extends \Object {
 
     public static $name = 'Ace editor';
+    public static $bowerPacks = [
+        'ace-builds' => '*'
+    ];
     public static $files = [
-        'js' => [
-            '/static/moduleAsset/libs/libs/ace/js/src-noconflict/ace.js',
-        ],
+        'bower' => [
+            'js' => [
+                'ace-builds/src-min-noconflict/ace.js',
+            ],
+        ]
     ];
 
 }
