@@ -15,8 +15,9 @@ class UserForms extends \Module {
         if (!empty($_POST['UserForms'])) {
             foreach ($_POST['UserForms'] as $form_id => $inputs) {
                 $form = \UserForms\Form::get((int) $form_id);
-                if (!$form)
-                    continue;
+                if (!$form) {
+                                    continue;
+                }
                 $formRecive = new \UserForms\Recive();
                 $formRecive->user_id = (int) \Users\User::$cur->id;
                 $formRecive->form_id = (int) $form_id;

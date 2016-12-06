@@ -27,7 +27,8 @@ class Walker {
         //walk know pathes
         foreach ($this->map->paths(['where' => ['path', $this->curPath]]) as $path) {
             if (isset($this->data[$path->item])) {
-                if ($path->type == 'container') { //create walker for container
+                if ($path->type == 'container') {
+//create walker for container
                     $walker = new Walker();
                     $walker->migration = $this->migration;
                     $walker->map = $this->map;
@@ -37,7 +38,8 @@ class Walker {
                     $walker->mapPathParent = $this->mapPath;
                     $walker->migtarionLog = $this->migtarionLog;
                     $walker->walk();
-                } elseif ($path->type == 'object') { //start parse path data
+                } elseif ($path->type == 'object') {
+//start parse path data
                     $this->startObjectParse($path->object_id, $this->data[$path->item]);
                 }
             }
@@ -54,9 +56,11 @@ class Walker {
                         ['code', $key],
                         ['migration_id', $this->migration->id]
             ]);
-            if ($object) { //parse as object
+            if ($object) {
+//parse as object
                 $this->startObjectParse($object, $data);
-            } else { //create new map path for configure unknown path
+            } else {
+//create new map path for configure unknown path
                 $this->mapPath = new Migration\Map\Path();
                 $this->mapPath->parent_id = $this->mapPathParent ? $this->mapPathParent->id : 0;
                 $this->mapPath->path = $this->curPath;

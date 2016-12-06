@@ -22,6 +22,9 @@ class ComposerCmd {
         }
     }
 
+    /**
+     * @param string $path
+     */
     public static function installComposer($path) {
         if (file_exists($path . '/composer/bin/composer')) {
             return true;
@@ -73,6 +76,10 @@ class ComposerCmd {
         self::command('install', false, $path);
     }
 
+    /**
+     * @param string $command
+     * @param string $path
+     */
     public static function command($command, $needOutput = true, $path = null) {
         ini_set('memory_limit', '2000M');
         include_once getenv('COMPOSER_HOME') . '/composer/vendor/autoload.php';

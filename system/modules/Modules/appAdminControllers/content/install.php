@@ -6,8 +6,9 @@
     $systemModules = array_slice(scandir(INJI_SYSTEM_DIR . '/modules'), 2);
     foreach ($systemModules as $module) {
         $info = Module::getInfo($module);
-        if (!$info || isset($modules[$module]))
-            continue;
+        if (!$info || isset($modules[$module])) {
+                    continue;
+        }
         ?>
         <div class ="form-group">
             <div class="checkbox">

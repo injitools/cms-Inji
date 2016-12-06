@@ -108,7 +108,7 @@ class Mysql extends \Object {
     }
 
     public function deleteTable($tableName) {
-        if(!$tableName){
+        if (!$tableName) {
             return true;
         }
         $query = new Mysql\Query($this);

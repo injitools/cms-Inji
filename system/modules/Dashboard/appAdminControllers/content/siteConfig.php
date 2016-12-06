@@ -2,27 +2,45 @@
 <form action = '' method = 'POST' enctype="multipart/form-data">
     <div class ="form-group">
         <label>Название сайта</label>
-        <input class ="form-control" type = 'text' name = 'site_name' value = '<?php if (!empty(\App::$primary->config['site']['name'])) echo \App::$primary->config['site']['name']; ?>' />
+        <input class ="form-control" type = 'text' name = 'site_name' value = '<?php if (!empty(\App::$primary->config['site']['name'])) {
+    echo \App::$primary->config['site']['name'];
+}
+?>' />
     </div>
     <div class ="form-group">
         <label>Название компании</label>
-        <input class ="form-control" type = 'text' name = 'company_name' value = '<?php if (!empty(\App::$primary->config['site']['company_name'])) echo \App::$primary->config['site']['company_name']; ?>' />
+        <input class ="form-control" type = 'text' name = 'company_name' value = '<?php if (!empty(\App::$primary->config['site']['company_name'])) {
+    echo \App::$primary->config['site']['company_name'];
+}
+?>' />
     </div>
     <div class ="form-group">
         <label>Основной домен</label>
-        <input class ="form-control" type = 'text' name = 'site_domain' value = '<?php if (!empty(\App::$primary->config['site']['domain'])) echo \App::$primary->config['site']['domain']; ?>' />
+        <input class ="form-control" type = 'text' name = 'site_domain' value = '<?php if (!empty(\App::$primary->config['site']['domain'])) {
+    echo \App::$primary->config['site']['domain'];
+}
+?>' />
     </div>
     <div class ="form-group">
         <label>Контактный email</label>
-        <input class ="form-control" type = 'text' name = 'site_email' value = '<?php if (!empty(\App::$primary->config['site']['email'])) echo \App::$primary->config['site']['email']; ?>' />
+        <input class ="form-control" type = 'text' name = 'site_email' value = '<?php if (!empty(\App::$primary->config['site']['email'])) {
+    echo \App::$primary->config['site']['email'];
+}
+?>' />
     </div>
     <div class ="form-group">
         <label>Ключевые слова</label>
-        <input class ="form-control" type = 'text' name = 'site_keywords' value = '<?php if (!empty(\App::$primary->config['site']['keywords'])) echo \App::$primary->config['site']['keywords']; ?>' />
+        <input class ="form-control" type = 'text' name = 'site_keywords' value = '<?php if (!empty(\App::$primary->config['site']['keywords'])) {
+    echo \App::$primary->config['site']['keywords'];
+}
+?>' />
     </div>
     <div class ="form-group">
         <label>Краткое описание сайта</label>
-        <input class ="form-control" type = 'text' name = 'site_description' value = '<?php if (!empty(\App::$primary->config['site']['description'])) echo \App::$primary->config['site']['description']; ?>' />
+        <input class ="form-control" type = 'text' name = 'site_description' value = '<?php if (!empty(\App::$primary->config['site']['description'])) {
+    echo \App::$primary->config['site']['description'];
+}
+?>' />
     </div>
     <?php
     $form = new Ui\Form();
