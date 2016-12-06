@@ -18,11 +18,13 @@
                         <ul class="item-options">
                           <?php
                             foreach ($item->options as $param) {
-                                if (!$param->item_option_view || !$param->value)
-                                    continue;
+                                if (!$param->item_option_view || !$param->value) {
+                                                                    continue;
+                                }
                                 if ($param->item_option_type == 'select') {
-                                    if (empty($param->option->items[$param->value]))
-                                        continue;
+                                    if (empty($param->option->items[$param->value])) {
+                                                                            continue;
+                                    }
                                     $value = $param->option->items[$param->value]->value;
                                 } else {
                                     $value = $param->value;

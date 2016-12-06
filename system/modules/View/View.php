@@ -283,7 +283,7 @@ class View extends \Module {
                 $source = preg_replace('!url\((\'?"?)[\.]{1}!isU', 'url($1' . $rootPath, $source);
                 $source = preg_replace('#url\(([\'"]){1}(?!http|https|/|data\:)([^/])#isU', 'url($1' . $rootPath . '/$2', $source);
                 $source = preg_replace('#url\((?!http|https|/|data\:|\'|")([^/])#isU', 'url(' . $rootPath . '/$1$2', $source);
-                $cssAll .= $source."\n";
+                $cssAll .= $source . "\n";
             }
             file_put_contents($cacheDir . '/all' . $timeMd5 . '.css', $cssAll);
         }

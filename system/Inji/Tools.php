@@ -55,8 +55,9 @@ class Tools extends Model {
      * @return boolean
      */
     public static function createDir($path) {
-        if (file_exists($path))
-            return true;
+        if (file_exists($path)) {
+                    return true;
+        }
 
         $path = explode('/', $path);
         $cur = '';
