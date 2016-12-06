@@ -128,7 +128,7 @@ class Module {
      * Get installed modules for app
      * 
      * @param \App $app
-     * @param boolean|\App $primary
+     * @param App $primary
      * @return array
      */
     public static function getInstalled($app, $primary = false) {

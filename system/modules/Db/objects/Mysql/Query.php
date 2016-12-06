@@ -31,6 +31,9 @@ class Query extends \Object {
     public $params = [];
     public $distinct = false;
 
+    /**
+     * @param  $instance
+     */
     public function __construct($instance = null) {
         if (!$instance) {
             $this->curInstance = \App::$cur->db->connection;

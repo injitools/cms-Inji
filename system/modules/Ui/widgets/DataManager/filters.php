@@ -8,110 +8,110 @@ if (!$dataManager->checkAccess()) {
       return false;">
     <div class="row">       
       <?php
-      $i = -1;
-      $form = new Ui\Form();
-      foreach ($dataManager->managerOptions['filters'] as $col) {
+        $i = -1;
+        $form = new Ui\Form();
+        foreach ($dataManager->managerOptions['filters'] as $col) {
 
-          if ($dataManager->modelName) {
-              $modelName = $dataManager->modelName;
-              $colInfo = $modelName::getColInfo($col);
-          } else {
-              $colInfo = $dataManager->managerOptions['cols'][$col];
-          }
-          $values = [];
-          $inputOptions = [];
-          if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
-              $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
-              if (!empty($colOptions['userCol'])) {
-                  if (strpos($colOptions['userCol'], ':')) {
-                      $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
-                      $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
+            if ($dataManager->modelName) {
+                $modelName = $dataManager->modelName;
+                $colInfo = $modelName::getColInfo($col);
+            } else {
+                $colInfo = $dataManager->managerOptions['cols'][$col];
+            }
+            $values = [];
+            $inputOptions = [];
+            if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
+                $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
+                if (!empty($colOptions['userCol'])) {
+                    if (strpos($colOptions['userCol'], ':')) {
+                        $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
+                        $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
 
-                      $inputOptions['value'] = \Users\User::$cur->$rel->$param;
-                  } else {
-                      $this->model->$col = \Users\User::$cur->{$preset['userCol']};
-                  }
-              } elseif (!empty($colOptions['value'])) {
-                  $inputOptions['value'] = $colOptions['value'];
-              }
-              if (is_array($inputOptions['value'])) {
-                  $values = $inputOptions['value'];
-                  foreach ($values as $key => $value) {
-                      $inputOptions['value'] = $value;
-                      $form->input('hidden', "datamanagerFilters[{$col}][value][{$key}]", '', $inputOptions);
-                  }
-              } else {
-                  $form->input('hidden', "datamanagerFilters[{$col}][value]", '', $inputOptions);
-              }
-              continue;
-          }
-          if (++$i && !($i % 2)) {
-              echo '</div><div class="row">';
-          }
-          echo '<div class="col-md-6">';
-          if (!empty($colInfo['colParams']['type'])) {
-              switch ($colInfo['colParams']['type']) {
-                  case 'select':
+                        $inputOptions['value'] = \Users\User::$cur->$rel->$param;
+                    } else {
+                        $this->model->$col = \Users\User::$cur->{$preset['userCol']};
+                    }
+                } elseif (!empty($colOptions['value'])) {
+                    $inputOptions['value'] = $colOptions['value'];
+                }
+                if (is_array($inputOptions['value'])) {
+                    $values = $inputOptions['value'];
+                    foreach ($values as $key => $value) {
+                        $inputOptions['value'] = $value;
+                        $form->input('hidden', "datamanagerFilters[{$col}][value][{$key}]", '', $inputOptions);
+                    }
+                } else {
+                    $form->input('hidden', "datamanagerFilters[{$col}][value]", '', $inputOptions);
+                }
+                continue;
+            }
+            if (++$i && !($i % 2)) {
+                echo '</div><div class="row">';
+            }
+            echo '<div class="col-md-6">';
+            if (!empty($colInfo['colParams']['type'])) {
+                switch ($colInfo['colParams']['type']) {
+                    case 'select':
                       switch ($colInfo['colParams']['source']) {
-                          case 'array':
+                            case 'array':
                               $values = ['' => 'Не важно'] + $colInfo['colParams']['sourceArray'];
-                              break;
-                          case 'method':
+                                break;
+                            case 'method':
                               if (!empty($colInfo['colParams']['params'])) {
-                                  $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
-                              } else {
-                                  $values = ['' => 'Не важно'] + App::$cur->$colInfo['colParams']['module']->$colInfo['colParams']['method']();
-                              }
-                              break;
-                          case 'model':
+                                    $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
+                                } else {
+                                    $values = ['' => 'Не важно'] + App::$cur->$colInfo['colParams']['module']->$colInfo['colParams']['method']();
+                                }
+                                break;
+                            case 'model':
                               $values = ['' => 'Не важно'] + $colInfo['colParams']['model']::getList(['forSelect' => true]);
-                              break;
-                          case 'relation':
+                                break;
+                            case 'relation':
                               $relations = $colInfo['modelName']::relations();
-                              $filters = $relations[$colInfo['colParams']['relation']]['model']::managerFilters();
-                              $cols = $relations[$colInfo['colParams']['relation']]['model']::cols();
-                              $options = [
-                                  'where' => !empty($filters['getRows']['where']) ? $filters['getRows']['where'] : ''
-                              ];
-                              if (isset($cols[$relations[$colInfo['colParams']['relation']]['model']::colPrefix() . 'name'])) {
-                                  $options['order'] = 'name';
-                              }
-                              $items = $relations[$colInfo['colParams']['relation']]['model']::getList($options);
-                              $values = ['' => 'Не задано'];
-                              foreach ($items as $key => $item) {
-                                  if (!empty($inputParams['showCol'])) {
-                                      $values[$key] = $item->$inputParams['showCol'];
-                                  } else {
-                                      $values[$key] = $item->name();
-                                  }
-                              }
-                              $values;
-                              break;
-                      }
-                      $value = !empty($_GET['datamanagerFilters'][$col]['value']) ? $_GET['datamanagerFilters'][$col]['value'] : (!empty($params['filters'][$col]['value']) ? $params['filters'][$col]['value'] : '');
-                      $inputOptions = ['value' => $value, 'values' => $values, 'multiple' => true];
-                      if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
+                                $filters = $relations[$colInfo['colParams']['relation']]['model']::managerFilters();
+                                $cols = $relations[$colInfo['colParams']['relation']]['model']::cols();
+                                $options = [
+                                    'where' => !empty($filters['getRows']['where']) ? $filters['getRows']['where'] : ''
+                                ];
+                                if (isset($cols[$relations[$colInfo['colParams']['relation']]['model']::colPrefix() . 'name'])) {
+                                    $options['order'] = 'name';
+                                }
+                                $items = $relations[$colInfo['colParams']['relation']]['model']::getList($options);
+                                $values = ['' => 'Не задано'];
+                                foreach ($items as $key => $item) {
+                                    if (!empty($inputParams['showCol'])) {
+                                        $values[$key] = $item->$inputParams['showCol'];
+                                    } else {
+                                        $values[$key] = $item->name();
+                                    }
+                                }
+                                $values;
+                                break;
+                        }
+                        $value = !empty($_GET['datamanagerFilters'][$col]['value']) ? $_GET['datamanagerFilters'][$col]['value'] : (!empty($params['filters'][$col]['value']) ? $params['filters'][$col]['value'] : '');
+                        $inputOptions = ['value' => $value, 'values' => $values, 'multiple' => true];
+                        if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
 
-                          $inputOptions['disabled'] = true;
-                          $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
-                          if (!empty($colOptions['userCol'])) {
-                              if (strpos($colOptions['userCol'], ':')) {
-                                  $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
-                                  $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
+                            $inputOptions['disabled'] = true;
+                            $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
+                            if (!empty($colOptions['userCol'])) {
+                                if (strpos($colOptions['userCol'], ':')) {
+                                    $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
+                                    $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
 
-                                  $inputOptions['value'] = \Users\User::$cur->$rel->$param;
-                              } else {
-                                  $this->model->$col = \Users\User::$cur->{$preset['userCol']};
-                              }
-                          } elseif (!empty($colOptions['value'])) {
+                                    $inputOptions['value'] = \Users\User::$cur->$rel->$param;
+                                } else {
+                                    $this->model->$col = \Users\User::$cur->{$preset['userCol']};
+                                }
+                            } elseif (!empty($colOptions['value'])) {
 
-                              $inputOptions['value'] = $colOptions['value'];
-                          }
-                      }
-                      $inputOptions['class'] = 'input-sm';
-                      $form->input('select', "datamanagerFilters[{$col}][value]", $colInfo['label'], $inputOptions);
-                      break;
-                  case 'email':
+                                $inputOptions['value'] = $colOptions['value'];
+                            }
+                        }
+                        $inputOptions['class'] = 'input-sm';
+                        $form->input('select', "datamanagerFilters[{$col}][value]", $colInfo['label'], $inputOptions);
+                        break;
+                    case 'email':
                   case 'text':
                   case 'textarea':
                   case 'html':
@@ -138,40 +138,40 @@ if (!$dataManager->checkAccess()) {
                         ?>
                         <div class="filter_form_field filter_select">
                           <?php
-                          if (!empty($_GET['datamanagerFilters'][$col]['value'])) {
-                              $value = 1;
-                          } elseif (isset($_GET['datamanagerFilters'][$col]['value'])) {
-                              $value = 0;
-                          } else {
-                              $value = '';
-                          }
-                          $inputOptions = ['value' => $value, 'values' => [
-                                  '' => 'Не важно',
-                                  '1' => $colInfo['label'],
-                                  '0' => 'Нет'
-                              ]
-                          ];
-                          if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
+                            if (!empty($_GET['datamanagerFilters'][$col]['value'])) {
+                                $value = 1;
+                            } elseif (isset($_GET['datamanagerFilters'][$col]['value'])) {
+                                $value = 0;
+                            } else {
+                                $value = '';
+                            }
+                            $inputOptions = ['value' => $value, 'values' => [
+                                    '' => 'Не важно',
+                                    '1' => $colInfo['label'],
+                                    '0' => 'Нет'
+                                ]
+                            ];
+                            if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
 
-                              $inputOptions['disabled'] = true;
-                              $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
-                              if (!empty($colOptions['userCol'])) {
-                                  if (strpos($colOptions['userCol'], ':')) {
-                                      $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
-                                      $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
+                                $inputOptions['disabled'] = true;
+                                $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
+                                if (!empty($colOptions['userCol'])) {
+                                    if (strpos($colOptions['userCol'], ':')) {
+                                        $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
+                                        $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
 
-                                      $inputOptions['value'] = \Users\User::$cur->$rel->$param;
-                                  } else {
-                                      $this->model->$col = \Users\User::$cur->{$preset['userCol']};
-                                  }
-                              } elseif (!empty($colOptions['value'])) {
+                                        $inputOptions['value'] = \Users\User::$cur->$rel->$param;
+                                    } else {
+                                        $this->model->$col = \Users\User::$cur->{$preset['userCol']};
+                                    }
+                                } elseif (!empty($colOptions['value'])) {
 
-                                  $inputOptions['value'] = $colOptions['value'];
-                              }
-                          }
-                          $inputOptions['class'] = 'input-sm';
-                          $form->input('select', "datamanagerFilters[{$col}][value]", $colInfo['label'], $inputOptions);
-                          ?>
+                                    $inputOptions['value'] = $colOptions['value'];
+                                }
+                            }
+                            $inputOptions['class'] = 'input-sm';
+                            $form->input('select', "datamanagerFilters[{$col}][value]", $colInfo['label'], $inputOptions);
+                            ?>
                         </div>
 
                         <?php

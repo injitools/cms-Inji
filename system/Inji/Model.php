@@ -542,7 +542,7 @@ class Model {
     /**
      * Information extractor for col relations path
      * 
-     * @param string|array $info
+     * @param string $info
      * @return array
      */
     public static function parseColRecursion($info) {
@@ -626,7 +626,7 @@ class Model {
      * Generate params string for col by name
      * 
      * @param string $colName
-     * @return boolean|string
+     * @return false|string
      */
     public static function genColParams($colName) {
         if (empty(static::$cols[$colName]) || static::$storage['type'] == 'moduleConfig') {
@@ -781,7 +781,7 @@ class Model {
     /**
      * return relations list
      * 
-     * @return array
+     * @return string
      */
     public static function relations() {
         return [];
@@ -1311,7 +1311,7 @@ class Model {
      * 
      * @param array $params
      * @param array $where
-     * @return boolean
+     * @return false|null
      */
     public static function update($params, $where = []) {
         static::fixPrefix($params);
