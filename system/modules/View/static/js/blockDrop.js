@@ -8,10 +8,6 @@ function BlockDrop() {
 
 BlockDrop.prototype.bindUi = function () {
   if (this.binded) {
-    //$(".block-preset,.blockMap .block").draggable();
-    //$(".block-preset,.blockMap .block").draggable("destroy");
-    //$(".block-preset,.blockMap .block").droppable();
-    //$(".block-preset,.blockMap .block").droppable("destroy");
     $(".block-preset,.blockMap .rows .row > div").sortable();
     $(".block-preset,.blockMap .rows .row > div").sortable("destroy");
   }
@@ -22,37 +18,6 @@ BlockDrop.prototype.bindUi = function () {
     connectWith: ".block-preset,.blockMap .rows .row > div",
     tolerance: "pointer",
   });
-  /*
-   $(".blockMap .blockCol, .block-preset").droppable({
-   activeClass: "ui-state-default",
-   hoverClass: "ui-state-hover",
-   accept: ":not(.ui-sortable-helper)",
-   drop: function (event, ui) {
-   //$(this).find(".placeholder").remove();
-   $("<div class ='block'  data-code='" + ui.draggable.data('code') + "'></div>").text(ui.draggable.text()).appendTo(this).draggable({
-   appendTo: "body",
-   revert: true,
-   });
-   if (ui.draggable.closest('.rows').length > 0) {
-   ui.draggable.remove();
-   }
-   }
-   }).sortable({
-   items: "div:not(.placeholder)",
-   placeholder: "ui-state-highlight",
-   sort: function () {
-   //$(this).removeClass("ui-state-default");
-   //$(this).css('width','auto');
-   }
-   });
-   $(".block-preset .block,.blockMap .block").draggable({
-   appendTo: "body",
-   revert: true,
-   stack: ".block-preset .block,.blockMap .block",
-   opacity: 0.7,
-   connectToSortable: '.blockMap .blockCol, .block-preset',
-   });
-   */
   this.binded = true;
 }
 BlockDrop.prototype.addRow = function (selector) {
@@ -72,7 +37,7 @@ BlockDrop.prototype.addRow = function (selector) {
   html += '</div>';
   html += '<div class = "form-group"><button class = "btn btn-success" onclick = "blockDrop.acceptAddRow(this);" data-dismiss="modal">Добавить строку</button></div>';
   html += '</div>';
-  var modal = inji.Ui.modals.show('Выбор разметки', html);
+  inji.Ui.modals.show('Выбор разметки', html);
 }
 BlockDrop.prototype.changeCols = function (btn, count) {
   var rowselector = $(btn).closest('.rowsSelector');

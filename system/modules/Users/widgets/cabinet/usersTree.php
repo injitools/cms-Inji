@@ -29,9 +29,6 @@ foreach ($partners['users'] as $user) {
         'translit' => Tools::translit($user->name()),
     ];
 }
-if (!empty($_GET['info']['user_id']) && !empty($users[$_GET['info']['user_id']])) {
-    
-}
 App::$cur->libs->loadLib('typeahead');
 ?>
 

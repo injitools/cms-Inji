@@ -18,9 +18,6 @@ inji.onLoad(function () {
           return;
         }
         tree.addClass('treeview-tree');
-        tree.find('li').each(function () {
-          var stick = $(this);
-        });
         tree.find('li').has("ul").each(function () {
           var branch = $(this); //li with children ul
           var icon = branch.data('treeview-icon-closed');

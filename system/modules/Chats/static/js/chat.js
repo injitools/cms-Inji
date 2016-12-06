@@ -2,7 +2,6 @@ inji.Chats = {};
 inji.Chats.chats = [];
 inji.Chats.get = function (id, params) {
   var chatElement = $('#' + id);
-  var chat;
   if (chatElement.data('chats-index') === undefined) {
     inji.Chats.chats.push({
       element: chatElement,

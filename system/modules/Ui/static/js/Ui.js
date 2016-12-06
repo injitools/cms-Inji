@@ -182,12 +182,7 @@ Forms.prototype.popUp = function (item, params, callback) {
     code += params.relation;
   }
   code = code.replace(/:/g, '_').replace(/\\/g, '_');
-  var exist = false;
-  if ($('#' + code).length != 0) {
-    exist = true;
-  }
   var modal = inji.Ui.modals.show('', '<div class = "text-center"><img src = "' + inji.options.appRoot + 'static/moduleAsset/Ui/images/ajax-loader.gif" /></div>', code, 'modal-lg');
-  //if (!exist) {
   inji.Server.request({
     url: 'ui/formPopUp/',
     data: {item: item, params: params},
@@ -199,7 +194,6 @@ Forms.prototype.popUp = function (item, params, callback) {
       inji.Ui.editors.loadIn(modal.find('.modal-body'), '.htmleditor');
     }
   });
-  //}
 }
 Forms.prototype.submitAjax = function (form, params) {
   inji.Ui.editors.beforeSubmit(form);

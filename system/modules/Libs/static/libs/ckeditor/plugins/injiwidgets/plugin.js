@@ -27,7 +27,6 @@ CKEDITOR.plugins.add('injiwidgets',
             requires: ['iframedialog', 'fakeobjects'],
             init: function (editor)
             {
-                var editorI = editors.length;
                 editors.push(editor);
                 var height = 300, width = 400;
                 CKEDITOR.dialog.addIframe(

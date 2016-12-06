@@ -25,7 +25,7 @@ class TemplateController extends \Controller {
             if (!empty($code)) {
                 $result = new Server\Result();
                 $result->successMsg = 'Файл сохранен';
-                $content = file_put_contents($template->path . '/' . Tools::parsePath($_GET['path']), $code);
+                file_put_contents($template->path . '/' . Tools::parsePath($_GET['path']), $code);
                 $result->send();
             }
             $content = file_get_contents($template->path . '/' . Tools::parsePath($_GET['path']));

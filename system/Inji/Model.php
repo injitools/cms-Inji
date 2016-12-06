@@ -303,7 +303,6 @@ class Model {
                                 $relation = static::getRelation($type['relation']);
                                 $sourceModel = $relation['model'];
                             }
-                            $inputType = 'select';
                             $value = $sourceModel::get($item->$colName);
                             if ($value) {
                                 $value = $value->name();
@@ -560,13 +559,11 @@ class Model {
                     case 'to':
                         $relCol = $relations[$rel]['col'];
                         static::fixPrefix($relCol);
-                        //$info['modelName'] = $relations[$rel]['model'];
                         $info['joins'][$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol];
                         break;
                     case 'one':
                         $relCol = $relations[$rel]['col'];
                         $relations[$rel]['model']::fixPrefix($relCol);
-                        //$info['modelName'] = $relations[$rel]['model'];
                         $info['joins'][$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol];
                         break;
                 }

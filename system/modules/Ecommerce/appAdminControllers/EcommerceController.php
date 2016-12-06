@@ -12,8 +12,6 @@ class EcommerceController extends adminController {
 
     public function dashboardAction() {
         $this->view->setTitle('Онлайн магазин');
-        $forms = \Ecommerce\Item::$magicForms;
-        \Ecommerce\Item::$forms['simpleItem']['handler']();
         $this->view->page();
     }
 

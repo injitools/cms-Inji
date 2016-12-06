@@ -10,7 +10,7 @@
  */
 class Dashboard extends Module {
 
-    public function itemHref($item, $col, $colParam) {
+    public function itemHref($item, $col) {
         $modelName = $item->model;
         $relItem = $modelName::get($item->$col);
         if ($relItem) {
@@ -19,7 +19,7 @@ class Dashboard extends Module {
         return 'Ресурс удален';
     }
 
-    public function moduleHref($item, $col, $colParam) {
+    public function moduleHref($item, $col) {
         if (!$item->$col) {
             return 'Модуль не задан';
         }
@@ -30,7 +30,7 @@ class Dashboard extends Module {
         return !empty($moduleInfo['name']) ? $moduleInfo['name'] : $item->$col;
     }
 
-    public function modelHref($item, $col, $colParam) {
+    public function modelHref($item, $col) {
         if (!$item->$col) {
             return 'Модель не задана';
         }

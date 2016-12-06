@@ -55,9 +55,7 @@ class Orders extends \Object {
 
             $this->updateCartItems($cart, $order->Товары->Товар);
             $cart->payed = $payed;
-            if ($payed && $cart->cart_status_id == 5) {
-                
-            } elseif ($payed && $cart->cart_status_id == 3) {
+            if ($payed && $cart->cart_status_id == 3) {
                 $cart->cart_status_id = 5;
                 $cart->save();
             } elseif ($cancel && $cart->cart_status_id == 3) {
@@ -71,7 +69,6 @@ class Orders extends \Object {
                     }
                 }
             }
-            //$cart->cc_exported = 1;
             $cart->save();
         }
     }

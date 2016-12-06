@@ -26,27 +26,6 @@ class Item extends \Model {
     public static $cols = [
         'type' => ['type' => 'select', 'source' => 'array', 'sourceArray' => [
                 'href' => 'Ссылка',
-            /*
-              'materialCategory' => [
-              'text' => 'Категория материалов',
-              'input' => [
-              'type' => 'select',
-              'source' => 'model',
-              'model' => '\Materials\Category',
-              'name' => 'aditional'
-              ]
-              ],
-              'material' => [
-              'text' => 'Материал',
-              'input' => [
-              'type' => 'select',
-              'source' => 'model',
-              'model' => '\Materials\Material',
-              'name' => 'aditional'
-              ]
-              ]
-             * 
-             */
             ]
         ],
         'aditional' => ['type' => 'hidden'],

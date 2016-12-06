@@ -23,17 +23,17 @@ class Files extends Module {
         $sitePath = App::$primary->path;
 
         if (!is_uploaded_file($file['tmp_name'])) {
-                    return 0;
+            return 0;
         }
 
         $fileinfo = pathinfo($file['name']);
         if (empty($fileinfo['extension'])) {
-                    return 0;
+            return 0;
         }
 
         $type = Files\Type::get($fileinfo['extension'], 'ext');
         if (!$type) {
-                    return 0;
+            return 0;
         }
 
         if (!empty($options['accept_group']) && $options['accept_group'] != $type->group) {
@@ -51,7 +51,7 @@ class Files extends Module {
         $fileObject->name = $fileinfo['filename'];
         $fileObject->path = $type->type_dir . date('Y-m-d') . '/' . microtime(true) . '.' . $fileinfo['extension'];
         if ($fileObject->id && file_exists($sitePath . $fileObject->path)) {
-                    unlink($sitePath . $fileObject->path);
+            unlink($sitePath . $fileObject->path);
         }
 
         Tools::createDir($sitePath . $type->type_dir . date('Y-m-d') . '/');
@@ -62,7 +62,7 @@ class Files extends Module {
 
         if ($type->allow_resize && $type->options && json_decode($type->options, true)) {
             $typeOptions = json_decode($type->options, true);
-            list($img_width, $img_height, $img_type, $img_tag) = getimagesize($sitePath . $fileObject->path);
+            list($img_width, $img_height) = getimagesize($sitePath . $fileObject->path);
             if ($img_height > $typeOptions['max_height'] || $img_width > $typeOptions['max_width']) {
                 Tools::resizeImage($sitePath . $fileObject->path, $typeOptions['max_width'], $typeOptions['max_height']);
             }
@@ -89,12 +89,12 @@ class Files extends Module {
 
         $fileinfo = pathinfo($url);
         if (empty($fileinfo['extension'])) {
-                    return 0;
+            return 0;
         }
 
         $type = Files\Type::get($fileinfo['extension'], 'ext');
         if (!$type) {
-                    return 0;
+            return 0;
         }
 
         if (!empty($options['accept_group']) && $options['accept_group'] != $type->group) {
@@ -112,7 +112,7 @@ class Files extends Module {
         $fileObject->name = $fileinfo['filename'];
         $fileObject->path = $type->type_dir . date('Y-m-d') . '/' . microtime(true) . '.' . $fileinfo['extension'];
         if ($fileObject->id && file_exists($sitePath . $fileObject->path)) {
-                    unlink($sitePath . $fileObject->path);
+            unlink($sitePath . $fileObject->path);
         }
 
         Tools::createDir($sitePath . $type->type_dir . date('Y-m-d') . '/');
@@ -127,7 +127,7 @@ class Files extends Module {
 
         if ($type->allow_resize && $type->options && json_decode($type->options, true)) {
             $typeOptions = json_decode($type->options, true);
-            list($img_width, $img_height, $img_type, $img_tag) = getimagesize($sitePath . $fileObject->path);
+            list($img_width, $img_height) = getimagesize($sitePath . $fileObject->path);
             if ($img_height > $typeOptions['max_height'] || $img_width > $typeOptions['max_width']) {
                 Tools::resizeImage($sitePath . $fileObject->path, $typeOptions['max_width'], $typeOptions['max_height']);
             }
@@ -140,5 +140,4 @@ class Files extends Module {
 
         return $fileObject->id;
     }
-
 }

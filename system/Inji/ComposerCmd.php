@@ -31,9 +31,6 @@ class ComposerCmd {
             file_put_contents($path . '/composer/composerInstall.php', str_replace('process(is_array($argv) ? $argv : array());', '', file_get_contents('https://getcomposer.org/installer')));
             include_once $path . '/composer/composerInstall.php';
 
-            $check = false;
-            $help = false;
-            $force = false;
             $quiet = false;
             $channel = 'stable';
             $disableTls = false;

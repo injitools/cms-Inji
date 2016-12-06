@@ -52,7 +52,7 @@ class Action extends \Object {
      * @param array $adInfo
      * @return string
      */
-    public static function groupAction($dataManager, $ids, $actionParams, $adInfo) {
+    public static function groupAction($dataManager, $ids, $actionParams, $adInfo = []) {
         return 'empty action';
     }
 }

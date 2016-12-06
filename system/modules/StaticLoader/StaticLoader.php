@@ -108,9 +108,9 @@ class StaticLoader extends Module {
                 $sizes = explode('x', $_GET['resize']);
                 $sizes[0] = intval($sizes[0]);
                 if (isset($sizes[1])) {
-                                    $sizes[1] = intval($sizes[1]);
+                    $sizes[1] = intval($sizes[1]);
                 } else {
-                                    $sizes[1] = 0;
+                    $sizes[1] = 0;
                 }
 
                 if (!$sizes[0] || !$sizes[1]) {
@@ -124,14 +124,14 @@ class StaticLoader extends Module {
 
                     if (!empty($_GET['resize_crop'])) {
                         if (in_array($_GET['resize_crop'], array('q', 'c'))) {
-                                                    $crop = $_GET['resize_crop'];
+                            $crop = $_GET['resize_crop'];
                         } else {
-                                                    $crop = 'c';
+                            $crop = 'c';
                         }
                     } elseif (!empty($_GET['resize_quadro'])) {
-                                            $crop = 'q';
+                        $crop = 'q';
                     } else {
-                                            $crop = '';
+                        $crop = '';
                     }
                     $pos = 'center';
                     if (!empty($_GET['resize_pos']) && in_array($_GET['resize_pos'], array('top', 'center'))) {
@@ -174,9 +174,7 @@ class StaticLoader extends Module {
             exit();
         }
 
-        //if( strpos( $file, '/static/doc' ) !== false ) {
         header('Content-Description: File Transfer');
-        //}
         if (isset($this->mimes[strtolower($fileinfo['extension'])])) {
             header("Content-Type: " . $this->mimes[strtolower($fileinfo['extension'])]);
         }
@@ -194,12 +192,8 @@ class StaticLoader extends Module {
         }
 
         header('Content-Transfer-Encoding: binary');
-        //}
-
-
 
         readfile($file);
         exit();
     }
-
 }

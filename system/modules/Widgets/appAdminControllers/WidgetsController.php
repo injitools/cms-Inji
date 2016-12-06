@@ -25,7 +25,7 @@ class WidgetsController extends Controller {
         if (!empty($_GET['text'])) {
             $widgetCode = explode(':', preg_replace('!^{WIDGET:!isU', '', preg_replace('!}$!isU', '', urldecode($_GET['text']))));
             $text = 'Виджет: ';
-            $widget = false; //Widget::get($widgetCode[0], 'widget_filename');
+            $widget = false;
 
             if ($widget) {
                 $text .= $widget->widget_name . "\n";

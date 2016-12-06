@@ -117,7 +117,6 @@ class Twitter extends \Users\SocialHelper {
     }
 
     public static function auth() {
-        $config = static::getConfig();
         if (empty($_GET['oauth_verifier']) || empty($_SESSION['oauth_token_secret'])) {
             $tokens = self::requestToken();
             $_SESSION['oauth_token_secret'] = $tokens['oauth_token_secret'];

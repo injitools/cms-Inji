@@ -153,13 +153,6 @@ class UsersController extends Controller {
         echo "id:{$user->id}<br />";
         echo "E-mail: <a href='mailto:{$user->mail}'>{$user->mail}</a>";
         $rewards = Money\Reward::getList(['where' => ['active', 1]]);
-        $levelTypes = [
-            'procent' => 'Процент',
-            'amount' => 'Сумма',
-        ];
-        $itemTypes = [
-            'event' => 'Событие'
-        ];
         foreach ($rewards as $reward) {
             foreach ($reward->conditions as $condition) {
                 $complete = $condition->checkComplete($userId);

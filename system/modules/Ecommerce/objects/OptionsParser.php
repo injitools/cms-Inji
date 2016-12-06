@@ -43,7 +43,7 @@ class OptionsParser extends \Object {
         ];
 
         //add custom preset filters from config on where
-        self::presetFilters($options, $selectOptions);
+        self::presetFilters($selectOptions);
 
         //parse filters
         self::filters($options, $selectOptions);
@@ -54,7 +54,7 @@ class OptionsParser extends \Object {
         //search
         self::search($options, $selectOptions);
 
-        self::warehouse($options, $selectOptions);
+        self::warehouse($selectOptions);
 
         $selectOptions['group'] = Item::index();
 
@@ -104,7 +104,7 @@ class OptionsParser extends \Object {
         }
     }
 
-    public static function presetFilters(&$options, &$selectOptions) {
+    public static function presetFilters(&$selectOptions) {
         if (empty(\App::$cur->Ecommerce->config['view_filter'])) {
             return;
         }
@@ -205,7 +205,7 @@ class OptionsParser extends \Object {
         }
     }
 
-    public static function warehouse(&$options, &$selectOptions) {
+    public static function warehouse(&$selectOptions) {
         if (!empty(\App::$cur->Ecommerce->config['view_empty_warehouse'])) {
             return;
         }

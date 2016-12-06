@@ -269,7 +269,6 @@ class Item extends \Model {
                 'type' => 'many',
                 'model' => 'Ecommerce\Item\Param',
                 'col' => 'item_id',
-                //'resultKey' => 'code',
                 'resultKey' => 'item_option_id',
                 'join' => [Item\Option::table(), Item\Option::index() . ' = ' . Item\Param::colPrefix() . Item\Option::index()]
             ],

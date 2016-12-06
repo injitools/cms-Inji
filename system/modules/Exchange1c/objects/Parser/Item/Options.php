@@ -20,7 +20,6 @@ class Options extends \Migrations\Parser {
             Options::$options = \Ecommerce\Item\Option::getList();
         }
         $options = [];
-        $modelName = 'Ecommerce\Item\Option';
         foreach ($this->data['ЗначенияСвойства'] as $opt) {
             $optionId = \App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option'][$opt['Ид']]->object_id;
             if ($optionId && !isset(Options::$options[$optionId])) {

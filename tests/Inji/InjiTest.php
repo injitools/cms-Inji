@@ -2,10 +2,6 @@
 
 class InjiTest extends PHPUnit_Framework_TestCase {
 
-    function setUp() {
-        
-    }
-
     /**
      * @covers Inji::listen
      * @covers Inji::event
@@ -37,7 +33,7 @@ class InjiTest extends PHPUnit_Framework_TestCase {
     public function testArrayWithCallback() {
         $callbackOptions = ['callback' => 'InjiTestcallbackArray', 'data' => 'data'];
         \Inji::$inst->listen('testEvent3', 'testCallback', $callbackOptions);
-        $this->assertEquals($callbackOptions, Inji::$inst->event('testEvent3'));
+        $this->assertEquals($callbackOptions, Inji::$inst->event('testEvent3')['callbackOptions']);
     }
 }
 
@@ -46,5 +42,5 @@ function InjiTestcallback() {
 }
 
 function InjiTestcallbackArray($event, $callbackOptions) {
-    return $callbackOptions;
+    return ['event' => $event, 'callbackOptions' => $callbackOptions];
 }

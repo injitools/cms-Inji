@@ -37,7 +37,6 @@ class PerfectMoney extends \Money\MerchantHelper {
         }
         $form->end('process');
         echo '<script>document.querySelector("form").submit();</script>';
-        //\Tools::redirect('https://perfectmoney.is/api/step1.asp?' . http_build_query($request));
     }
 
     public static function reciver($data, $status) {

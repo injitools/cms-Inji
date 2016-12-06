@@ -149,7 +149,7 @@ class Query extends \Exchange1c\Mode {
 
             addToXml($xml, $doc, 'Время', $statusDateTime->format('H:i:s'));
             addToXml($xml, $doc, 'Комментарий', $cart->comment);
-            $goodss = $doc->appendChild($goodss);
+            $doc->appendChild($goodss);
 
             $reqs = $doc->appendChild($xml->createElement('ЗначенияРеквизитов'));
             $req = $reqs->appendChild($xml->createElement('ЗначениеРеквизита'));
@@ -208,7 +208,7 @@ class Query extends \Exchange1c\Mode {
             addToXml($xml, $req, 'Наименование', 'Дата изменения статуса');
             addToXml($xml, $req, 'Значение', $statusDateTime->format('Y-m-d H:i:s'));
 
-            $doc = $root->appendChild($doc);
+            $root->appendChild($doc);
         }
 
         echo $xml->saveXML();

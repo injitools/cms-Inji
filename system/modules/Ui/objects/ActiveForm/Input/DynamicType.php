@@ -26,7 +26,6 @@ class DynamicType extends \Ui\ActiveForm\Input {
             $this->form->input('hidden', $inputName, '', $inputOptions);
             return true;
         }
-        $classPath = explode('\\', get_called_class());
         $inputType = 'text';
 
         switch ($this->colParams['typeSource']) {

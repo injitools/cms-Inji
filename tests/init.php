@@ -85,6 +85,3 @@ if (file_exists(__DIR__ . '/tmp/vendor/autoload.php')) {
 if (file_exists(App::$primary->path . '/vendor/autoload.php')) {
     include_once App::$primary->path . '/vendor/autoload.php';
 }
-//Module::$cur = Module::resolveModule(App::$cur);
-//Controller::$cur = Module::$cur->findController();
-//Controller::$cur->run();

@@ -227,8 +227,7 @@ class Money extends Module {
             $recive->user_id = $user->id;
             $recive->amount = 1;
             $recive->save();
-            $count = $types[$level->type]['rewarder']($reward, $sums, $user, $rootUser, $level, $rewardGet);
+            return $types[$level->type]['rewarder']($reward, $sums, $user, $rootUser, $level, $rewardGet);
         }
     }
-
 }

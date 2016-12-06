@@ -73,7 +73,6 @@ class Offer extends \Model {
                 'type' => 'many',
                 'model' => 'Ecommerce\Item\Offer\Param',
                 'col' => 'item_offer_id',
-                //'resultKey' => 'code',
                 'resultKey' => 'item_offer_option_id',
                 'join' => [Offer\Option::table(), Offer\Option::index() . ' = ' . Offer\Param::colPrefix() . Offer\Option::index()]
             ],

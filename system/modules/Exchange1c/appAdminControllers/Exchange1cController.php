@@ -29,8 +29,6 @@ class Exchange1cController extends adminController {
             copy($reExchange->path . '/' . $reFile->name, $exchange->path . '/' . $reFile->name);
         }
 
-        //Tools::copyFiles($reExchange->path, $exchange->path);
-
         foreach ($reExchange->logs as $reLog) {
             if (!in_array($reLog->info, ['import'])) {
                 continue;

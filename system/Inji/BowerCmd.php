@@ -40,10 +40,7 @@ class BowerCmd {
         if (!file_exists($path . '/.bowerrc')) {
             $json = [
                 "directory" => 'static/bower',
-                "interactive" => false,
-                /*"ignoredDependencies" => [
-                    "jquery"
-                ]*/
+                "interactive" => false
             ];
             Tools::createDir($path);
             file_put_contents($path . '/.bowerrc', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));

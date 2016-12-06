@@ -377,20 +377,19 @@ class Users extends Module {
         return password_verify($pass, $hash);
     }
 
-    public function getUserPartners($user, $levels = 0) {
+    public function getUserPartners($user, $levelsCount = 0) {
         $return = [
             'users' => [],
             'levels' => [],
             'count' => 0,
             'lastLevel' => 0
         ];
-        $levels = [];
         $userIds = $user->user_id;
-        for ($i = 1; $i <= $levels || !$levels; $i++) {
-            if (!$userIds && $levels) {
-                $levels[$i] = [];
+        for ($i = 1; $i <= $levelsCount || !$levelsCount; $i++) {
+            if (!$userIds && $levelsCount) {
+                $return['levels'][$i] = [];
                 continue;
-            } elseif (!$userIds && !$levels) {
+            } elseif (!$userIds && !$levelsCount) {
                 break;
             }
             $usersLevel = \Users\User::getList(['where' => [['parent_id', $userIds, 'IN']]]);

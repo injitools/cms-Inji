@@ -52,14 +52,6 @@ class ChatsController extends Controller {
                 ];
                 $result->content['messages'][] = $msg;
             }
-            /* $members = $this->module->getMembers($chatId);
-              foreach ($members as $member) {
-              $result->content['members'][$member->user_id] = [
-              'fullUserName' => $member->user->name(),
-              'userFirstName' => $member->user->info->first_name,
-              'userPhoto' => $member->user->info->photo ? $member->user->info->photo->path : '/static/system/images/no-image.png'
-              ];
-              } */
         }
         $result->send();
     }
