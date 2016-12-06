@@ -336,8 +336,8 @@ DataManager.prototype.load = function (options) {
       if (dataManager.mode == 'sort') {
         $(instance.element).find('.datamanagertable tbody').sortable({
           stop: function (event, ui) {
-            ids = $(instance.element).find('.datamanagertable tbody tr');
-            i = 0;
+            var ids = $(instance.element).find('.datamanagertable tbody tr');
+            var i = 0;
             while (ids[i]) {
               var key = $($(ids[i++]).find('td').get(1)).text();
               inji.Server.request({
@@ -367,13 +367,11 @@ DataManager.prototype.load = function (options) {
           });
           $(instance.element).find('.categoryTree ul').sortable({
             stop: function (event, ui) {
-              ids = $(instance.element).find('li');
-              console.log(instance.element, ids)
-              i = 0;
+              var ids = $(instance.element).find('li');
+              var i = 0;
               while (ids[i]) {
                 var key = $(ids[i]).find('>a').data('id');
                 var model = $(ids[i]).find('>a').data('model');
-                console.log(key, model)
                 if (key && model) {
                   inji.Server.request({
                     url: 'ui/dataManager/updateRow',
