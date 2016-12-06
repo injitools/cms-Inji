@@ -134,7 +134,7 @@ class View extends \Module {
 
     private function parseRaw($source) {
         if (!$source) {
-                    return [];
+            return [];
         }
 
         preg_match_all("|{([^}]+)}|", $source, $result);
@@ -185,7 +185,7 @@ class View extends \Module {
     public function getHref($type, $params) {
         $href = '';
         if (is_string($params)) {
-            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $params;
+            $href = $params;
         } elseif (empty($params['template']) && !empty($params['file'])) {
             $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $params['file'];
         } elseif (!empty($params['template']) && !empty($params['file'])) {
@@ -283,7 +283,7 @@ class View extends \Module {
                 $source = preg_replace('!url\((\'?"?)[\.]{1}!isU', 'url($1' . $rootPath, $source);
                 $source = preg_replace('#url\(([\'"]){1}(?!http|https|/|data\:)([^/])#isU', 'url($1' . $rootPath . '/$2', $source);
                 $source = preg_replace('#url\((?!http|https|/|data\:|\'|")([^/])#isU', 'url(' . $rootPath . '/$1$2', $source);
-                $cssAll .= $source;
+                $cssAll .= $source."\n";
             }
             file_put_contents($cacheDir . '/all' . $timeMd5 . '.css', $cssAll);
         }
@@ -313,9 +313,9 @@ class View extends \Module {
                         continue;
                     }
                     if (strpos($css, '//') !== false) {
-                                            $href = $css;
+                        $href = $css;
                     } else {
-                                            $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $css;
+                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $css;
                     }
                     $hrefs[$href] = $href;
                 }
@@ -327,9 +327,9 @@ class View extends \Module {
                         continue;
                     }
                     if (strpos($css, '://') !== false) {
-                                            $href = $css;
+                        $href = $css;
                     } else {
-                                            $href = $this->app->templatesPath . "/{$this->template->name}/css/{$css}";
+                        $href = $this->app->templatesPath . "/{$this->template->name}/css/{$css}";
                     }
                     $hrefs[$href] = $href;
                 }
@@ -430,7 +430,7 @@ class View extends \Module {
         $cacheDir = Cache::getDir('static');
         if (!file_exists($cacheDir . '/all' . $timeMd5 . '.js')) {
             foreach ($urls as $url) {
-                $scriptAll .= ';' . file_get_contents($url);
+                $scriptAll .= ";\n" . file_get_contents($url);
             }
             file_put_contents($cacheDir . '/all' . $timeMd5 . '.js', $scriptAll);
         }
@@ -518,7 +518,9 @@ class View extends \Module {
         if (!$lib) {
             $this->dynAssets[$type][] = $asset;
         } else {
-            $this->libAssets[$type][$lib][] = $asset;
+            if (empty($this->libAssets[$type][$lib]) || !in_array($asset, $this->libAssets[$type][$lib])) {
+                $this->libAssets[$type][$lib][] = $asset;
+            }
         }
     }
 
@@ -593,5 +595,4 @@ class View extends \Module {
         }
         return $paths;
     }
-
 }
