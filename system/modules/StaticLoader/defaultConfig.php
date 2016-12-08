@@ -61,6 +61,7 @@ return [
         'mny' => 'application/x-msmoney',
         'movie' => 'video/x-sgi-movie',
         'mp3' => 'audio/mpeg',
+        'ogg' => 'audio/ogg',
         'mpp' => 'application/vnd.ms-project',
         'mpv2' => 'video/mpeg',
         'ms' => 'application/x-troff-ms',
