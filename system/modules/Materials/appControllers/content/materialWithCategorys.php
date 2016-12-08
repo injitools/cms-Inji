@@ -4,7 +4,7 @@
           <?php
             $category = $material->category;
             \Ui\Tree::ul($category->getRoot(), 0, function($category) {
-                echo "<a href='{$category->getHref()}'> {$category->name()}</a>";
+                return "<a href='{$category->getHref()}'> {$category->name()}</a>";
             });
             ?>
         </div>

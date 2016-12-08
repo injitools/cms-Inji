@@ -3,7 +3,7 @@
         <div class="col-md-3">
           <?php
             \Ui\Tree::ul($category->getRoot(), 0, function($category) {
-                echo "<a href='{$category->getHref()}'> {$category->name()}</a>";
+                return "<a href='{$category->getHref()}'> {$category->name()}</a>";
             });
             ?>
         </div>
