@@ -694,12 +694,17 @@ class DataManager extends \Object {
         if (!$this->predraw) {
             $this->preDraw($params, $model);
         }
+        if (!$this->checkAccess()) {
+            $this->drawError('you not have access to "' . $this->modelName . '" manager with name: "' . $this->managerName . '"');
+            return false;
+        }
         \App::$cur->view->widget('Ui\DataManager/DataManager', [
             'dataManager' => $this,
             'model' => $model,
             'table' => $this->table,
             'params' => $params
         ]);
+        return true;
     }
 
     public function drawCategorys() {

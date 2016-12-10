@@ -92,6 +92,25 @@ class Input extends \Object {
     }
 
     public function readOnly() {
+        if (!empty($this->colParams['readonly'])) {
+            if (is_bool($this->colParams['readonly'])) {
+                return true;
+            }
+            $readonly = true;
+            if (is_array($this->colParams['readonly'])) {
+                switch ($this->colParams['readonly']['cond']) {
+                    case 'colValue':
+                        $readonly = $this->activeForm->model->{$this->colParams['readonly']['col']} == $this->colParams['readonly']['value'];
+                        if (!empty($this->colParams['readonly']['reverse'])) {
+                            $readonly = !$readonly;
+                        }
+                        break;
+                }
+            }
+            if ($readonly) {
+                return true;
+            }
+        }
         return !empty($this->activeForm->form['userGroupReadonly'][\Users\User::$cur->group_id]) && in_array($this->colName, $this->activeForm->form['userGroupReadonly'][\Users\User::$cur->group_id]);
     }
 
@@ -105,5 +124,4 @@ class Input extends \Object {
             $validator($this->activeForm, $request);
         }
     }
-
 }
