@@ -1,6 +1,9 @@
 <?php
 return [
     'accessCheck' => function() {
+        if (!class_exists('Users\User')) {
+            return false;
+        }
         $access = null;
         $path = [
             'accessTree',
