@@ -745,8 +745,8 @@ class DataManager extends \Object {
         if (!empty($this->managerOptions['options']['access']['apps']) && !in_array(\App::$cur->name, $this->managerOptions['options']['access']['apps'])) {
             return false;
         }
-        if (!empty($this->managerOptions['options']['access']['groups']) && in_array(\Users\User::$cur->group_id, $this->managerOptions['options']['access']['groups'])) {
-            return true;
+        if (!empty($this->managerOptions['options']['access']['groups'])) {
+            return in_array(\Users\User::$cur->group_id, $this->managerOptions['options']['access']['groups']);
         }
         if ($this->managerName == 'manager' && !\Users\User::$cur->isAdmin()) {
             return false;
