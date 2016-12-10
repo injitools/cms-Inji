@@ -3,14 +3,21 @@
   width:40px;
 }
 .nav-list-categorys .nav-list{
-  padding-left:15px;margin-bottom:0;
+  padding-left:15px;
+  margin-bottom:0;
 }
 .nav-list-categorys .actions{
-  white-space: nowrap;margin-left: 10px}
-.nav-list-categorys label{font-weight: 400; font-size:12px;
+  white-space: nowrap;
+  margin-left: 10px
+}
+.nav-list-categorys label{
+  font-weight: 400; 
+  font-size:12px;
 }
 .nav-list-categorys{
-  padding-left:0px;padding-right:0px;margin-bottom:0;
+  padding-left:0px;
+  padding-right:0px;
+  margin-bottom:0;
 }
 span.nav-toggle-icon{
   font-size:12px;
