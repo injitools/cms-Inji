@@ -6,6 +6,7 @@
             </a>
         </li>
         <?php
+        $where = [];
         if (class_exists('Users\User')) {
             App::$cur->ui;
             ?>
@@ -33,20 +34,22 @@
             if (Users\User::$cur->group_id == 3) {
                 $where[] = ['group_id', 0, '=', 'OR'];
             }
-            $menu = Menu\Menu::get([['code', 'sidebarMenu'], $where]);
-            if ($menu) {
-                foreach ($menu->items(['where' => ['parent_id', 0], 'order' => ['weight', 'asc']]) as $item) {
-                    echo "<li><a href = '{$item->href}'>{$item->name}</a>";
-                    $childItems = Menu\Item::getList(['where' => ['parent_id', $item->id]]);
-                    if ($childItems) {
-                        echo "<ul>";
-                        foreach ($childItems as $item) {
-                            echo "<li><a href = '{$item->href}'>{$item->name}</a>";
-                        }
-                        echo "</ul>";
+        } else {
+            $where[] = ['group_id', 0, '='];
+        }
+        $menu = Menu\Menu::get([['code', 'sidebarMenu'], $where]);
+        if ($menu) {
+            foreach ($menu->items(['where' => ['parent_id', 0], 'order' => ['weight', 'asc']]) as $item) {
+                echo "<li><a href = '{$item->href}'>{$item->name}</a>";
+                $childItems = Menu\Item::getList(['where' => ['parent_id', $item->id]]);
+                if ($childItems) {
+                    echo "<ul>";
+                    foreach ($childItems as $item) {
+                        echo "<li><a href = '{$item->href}'>{$item->name}</a>";
                     }
-                    echo "</li>";
+                    echo "</ul>";
                 }
+                echo "</li>";
             }
         }
         ?>
