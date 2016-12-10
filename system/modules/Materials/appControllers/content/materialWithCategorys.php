@@ -2,11 +2,9 @@
     <div class="row">
         <div class="col-md-3">
           <?php
-            $category = $material->category;
-            \Ui\Tree::ul($category->getRoot(), 0, function($category) {
-                return "<a href='{$category->getHref()}'> {$category->name()}</a>";
-            });
-            ?>
+          $category = $material->category;
+          $this->widget('Materials\categoryTree', ['category' => $category]);
+          ?>
         </div>
         <div class="col-md-9">
             <div class="content">
