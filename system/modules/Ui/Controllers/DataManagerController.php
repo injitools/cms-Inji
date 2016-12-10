@@ -99,7 +99,7 @@ class DataManagerController extends Controller {
             ob_end_clean();
             header('Content-Encoding: UTF-8');
             header("Content-Type: text/csv");
-            header("Content-Disposition: attachment; filename=" . $request['modelName']::$objectName . '.csv');
+            header("Content-Disposition: attachment; filename=" . str_replace(' ', '_', $request['modelName']::$objectName ? $request['modelName']::$objectName : $request['modelName']) . ".csv");
             echo "\xEF\xBB\xBF"; // UTF-8 BOM
 
 
