@@ -59,10 +59,17 @@ class Image extends \Model {
         ]
     ];
 
+    public function beforeSave() {
+        if ($this->file_id && !$this->item->image_file_id) {
+            $item = $this->item;
+            $item->image_file_id = $this->file_id;
+            $item->save();
+        }
+    }
+
     public function beforeDelete() {
         if ($this->file) {
             $this->file->delete();
         }
     }
-
 }
