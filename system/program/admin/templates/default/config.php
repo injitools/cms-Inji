@@ -5,6 +5,6 @@ return [
     'file' => 'index.html',
     'css' => ['paper.bootstrap.css', 'style.css'],
     'libs' => [
-        'bootstrap', 'JqueryUi'
+        'bootstrap', 'JqueryUi', 'FancyBox'
     ]
 ];
