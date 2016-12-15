@@ -72,8 +72,12 @@ class BowerCmd {
             $path = App::$primary->path;
         }
         $bowerJson = json_decode(file_get_contents($path . '/bower.json'), true);
-
-        if (isset($bowerJson['dependencies'][$packageName]) && file_exists($path . '/static/bower/' . $packageName)) {
+        if (strpos($packageName, 'github') !== false) {
+            $needPackageName = basename($packageName);
+        } else {
+            $needPackageName = $packageName;
+        }
+        if (isset($bowerJson['dependencies'][$needPackageName]) && file_exists($path . '/static/bower/' . $needPackageName)) {
             return true;
         }
 
