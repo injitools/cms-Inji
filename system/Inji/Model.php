@@ -219,7 +219,9 @@ class Model {
             case 'image':
                 $file = Files\File::get($item->$colName);
                 if ($file) {
-                    $value = '<img src="' . $file->path . '?resize=60x120" />';
+                    $photoId = Tools::randomString();
+                    $value = '<a href = "' . $file->path . '" id="' . $photoId . '"><img src="' . $file->path . '?resize=60x120" /></a>';
+                    $value .='<script>inji.onLoad(function(){$("#' . $photoId . '").fancybox();});</script>';
                 } else {
                     $value = '<img src="/static/system/images/no-image.png?resize=60x120" />';
                 }
@@ -468,12 +470,13 @@ class Model {
                     $changes_text[] = !empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName;
                 }
             }
-            if (!$changes_text) {
-                return false;
-            }
             $activity->changes_text = implode(', ', $changes_text);
             $activity->save();
             foreach ($this->_changedParams as $fullColName => $oldValue) {
+                $colName = substr($fullColName, strlen($class::colPrefix()));
+                if (isset($class::$cols[$colName]['logging']) && !$class::$cols[$colName]['logging']) {
+                    continue;
+                }
                 $colName = substr($fullColName, strlen($class::colPrefix()));
                 $change = new Dashboard\Activity\Change([
                     'activity_id' => $activity->id,
