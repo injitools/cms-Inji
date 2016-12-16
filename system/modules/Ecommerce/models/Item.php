@@ -28,7 +28,8 @@ class Item extends \Model {
         'widget' => 'Виджет для отображения в каталоге',
         'view' => 'Шаблон для отображения полной информации',
         'deleted' => 'Удален',
-        'imgs' => 'Фото'
+        'imgs' => 'Фото',
+        'date_create' => 'Дата создания'
     ];
     public static $cols = [
         //Основные параметры
@@ -120,9 +121,14 @@ class Item extends \Model {
                 'deleted',
                 'options',
                 'offers',
+                'date_create'
             ],
             'categorys' => [
                 'model' => 'Ecommerce\Category',
+            ],
+            'sortable' => ['date_create'],
+            'preSort' => [
+                'date_create' => 'desc'
             ],
             'sortMode' => true
         ]
@@ -345,5 +351,4 @@ class Item extends \Model {
     public function getHref() {
         return "/ecommerce/view/{$this->pk()}";
     }
-
 }

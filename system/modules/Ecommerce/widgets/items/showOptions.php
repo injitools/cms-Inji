@@ -1,6 +1,7 @@
 <?php
 $query = $_GET;
 $path = Controller::$cur->method != 'itemList' ? '/ecommerce/itemList' : '';
+$limit = !empty(App::$cur->Ecommerce->config['default_limit']) ? App::$cur->Ecommerce->config['default_limit'] : 18;
 ?>
 <div class="ecommerce-showoptions">
     <div class="row">
@@ -12,9 +13,13 @@ $path = Controller::$cur->method != 'itemList' ? '/ecommerce/itemList' : '';
         <div class="col-xs-6 text-right ecommerce-showoptions-view">
             <span class="caption">Вид:</span>
             <span class="group">
-                <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['limit' => 24])); ?>">24</a> 
-                <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['limit' => 48])); ?>">48</a> 
-                <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['limit' => 72])); ?>">72</a> 
+              <?php
+              for ($i = 2; $i < 5; $i++) {
+                  $curLimit = $limit * $i;
+                  $curQuery = http_build_query(array_merge($query, ['limit' => $curLimit]));
+                  echo " <a href='{$path}?{$curQuery}'>{$curLimit}</a> ";
+              }
+              ?>
             </span>
             <span class="group">
                 <a href ='#' onclick="inji.onLoad(function () {

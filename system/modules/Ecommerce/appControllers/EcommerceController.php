@@ -144,7 +144,7 @@ class ecommerceController extends Controller {
                 'search' => trim($search),
                 'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
             ]),
-            'limit' => 18,
+            'limit' => !empty($this->Ecommerce->config['default_limit']) ? $this->Ecommerce->config['default_limit'] : 18,
         ]);
 
         //bread
@@ -244,5 +244,4 @@ class ecommerceController extends Controller {
 
         $this->view->page($options);
     }
-
 }

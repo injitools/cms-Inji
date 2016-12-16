@@ -184,7 +184,9 @@ class OptionsParser extends \Object {
             $selectOptions['where'][] = $where;
         } else {
             $category = Category::get($options['parent']);
-            $selectOptions['where'][] = ['tree_path', $category->tree_path . (int) $options['parent'] . '/%', 'LIKE'];
+            if ($category) {
+                $selectOptions['where'][] = ['tree_path', $category->tree_path . (int) $options['parent'] . '/%', 'LIKE'];
+            }
         }
     }
 
@@ -245,5 +247,4 @@ class OptionsParser extends \Object {
         }
         return $warehouseIds;
     }
-
 }
