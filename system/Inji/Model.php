@@ -322,28 +322,28 @@ class Model {
                                         $uid = Tools::randomString();
                                         ?>
                                         <div id='map<?= $uid; ?>_container' style="display:none;"><script>/*
-                                                                                 <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
-                                                                                 <script>
-                                                                                 var myMap<?= $uid; ?>;
-                                                                                 var myMap<?= $uid; ?>CurPin;
-                                                                                 inji.onLoad(function () {
-                                                                                 ymaps.ready(init<?= $uid; ?>);
-                                                                                 function init<?= $uid; ?>() {
-                                                                                 var myPlacemark;
-                                                                                 myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
-                                                                                 center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
-                                                                                 zoom: 13
-                                                                                 });
-                                                                                 myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
-                                                                                 myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
-                                                                                 {iconContent: "<?= $addres['address']; ?>"},
-                                                                                 {preset: 'islands#greenStretchyIcon'}
-                                                                                 );
-                                                                                 myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
-                                                                                 }
-                                                                                 window['init<?= $uid; ?>'] = init<?= $uid; ?>;
-                                                                                 });
-                                                                                 */</script>
+                                         <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
+                                         <script>
+                                         var myMap<?= $uid; ?>;
+                                         var myMap<?= $uid; ?>CurPin;
+                                         inji.onLoad(function () {
+                                         ymaps.ready(init<?= $uid; ?>);
+                                         function init<?= $uid; ?>() {
+                                         var myPlacemark;
+                                         myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+                                         center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
+                                         zoom: 13
+                                         });
+                                         myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
+                                         myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                                         {iconContent: "<?= $addres['address']; ?>"},
+                                         {preset: 'islands#greenStretchyIcon'}
+                                         );
+                                         myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+                                         }
+                                         window['init<?= $uid; ?>'] = init<?= $uid; ?>;
+                                         });
+                                         */</script>
                                         </div>
                                         <?php
                                         $content = ob_get_contents();
@@ -469,6 +469,9 @@ class Model {
                 } else {
                     $changes_text[] = !empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName;
                 }
+            }
+            if (!$changes_text) {
+                return false;
             }
             $activity->changes_text = implode(', ', $changes_text);
             $activity->save();
