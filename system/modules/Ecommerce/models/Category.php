@@ -116,6 +116,17 @@ class Category extends \Model {
         ]
     ];
 
+    public function getRoot() {
+        $treePath = array_values(array_filter(explode('/', $this->tree_path)));
+        if (!empty($treePath[0])) {
+            $category = Category::get($treePath[0]);
+            if ($category) {
+                return $category;
+            }
+        }
+        return $this;
+    }
+
     public function beforeSave() {
         if ($this->id && $this->id == $this->parent_id) {
             $this->parent_id = 0;
@@ -148,5 +159,4 @@ class Category extends \Model {
             return (!empty(\App::$cur->ecommerce->config['defaultCategoryView']) ? \App::$cur->ecommerce->config['defaultCategoryView'] : 'itemList');
         }
     }
-
 }
