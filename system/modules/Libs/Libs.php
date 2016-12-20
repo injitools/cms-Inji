@@ -11,7 +11,6 @@
 class Libs extends Module {
 
     public function loadLib($libName, $options = []) {
-
         $className = 'Libs\\' . ucfirst($libName);
         if (class_exists($className)) {
             if (!empty($className::$composerPacks)) {
@@ -87,7 +86,7 @@ class Libs extends Module {
     public function getPath($args) {
         if (!empty($args[0])) {
             $libName = 'Libs\\' . ucfirst($args[0]);
-            if (class_exists($libName)) {
+            if (class_exists($libName) && !empty($libName::$staticDirs)) {
                 $file = implode('/', array_slice($args, 1));
                 foreach ($libName::$staticDirs as $dir) {
                     if (strpos($file, $dir) === 0) {
