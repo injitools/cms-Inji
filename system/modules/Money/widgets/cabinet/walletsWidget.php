@@ -1,13 +1,13 @@
-<big>Кошельки</big><br />
+<big>Кошельки</big><br/>
 <?php
 $blocked = App::$cur->money->getUserBlocks();
 $wallets = App::$cur->money->getUserWallets();
 foreach ($wallets as $wallet) {
     ?>
-    <b><?= $wallet->showAmount(); ?></b> <?= $wallet->currency->acronym(); ?><br />
+    <b><?= $wallet->showAmount(); ?></b> <?= $wallet->currency->acronym(); ?><br/>
     <?php
 }
 ?>
-<a href ='/money/refill'>Пополнить</a>
-<a href ='/money/exchange'>Обменять</a>
-<a href ='/money/transfer'>Перевести</a>
+<a href='/money/refill'>Пополнить</a>
+<a href='/money/exchange'>Обменять</a>
+<a href='/money/transfer'>Перевести</a>

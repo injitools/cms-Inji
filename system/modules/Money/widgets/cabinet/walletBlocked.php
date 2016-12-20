@@ -1,6 +1,6 @@
 <h3>Блокировки на счете</h3>
 <?php
-$currency_id = !empty($_GET['currency_id']) ? (int) $_GET['currency_id'] : 0;
+$currency_id = !empty($_GET['currency_id']) ? (int)$_GET['currency_id'] : 0;
 $wallets = App::$cur->money->getUserWallets();
 if ($currency_id && empty($wallets[$currency_id])) {
     Msg::add('У вас нет такого кошелька');
@@ -26,13 +26,13 @@ $table->setCols([
 $pages = new \Ui\Pages($_GET, [
     'count' => \Money\Wallet\Block::getCount(['where' => ['wallet_id', $ids, 'IN']]),
     'limit' => 20,
-        ]);
+]);
 $histories = \Money\Wallet\Block::getList([
-            'where' => ['wallet_id', $ids, 'IN'],
-            'order' => [['date_create', 'DESC'], ['id', 'DESC']],
-            'start' => $pages->params['start'],
-            'limit' => $pages->params['limit'],
-        ]);
+    'where' => ['wallet_id', $ids, 'IN'],
+    'order' => [['date_create', 'DESC'], ['id', 'DESC']],
+    'start' => $pages->params['start'],
+    'limit' => $pages->params['limit'],
+]);
 foreach ($histories as $history) {
     $amount = $history->amount;
     $table->addRow([
@@ -45,4 +45,3 @@ foreach ($histories as $history) {
 }
 $table->draw();
 $pages->draw();
-?>
