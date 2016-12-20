@@ -6,7 +6,7 @@ if (empty($form_id)) {
     echo('form not found');
     return;
 }
-$userForm = \UserForms\Form::get((int) $form_id);
+$userForm = \UserForms\Form::get((int)$form_id);
 if (!$userForm) {
     echo('form not found');
     return;
@@ -19,8 +19,8 @@ if ($userForm->description) {
     echo "<p class = 'text-center'>{$userForm->description}</p>";
 }
 foreach ($userForm->inputs(['order' => ['weight']]) as $input) {
-    $form->input($input->type, 'UserForms[' . (int) $form_id . '][input' . $input->id . ']', $input->label, ['required' => $input->required]);
+    $form->input($input->type, 'UserForms[' . (int)$form_id . '][input' . $input->id . ']', $input->label, ['required' => $input->required]);
 }
 ?>
-<button class = 'btn btn-success btn-block'>Отправить</button>
+<button class='btn btn-success btn-block'>Отправить</button>
 </form>
