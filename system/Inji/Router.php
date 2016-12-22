@@ -12,7 +12,7 @@ class Router {
 
     /**
      * Find class by name
-     * 
+     *
      * @param string $className
      * @return boolean
      */
@@ -34,7 +34,7 @@ class Router {
 
     /**
      * Include class by name
-     * 
+     *
      * @param string $className
      * @return boolean
      */
@@ -86,7 +86,7 @@ class Router {
 
     /**
      * Return posible paths for class path
-     * 
+     *
      * @param string $code
      * @param string $folder
      * @param string $classPath
@@ -113,13 +113,33 @@ class Router {
 
     /**
      * Return dir for class name
-     * 
+     *
      * @param string $className
      * @return string
      */
     public static function getLoadedClassPath($className) {
         $rc = new ReflectionClass($className);
         return dirname($rc->getFileName());
+    }
+
+    public static function resolvePath($path) {
+        $params = Tools::uriParse($path);
+        if ($params[0] == App::$cur->name) {
+            $app = App::$cur;
+            $params = array_slice($params, 1);
+        } else {
+            $app = App::$primary;
+        }
+        $module = Module::resolveModule($app, $params);
+        if (!$module) {
+            return false;
+        }
+        $controller = $module->findController();
+        if (!$controller) {
+            return false;
+        }
+        $controller->resolveMethod();
+        return compact('module', 'controller', 'params');
     }
 
 }
