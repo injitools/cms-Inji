@@ -67,7 +67,7 @@ if (!$dbConf) {
 }
 App::$cur->db->init();
 putenv('COMPOSER_HOME=' . __DIR__ . '/tmp');
-putenv('COMPOSER_CACHE_DIR=' . __DIR__ . '/tmp/composerCache');
+putenv('COMPOSER_CACHE_DIR=' . __DIR__ . '/tmp/cache/composer');
 ComposerCmd::check();
 if (!function_exists('idn_to_utf8')) {
     ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", getenv('COMPOSER_HOME'));
