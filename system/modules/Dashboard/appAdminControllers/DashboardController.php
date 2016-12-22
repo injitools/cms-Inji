@@ -32,6 +32,10 @@ class DashboardController extends adminController {
                 $fileId = $this->Files->upload($_FILES['site_logo'], array('file_code' => 'site_logo'));
                 $config['site']['site_logo'] = Files\File::get($fileId)->path;
             }
+            if (!empty($_FILES['noimage']['tmp_name'])) {
+                $fileId = $this->Files->upload($_FILES['noimage'], array('file_code' => 'noimage'));
+                $config['site']['noimage'] = Files\File::get($fileId)->path;
+            }
             Config::save('app', $config);
             Tools::redirect('/admin/dashboard/siteConfig', 'Изменения сохранены', 'success');
         }
