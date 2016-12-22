@@ -12,56 +12,56 @@ class Module {
 
     /**
      * Storage of cur requested module
-     * 
+     *
      * @var \Module
      */
     public static $cur = null;
 
     /**
      * Module name
-     * 
+     *
      * @var string
      */
     public $moduleName = '';
 
     /**
      * Module config
-     * 
+     *
      * @var array
      */
     public $config = [];
 
     /**
      * Module info
-     * 
+     *
      * @var array
      */
     public $info = [];
 
     /**
      * Requested module params
-     * 
+     *
      * @var array
      */
     public $params = [];
 
     /**
      * Module directory path
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $path = '';
 
     /**
      * Module app
-     * 
+     *
      * @var \App
      */
     public $app = null;
 
     /**
      * Parse cur module
-     * 
+     *
      * @param \App $app
      */
     public function __construct($app) {
@@ -71,7 +71,7 @@ class Module {
         $this->info = $this->getInfo();
         $this->config = Config::module($this->moduleName, !empty($this->info['systemConfig']));
         $that = $this;
-        Inji::$inst->listen('Config-change-module-' . $this->app->name . '-' . $this->moduleName, $this->app->name . '-' . $this->moduleName . 'config', function($event) use ($that) {
+        Inji::$inst->listen('Config-change-module-' . $this->app->name . '-' . $this->moduleName, $this->app->name . '-' . $this->moduleName . 'config', function ($event) use ($that) {
             $that->config = $event['eventObject'];
             return $event['eventObject'];
         });
@@ -79,7 +79,7 @@ class Module {
 
     /**
      * Get all posible directorys for module files
-     * 
+     *
      * @param string $moduleName
      * @return array
      */
@@ -96,7 +96,7 @@ class Module {
 
     /**
      * Return directory where places module file
-     * 
+     *
      * @param string $moduleName
      * @return string
      */
@@ -112,7 +112,7 @@ class Module {
 
     /**
      * Check module for installed
-     * 
+     *
      * @param string $moduleName
      * @param \App $app
      * @return boolean
@@ -126,7 +126,7 @@ class Module {
 
     /**
      * Get installed modules for app
-     * 
+     *
      * @param \App $app
      * @param App $primary
      * @return array
@@ -144,7 +144,7 @@ class Module {
 
     /**
      * Find module controllers
-     * 
+     *
      * @param string $moduleName
      * @return array
      */
@@ -171,14 +171,17 @@ class Module {
 
     /**
      * Find module by request
-     * 
+     *
      * @param \App $app
+     * @param array|null $params
      * @return \Module
      */
-    public static function resolveModule($app) {
-        if (!empty($app->params[0]) && $app->{$app->params[0]}) {
-            $module = $app->{$app->params[0]};
-            $module->params = array_slice($app->params, 1);
+    public static function resolveModule($app, $params = null) {
+        $search = is_array($params) ? $params : $app->params;
+
+        if (!empty($search[0]) && $app->{$search[0]}) {
+            $module = $app->{$search[0]};
+            $module->params = array_slice($search, 1);
             return $module;
         }
         if (!empty($app->config['defaultModule']) && $app->{$app->config['defaultModule']}) {
@@ -197,7 +200,7 @@ class Module {
 
     /**
      * Get posible path for controller
-     * 
+     *
      * @return array
      */
     public function getControllerPaths() {
@@ -235,14 +238,14 @@ class Module {
 
     /**
      * Find controller by request
-     * 
+     *
      * @return \Controller
      */
     public function findController() {
         $paths = $this->getControllerPaths();
         foreach ($paths as $pathName => $path) {
             if (file_exists($path)) {
-                include $path;
+                include_once $path;
                 if (strpos($pathName, 'slice')) {
                     $controllerName = ucfirst($this->params[0]);
                     $params = array_slice($this->params, 1);
@@ -263,7 +266,7 @@ class Module {
 
     /**
      * Return module info
-     * 
+     *
      * @param string $moduleName
      * @return array
      */
@@ -284,7 +287,7 @@ class Module {
 
     /**
      * Return snippets by name
-     * 
+     *
      * @param string $snippetsPath
      * @param boolean $extensions
      * @param string $dir
@@ -317,7 +320,7 @@ class Module {
 
     /**
      * Return extensions for type
-     * 
+     *
      * @param string $extensionType
      * @param string $request
      * @return array
