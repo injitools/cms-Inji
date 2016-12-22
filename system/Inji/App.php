@@ -11,9 +11,14 @@
 class App {
 
     /**
-     * static instances
+     * static instance
+     *
+     * @var App
      */
     public static $cur = null;
+    /**
+     * @var App
+     */
     public static $primary = null;
     private $_objects = [];
 
@@ -35,7 +40,7 @@ class App {
 
     /**
      * Constructor App
-     * 
+     *
      * @param array $preSet
      */
     public function __construct($preSet = []) {
@@ -46,9 +51,9 @@ class App {
 
     /**
      * Return module object by name or alias
-     * 
+     *
      * @param string $className
-     * @return object
+     * @return Module
      */
     public function getObject($className, $params = []) {
         $paramsStr = serialize($params);
@@ -61,7 +66,7 @@ class App {
 
     /**
      * Find module class from each paths
-     * 
+     *
      * @param string $moduleName
      * @return mixed
      */
@@ -96,7 +101,7 @@ class App {
 
     /**
      * Load module by name or alias
-     * 
+     *
      * @param string $className
      * @return mixed
      */
@@ -119,9 +124,9 @@ class App {
 
     /**
      * Reference to module getter
-     * 
+     *
      * @param string $className
-     * @return object|null
+     * @return Module|null
      */
     public function __get($className) {
         return $this->getObject($className);
@@ -129,7 +134,7 @@ class App {
 
     /**
      * Reference to module getter with params
-     * 
+     *
      * @param string $className
      * @param array $params
      * @return object|null
