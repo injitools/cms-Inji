@@ -14,17 +14,23 @@ namespace Libs;
 class Bootstrap extends \Object {
 
     public static $name = 'BootStrap';
-    public static $composerPacks = [
-        'twbs/bootstrap' => '3.*'
+    public static $bowerPacks = [
+        'bootstrap' => '3'
     ];
     public static $files = [
+        'bower' => [
+            'js' => [
+                'bootstrap/dist/js/bootstrap.min.js',
+            ],
+            'css' => [
+                'bootstrap/dist/css/bootstrap.min.css',
+            ]
+        ],
         'js' => [
-            'twbs/bootstrap/dist/js/bootstrap.min.js',
             '/static/moduleAsset/libs/libs/bootstrap/js/modalStack.js',
             '/static/moduleAsset/libs/libs/bootstrap/js/treeView.js'
         ],
         'css' => [
-            'twbs/bootstrap/dist/css/bootstrap.min.css',
             '/static/moduleAsset/libs/libs/bootstrap/css/treeView.css'
         ]
     ];
