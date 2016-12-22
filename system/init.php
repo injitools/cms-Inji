@@ -12,7 +12,7 @@ session_start();
 
 define('INJI_DOMAIN_NAME', $_SERVER['SERVER_NAME']);
 
-spl_autoload_register(function($class_name) {
+spl_autoload_register(function ($class_name) {
     if (file_exists(INJI_SYSTEM_DIR . '/Inji/' . $class_name . '.php')) {
         include_once INJI_SYSTEM_DIR . '/Inji/' . $class_name . '.php';
     }
@@ -21,7 +21,7 @@ spl_autoload_register(function($class_name) {
 //load core
 Inji::$inst = new Inji();
 Inji::$config = Config::system();
-Inji::$inst->listen('Config-change-system', 'systemConfig', function($event) {
+Inji::$inst->listen('Config-change-system', 'systemConfig', function ($event) {
     Inji::$config = $event['eventObject'];
     return $event['eventObject'];
 });
@@ -70,12 +70,12 @@ if (!empty($params[0]) && file_exists(INJI_SYSTEM_DIR . '/program/' . $params[0]
     App::$cur->params = array_slice($params, 1);
     App::$cur->config = Config::app(App::$cur);
 
-    Inji::$inst->listen('Config-change-app-' . App::$primary->name, 'primaryAppConfig', function($event) {
+    Inji::$inst->listen('Config-change-app-' . App::$primary->name, 'primaryAppConfig', function ($event) {
         App::$primary->config = $event['eventObject'];
         return $event['eventObject'];
     });
 }
-Inji::$inst->listen('Config-change-app-' . App::$cur->name, 'curAppConfig', function($event) {
+Inji::$inst->listen('Config-change-app-' . App::$cur->name, 'curAppConfig', function ($event) {
     App::$cur->config = $event['eventObject'];
     return $event['eventObject'];
 });
@@ -84,7 +84,7 @@ if (empty($shareConfig['installed']) && App::$cur->name != 'setup' && (empty(App
     Tools::redirect('/setup');
 }
 putenv('COMPOSER_HOME=' . getcwd());
-putenv('COMPOSER_CACHE_DIR=' . getcwd() . DIRECTORY_SEPARATOR . 'composerCache');
+putenv('COMPOSER_CACHE_DIR=' . getcwd() . DIRECTORY_SEPARATOR . 'cache/composer');
 ComposerCmd::check();
 if (!function_exists('idn_to_utf8')) {
     ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", '.');
