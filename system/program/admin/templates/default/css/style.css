@@ -10,14 +10,14 @@
  */
 
 #menu-toggle {
-  font-size: 21px;
-  display: inline-block;
-  padding:4px 7px;
-  cursor:pointer;
-  position:fixed;
-  top:0;
-  z-index:1000;
-  color:#8F8F8F;
+    font-size: 21px;
+    display: inline-block;
+    padding: 4px 7px;
+    cursor: pointer;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    color: #8F8F8F;
 }
 
 /*!
@@ -29,143 +29,136 @@
 /* Toggle Styles */
 
 #wrapper {
-  padding-left: 0;
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 #wrapper.toggled {
-  padding-left: 250px;
+    padding-left: 250px;
 }
 
 #sidebar-wrapper {
-  z-index: 1000;
-  position: fixed;
-  left: 250px;
-  width: 0;
-  height: 100%;
-  margin-left: -250px;
-  overflow-y: auto;
-  background: #000;
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    background: #1b2133;
+    color: #fff;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
-#wrapper.toggled #sidebar-wrapper {
-  width: 250px;
-}
-
-#page-content-wrapper {
-  width: 100%;
-  position: absolute;
-  padding: 15px;
+#sidebar-wrapper a {
+    color: #fff;
 }
 
 #wrapper.toggled #page-content-wrapper {
-  position: absolute;
-  margin-right: -250px;
+    margin-right: -250px;
 }
 
 /* Sidebar Styles */
 
 .sidebar-nav {
-  position: absolute;
-  top: 0;
-  width: 250px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .sidebar-nav li {
-  text-indent: 20px;
-  line-height: 40px;
+    text-indent: 20px;
+    line-height: 40px;
 }
 
 .sidebar-nav li a {
-  display: block;
-  text-decoration: none;
-  color: #999999;
+    display: block;
+    text-decoration: none;
+    color: #999999;
 }
 
 .sidebar-nav li a:hover {
-  text-decoration: none;
-  color: #fff;
-  background: rgba(255,255,255,0.2);
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar-nav li a:active,
 .sidebar-nav li a:focus {
-  text-decoration: none;
+    text-decoration: none;
 }
 
-.sidebar-nav > .sidebar-brand {
-  height: 65px;
-  font-size: 18px;
-  line-height: 60px;
+@media (min-width: 768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
 }
 
-.sidebar-nav > .sidebar-brand a {
-  color: #999999;
-}
-
-.sidebar-nav > .sidebar-brand a:hover {
-  color: #fff;
-  background: none;
-}
-
-@media(min-width:768px) {
-  #wrapper {
-    padding-left: 250px;
-  }
-
-  #wrapper.toggled {
-    padding-left: 0;
-  }
-
-  #sidebar-wrapper {
-    width: 250px;
-  }
-
-  #wrapper.toggled #sidebar-wrapper {
-    width: 0;
-  }
-
-  #page-content-wrapper {
-    padding: 20px;
-    position: relative;
-  }
-
-  #wrapper.toggled #page-content-wrapper {
-    position: relative;
-    margin-right: 0;
-  }
-}
 #sidebar-wrapper .userWidget {
-  width: 250px;padding-left: 10px;
-  color:#fff;
-  text-overflow: ellipsis;
-}
-#sidebar-wrapper .userWidget a{
-  color:#fff;
-}
-#sidebar-wrapper .userWidget>div{
-  padding:0;
-  padding-left:10px;
+    padding: 15px 0;
+    color: #fff;
+    text-overflow: ellipsis;
 }
 
+#sidebar-wrapper .userWidget a {
+    color: #fff;
+}
+
+#sidebar-wrapper .userWidget > div {
+    padding: 0;
+    padding-left: 10px;
+}
+
+#sidebar-wrapper .sidebar-brand {
+    padding: 15px 0;
+}
+
+#sidebar-wrapper .sidebar-brand > div {
+    padding: 0;
+    padding-left: 10px;
+}
+#sidebar-wrapper .sidebar-brand label, #sidebar-wrapper .userWidget label {
+    display: block;
+    color: #a0a0a0;
+    padding-left: 10px;
+    font-weight:bold;
+}
 h1 {
-  font-size: 40px;
+    font-size: 40px;
 }
 
-
-.categoryTree .active>a {
-  font-weight: bold;
+.categoryTree .active > a {
+    font-weight: bold;
 }
-.categoryTree .active>a.glyphicon {
-  font-weight: normal;
+
+.categoryTree .active > a.glyphicon {
+    font-weight: normal;
 }

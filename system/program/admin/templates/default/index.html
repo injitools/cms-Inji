@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {HEAD}
-    </head>
-    <body>
-        <div id="wrapper">
-            {WIDGET:sidebar}
-            <span id ='menu-toggle' class = 'glyphicon glyphicon-th-list'></span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {HEAD}
+</head>
+<body>
+{WIDGET:header}
+<div id="wrapper">
+    {WIDGET:sidebar}
+    <span id='menu-toggle' class='glyphicon glyphicon-th-list'></span>
 
-            <!-- Page Content -->
-            <div id="page-content-wrapper">
-                <div class="container-fluid">
-                    {CONTENT}
-                </div>
-            </div>
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            {CONTENT}
         </div>
-        <!-- Menu Toggle Script -->
-        <script>
-            inji.onLoad(function () {
-              if (localStorage.adminSidebarHide == 'true') {
-                $("#wrapper").addClass("toggled");
-              }
-              $("#menu-toggle").click(function (e) {
-                localStorage.adminSidebarHide = localStorage.adminSidebarHide == 'true' ? 'false' : 'true';
-                e.preventDefault();
-                $("#wrapper").toggleClass("toggled");
-              });
-            });
-        </script>
-    </body>
+    </div>
+</div>
+<!-- Menu Toggle Script -->
+<script>
+    inji.onLoad(function () {
+        if (localStorage.adminSidebarHide == 'true') {
+            $('#sidebar-wrapper .sidebar-nav').width($('#sidebar-wrapper .sidebar-nav').width());
+            $("#wrapper").addClass("toggled");
+        }
+        $("#menu-toggle").click(function (e) {
+            localStorage.adminSidebarHide = localStorage.adminSidebarHide == 'true' ? 'false' : 'true';
+            e.preventDefault();
+            if(!$("#wrapper").hasClass("toggled")){
+                $('#sidebar-wrapper .sidebar-nav').width($('#sidebar-wrapper .sidebar-nav').width());
+            }
+            $("#wrapper").toggleClass("toggled");
+        });
+    });
+</script>
+</body>
 </html>

@@ -1,33 +1,51 @@
 <div id="sidebar-wrapper">
     <ul class="sidebar-nav">
-        <li class="sidebar-brand">
-            <a href="/">
-                Вернуться на сайт
-            </a>
-        </li>
+        <li class="text-center" style="text-indent: 0"><a href="/" style="font-size:16px;">Перейти на сайт</a></li>
+        <div class="sidebar-brand">
+
+            <label>Текущий сайт:</label>
+            <div class="col-xs-4">
+                <img
+                    src="<?= Statics::file(!empty(\App::$primary->config['site']['site_logo']) ? \App::$primary->config['site']['site_logo'] : ''); ?>"
+                    class="img-responsive"/>
+            </div>
+            <div class="col-xs-8">
+                <?= !empty(\App::$primary->config['site']['name']) ? \App::$primary->config['site']['name'] : 'Название не задано'; ?>
+                <br/>
+                <?= !empty(\App::$primary->config['site']['email']) ? \App::$primary->config['site']['email'] : 'E-mail не задан'; ?>
+                <?php
+                $resolved = Router::resolvePath('/admin/dashboard/siteConfig');
+                if (isset($resolved['controller']) && $resolved['controller']->checkAccess()) {
+                    echo "<br/><a href=\"/admin/dashboard/siteConfig\">Редактировать</a>";
+                }
+                ?>
+            </div>
+            <div class="clearfix"></div>
+
+        </div>
         <?php
+
         $where = [];
         if (class_exists('Users\User')) {
             App::$cur->ui;
             ?>
-            <hr />
-            <div class="row userWidget">
+            <div class="userWidget">
+                <label>Текущий пользователь:</label>
                 <div class="col-xs-4">
-                    <img src="<?= Users\User::$cur->info->photo ? Users\User::$cur->info->photo->path : '/static/system/images/no-image.png'; ?>" class="img-responsive" />
+                    <img
+                        src="<?= Statics::file(Users\User::$cur->info->photo ? Users\User::$cur->info->photo->path : ''); ?>"
+                        class="img-responsive"/>
                 </div>
                 <div class="col-xs-8">
-                    <?= Users\User::$cur->name(); ?><br />
-                    <?= Users\User::$cur->mail; ?>
+                    <?= Users\User::$cur->name(); ?><br/>
+                    <?= Users\User::$cur->mail; ?><br/>
+                    <a href="#"
+                       onclick="inji.Ui.forms.popUp('Users\\User:<?= Users\User::$cur->id; ?>', {formName: 'profile'});return false;">Редактировать</a>
                 </div>
-
-                <div class = "col-xs-12">
-                    <a href = "#" onclick = "inji.Ui.forms.popUp('Users\\User:<?= Users\User::$cur->id; ?>', {formName: 'profile'});return false;">Редактировать</a> |
-                    <a href = "?logout">Выйти</a>
-                </div>
+                <div class="clearfix"></div>
             </div>
-            <hr />
             <li>
-                <a href = "/admin">Панель управления</a>
+                <a href="/admin">Панель управления</a>
             </li>
             <?php
             $where[] = ['group_id', Users\User::$cur->group_id];
@@ -54,7 +72,7 @@
         }
         ?>
         <li>
-            <a href = "?logout">Выйти</a>
+            <a href="?logout">Выйти</a>
         </li>
     </ul>
 </div>
