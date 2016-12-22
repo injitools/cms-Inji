@@ -22,7 +22,10 @@ class FastEdit extends \Object {
         $str .= ">";
         $value = $value !== null ? $value : ($object ? $object->$col : '');
         if ($parse) {
+            ob_start();
             \App::$cur->view->parseSource($value);
+            $str .= ob_get_contents();
+            ob_end_clean();
         } else {
             $str .= $value;
         }
@@ -30,5 +33,4 @@ class FastEdit extends \Object {
         $str .= "</div>";
         return $str;
     }
-
 }
