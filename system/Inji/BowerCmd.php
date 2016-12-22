@@ -20,23 +20,23 @@ class BowerCmd {
         if (!$path) {
             $path = App::$primary->path . '/';
         }
-        if (!file_exists($path . '/bower.json')) {
-            $json = [
-                "name" => get_current_user() . "/" . App::$primary->name,
-                "config" => [
-                    "cache-dir" => "./composerCache/"
-                ],
-                "authors" => [
-                    [
-                        get_current_user() . ' <' . get_current_user() . "@" . INJI_DOMAIN_NAME . '>'
-                    ]
-                ],
-                'private' => true,
-                "dependencies" => [],
-            ];
-            Tools::createDir($path);
-            file_put_contents($path . '/bower.json', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        }
+
+        $json = [
+            "name" => get_current_user() . "/" . App::$primary->name,
+            "config" => [
+                "cache-dir" => "./cache/bower/"
+            ],
+            "authors" => [
+                [
+                    get_current_user() . ' <' . get_current_user() . "@" . INJI_DOMAIN_NAME . '>'
+                ]
+            ],
+            'private' => true,
+            "dependencies" => [],
+        ];
+        Tools::createDir($path);
+        file_put_contents($path . '/bower.json', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
         if (!file_exists($path . '/.bowerrc')) {
             $json = [
                 "directory" => 'static/bower',
@@ -45,12 +45,12 @@ class BowerCmd {
             Tools::createDir($path);
             file_put_contents($path . '/.bowerrc', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
+        ComposerCmd::requirePackage("injitools/bowerphp", "dev-master", '.');
         self::command('install', false, $path);
     }
 
     public static function command($command, $needOutput = true, $path = null) {
         ini_set('memory_limit', '2000M');
-        ComposerCmd::requirePackage("injitools/bowerphp", "dev-master", '.');
         include_once 'vendor/injitools/bowerphp/src/bootstrap.php';
         if ($needOutput) {
             $output = new Symfony\Component\Console\Output\StreamOutput(fopen('php://output', 'w'));
