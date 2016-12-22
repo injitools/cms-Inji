@@ -8,7 +8,7 @@
  * @copyright 2016 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-$getFunction = function($element) {
+$getFunction = function ($element) {
     $access = null;
     $path = [
         'accessTree',
