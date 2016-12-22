@@ -12,61 +12,61 @@ class Controller {
 
     /**
      * Storage of cur requested controller
-     * 
-     * @var Controller 
+     *
+     * @var Controller
      */
     public static $cur = null;
 
     /**
      * Requested params for method
-     * 
-     * @var array 
+     *
+     * @var array
      */
     public $params = [];
 
     /**
      * Path to controller dir
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $path = '';
 
     /**
      * Requested action name
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $method = 'index';
 
     /**
      * Module of this controller
-     * 
-     * @var Module 
+     *
+     * @var Module
      */
     public $module = null;
 
     /**
      * This controller name
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $name = '';
 
     /**
      * Flag of controller runing
-     * 
-     * @var boolean 
+     *
+     * @var boolean
      */
     public $run = false;
+
+    public $methodResolved = false;
 
     /**
      * Run controller
      */
     public function run() {
-        if (!empty($this->params[0]) && method_exists($this, $this->params[0] . 'Action')) {
-            $this->method = $this->params[0];
-            $this->params = array_slice($this->params, 1);
-        } elseif (!method_exists($this, $this->method . 'Action')) {
+        !$this->methodResolved && $this->resolveMethod();
+        if (!method_exists($this, $this->method . 'Action')) {
             INJI_SYSTEM_ERROR('method not found', true);
         }
         if (!$this->checkAccess()) {
@@ -75,6 +75,19 @@ class Controller {
         }
         $this->run = true;
         call_user_func_array([$this, $this->method . 'Action'], $this->params);
+    }
+
+    public function resolveMethod() {
+        if ($this->methodResolved) {
+            return true;
+        }
+        if (!empty($this->params[0]) && method_exists($this, $this->params[0] . 'Action')) {
+            $this->method = $this->params[0];
+            $this->params = array_slice($this->params, 1);
+            $this->methodResolved = true;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -93,7 +106,7 @@ class Controller {
 
     /**
      * Check access to controller method
-     * 
+     *
      * @return boolean
      */
     public function checkAccess() {
