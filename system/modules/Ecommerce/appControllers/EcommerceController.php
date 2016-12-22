@@ -17,7 +17,7 @@ class ecommerceController extends Controller {
         $user = Users\User::$cur;
         if (!empty($_POST) && !empty($_POST['card_id'])) {
             $error = false;
-            $card = \Ecommerce\Card::get((int) $_POST['card_id']);
+            $card = \Ecommerce\Card::get((int)$_POST['card_id']);
             if (!$card) {
                 $error = true;
                 Msg::add('Такой карты не существует', 'danger');
@@ -103,7 +103,7 @@ class ecommerceController extends Controller {
         //search
         if (!empty($_GET['search'])) {
             if (!empty($_GET['inCatalog'])) {
-                $category_id = (int) $_GET['inCatalog'];
+                $category_id = (int)$_GET['inCatalog'];
             }
             $search = $_GET['search'];
         } else {
@@ -140,10 +140,10 @@ class ecommerceController extends Controller {
 
         //items pages
         $pages = new \Ui\Pages($_GET, ['count' => $this->ecommerce->getItemsCount([
-                'parent' => $category_id,
-                'search' => trim($search),
-                'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
-            ]),
+            'parent' => $category_id,
+            'search' => trim($search),
+            'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
+        ]),
             'limit' => !empty($this->Ecommerce->config['default_limit']) ? $this->Ecommerce->config['default_limit'] : 18,
         ]);
 
@@ -208,8 +208,8 @@ class ecommerceController extends Controller {
             'data' => compact('active', 'category', 'sort', 'search', 'pages', 'items', 'categorys', 'bread', 'options')]);
     }
 
-    public function viewAction($id = '') {
-        $item = \Ecommerce\Item::get((int) $id);
+    public function viewAction($id = '', $quick = 0) {
+        $item = \Ecommerce\Item::get((int)$id);
         if (!$item) {
             Tools::redirect('/ecommerce/', 'Такой товар не найден');
         }
@@ -228,8 +228,8 @@ class ecommerceController extends Controller {
         $bread[] = ['text' => $item->name()];
         $this->view->setTitle($item->name());
         $options = [
-            'data' => compact('item', 'active', 'catalog', 'bread'),
-            'content' => $item->view ? $item->view : 'view'
+            'data' => compact('item', 'active', 'catalog', 'bread','quick'),
+            'content' => $item->view ? $item->view : 'view',
         ];
         if (isset($_GET['quickview'])) {
             $options['page'] = 'blank';
@@ -241,7 +241,10 @@ class ecommerceController extends Controller {
             $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . INJI_DOMAIN_NAME . $item->image->path]);
         }
         $this->view->addMetaTag(['property' => 'og:url', 'content' => 'http://' . INJI_DOMAIN_NAME . '/view/' . $item->id]);
-
-        $this->view->page($options);
+        if ($quick) {
+            $this->view->content($options);
+        } else {
+            $this->view->page($options);
+        }
     }
 }
