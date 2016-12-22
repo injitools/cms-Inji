@@ -1,10 +1,9 @@
-/.idea
-/nbproject/private/
+/nbproject/
 !/program/.gitkeep
 /program/*
 /vendor/
+/composer/
 /composer.lock
-/system/program/admin/templates/ruby_active_admin/
 /.idea/
 /build/
 /tests/tmp/
