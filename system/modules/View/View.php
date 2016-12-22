@@ -13,6 +13,9 @@
 class View extends \Module {
 
     public $title = 'No title';
+    /**
+     * @var View\Template
+     */
     public $template = null;
     public $libAssets = ['css' => [], 'js' => []];
     public $dynAssets = ['css' => [], 'js' => []];
@@ -312,12 +315,7 @@ class View extends \Module {
                         $this->ResolveCssHref($css, $type, $hrefs);
                         continue;
                     }
-                    if (strpos($css, '//') !== false) {
-                        $href = $css;
-                    } else {
-                        $href = ($this->app->type != 'app' ? '/' . $this->app->name : '') . $css;
-                    }
-                    $hrefs[$href] = $href;
+                    $hrefs[$css] = $css;
                 }
                 break;
             case 'template':
