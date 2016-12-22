@@ -24,6 +24,7 @@ class ComposerCmd {
 
     /**
      * @param string $path
+     * @return bool
      */
     public static function installComposer($path) {
         if (file_exists($path . '/composer/bin/composer')) {
@@ -43,11 +44,13 @@ class ComposerCmd {
             $cafile = false;
             setUseAnsi([]);
             ob_start();
-            installComposer($version, $installDir, $filename, $quiet, $disableTls, $cafile, $channel);
+            $installer = new Installer($quiet, $disableTls, $cafile);
+            $installer->run($version, $installDir, $filename, $channel);
             ob_end_clean();
         }
         $composer = new Phar($path . '/composer/composer.phar');
         $composer->extractTo($path . '/composer/');
+        return true;
     }
 
     public static function initComposer($path = '') {
@@ -58,7 +61,7 @@ class ComposerCmd {
             $json = [
                 "name" => get_current_user() . "/" . App::$primary->name,
                 "config" => [
-                    "cache-dir" => "./composerCache/"
+                    "cache-dir" => "./cache/composer/"
                 ],
                 "authors" => [
                     [
