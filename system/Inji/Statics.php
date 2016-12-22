@@ -12,7 +12,7 @@ class Statics {
 
     /**
      * Cached static file and return absolute url for client side use
-     * 
+     *
      * @param string $path
      * @param string $resize
      * @param string $resizeCrop
@@ -20,11 +20,14 @@ class Statics {
      * @return string
      */
     public static function file($path, $resize = '', $resizeCrop = '', $resizePos = '') {
+        if (!$path) {
+            return !empty(\App::$primary->config['site']['noimage']) ? \App::$primary->config['site']['noimage'] : '/static/system/images/no-image.png';
+        }
         $absolutePath = App::$cur->staticLoader->parsePath($path);
-        $convet = false;
+        $convert = false;
         if (!file_exists($absolutePath) && file_exists(mb_convert_encoding($absolutePath, 'Windows-1251', 'UTF-8'))) {
             $absolutePath = mb_convert_encoding($absolutePath, 'Windows-1251', 'UTF-8');
-            $convet = true;
+            $convert = true;
         }
         if (!file_exists($absolutePath)) {
             return '';
@@ -37,7 +40,7 @@ class Statics {
             $options['crop'] = $resizeCrop;
             $options['pos'] = $resizePos;
             $path = Cache::file($absolutePath, $options);
-            $path = $convet ? mb_convert_encoding($path, 'UTF-8', 'Windows-1251') : $path;
+            $path = $convert ? mb_convert_encoding($path, 'UTF-8', 'Windows-1251') : $path;
             return '/' . $path;
         }
     }
