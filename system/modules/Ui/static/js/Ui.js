@@ -1,6 +1,6 @@
 /**
  * Main Ui object
- * 
+ *
  * @returns {Ui}
  */
 inji.Ui = new function () {
@@ -43,13 +43,13 @@ inji.Ui = new function () {
       return false;
     });
   }
-}
+};
 
 
 
 /**
  * Editors
- * 
+ *
  */
 var Editors = function () {
   this.ckeditor = false;
@@ -60,15 +60,15 @@ var Editors = function () {
   inji.onLoad(function () {
     inji.Ui.editors.loadIn('.htmleditor');
   })
-}
+};
 Editors.prototype.checkEditors = function () {
   if (!this.ckeditor && typeof CKEDITOR != 'undefined') {
     this.ckeditor = true;
   }
-}
+};
 Editors.prototype.loadAll = function () {
 
-}
+};
 Editors.prototype.loadIn = function (selector, search) {
   if (this.ckeditor) {
     setTimeout(function () {
@@ -89,12 +89,12 @@ Editors.prototype.loadIn = function (selector, search) {
             setTimeout(function () {
               editor = $(_this).ckeditor({customConfig: inji.options.appRoot + 'static/moduleAsset/libs/libs/ckeditor/program/userConfig.php'});
             }, 1000);
-          })
+          });
           $(this).closest('.modal').on('hide.bs.modal', function () {
             if (editor.editor) {
               editor.editor.updateElement();
               editor.editor.destroy();
-              delete editor.editor
+              delete editor.editor;
               $(this).closest('.modal').unbind('hide.bs.modal');
               $(this).closest('.modal').unbind('shown.bs.modal');
             }
@@ -104,27 +104,27 @@ Editors.prototype.loadIn = function (selector, search) {
       })
     }, 1000);
   }
-}
+};
 Editors.prototype.beforeSubmit = function (form) {
   if (this.ckeditor) {
     $.each(CKEDITOR.instances, function () {
       this.updateElement();
-    })
+    });
     $.each($(form).find('.cke'), function () {
       var instance = $(this).attr('id').replace('cke_', '');
       $(CKEDITOR.instances[instance].element).closest('.modal').unbind();
       CKEDITOR.instances[instance].destroy();
     });
   }
-}
+};
 /**
  * Modals objects
- * 
+ *
  * @returns {Modals}
  */
 var Modals = function () {
   this.modals = 0;
-}
+};
 Modals.prototype.show = function (title, body, code, size) {
   if (code == null) {
     code = 'modal' + (++this.modals);
@@ -162,10 +162,10 @@ Modals.prototype.show = function (title, body, code, size) {
   $('body').append(modal);
   modal.modal('show');
   return modal;
-}
+};
 /**
  * Forms object
- * 
+ *
  * @returns {Forms}
  */
 function Forms() {
@@ -194,7 +194,7 @@ Forms.prototype.popUp = function (item, params, callback) {
       inji.Ui.editors.loadIn(modal.find('.modal-body'), '.htmleditor');
     }
   });
-}
+};
 Forms.prototype.submitAjax = function (form, params) {
   inji.Ui.editors.beforeSubmit(form);
   var form = $(form);
@@ -238,14 +238,14 @@ Forms.prototype.submitAjax = function (form, params) {
       }
     }
   });
-}
+};
 Forms.prototype.addRowToList = function (btn) {
   var container = $(btn).closest('.dynamicList');
   var counter = parseInt(container.find('.sourceRow').data('counter')) + 1;
   container.find('.sourceRow').data('counter', counter);
   var trHtml = container.find('.sourceRow script').html().replace(/^\/\*/g, '').replace(/\*\/$/g, '').replace(/\[counterPlaceholder\]/g, '[' + counter + ']');
   container.find('.listBody').append(trHtml);
-}
+};
 Forms.prototype.checkAditionals = function (select) {
   var selectedInputAd = $(select).find('option:selected').attr('data-aditionalInput');
   var nextSelect = $(select).next();
@@ -267,7 +267,7 @@ Forms.prototype.checkAditionals = function (select) {
     nextSelect = $(nextSelect).next();
     i++;
   }
-}
+};
 Forms.prototype.delRowFromList = function (btn) {
   $(btn).closest('tr').remove();
 };
@@ -295,7 +295,7 @@ inji.Ui.activeForms = new function () {
 
     activeForm.load();
   }
-}
+};
 function ActiveForm() {
   this.modelName;
   this.formName;
@@ -355,7 +355,7 @@ function ActiveForm() {
                 inputContainer.querySelector('[type="text"]').value = this.innerHTML;
                 selectedDiv.innerHTML = 'Выбрано: ' + this.innerHTML;
                 resultsDiv.innerHTML = '';
-              }
+              };
               resultsDiv.appendChild(resultElement);
             }
             resultsDiv.style.display = 'block';
