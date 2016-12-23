@@ -12,42 +12,43 @@ class Inji {
 
     /**
      * Static storage for core object
-     * 
+     *
      * @var Inji
      */
     public static $inst = null;
 
     /**
      * Dynamic events listeners
-     * 
+     *
      * @var array
      */
     private $_listeners = [];
 
     /**
      * Core config
-     * 
+     *
      * @var array
      */
     public static $config = [];
 
     /**
      * Static storage for anything
-     * 
-     * @var array 
+     *
+     * @var array
      */
     public static $storage = [];
 
     /**
      * Stop executing code if this true after use Inji::$inst->stop() constuction in code
-     * 
+     *
      * @var boolean
      */
     public $exitOnStop = true;
+    public $parallelLockFileStream = null;
 
     /**
      * Add event listener
-     * 
+     *
      * @param string $eventName
      * @param string $listenCode
      * @param array|string|closure $callback
@@ -65,7 +66,7 @@ class Inji {
 
     /**
      * Throw event
-     * 
+     *
      * @param string $eventName
      * @param mixed $eventObject
      * @return mixed
@@ -107,7 +108,7 @@ class Inji {
 
     /**
      * Unlisten event
-     * 
+     *
      * @param string $eventName
      * @param string $listenCode
      * @param boolean $save
@@ -130,5 +131,20 @@ class Inji {
             exit();
         }
         return false;
+    }
+
+    public function blockParallel() {
+        $this->parallelLockFileStream = fopen('lock.file', 'w+');
+        if (!flock($this->parallelLockFileStream, LOCK_EX | LOCK_NB)) {
+            return false;
+        }
+        return true;
+    }
+
+    public function unBlockParallel() {
+        if (is_resource($this->parallelLockFileStream)) {
+            flock($this->parallelLockFileStream, LOCK_UN);
+            fclose($this->parallelLockFileStream);
+        }
     }
 }

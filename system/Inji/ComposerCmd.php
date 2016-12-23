@@ -9,6 +9,14 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class ComposerCmd {
+    public static $appInstance = null;
+
+    public static function getInstance() {
+        if (!self::$appInstance) {
+            self::$appInstance = new Composer\Console\Application();
+        }
+        return self::$appInstance;
+    }
 
     public static function check() {
         if (!file_exists(getenv('COMPOSER_HOME') . '/composer/vendor/autoload.php')) {
@@ -27,6 +35,10 @@ class ComposerCmd {
      * @return bool
      */
     public static function installComposer($path) {
+        while (!Inji::$inst->blockParallel()) {
+            sleep(2);
+        }
+        ini_set('memory_limit', '1000M');
         if (file_exists($path . '/composer/bin/composer')) {
             return true;
         }
@@ -50,6 +62,9 @@ class ComposerCmd {
         }
         $composer = new Phar($path . '/composer/composer.phar');
         $composer->extractTo($path . '/composer/');
+        $composer = null;
+        gc_collect_cycles();
+        Inji::$inst->unBlockParallel();
         return true;
     }
 
@@ -84,7 +99,10 @@ class ComposerCmd {
      * @param string $path
      */
     public static function command($command, $needOutput = true, $path = null) {
-        ini_set('memory_limit', '2000M');
+        while (!Inji::$inst->blockParallel()) {
+            sleep(2);
+        }
+        ini_set('memory_limit', '1000M');
         include_once getenv('COMPOSER_HOME') . '/composer/vendor/autoload.php';
         if ($needOutput) {
             $output = new Symfony\Component\Console\Output\StreamOutput(fopen('php://output', 'w'));
@@ -93,11 +111,16 @@ class ComposerCmd {
         }
         $path = str_replace('\\', '/', $path === null ? App::$primary->path . '/' : $path);
         $input = new Symfony\Component\Console\Input\StringInput($command . ' -d ' . $path);
-        $app = new Composer\Console\Application();
+        $app = self::getInstance();
         $app->setAutoExit(false);
         $dir = getcwd();
         $app->run($input, $output);
+        $app = null;
+        $output = null;
+        $input = null;
         chdir($dir);
+        gc_collect_cycles();
+        Inji::$inst->unBlockParallel();
     }
 
     public static function requirePackage($packageName, $version = '', $path = '') {

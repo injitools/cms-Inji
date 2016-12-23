@@ -9,6 +9,14 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class BowerCmd {
+    public static $appInstance = null;
+
+    public static function getInstance() {
+        if (!self::$appInstance) {
+            self::$appInstance = new Bowerphp\Console\Application();
+        }
+        return self::$appInstance;
+    }
 
     public static function check() {
         if (!file_exists(App::$primary->path . '/bower.json')) {
@@ -17,6 +25,9 @@ class BowerCmd {
     }
 
     public static function initBower($path = '') {
+        while (!Inji::$inst->blockParallel()) {
+            sleep(2);
+        }
         if (!$path) {
             $path = App::$primary->path . '/';
         }
@@ -46,9 +57,14 @@ class BowerCmd {
             file_put_contents($path . '/.bowerrc', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
         self::command('install', false, $path);
+        gc_collect_cycles();
+        Inji::$inst->unBlockParallel();
     }
 
     public static function command($command, $needOutput = true, $path = null) {
+        while (!Inji::$inst->blockParallel()) {
+            sleep(2);
+        }
         ini_set('memory_limit', '2000M');
         ComposerCmd::requirePackage("injitools/bowerphp", "dev-master", '.');
         include_once 'vendor/injitools/bowerphp/src/bootstrap.php';
@@ -59,12 +75,17 @@ class BowerCmd {
         }
         $path = str_replace('\\', '/', $path === null ? App::$primary->path . '/' : $path);
         $input = new Symfony\Component\Console\Input\StringInput($command);
-        $app = new Bowerphp\Console\Application();
+        $app = self::getInstance();
         $dir = getcwd();
         chdir($path);
         putenv('HOME=' . getcwd());
         $app->doRun($input, $output);
+        $app = null;
+        $output = null;
+        $input = null;
         chdir($dir);
+        gc_collect_cycles();
+        Inji::$inst->unBlockParallel();
     }
 
     public static function requirePackage($packageName, $version = '', $path = '') {
@@ -84,4 +105,6 @@ class BowerCmd {
         self::command('install ' . $packageName . ($version ? '#' . $version : '') . ' --save', false, $path);
         return true;
     }
+
+
 }
