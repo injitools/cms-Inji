@@ -80,7 +80,6 @@ class BowerCmd {
         chdir($path);
         putenv('HOME=' . getcwd());
         $app->doRun($input, $output);
-        $app = null;
         $output = null;
         $input = null;
         chdir($dir);

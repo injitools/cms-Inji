@@ -115,7 +115,6 @@ class ComposerCmd {
         $app->setAutoExit(false);
         $dir = getcwd();
         $app->run($input, $output);
-        $app = null;
         $output = null;
         $input = null;
         chdir($dir);
