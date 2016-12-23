@@ -4,6 +4,7 @@
  */
 CKEDITOR.plugins.addExternal('injiwidgets', '/static/moduleAsset/libs/libs/ckeditor/plugins/injiwidgets/');
 CKEDITOR.plugins.addExternal('justify', '/static/moduleAsset/libs/libs/ckeditor/plugins/justify/');
+CKEDITOR.plugins.addExternal('font', '/static/moduleAsset/libs/libs/ckeditor/plugins/font/');
 
 CKEDITOR.editorConfig = function (config) {
   config.filebrowserBrowseUrl = '/admin/files/managerForEditor?folder=images';
@@ -13,5 +14,6 @@ CKEDITOR.editorConfig = function (config) {
   config.height = '300px';
   config.extraPlugins = 'injiwidgets,justify,colorbutton';
 };
-CKEDITOR.basePath = inji.options.appRoot + 'static/libs/vendor/ckeditor/ckeditor/ckeditor/';
-CKEDITOR.plugins.basePath = inji.options.appRoot + 'static/libs/vendor/ckeditor/ckeditor/ckeditor/plugins/';
+console.log(inji.options.appRoot);
+CKEDITOR.basePath = '/static/bower/ckeditor/';
+CKEDITOR.plugins.basePath = CKEDITOR.basePath + 'plugins/';

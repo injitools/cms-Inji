@@ -14,20 +14,16 @@ namespace Libs;
 class JqueryUi extends \Object {
 
     public static $name = 'jQuery Ui';
-    public static $composerPacks = [
-        'components/jqueryui' => '1.11.*'
-    ];
     public static $bowerPacks = [
+        'jquery-ui' => '1.11.*',
         'jqueryui-timepicker-addon' => '*',
         'https://github.com/jquery-ui-bootstrap/jquery-ui-bootstrap' => '*'
     ];
     public static $files = [
-        'js' => [
-            'components/jqueryui/jquery-ui.min.js',
-            'components/jqueryui/ui/i18n/datepicker-ru.js',
-        ],
         'bower' => [
             'js' => [
+                'jquery-ui/jquery-ui.min.js',
+                'jquery-ui/ui/i18n/datepicker-ru.js',
                 'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
                 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-ru.js'
             ],
@@ -36,9 +32,6 @@ class JqueryUi extends \Object {
                 'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.css'
             ],
         ]
-    ];
-    public static $staticDirs = [
-        'components/jqueryui'
     ];
     public static $requiredLibs = [
         'jquery'

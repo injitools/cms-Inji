@@ -49,5 +49,5 @@ CKEDITOR.editorConfig = function (config) {
   ];
   config.extraPlugins = 'inlinesave,injiwidgets,font,justify,colorbutton';
 };
-CKEDITOR.basePath = inji.options.appRoot + 'static/libs/vendor/ckeditor/ckeditor/ckeditor/';
-CKEDITOR.plugins.basePath = inji.options.appRoot + 'static/libs/vendor/ckeditor/ckeditor/ckeditor/plugins/';
+CKEDITOR.basePath = '/static/bower/ckeditor/';
+CKEDITOR.plugins.basePath = CKEDITOR.basePath + 'plugins/';
