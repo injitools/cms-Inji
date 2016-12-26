@@ -13,6 +13,7 @@
 class View extends \Module {
 
     public $title = 'No title';
+
     /**
      * @var View\Template
      */
@@ -226,8 +227,9 @@ class View extends \Module {
     public function head() {
 
         echo "<title>{$this->title}</title>\n";
-
-        if (!empty($this->template->config['favicon']) && file_exists($this->template->path . "/{$this->template->config['favicon']}")) {
+        if (!empty(\App::$primary->config['site']['favicon']) && file_exists(\App::$primary->path . '/' . \App::$primary->config['site']['favicon'])) {
+            echo "        <link rel='shortcut icon' href='" . \App::$primary->config['site']['favicon'] . "' />";
+        } elseif (!empty($this->template->config['favicon']) && file_exists($this->template->path . "/{$this->template->config['favicon']}")) {
             echo "        <link rel='shortcut icon' href='/templates/{$this->template->name}/{$this->template->config['favicon']}' />";
         } elseif (!empty($this->template->config['favicon']) && file_exists($this->app->path . "/static/images/{$this->template->config['favicon']}")) {
             echo "        <link rel='shortcut icon' href='/static/images/{$this->template->config['favicon']}' />";

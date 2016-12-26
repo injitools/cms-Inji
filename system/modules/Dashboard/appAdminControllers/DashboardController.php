@@ -36,6 +36,10 @@ class DashboardController extends adminController {
                 $fileId = $this->Files->upload($_FILES['noimage'], array('file_code' => 'noimage'));
                 $config['site']['noimage'] = Files\File::get($fileId)->path;
             }
+            if (!empty($_FILES['favicon']['tmp_name'])) {
+                $fileId = $this->Files->upload($_FILES['favicon'], array('file_code' => 'favicon'));
+                $config['site']['favicon'] = Files\File::get($fileId)->path;
+            }
             Config::save('app', $config);
             Tools::redirect('/admin/dashboard/siteConfig', 'Изменения сохранены', 'success');
         }

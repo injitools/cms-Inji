@@ -46,6 +46,7 @@
     $form = new Ui\Form();
     $form->input('image', 'site_logo', 'Лого сайта', ['value' => !empty(\App::$primary->config['site']['site_logo']) ? \App::$primary->config['site']['site_logo'] : '']);
     $form->input('image', 'noimage', 'Плейсхолдер для отсутствующих изображений', ['value' => !empty(\App::$primary->config['site']['noimage']) ? \App::$primary->config['site']['noimage'] : '']);
+    $form->input('image', 'favicon', 'Фавикон', ['value' => !empty(\App::$primary->config['site']['favicon']) ? \App::$primary->config['site']['favicon'] : '']);
     ?>
     <h2>Дополнительные мета теги</h2>
     <div class ="form-group">
