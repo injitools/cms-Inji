@@ -15,7 +15,7 @@ inji.Ecommerce = {
           inji.Server.request({
             url: 'ecommerce/cart/getCart',
             success: function (data) {
-              $("#cart").html(data);
+              $("#cart,.cartplace").html(data);
             }
           });
         }
