@@ -25,6 +25,7 @@ class Category extends \Model {
         'description' => ['type' => 'html'],
         'image_file_id' => ['type' => 'image'],
         'options_inherit' => ['type' => 'bool'],
+        'hidden' => ['type' => 'bool'],
         //Системные
         'imported' => ['type' => 'bool'],
         'weight' => ['type' => 'number'],
@@ -42,6 +43,7 @@ class Category extends \Model {
         'description' => 'Описание',
         'options_inherit' => 'Наследовать набор свойств',
         'options' => 'Свойства товаров',
+        'hidden' => 'Скрытая'
     ];
     public static $forms = [
         'manager' => [
@@ -49,7 +51,7 @@ class Category extends \Model {
                 ['name', 'alias'],
                 ['parent_id', 'image_file_id'],
                 ['viewer', 'template'],
-                ['options_inherit'],
+                ['options_inherit', 'hidden'],
                 ['options'],
                 ['description']
             ]
