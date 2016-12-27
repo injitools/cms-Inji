@@ -194,7 +194,7 @@ class Model {
                         if (!empty($colInfo['colParams']['params'])) {
                             $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
                         } else {
-                            $values = $colInfo['colParams']['module']->$colInfo['colParams']['method']();
+                            $values = \App::$cur->{$colInfo['colParams']['module']}->$colInfo['colParams']['method']();
                         }
                         $value = !empty($values[$item->$colName]) ? $values[$item->$colName] : 'Не задано';
                         break;
