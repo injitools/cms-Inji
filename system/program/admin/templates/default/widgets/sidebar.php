@@ -27,27 +27,6 @@
 
         $where = [];
         if (class_exists('Users\User')) {
-            App::$cur->ui;
-            ?>
-            <div class="userWidget">
-                <label>Текущий пользователь:</label>
-                <div class="col-xs-4">
-                    <img
-                        src="<?= Statics::file(Users\User::$cur->info->photo ? Users\User::$cur->info->photo->path : ''); ?>"
-                        class="img-responsive"/>
-                </div>
-                <div class="col-xs-8">
-                    <?= Users\User::$cur->name(); ?><br/>
-                    <?= Users\User::$cur->mail; ?><br/>
-                    <a href="#"
-                       onclick="inji.Ui.forms.popUp('Users\\User:<?= Users\User::$cur->id; ?>', {formName: 'profile'});return false;">Редактировать</a>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <li>
-                <a href="/admin">Панель управления</a>
-            </li>
-            <?php
             $where[] = ['group_id', Users\User::$cur->group_id];
             if (Users\User::$cur->group_id == 3) {
                 $where[] = ['group_id', 0, '=', 'OR'];
@@ -55,6 +34,11 @@
         } else {
             $where[] = ['group_id', 0, '='];
         }
+        ?>
+        <li>
+            <a href="/admin">Панель управления</a>
+        </li>
+        <?php
         $menu = Menu\Menu::get([['code', 'sidebarMenu'], $where]);
         if ($menu) {
             foreach ($menu->items(['where' => ['parent_id', 0], 'order' => ['weight', 'asc']]) as $item) {

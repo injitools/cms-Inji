@@ -17,7 +17,7 @@
     position: fixed;
     top: 0;
     z-index: 1000;
-    color: #8F8F8F;
+    color: #fff;
 }
 
 /*!
@@ -40,10 +40,23 @@
     padding-left: 250px;
 }
 
+#header-wrapper {
+    background: #1b2133;
+    padding-right:15px;
+}
+#header-wrapper a{
+    color: #fff;
+}
+#header-wrapper .user-avatar{
+    margin: 2px 0;
+
+}
+
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
     left: 250px;
+    top:0;
     width: 0;
     height: 100%;
     margin-left: -250px;
@@ -145,12 +158,14 @@
     padding: 0;
     padding-left: 10px;
 }
+
 #sidebar-wrapper .sidebar-brand label, #sidebar-wrapper .userWidget label {
     display: block;
     color: #a0a0a0;
     padding-left: 10px;
-    font-weight:bold;
+    font-weight: bold;
 }
+
 h1 {
     font-size: 40px;
 }
