@@ -21,7 +21,7 @@ class Statics {
      */
     public static function file($path, $resize = '', $resizeCrop = '', $resizePos = '') {
         if (!$path) {
-            return !empty(\App::$primary->config['site']['noimage']) ? \App::$primary->config['site']['noimage'] : '/static/system/images/no-image.png';
+            $path = !empty(\App::$primary->config['site']['noimage']) ? \App::$primary->config['site']['noimage'] : '/static/system/images/no-image.png';
         }
         $absolutePath = App::$cur->staticLoader->parsePath($path);
         $convert = false;
