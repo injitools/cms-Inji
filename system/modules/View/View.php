@@ -175,6 +175,10 @@ class View extends \Module {
                     $source = $this->cutTag($source, $rawTag);
                     $this->bodyEnd();
                     break;
+                case 'TEMPLATE_PATH':
+                    $source = $this->cutTag($source, $rawTag);
+                    echo "/static/templates/{$this->template->name}";
+                    break;
             }
         }
         echo $source;
