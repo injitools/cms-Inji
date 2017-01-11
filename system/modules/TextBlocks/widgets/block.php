@@ -1,6 +1,12 @@
 <?php
 
-$block = \TextBlocks\Block::get($params[0], 'code');
-echo "<div class = 'fastEdit' data-model='\TextBlocks\Block' data-col='text' data-key='{$block->id}'>";
-echo $block->text;
-echo '</div>';
+$code = !empty($param[0]) ? $param[0] : (!empty($code) ? $code : false);
+if (!$code) {
+    return;
+}
+$block = \TextBlocks\Block::get($code, 'code');
+if (!$block) {
+    $block = new TextBlocks\Block(['code' => $code]);
+    $block->save();
+}
+echo \Ui\FastEdit::block($block, 'text');
