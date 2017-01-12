@@ -18,45 +18,31 @@ class Users extends Module {
         }
         \Users\User::$cur = new Users\User(array('group_id' => 1, 'role_id' => 1));
         if (!App::$cur->db->connect) {
-            return;
+            return false;
         }
         if (isset($_GET['logout'])) {
             return $this->logOut();
         }
-        /*
-          $activeSocials = Users\Social::getList(['where' => ['active', 1]]);
-          foreach ($activeSocials as $activeSocial) {
-          $objectName = 'Users\SocialHelper\\' . $activeSocial->object_name;
-          if (method_exists($objectName, 'checkAppAccess')) {
-          $user = $objectName::checkAppAccess();
-          if ($user) {
-          \Users\User::$cur = $user;
-          return true;
-          }
-          }
-          }
-         * 
-         */
         if (isset($_GET['passre']) && filter_input(INPUT_GET, 'user_mail')) {
             $this->passre(trim(filter_input(INPUT_GET, 'user_mail')));
         }
         if (!empty($_GET['passrecont']) && filter_input(INPUT_GET, 'hash')) {
             $this->passrecont(filter_input(INPUT_GET, 'hash'));
         }
-        if (filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash') && filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id')) {
-            return $this->cuntinueSession(filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash'), filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id'));
-        }
         if (isset($_POST['autorization']) && trim(filter_input(INPUT_POST, 'user_login')) && trim(filter_input(INPUT_POST, 'user_pass'))) {
             unset($_POST['autorization']);
             return $this->autorization(trim(filter_input(INPUT_POST, 'user_login')), trim(filter_input(INPUT_POST, 'user_pass')), strpos(filter_input(INPUT_POST, 'user_login'), '@') ? 'mail' : 'login', false);
+        }
+        if (filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash') && filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id')) {
+            return $this->cuntinueSession(filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash'), filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id'));
         }
     }
 
     public function logOut($redirect = true) {
         if (!empty($_COOKIE[$this->cookiePrefix . "_user_session_hash"]) && !empty($_COOKIE[$this->cookiePrefix . "_user_id"])) {
             $session = Users\Session::get([
-                        ['user_id', $_COOKIE[$this->cookiePrefix . "_user_id"]],
-                        ['hash', $_COOKIE[$this->cookiePrefix . "_user_session_hash"]]
+                ['user_id', $_COOKIE[$this->cookiePrefix . "_user_id"]],
+                ['hash', $_COOKIE[$this->cookiePrefix . "_user_session_hash"]]
             ]);
             if ($session) {
                 $session->delete();
@@ -76,8 +62,8 @@ class Users extends Module {
 
     public function cuntinueSession($hash, $userId) {
         $session = Users\Session::get([
-                    ['user_id', $userId],
-                    ['hash', $hash]
+            ['user_id', $userId],
+            ['hash', $hash]
         ]);
         if ($session && $session->user && $session->user->blocked) {
             if (!headers_sent()) {
@@ -149,18 +135,35 @@ class Users extends Module {
             $user = Users\User::get($passre->user_id);
             $user->pass = $this->hashpass($pass);
             $user->save();
-            $this->autorization($user->mail, $user->pass, 'mail');
+            $this->autorization($user->id, $pass, 'id', true, true);
             Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, $user->mail, 'Новый пароль на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME), 'Было запрошено восстановление пароля на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />Ваш новый пароль: ' . $pass);
-            Tools::redirect('/', 'На указанный почтовый ящик был выслан новый пароль', 'success');
+            Tools::redirect('/', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль', 'success');
         }
     }
 
-    public function autorization($login, $pass, $ltype = 'login', $noMsg = true) {
-
-        sleep(3); //simple anti brute
-
+    public function autorization($login, $pass, $ltype = 'login', $noMsg = true, $skipErrorCheck = false) {
         $user = $this->get($login, $ltype);
+        if ($user && !$skipErrorCheck) {
+            $lastSuccessLogin = \Users\User\LoginHistory::lastSuccessLogin($user->id);
+            $where = [['user_id', $user->id]];
+            if ($lastSuccessLogin) {
+                $where[] = ['date_create', $lastSuccessLogin->date_create, '>'];
+            }
+            $loginHistoryErrorCount = \Users\User\LoginHistory::getCount(['where' => $where]);
+            if ($loginHistoryErrorCount > 5) {
+                Msg::add('Было совершено более 5ти попыток подбора пароля к вашему аккаунту, для вашей безопасности мы были вынуждены заблокировать к нему доступ.<br />
+Для разблокировки аккаунта, воспользуйтесь <a href = "?passre=1&user_mail=' . $user->mail . '">Сбросом пароля</a>', 'danger');
+                return false;
+            }
+
+        }
         if ($user && $this->verifypass($pass, $user->pass) && !$user->blocked) {
+            $loginHistory = new \Users\User\LoginHistory([
+                'user_id' => $user->id,
+                'ip' => $_SERVER['REMOTE_ADDR'],
+                'success' => true
+            ]);
+            $loginHistory->save();
             if (!empty($this->config['needActivation']) && $user->activation) {
                 Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
             } elseif ($user->activation) {
@@ -183,6 +186,12 @@ class Users extends Module {
             if ($user && $user->blocked) {
                 Msg::add('Вы заблокированы', 'danger');
             } elseif ($user) {
+                $loginHistory = new \Users\User\LoginHistory([
+                    'user_id' => $user->id,
+                    'ip' => $_SERVER['REMOTE_ADDR'],
+                    'success' => false
+                ]);
+                $loginHistory->save();
                 Msg::add('Вы ошиблись при наборе пароля или логина, попробуйте ещё раз или воспользуйтесь <a href = "?passre=1&user_mail=' . $user->mail . '">Восстановлением пароля</a>', 'danger');
             } else {
                 Msg::add('Данный почтовый ящик не зарегистрирован в системе', 'danger');
@@ -214,7 +223,7 @@ class Users extends Module {
 
     /**
      * Return user
-     * 
+     *
      * @param integer|string $idn
      * @param type $ltype
      * @return boolean|\User\User
