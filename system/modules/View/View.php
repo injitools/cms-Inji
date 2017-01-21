@@ -283,7 +283,7 @@ class View extends \Module {
         }
         $timeMd5 = md5($timeStr);
         $cacheDir = Cache::getDir('static');
-        if (!file_exists($cacheDir . '/all' . $timeMd5 . '.css')) {
+        if (!file_exists($cacheDir . 'all' . $timeMd5 . '.css')) {
             foreach ($urls as $primaryUrl => $url) {
                 $source = file_get_contents($url);
                 $rootPath = substr($primaryUrl, 0, strrpos($primaryUrl, '/'));
@@ -294,9 +294,9 @@ class View extends \Module {
                 $source = preg_replace('#url\((?!http|https|/|data\:|\'|")([^/])#isU', 'url(' . $rootPath . '/$1$2', $source);
                 $cssAll .= $source . "\n";
             }
-            file_put_contents($cacheDir . '/all' . $timeMd5 . '.css', $cssAll);
+            file_put_contents($cacheDir . 'all' . $timeMd5 . '.css', $cssAll);
         }
-        echo "\n        <link href='/{$cacheDir}/all{$timeMd5}.css' rel='stylesheet' type='text/css' />";
+        echo "\n        <link href='/{$cacheDir}all{$timeMd5}.css' rel='stylesheet' type='text/css' />";
     }
 
     public function getCss() {
@@ -432,11 +432,11 @@ class View extends \Module {
 
         $timeMd5 = md5($timeStr);
         $cacheDir = Cache::getDir('static');
-        if (!file_exists($cacheDir . '/all' . $timeMd5 . '.js')) {
+        if (!file_exists($cacheDir . 'all' . $timeMd5 . '.js')) {
             foreach ($urls as $url) {
                 $scriptAll .= ";\n" . file_get_contents($url);
             }
-            file_put_contents($cacheDir . '/all' . $timeMd5 . '.js', $scriptAll);
+            file_put_contents($cacheDir . 'all' . $timeMd5 . '.js', $scriptAll);
         }
         $options = [
             'scripts' => array_values($noParsedScripts),
@@ -445,7 +445,7 @@ class View extends \Module {
             'appRoot' => $this->app->type == 'app' ? '/' : '/' . $this->app->name . '/',
             'onLoadModules' => $onLoadModules
         ];
-        $options['scripts'][] = '/' . $cacheDir . '/all' . $timeMd5 . '.js';
+        $options['scripts'][] = '/' . $cacheDir . 'all' . $timeMd5 . '.js';
         $this->widget('View\bodyEnd', compact('options'));
     }
 
