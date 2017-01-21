@@ -47,7 +47,7 @@ class Item extends \Model {
         'sales' => ['type' => 'number'],
         'imported' => ['type' => 'text'],
         'tree_path' => ['type' => 'text'],
-        'search_index' => ['type' => 'text'],
+        'search_index' => ['type' => 'text', 'logging' => false],
         'date_create' => ['type' => 'dateTime'],
         'widget' => ['type' => 'text'],
         'view' => ['type' => 'text'],
