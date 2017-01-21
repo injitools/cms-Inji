@@ -15,5 +15,5 @@ CKEDITOR.editorConfig = function (config) {
   config.extraPlugins = 'injiwidgets,justify,colorbutton';
 };
 console.log(inji.options.appRoot);
-CKEDITOR.basePath = '/static/bower/ckeditor/';
+CKEDITOR.basePath = '/cache/static/bowerLibs/ckeditor/';
 CKEDITOR.plugins.basePath = CKEDITOR.basePath + 'plugins/';
