@@ -98,7 +98,7 @@ class StaticLoader extends Module {
             $allow_resize = false;
             if (App::$cur->db->connect) {
                 $type = Files\Type::get($fileinfo['extension'], 'ext');
-                $allow_resize = $type->allow_resize;
+                $allow_resize = $type ? $type->allow_resize : false;
             }
             if (!$type && in_array(strtolower($fileinfo['extension']), array('png', 'jpg', 'jpeg', 'gif'))) {
                 $allow_resize = true;
@@ -137,7 +137,7 @@ class StaticLoader extends Module {
                     if (!empty($_GET['resize_pos']) && in_array($_GET['resize_pos'], array('top', 'center'))) {
                         $pos = $_GET['resize_pos'];
                     }
-                    $file = Statics::file($file, $sizes[0] . 'x' . $sizes[1], $crop, $pos);
+                    $file = INJI_BASE_DIR . rtrim(Statics::file($file, $sizes[0] . 'x' . $sizes[1], $crop, $pos, true), '/');
                 }
             }
         }

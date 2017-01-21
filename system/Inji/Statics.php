@@ -19,11 +19,14 @@ class Statics {
      * @param string $resizePos
      * @return string
      */
-    public static function file($path, $resize = '', $resizeCrop = '', $resizePos = '') {
+    public static function file($path, $resize = '', $resizeCrop = '', $resizePos = '', $pathAbsolute = false) {
         if (!$path) {
+            $pathAbsolute = false;
             $path = !empty(\App::$primary->config['site']['noimage']) ? \App::$primary->config['site']['noimage'] : '/static/system/images/no-image.png';
         }
-        $absolutePath = App::$cur->staticLoader->parsePath($path);
+
+        $absolutePath = $pathAbsolute ? $path : App::$cur->staticLoader->parsePath($path);
+
         $convert = false;
         if (!file_exists($absolutePath) && file_exists(mb_convert_encoding($absolutePath, 'Windows-1251', 'UTF-8'))) {
             $absolutePath = mb_convert_encoding($absolutePath, 'Windows-1251', 'UTF-8');
@@ -44,5 +47,4 @@ class Statics {
             return '/' . $path;
         }
     }
-
 }
