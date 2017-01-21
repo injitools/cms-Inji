@@ -20,12 +20,11 @@ class Ckeditor extends \Object {
     public static $files = [
         'bower' => [
             'js' => [
-
             ]
         ],
         'js' => [
             '/static/moduleAsset/libs/libs/ckeditor/path.js',
-            '/static/bower/ckeditor/ckeditor.js',
+            '/cache/static/bowerLibs/ckeditor/ckeditor.js',
             '/static/moduleAsset/libs/libs/ckeditor/bootstrap-ckeditor-fix.js',
             '/static/moduleAsset/libs/libs/ckeditor/jquery.adapter.js'
         ]
