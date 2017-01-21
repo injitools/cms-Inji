@@ -34,6 +34,9 @@ class BowerCmd {
         }
         $json = [
             "name" => get_current_user() . "/" . App::$primary->name,
+            "config" => [
+                "cache-dir" => INJI_BASE_DIR . Cache::folder() . "bower/"
+            ],
             "authors" => [
                 [
                     get_current_user() . ' <' . get_current_user() . "@" . INJI_DOMAIN_NAME . '>'
