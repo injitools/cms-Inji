@@ -9,6 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class BowerCmd {
+
     public static $appInstance = null;
 
     public static function getInstance() {
@@ -19,7 +20,7 @@ class BowerCmd {
     }
 
     public static function check() {
-        if (!file_exists(App::$primary->path . '/bower.json')) {
+        if (!file_exists(INJI_BASE_DIR . Cache::folder() . "static/bowerLibs/bower.json")) {
             BowerCmd::initBower();
         }
     }
@@ -29,14 +30,10 @@ class BowerCmd {
             sleep(2);
         }
         if (!$path) {
-            $path = App::$primary->path . '/';
+            $path = INJI_BASE_DIR . Cache::folder() . "static/bowerLibs/";
         }
-
         $json = [
             "name" => get_current_user() . "/" . App::$primary->name,
-            "config" => [
-                "cache-dir" => "./cache/bower/"
-            ],
             "authors" => [
                 [
                     get_current_user() . ' <' . get_current_user() . "@" . INJI_DOMAIN_NAME . '>'
@@ -46,15 +43,15 @@ class BowerCmd {
             "dependencies" => [],
         ];
         Tools::createDir($path);
-        file_put_contents($path . '/bower.json', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        file_put_contents($path . 'bower.json', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
-        if (!file_exists($path . '/.bowerrc')) {
+        if (!file_exists($path . '.bowerrc')) {
             $json = [
-                "directory" => 'static/bower',
+                "directory" => './',
                 "interactive" => false
             ];
             Tools::createDir($path);
-            file_put_contents($path . '/.bowerrc', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+            file_put_contents($path . '.bowerrc', json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         }
         self::command('install', false, $path);
         gc_collect_cycles();
@@ -73,37 +70,34 @@ class BowerCmd {
         } else {
             $output = new Symfony\Component\Console\Output\NullOutput();
         }
-        $path = str_replace('\\', '/', $path === null ? App::$primary->path . '/' : $path);
+        $path = str_replace('\\', '/', $path === null ? INJI_BASE_DIR . Cache::folder() . "static/bowerLibs/" : $path);
         $input = new Symfony\Component\Console\Input\StringInput($command);
         $app = self::getInstance();
-        $dir = getcwd();
         chdir($path);
         putenv('HOME=' . getcwd());
         $app->doRun($input, $output);
         $output = null;
         $input = null;
-        chdir($dir);
+        chdir(INJI_BASE_DIR);
         gc_collect_cycles();
         Inji::$inst->unBlockParallel();
     }
 
     public static function requirePackage($packageName, $version = '', $path = '') {
         if (!$path) {
-            $path = App::$primary->path;
+            $path = INJI_BASE_DIR . Cache::folder() . "static/bowerLibs/";
         }
-        $bowerJson = json_decode(file_get_contents($path . '/bower.json'), true);
+        $bowerJson = json_decode(file_get_contents($path . 'bower.json'), true);
         if (strpos($packageName, 'github') !== false) {
             $needPackageName = basename($packageName);
         } else {
             $needPackageName = $packageName;
         }
-        if (isset($bowerJson['dependencies'][$needPackageName]) && file_exists($path . '/static/bower/' . $needPackageName)) {
+        if (file_exists(Cache::folder() . 'static/bowerLibs/' . $needPackageName)) {
             return true;
         }
 
         self::command('install ' . $packageName . ($version ? '#' . $version : '') . ' --save', false, $path);
         return true;
     }
-
-
 }

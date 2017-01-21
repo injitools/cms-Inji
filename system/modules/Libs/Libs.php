@@ -55,12 +55,12 @@ class Libs extends Module {
     public function bowerFiles($libName, $files, $options) {
         if (!empty($files['css']) && (!isset($options['loadCss']) || $options['loadCss'])) {
             foreach ($files['css'] as $file) {
-                App::$cur->view->customAsset('css', '/static/bower/' . $file, $libName);
+                App::$cur->view->customAsset('css', '/cache/static/bowerLibs/' . $file, $libName);
             }
         }
         if (!empty($files['js'])) {
             foreach ($files['js'] as $file) {
-                App::$cur->view->customAsset('js', '/static/bower/' . $file, $libName);
+                App::$cur->view->customAsset('js', '/cache/static/bowerLibs/' . $file, $libName);
             }
         }
     }

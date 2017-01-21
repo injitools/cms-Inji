@@ -109,7 +109,7 @@ class Cache {
         $pos = !empty($options['pos']) ? $options['pos'] : 'center';
         $fileinfo = pathinfo($file);
         $fileCheckSum = md5($fileinfo['dirname'] . filemtime($file));
-        $path = static::getDir('static') . '/' . $fileCheckSum . '_' . $fileinfo['filename'];
+        $path = static::getDir('static') . $fileCheckSum . '_' . $fileinfo['filename'];
         if ($sizes) {
             $path .= '.' . $sizes['x'] . 'x' . $sizes['y'] . $crop . $pos;
         }
@@ -134,9 +134,12 @@ class Cache {
         if (!$app) {
             $app = App::$primary;
         }
-        $path = "cache/{$dirname}/{$app->dir}";
+        $path = static::folder() . "{$dirname}/{$app->dir}/";
         Tools::createDir($path);
         return $path;
     }
 
+    public static function folder() {
+        return 'cache/';
+    }
 }

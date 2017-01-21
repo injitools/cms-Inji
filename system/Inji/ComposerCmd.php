@@ -9,6 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class ComposerCmd {
+
     public static $appInstance = null;
 
     public static function getInstance() {
@@ -76,7 +77,7 @@ class ComposerCmd {
             $json = [
                 "name" => get_current_user() . "/" . App::$primary->name,
                 "config" => [
-                    "cache-dir" => "./cache/composer/"
+                    "cache-dir" => Cache::folder() . "composer/"
                 ],
                 "authors" => [
                     [
