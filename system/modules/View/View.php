@@ -253,7 +253,7 @@ class View extends \Module {
 
         $this->checkNeedLibs();
         $this->parseCss();
-        echo "\n        <script src='" . Statics::file(($this->app->type != 'app' ? '/' . $this->app->name : '') . "/static/system/js/Inji.js") . "'></script>";
+        echo "\n        <script src='" . Statics::file("/static/system/js/Inji.js") . "'></script>";
     }
 
     public function parseCss() {
