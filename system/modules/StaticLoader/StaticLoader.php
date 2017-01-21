@@ -50,6 +50,8 @@ class StaticLoader extends Module {
 
         $type = substr($path, 0, strpos($path, '/'));
         switch ($type) {
+            case 'cache':
+                return INJI_BASE_DIR . $path;
             case 'libs':
                 return App::$cur->Libs->getPath(array_slice(explode('/', $path), 2));
             case 'templates':
