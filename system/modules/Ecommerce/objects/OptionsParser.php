@@ -170,10 +170,11 @@ class OptionsParser extends \Object {
         if (empty($options['parent'])) {
             return;
         }
-        if (strpos($options['parent'], ',') !== false) {
+        if (is_array($options['parent']) || strpos($options['parent'], ',') !== false) {
+            $list = is_array($options['parent']) ? $options['parent'] : explode(',', $options['parent']);
             $first = true;
             $where = [];
-            foreach (explode(',', $options['parent']) as $categoryId) {
+            foreach ($list as $categoryId) {
                 if (!$categoryId) {
                     continue;
                 }

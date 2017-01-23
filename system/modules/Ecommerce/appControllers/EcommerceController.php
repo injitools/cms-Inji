@@ -137,10 +137,16 @@ class ecommerceController extends Controller {
             $category_id = 0;
         }
         $active = $category_id;
+        if(!empty($_GET['categorys'])){
+            $categorysList = $_GET['categorys'];
+        }
+        else {
+            $categorysList = $category_id;
+        }
 
         //items pages
         $pages = new \Ui\Pages($_GET, ['count' => $this->ecommerce->getItemsCount([
-            'parent' => $category_id,
+            'parent' => $categorysList,
             'search' => trim($search),
             'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
         ]),
@@ -165,7 +171,7 @@ class ecommerceController extends Controller {
 
         //items
         $items = $this->ecommerce->getItems([
-            'parent' => $category_id,
+            'parent' => $categorysList,
             'start' => $pages->params['start'],
             'count' => $pages->params['limit'],
             'search' => trim($search),
@@ -178,7 +184,7 @@ class ecommerceController extends Controller {
             $options = \Ecommerce\Item\Option::getList(['where' => ['item_option_searchable', 1], 'order' => ['weight', 'asc']]);
         } else {
             $params = $this->ecommerce->getItemsParams([
-                'parent' => $category_id,
+                'parent' => $categorysList,
                 'search' => trim($search),
                 'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
             ]);
