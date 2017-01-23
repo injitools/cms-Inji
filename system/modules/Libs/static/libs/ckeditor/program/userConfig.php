@@ -25,5 +25,5 @@ if (!empty(App::$cur->libs->config['libConfig']['ckeditor']['pasteFromWordRemove
     echo 'CKEDITOR.config.pasteFromWordRemoveStyle = true;';
 }
 ?>
-CKEDITOR.basePath = '/cache/static/bowerLibs/';
+CKEDITOR.basePath = '/cache/static/bowerLibs/ckeditor/';
 CKEDITOR.plugins.basePath = CKEDITOR.basePath + 'plugins/';

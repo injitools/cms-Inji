@@ -1,1 +1,1 @@
-CKEDITOR_BASEPATH = '/cache/static/bowerLibs/';
+CKEDITOR_BASEPATH = '/cache/static/bowerLibs/ckeditor/';
