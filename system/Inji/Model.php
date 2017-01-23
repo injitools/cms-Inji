@@ -885,6 +885,8 @@ class Model {
         } catch (PDOException $exc) {
             if ($exc->getCode() == '42S02') {
                 static::createTable();
+            } else {
+                throw $exc;
             }
             $result = App::$cur->db->select(static::table());
         }
@@ -1233,6 +1235,9 @@ class Model {
         if (!empty($options['group'])) {
             static::fixPrefix($options['group'], 'first');
         }
+        if (!empty($options['order'])) {
+            static::fixPrefix($options['order'], 'first');
+        }
         if (!empty($options['where'])) {
             $query->where($options['where']);
         }
@@ -1300,6 +1305,8 @@ class Model {
         } catch (PDOException $exc) {
             if ($exc->getCode() == '42S02') {
                 static::createTable();
+            } else {
+                throw $exc;
             }
             $result = $query->select(static::table());
         }
