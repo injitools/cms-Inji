@@ -1,6 +1,6 @@
 <?php
 
-$code = !empty($param[0]) ? $param[0] : (!empty($code) ? $code : false);
+$code = !empty($code) ? $code : (!empty($param[0]) ? $param[0] : false);
 if (!$code) {
     return;
 }
