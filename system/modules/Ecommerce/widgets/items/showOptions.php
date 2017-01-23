@@ -5,7 +5,7 @@ $limit = !empty(App::$cur->Ecommerce->config['default_limit']) ? App::$cur->Ecom
 
 function sortDirectionIcon($type) {
     if (!empty($_GET['sort'][$type])) {
-        echo '<i class = "glyphicon glyphicon-triangle-' . ($_GET['sort'][$type] == 'asc' ? 'top' : 'bottom') . '"></i>';
+        return ' <small class = "glyphicon glyphicon-triangle-' . ($_GET['sort'][$type] == 'asc' ? 'top' : 'bottom') . '"></small>';
     }
 }
 ?>
@@ -13,8 +13,8 @@ function sortDirectionIcon($type) {
     <div class="row">
         <div class="col-xs-6 ecommerce-showoptions-sort">
             <span class="caption">Сортировка:</span>
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => 'asc']])); ?>">По цене <?=sortDirectionIcon('price');?></a> 
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => 'desc']])); ?>">По популярности <?=sortDirectionIcon('sales');?></a>
+            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => 'asc']])); ?>">По цене<?=sortDirectionIcon('price');?></a> 
+            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => 'desc']])); ?>">По популярности<?=sortDirectionIcon('sales');?></a>
         </div>
         <div class="col-xs-6 text-right ecommerce-showoptions-view">
             <span class="caption">Вид:</span>
