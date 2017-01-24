@@ -42,6 +42,9 @@ class Input extends \Object {
     }
 
     public function parseRequest($request) {
+        if ($this->readOnly()) {
+            return false;
+        }
         $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
         if (isset($request[$this->colName])) {
             $this->activeForm->model->{$colName} = $request[$this->colName];
