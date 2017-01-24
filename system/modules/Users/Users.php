@@ -41,8 +41,8 @@ class Users extends Module {
     public function logOut($redirect = true) {
         if (!empty($_COOKIE[$this->cookiePrefix . "_user_session_hash"]) && !empty($_COOKIE[$this->cookiePrefix . "_user_id"])) {
             $session = Users\Session::get([
-                ['user_id', $_COOKIE[$this->cookiePrefix . "_user_id"]],
-                ['hash', $_COOKIE[$this->cookiePrefix . "_user_session_hash"]]
+                        ['user_id', $_COOKIE[$this->cookiePrefix . "_user_id"]],
+                        ['hash', $_COOKIE[$this->cookiePrefix . "_user_session_hash"]]
             ]);
             if ($session) {
                 $session->delete();
@@ -62,8 +62,8 @@ class Users extends Module {
 
     public function cuntinueSession($hash, $userId) {
         $session = Users\Session::get([
-            ['user_id', $userId],
-            ['hash', $hash]
+                    ['user_id', $userId],
+                    ['hash', $hash]
         ]);
         if ($session && $session->user && $session->user->blocked) {
             if (!headers_sent()) {
@@ -155,7 +155,6 @@ class Users extends Module {
 Для разблокировки аккаунта, воспользуйтесь <a href = "?passre=1&user_mail=' . $user->mail . '">Сбросом пароля</a>', 'danger');
                 return false;
             }
-
         }
         if ($user && $this->verifypass($pass, $user->pass) && !$user->blocked) {
             $loginHistory = new \Users\User\LoginHistory([
@@ -202,15 +201,16 @@ class Users extends Module {
     }
 
     public function newSession($user) {
-        $hash = Tools::randomString(255);
+        do {
+            $hash = Tools::randomString(255);
+        } while (Users\Session::get($hash, 'hash'));
 
         $session = new Users\Session([
             'user_id' => $user->id,
             'agent' => $_SERVER['HTTP_USER_AGENT'],
-            'ip' => $_SERVER['REMOTE_ADDR']
+            'ip' => $_SERVER['REMOTE_ADDR'],
+            'hash' => $hash
         ]);
-
-        $session->hash = $hash;
         $session->save();
 
         if (!headers_sent()) {
