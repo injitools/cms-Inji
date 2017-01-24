@@ -108,6 +108,9 @@ class Input extends \Object {
                             $readonly = !$readonly;
                         }
                         break;
+                    case 'itemMethod':
+                        $readonly = $this->activeForm->model->{$this->colParams['readonly']['method']}();
+                        break;
                 }
             }
             if ($readonly) {
