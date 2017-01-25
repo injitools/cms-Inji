@@ -17,7 +17,7 @@ class ecommerceController extends Controller {
         $user = Users\User::$cur;
         if (!empty($_POST) && !empty($_POST['card_id'])) {
             $error = false;
-            $card = \Ecommerce\Card::get((int)$_POST['card_id']);
+            $card = \Ecommerce\Card::get((int) $_POST['card_id']);
             if (!$card) {
                 $error = true;
                 Msg::add('Такой карты не существует', 'danger');
@@ -103,7 +103,7 @@ class ecommerceController extends Controller {
         //search
         if (!empty($_GET['search'])) {
             if (!empty($_GET['inCatalog'])) {
-                $category_id = (int)$_GET['inCatalog'];
+                $category_id = (int) $_GET['inCatalog'];
             }
             $search = $_GET['search'];
         } else {
@@ -137,19 +137,18 @@ class ecommerceController extends Controller {
             $category_id = 0;
         }
         $active = $category_id;
-        if(!empty($_GET['categorys'])){
+        if (!empty($_GET['categorys'])) {
             $categorysList = $_GET['categorys'];
-        }
-        else {
+        } else {
             $categorysList = $category_id;
         }
 
         //items pages
         $pages = new \Ui\Pages($_GET, ['count' => $this->ecommerce->getItemsCount([
-            'parent' => $categorysList,
-            'search' => trim($search),
-            'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
-        ]),
+                'parent' => $categorysList,
+                'search' => trim($search),
+                'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
+            ]),
             'limit' => !empty($this->Ecommerce->config['default_limit']) ? $this->Ecommerce->config['default_limit'] : 18,
         ]);
 
@@ -214,8 +213,37 @@ class ecommerceController extends Controller {
             'data' => compact('active', 'category', 'sort', 'search', 'pages', 'items', 'categorys', 'bread', 'options')]);
     }
 
+    public function favoritesAction() {
+        if (Users\User::$cur->id) {
+            $count = \Ecommerce\Favorite::getCount(['user_id', Users\User::$cur->id]);
+        } else {
+            $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
+            $count = count($favs);
+        }
+        //items pages
+        $pages = new \Ui\Pages($_GET, [
+            'count' => $count,
+            'limit' => !empty($this->Ecommerce->config['default_limit']) ? $this->Ecommerce->config['default_limit'] : 18,
+        ]);
+        if (Users\User::$cur->id) {
+            $favs = \Ecommerce\Favorite::getList(['where' => ['user_id', Users\User::$cur->id], 'key' => 'item_id', 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
+            $ids = array_keys($favs);
+        } else {
+            $ids = array_slice($favs, $pages->params['start'], $pages->params['limit']);
+        }
+
+        //items
+        $items = \Ecommerce\Item::getList(['where' => ['id', $ids, 'IN']]);
+
+        $bread = [];
+        $bread[] = ['text' => 'Каталог', 'href' => '/ecommerce/itemList/'];
+        $bread[] = ['text' => 'Избранное'];
+        $this->view->setTitle('Избранное');
+        $this->view->page(['data' => compact('pages', 'items', 'bread')]);
+    }
+
     public function viewAction($id = '', $quick = 0) {
-        $item = \Ecommerce\Item::get((int)$id);
+        $item = \Ecommerce\Item::get((int) $id);
         if (!$item) {
             Tools::redirect('/ecommerce/', 'Такой товар не найден');
         }
@@ -234,7 +262,7 @@ class ecommerceController extends Controller {
         $bread[] = ['text' => $item->name()];
         $this->view->setTitle($item->name());
         $options = [
-            'data' => compact('item', 'active', 'catalog', 'bread','quick'),
+            'data' => compact('item', 'active', 'catalog', 'bread', 'quick'),
             'content' => $item->view ? $item->view : 'view',
         ];
         if (isset($_GET['quickview'])) {
@@ -251,6 +279,44 @@ class ecommerceController extends Controller {
             $this->view->content($options);
         } else {
             $this->view->page($options);
+        }
+    }
+
+    public function toggleFavAction($itemId) {
+        $result = new Server\Result();
+        $item = \Ecommerce\Item::get((int) $itemId);
+        if (!$item) {
+            $result->success = false;
+            $result->content = 'Товар не найден';
+            $result->send();
+        }
+        if (Users\User::$cur->id) {
+            $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', $item->id]]);
+            if ($fav) {
+                $result->success = false;
+                $result->content = 'Товар уже в избранном';
+                $result->send();
+            } else {
+                $fav = new \Ecommerce\Favorite([
+                    'user_id' => Users\User::$cur->id,
+                    'item_id' => $item->id
+                ]);
+                $fav->save();
+                $result->successMsg = 'Товар успешно добавлен в избранное';
+                $result->send();
+            }
+        } else {
+            $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
+            if (in_array($item->id, $favs)) {
+                $result->success = false;
+                $result->content = 'Товар уже в избранном';
+                $result->send();
+            } else {
+                $favs[] = $item->id;
+                setcookie("ecommerce_favitems", json_encode($favs), time() + 360000, "/");
+                $result->successMsg = 'Товар успешно добавлен в избранное';
+                $result->send();
+            }
         }
     }
 }

@@ -12,6 +12,27 @@ class Ecommerce extends Module {
 
     public function init() {
         App::$primary->view->customAsset('js', '/moduleAsset/Ecommerce/js/cart.js');
+        if (Users\User::$cur->id) {
+            $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
+            if ($favs) {
+                foreach ($favs as $itemId) {
+                    $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', (int) $itemId]]);
+                    if (!$fav) {
+                        $item = \Ecommerce\Item::get((int) $itemId);
+                        if ($item) {
+                            $fav = new \Ecommerce\Favorite([
+                                'user_id' => Users\User::$cur->id,
+                                'item_id' => $itemId
+                            ]);
+                            $fav->save();
+                        }
+                    }
+                }
+                if(!headers_sent()){
+                    setcookie("ecommerce_favitems", json_encode([]), time() + 360000, "/");
+                }
+            }
+        }
     }
 
     public function getPayTypeHandlers($forSelect = false) {
@@ -356,5 +377,4 @@ class Ecommerce extends Module {
         }
         return $map;
     }
-
 }

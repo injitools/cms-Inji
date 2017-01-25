@@ -54,6 +54,11 @@ inji.Ecommerce = {
         }
       });
     }
+  },
+  toggleFav: function (itemId, btn) {
+    inji.Server.request({
+      url: 'ecommerce/toggleFav/' + itemId,
+    }, btn);
   }
 }
 inji.onLoad(function () {
