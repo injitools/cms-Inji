@@ -12,7 +12,7 @@ class Ecommerce extends Module {
 
     public function init() {
         App::$primary->view->customAsset('js', '/moduleAsset/Ecommerce/js/cart.js');
-        if (Users\User::$cur->id) {
+        if (class_exists('Users\User') && Users\User::$cur->id) {
             $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             if ($favs) {
                 foreach ($favs as $itemId) {
@@ -28,7 +28,7 @@ class Ecommerce extends Module {
                         }
                     }
                 }
-                if(!headers_sent()){
+                if (!headers_sent()) {
                     setcookie("ecommerce_favitems", json_encode([]), time() + 360000, "/");
                 }
             }
