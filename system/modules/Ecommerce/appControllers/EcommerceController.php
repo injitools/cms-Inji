@@ -10,6 +10,36 @@
  */
 class ecommerceController extends Controller {
 
+    public function submitReviewAction() {
+        $result = new \Server\Result();
+        if (!empty($_POST['review']['item_id']) && !empty($_POST['review']['name']) && !empty($_POST['review']['text'])) {
+            $item = Ecommerce\Item::get((int) $_POST['review']['item_id']);
+            if (!$item) {
+                $result->success = false;
+                $result->content = ['errorText' => 'Товар не найден'];
+                return $result->send();
+            }
+            $review = new Ecommerce\Item\Review([
+                'item_id' => $item->id,
+                'user_id' => \Users\User::$cur->id,
+                'name' => htmlspecialchars($_POST['review']['name']),
+                'rating' => (int) $_POST['review']['rating'],
+                'text' => htmlspecialchars($_POST['review']['text']),
+                'mail' => !empty($_POST['review']['email']) ? htmlspecialchars($_POST['review']['email']) : '',
+                'file_id' => !empty($_FILES['review']['tmp_name']['file']) ? App::$cur->files->upload([
+                            'tmp_name' => $_FILES['review']['tmp_name']['file'],
+                            'name' => $_FILES['review']['name']['file']
+                        ]) : 0
+            ]);
+            $review->save();
+            $result->successMsg = 'Отзыв успешно оставлен, он появится после модерации';
+            return $result->send();
+        }
+        $result->success = false;
+        $result->content = ['errorText' => 'Не все поля были заполнены'];
+        return $result->send();
+    }
+
     public function buyCardAction() {
         $this->view->setTitle('Покупка карты');
         $bread = [];
@@ -214,12 +244,7 @@ class ecommerceController extends Controller {
     }
 
     public function favoritesAction() {
-        if (Users\User::$cur->id) {
-            $count = \Ecommerce\Favorite::getCount(['user_id', Users\User::$cur->id]);
-        } else {
-            $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
-            $count = count($favs);
-        }
+        $count = $this->module->getFavoriteCount();
         //items pages
         $pages = new \Ui\Pages($_GET, [
             'count' => $count,
@@ -288,34 +313,39 @@ class ecommerceController extends Controller {
         if (!$item) {
             $result->success = false;
             $result->content = 'Товар не найден';
-            $result->send();
+            return $result->send();
         }
         if (Users\User::$cur->id) {
             $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', $item->id]]);
             if ($fav) {
-                $result->success = false;
-                $result->content = 'Товар уже в избранном';
-                $result->send();
+                $fav->delete();
+                $result->content = ['count' => $this->module->getFavoriteCount()];
+                $result->successMsg = 'Товар успешно убран из избранного';
+                return $result->send();
             } else {
                 $fav = new \Ecommerce\Favorite([
                     'user_id' => Users\User::$cur->id,
                     'item_id' => $item->id
                 ]);
                 $fav->save();
+                $result->content = ['count' => $this->module->getFavoriteCount()];
                 $result->successMsg = 'Товар успешно добавлен в избранное';
-                $result->send();
+                return $result->send();
             }
         } else {
             $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             if (in_array($item->id, $favs)) {
-                $result->success = false;
-                $result->content = 'Товар уже в избранном';
-                $result->send();
+                unset($favs[array_search($item->id, $favs)]);
+                setcookie("ecommerce_favitems", json_encode($favs), time() + 360000, "/");
+                $result->content = ['count' => $this->module->getFavoriteCount()];
+                $result->successMsg = 'Товар успешно убран из избранного';
+                return $result->send();
             } else {
                 $favs[] = $item->id;
                 setcookie("ecommerce_favitems", json_encode($favs), time() + 360000, "/");
+                $result->content = ['count' => $this->module->getFavoriteCount()];
                 $result->successMsg = 'Товар успешно добавлен в избранное';
-                $result->send();
+                return $result->send();
             }
         }
     }

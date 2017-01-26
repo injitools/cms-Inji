@@ -377,4 +377,13 @@ class Ecommerce extends Module {
         }
         return $map;
     }
+
+    public function getFavoriteCount() {
+        if (Users\User::$cur->id) {
+            return \Ecommerce\Favorite::getCount(['user_id', Users\User::$cur->id]);
+        } else {
+            $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
+            return count($favs);
+        }
+    }
 }

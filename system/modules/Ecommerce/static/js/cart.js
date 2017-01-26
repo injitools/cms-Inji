@@ -58,6 +58,9 @@ inji.Ecommerce = {
   toggleFav: function (itemId, btn) {
     inji.Server.request({
       url: 'ecommerce/toggleFav/' + itemId,
+      success: function (data) {
+        $('.ecommerce-favorite-count').html(data.count);
+      }
     }, btn);
   }
 }
