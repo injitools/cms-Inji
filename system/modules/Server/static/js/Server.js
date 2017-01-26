@@ -47,7 +47,9 @@ Server.prototype.request = function (options, btn) {
     ajaxOptions.url = inji.options.appRoot + (options.url.replace(/^\//g, ''));
   }
   if (typeof btn != 'undefined') {
-    $(btn).data('loading-text', 'подождите');
+    if (!$(btn).data('loading-text')) {
+      $(btn).data('loading-text', 'подождите');
+    }
     var btn = $(btn).button().button('loading');
   }
   var callback = null;
