@@ -217,7 +217,7 @@ class Ecommerce extends Module {
             return [];
         }
         $cols = array_keys(App::$cur->db->getTableCols(\Ecommerce\Item\Option::table()));
-        $cols[] = \Ecommerce\Item\param::colPrefix() . \Ecommerce\Item::index();
+        $cols[] = \Ecommerce\Item\Param::colPrefix() . \Ecommerce\Item::index();
         $selectOptions = ['where' => ['view', 1],
             'join' => [
                 [Ecommerce\Item\Param::table(), \Ecommerce\Item\Option::index() . ' = ' . Ecommerce\Item\Param::colPrefix() . \Ecommerce\Item\Option::index() . ' and ' . Ecommerce\Item\Param::colPrefix() . Ecommerce\Item::index() . ' IN (' . implode(',', array_keys($items)) . ')', 'inner'],
