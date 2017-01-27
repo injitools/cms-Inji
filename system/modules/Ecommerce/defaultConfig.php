@@ -14,5 +14,6 @@ return [
     'catalogPresentPage' => false,
     'show_zero_price' => false,
     'show_without_price' => false,
-    'default_limit' => 18
+    'default_limit' => 18,
+    'list_all'=>false
 ];

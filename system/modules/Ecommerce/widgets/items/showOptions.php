@@ -13,8 +13,8 @@ function sortDirectionIcon($type) {
     <div class="row">
         <div class="col-xs-6 ecommerce-showoptions-sort">
             <span class="caption">Сортировка:</span>
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => 'asc']])); ?>">По цене<?=sortDirectionIcon('price');?></a> 
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => 'desc']])); ?>">По популярности<?=sortDirectionIcon('sales');?></a>
+            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => 'asc']])); ?>">По цене<?= sortDirectionIcon('price'); ?></a> 
+            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => 'desc']])); ?>">По популярности<?= sortDirectionIcon('sales'); ?></a>
         </div>
         <div class="col-xs-6 text-right ecommerce-showoptions-view">
             <span class="caption">Вид:</span>
@@ -23,7 +23,20 @@ function sortDirectionIcon($type) {
               for ($i = 2; $i < 5; $i++) {
                   $curLimit = $limit * $i;
                   $curQuery = http_build_query(array_merge($query, ['limit' => $curLimit]));
-                  echo " <a href='{$path}?{$curQuery}'>{$curLimit}</a> ";
+                  echo " <a href='{$path}?{$curQuery}'>";
+                  echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '<b>' : '';
+                  echo $curLimit;
+                  echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '</b>' : '';
+                  echo "</a> ";
+              }
+              if (!empty(App::$cur->ecommerce->config['list_all'])) {
+                  $curLimit = 'all';
+                  $curQuery = http_build_query(array_merge($query, ['limit' => $curLimit]));
+                  echo " <a href='{$path}?{$curQuery}'>";
+                  echo !empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '<b>' : '';
+                  echo 'Все';
+                  echo !empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '</b>' : '';
+                  echo "</a> ";
               }
               ?>
             </span>

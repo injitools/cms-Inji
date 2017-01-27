@@ -181,6 +181,11 @@ class ecommerceController extends Controller {
             ]),
             'limit' => !empty($this->Ecommerce->config['default_limit']) ? $this->Ecommerce->config['default_limit'] : 18,
         ]);
+        if (!empty(App::$cur->ecommerce->config['list_all']) && !empty($_GET['limit']) && $_GET['limit'] == 'all') {
+            $pages->params['start'] = 0;
+            $pages->params['limit'] = 0;
+            $pages->params['pages'] = 1;
+        }
 
         //bread
         $bread = [];
