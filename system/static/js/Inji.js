@@ -208,4 +208,42 @@ Inji.prototype.get = function (query) {
     }
   }
 }
+Inji.prototype.parseQueryString = function (string) {
+  var result = {};
+
+  string = string.indexOf('?') === 0 ? string.substr(1) : string;
+  if (!string.length) {
+    return [];
+  }
+  string = decodeURIComponent(string.replace(/\[[\"\']/g, '[').replace(/[\"\']\]/g, ']'));
+  var result = {};
+  var params = string.split('&');
+  for (var key in params) {
+    var item = params[key];
+    var itemPaths = item.match(/\[([^\]]*)\]/g);
+    if (itemPaths === null) {
+      result[item.split('=')[0]] = item.split('=')[1];
+      continue;
+    }
+    var rootParam = item.substr(0, item.indexOf('['));
+    if (typeof result[rootParam] == 'undefined') {
+      result[rootParam] = {};
+    }
+    var resultCurPath = result[rootParam];
+    for (var itemPathKey in itemPaths) {
+      var itemPath = itemPaths[itemPathKey].replace('[', '').replace(']', '');
+      if (itemPath == '') {
+        itemPath = Object.keys(resultCurPath).length;
+      }
+      if (typeof resultCurPath[itemPath] == 'undefined') {
+        resultCurPath[itemPath] = parseInt(itemPathKey) + 1 < itemPaths.length ? {} : item.split('=')[1];
+      }
+      if (parseInt(itemPathKey) + 1 < itemPaths.length) {
+        resultCurPath = resultCurPath[itemPath];
+      }
+    }
+
+  }
+  return result;
+}
 var inji = new Inji();
