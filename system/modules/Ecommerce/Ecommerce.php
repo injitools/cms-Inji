@@ -205,16 +205,22 @@ class Ecommerce extends Module {
     public function getItemsParams($params = []) {
         $params['filters'] = [];
         $selectOptions = Ecommerce\OptionsParser::parse($params);
+        $selectOptions['array'] = true;
         $items = Ecommerce\Item::getList($selectOptions);
         if (!$items) {
             return [];
         }
-        $items = Ecommerce\Item\Param::getList([
-                    'where' => ['item_id', array_keys($items), 'IN'],
-                    'join' => [[Ecommerce\Item\Option::table(), Ecommerce\Item\Option::index() . ' = ' . \Ecommerce\Item\Param::colPrefix() . Ecommerce\Item\Option::index() . ' and ' . \Ecommerce\Item\Option::colPrefix() . 'searchable = 1', 'inner']],
-                    'distinct' => \Ecommerce\Item\Option::index()
-        ]);
-        return $items;
+        $cols = array_keys(App::$cur->db->getTableCols(\Ecommerce\Item\Option::table()));
+        $cols[] = \Ecommerce\Item\param::colPrefix() . \Ecommerce\Item::index();
+        $selectOptions = ['where' => ['view', 1],
+            'join' => [
+                [Ecommerce\Item\Param::table(), \Ecommerce\Item\Option::index() . ' = ' . Ecommerce\Item\Param::colPrefix() . \Ecommerce\Item\Option::index() . ' and ' . Ecommerce\Item\Param::colPrefix() . Ecommerce\Item::index() . ' IN (' . implode(',', array_keys($items)) . ')', 'inner'],
+            ],
+            'distinct' => true,
+            'cols' => implode(',', $cols)
+        ];
+        $options = Ecommerce\Item\Option::getList($selectOptions);
+        return $options;
     }
 
     /**
