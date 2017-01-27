@@ -202,8 +202,14 @@ class Ecommerce extends Module {
      * @param array $params
      * @return array
      */
-    public function getItemsParams($params = []) {
+    public function getItemsParams($params = [], $saveFilterOptions = []) {
+        $filtersOptions = !empty($params['filters']['options']) ? $params['filters']['options'] : [];
         $params['filters'] = [];
+        foreach ($filtersOptions as $optionId => $filter) {
+            if (in_array($optionId, $saveFilterOptions)) {
+                $params['filters']['options'][$optionId] = $filter;
+            }
+        }
         $selectOptions = Ecommerce\OptionsParser::parse($params);
         $selectOptions['array'] = true;
         $items = Ecommerce\Item::getList($selectOptions);
