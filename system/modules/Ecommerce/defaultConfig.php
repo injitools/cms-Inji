@@ -15,5 +15,6 @@ return [
     'show_zero_price' => false,
     'show_without_price' => false,
     'default_limit' => 18,
-    'list_all'=>false
+    'list_all' => false,
+    'isset_sort' => false
 ];

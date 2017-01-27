@@ -8,13 +8,24 @@ function sortDirectionIcon($type) {
         return ' <small class = "glyphicon glyphicon-triangle-' . ($_GET['sort'][$type] == 'asc' ? 'top' : 'bottom') . '"></small>';
     }
 }
+
+function sortToggler($type, $default) {
+    return empty($_GET['sort'][$type]) ? $default : ($_GET['sort'][$type] == 'desc' ? 'asc' : 'desc');
+}
 ?>
 <div class="ecommerce-showoptions">
     <div class="row">
         <div class="col-xs-6 ecommerce-showoptions-sort">
             <span class="caption">Сортировка:</span>
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => 'asc']])); ?>">По цене<?= sortDirectionIcon('price'); ?></a> 
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => 'desc']])); ?>">По популярности<?= sortDirectionIcon('sales'); ?></a>
+            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => sortToggler('price','asc')]])); ?>">По цене<?= sortDirectionIcon('price'); ?></a> 
+            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => sortToggler('sales','desc')]])); ?>">По популярности<?= sortDirectionIcon('sales'); ?></a>
+            <?php
+            if (!empty(App::$cur->ecommerce->config['isset_sort'])) {
+                ?>
+                <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['isset' => sortToggler('isset','desc')]])); ?>">По наличию<?= sortDirectionIcon('isset'); ?></a>
+                <?php
+            }
+            ?>
         </div>
         <div class="col-xs-6 text-right ecommerce-showoptions-view">
             <span class="caption">Вид:</span>
@@ -33,9 +44,9 @@ function sortDirectionIcon($type) {
                   $curLimit = 'all';
                   $curQuery = http_build_query(array_merge($query, ['limit' => $curLimit]));
                   echo " <a href='{$path}?{$curQuery}'>";
-                  echo !empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '<b>' : '';
+                  echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '<b>' : '';
                   echo 'Все';
-                  echo !empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '</b>' : '';
+                  echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '</b>' : '';
                   echo "</a> ";
               }
               ?>

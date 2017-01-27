@@ -96,6 +96,26 @@ class OptionsParser extends \Object {
                 case 'new':
                     $selectOptions['order'][] = ['date_create', $direction];
                     break;
+                case 'isset':
+$warehouseIds = self::getWarehouses();
+                    $selectOptions['order'][] = [
+                        '(
+          (SELECT COALESCE(sum(`' . Item\Offer\Warehouse::colPrefix() . 'count`),0) 
+            FROM ' . \App::$cur->db->table_prefix . Item\Offer\Warehouse::table() . ' iciw 
+            WHERE iciw.' . Item\Offer\Warehouse::colPrefix() . Item\Offer::index() . ' = ' . Item\Offer::index() . '
+                ' . ($warehouseIds ? ' AND iciw.' . Item\Offer\Warehouse::colPrefix() . Warehouse::index() . ' IN(' . implode(',', $warehouseIds) . ')' : '') . '
+            )
+          -
+          (SELECT COALESCE(sum(' . Warehouse\Block::colPrefix() . 'count) ,0)
+            FROM ' . \App::$cur->db->table_prefix . Warehouse\Block::table() . ' iewb
+            inner JOIN ' . \App::$cur->db->table_prefix . Cart::table() . ' icc ON icc.' . Cart::index() . ' = iewb.' . Warehouse\Block::colPrefix() . Cart::index() . ' AND (
+                (`' . Cart::colPrefix() . 'warehouse_block` = 1 and `' . Cart::colPrefix() . 'cart_status_id` in(2,3,6)) ||
+                (`' . Cart::colPrefix() . Cart\Status::index() . '` in(0,1) and `' . Cart::colPrefix() . 'date_last_activ` >=subdate(now(),INTERVAL 30 MINUTE))
+            )
+            WHERE iewb.' . Warehouse\Block::colPrefix() . Item\Offer::index() . ' = ' . Item\Offer::index() . ')
+          )', $direction
+                    ];
+                    break;
                 case 'name':
                 case 'sales':
                 case 'weight':
