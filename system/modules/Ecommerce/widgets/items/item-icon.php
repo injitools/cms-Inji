@@ -1,4 +1,9 @@
 <div class="item">		
+  <?php
+  if ($item->badge && $item->badge->image) {
+      echo "<img class = 'item-icon-badge' src = '{$item->badge->image->path}' />";
+  }
+  ?>
     <h4 class="item-name">
         <a href="/ecommerce/view/<?= $item->id; ?>">
           <?= $item->name(); ?>

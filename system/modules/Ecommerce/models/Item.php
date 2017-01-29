@@ -18,6 +18,7 @@ class Item extends \Model {
     public static $labels = [
         'name' => 'Название',
         'alias' => 'Алиас',
+        'item_bage_id' => 'Наклейка',
         'category_id' => 'Раздел',
         'description' => 'Описание',
         'item_type_id' => 'Тип товара',
@@ -40,6 +41,7 @@ class Item extends \Model {
         'description' => ['type' => 'html'],
         'item_type_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'type'],
         'best' => ['type' => 'bool'],
+        'item_bage_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'badge'],
         'deleted' => ['type' => 'bool'],
         //Системные
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -139,7 +141,7 @@ class Item extends \Model {
                 ['name', 'alias'],
                 ['category_id', 'item_type_id', 'deleted'],
                 ['widget', 'view'],
-                ['best', 'image_file_id'],
+                ['best', 'item_bage_id', 'image_file_id'],
                 ['description'],
                 ['imgs'],
                 ['options'],
@@ -267,6 +269,10 @@ class Item extends \Model {
     public static function relations() {
 
         return [
+            'badge' => [
+                'model' => 'Ecommerce\Item\Badge',
+                'col' => 'item_bage_id'
+            ],
             'category' => [
                 'model' => 'Ecommerce\Category',
                 'col' => 'category_id'
