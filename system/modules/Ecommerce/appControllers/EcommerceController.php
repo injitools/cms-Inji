@@ -305,6 +305,13 @@ class ecommerceController extends Controller {
             $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . INJI_DOMAIN_NAME . $item->image->path]);
         }
         $this->view->addMetaTag(['property' => 'og:url', 'content' => 'http://' . INJI_DOMAIN_NAME . '/view/' . $item->id]);
+
+        $viewHistory = !empty($_COOKIE['ecommerce_item_view_history']) ? json_decode($_COOKIE['ecommerce_item_view_history'], true) : [];
+        array_unshift($viewHistory, $item->id);
+        $viewHistory = array_unique($viewHistory);
+        array_splice($viewHistory, 10);
+        setcookie("ecommerce_item_view_history", json_encode($viewHistory), time() + 360000, "/");
+        
         if ($quick) {
             $this->view->content($options);
         } else {
