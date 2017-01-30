@@ -259,6 +259,7 @@ class ecommerceController extends Controller {
             $favs = \Ecommerce\Favorite::getList(['where' => ['user_id', Users\User::$cur->id], 'key' => 'item_id', 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
             $ids = array_keys($favs);
         } else {
+            $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             $ids = array_slice($favs, $pages->params['start'], $pages->params['limit']);
         }
         if ($ids) {
