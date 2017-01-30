@@ -97,7 +97,7 @@ class OptionsParser extends \Object {
                     $selectOptions['order'][] = ['date_create', $direction];
                     break;
                 case 'isset':
-$warehouseIds = self::getWarehouses();
+                    $warehouseIds = self::getWarehouses();
                     $selectOptions['order'][] = [
                         '(
           (SELECT COALESCE(sum(`' . Item\Offer\Warehouse::colPrefix() . 'count`),0) 
@@ -144,6 +144,14 @@ $warehouseIds = self::getWarehouses();
         }
         foreach ($options['filters'] as $col => $filter) {
             switch ($col) {
+                case 'best':
+                    if ($filter) {
+                        $selectOptions['where'][] = ['best', 1];
+                    }
+                    break;
+                case 'badge':
+                    $selectOptions['where'][] = ['item_badge_id', (int) $filter];
+                    break;
                 case 'price':
                     $colName = Item\Offer\Price::colPrefix() . 'price';
                     if (!empty($filter['min'])) {
