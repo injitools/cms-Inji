@@ -261,9 +261,10 @@ class ecommerceController extends Controller {
         } else {
             $ids = array_slice($favs, $pages->params['start'], $pages->params['limit']);
         }
-
-        //items
-        $items = \Ecommerce\Item::getList(['where' => ['id', $ids, 'IN']]);
+        if ($ids) {
+            //items
+            $items = \Ecommerce\Item::getList(['where' => ['id', $ids, 'IN']]);
+        }
 
         $bread = [];
         $bread[] = ['text' => 'Каталог', 'href' => '/ecommerce/itemList/'];
@@ -311,7 +312,7 @@ class ecommerceController extends Controller {
         $viewHistory = array_unique($viewHistory);
         array_splice($viewHistory, 10);
         setcookie("ecommerce_item_view_history", json_encode($viewHistory), time() + 360000, "/");
-        
+
         if ($quick) {
             $this->view->content($options);
         } else {
