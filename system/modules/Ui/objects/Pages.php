@@ -26,7 +26,7 @@ class Pages extends \Object {
             $this->params['limit'] = 10;
         }
 
-        if ($this->options['count'] <= 0) {
+        if (empty($this->options['count']) || $this->options['count'] < 0) {
             $this->params['page'] = 0;
             $this->params['pages'] = 0;
             $this->params['start'] = 0;
@@ -36,9 +36,9 @@ class Pages extends \Object {
             if (!empty($this->data['page'])) {
                 $this->params['page'] = (int) $this->data['page'];
                 if ($this->params['page'] <= 0) {
-                                    $this->params['page'] = 1;
+                    $this->params['page'] = 1;
                 } elseif ($this->params['page'] > ceil($this->options['count'] / $this->params['limit'])) {
-                                    $this->params['page'] = ceil($this->options['count'] / $this->params['limit']);
+                    $this->params['page'] = ceil($this->options['count'] / $this->params['limit']);
                 }
             }
 
@@ -55,5 +55,4 @@ class Pages extends \Object {
         $getArr['limit'] = $this->params['limit'];
         \App::$cur->view->widget('Ui\Pages/pages', ['class' => $class, 'pagesInstance' => $this, 'getArr' => $getArr]);
     }
-
 }
