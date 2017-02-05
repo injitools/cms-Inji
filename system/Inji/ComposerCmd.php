@@ -26,9 +26,6 @@ class ComposerCmd {
         if (!file_exists(getenv('COMPOSER_HOME') . '/vendor/autoload.php')) {
             self::initComposer(getenv('COMPOSER_HOME'));
         }
-        if (!file_exists(App::$primary->path . '/vendor/autoload.php')) {
-            self::initComposer();
-        }
     }
 
     /**
@@ -71,18 +68,18 @@ class ComposerCmd {
 
     public static function initComposer($path = '') {
         if (!$path) {
-            $path = App::$primary->path . '/';
+            $path = getenv('COMPOSER_HOME');
         }
         if (!file_exists($path . '/composer.json')) {
             $json = [
-                "name" => get_current_user() . "/" . App::$primary->name,
+                "name" => get_current_user() . "/" . $_SERVER['SERVER_NAME'],
                 "config" => [
                     "cache-dir" => Cache::folder() . "composer/"
                 ],
                 "authors" => [
                     [
                         "name" => get_current_user(),
-                        "email" => get_current_user() . "@" . INJI_DOMAIN_NAME
+                        "email" => get_current_user() . "@" . $_SERVER['SERVER_NAME']
                     ]
                 ],
                 "require" => [
@@ -125,7 +122,7 @@ class ComposerCmd {
 
     public static function requirePackage($packageName, $version = '', $path = '') {
         if (!$path) {
-            $path = App::$primary->path;
+            $path = getenv('COMPOSER_HOME');
         }
         if (file_exists($path . '/composer.lock')) {
             $lockFile = json_decode(file_get_contents($path . '/composer.lock'), true);

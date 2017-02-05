@@ -39,7 +39,7 @@ class BowerCmd {
             ],
             "authors" => [
                 [
-                    get_current_user() . ' <' . get_current_user() . "@" . INJI_DOMAIN_NAME . '>'
+                    get_current_user() . ' <' . get_current_user() . "@" . $_SERVER['SERVER_NAME'] . '>'
                 ]
             ],
             'private' => true,

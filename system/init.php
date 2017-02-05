@@ -10,7 +10,7 @@
  */
 session_start();
 
-define('INJI_DOMAIN_NAME', $_SERVER['SERVER_NAME']);
+
 
 spl_autoload_register(function ($class_name) {
     if (file_exists(INJI_SYSTEM_DIR . '/Inji/' . $class_name . '.php')) {
@@ -26,6 +26,33 @@ Inji::$inst->listen('Config-change-system', 'systemConfig', function ($event) {
     return $event['eventObject'];
 });
 spl_autoload_register('Router::findClass');
+
+putenv('COMPOSER_HOME=' . getcwd());
+putenv('COMPOSER_CACHE_DIR=' . getcwd() . DIRECTORY_SEPARATOR . 'cache/composer');
+ComposerCmd::check();
+if (!function_exists('idn_to_utf8')) {
+    ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", '.');
+
+    function idn_to_utf8($domain) {
+        if (empty(Inji::$storage['IdnaConvert'])) {
+            Inji::$storage['IdnaConvert'] = new \idna_convert(array('idn_version' => 2008));
+        }
+        return Inji::$storage['IdnaConvert']->decode($domain);
+    }
+}
+
+BowerCmd::check();
+
+if (file_exists('vendor/autoload.php')) {
+    include_once 'vendor/autoload.php';
+}
+
+$domain = idn_to_utf8($_SERVER['SERVER_NAME']);
+if (strpos($domain, 'www.') === 0) {
+    $domain = substr($domain, 4);
+}
+define('INJI_DOMAIN_NAME', $domain);
+
 
 $apps = Apps\App::getList();
 //Make default app params
@@ -83,28 +110,7 @@ $shareConfig = Config::share();
 if (empty($shareConfig['installed']) && App::$cur->name != 'setup' && (empty(App::$cur->params[0]) || App::$cur->params[0] != 'static')) {
     Tools::redirect('/setup');
 }
-putenv('COMPOSER_HOME=' . getcwd());
-putenv('COMPOSER_CACHE_DIR=' . getcwd() . DIRECTORY_SEPARATOR . 'cache/composer');
-ComposerCmd::check();
-if (!function_exists('idn_to_utf8')) {
-    ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", '.');
 
-    function idn_to_utf8($domain) {
-        if (empty(Inji::$storage['IdnaConvert'])) {
-            Inji::$storage['IdnaConvert'] = new \idna_convert(array('idn_version' => 2008));
-        }
-        return Inji::$storage['IdnaConvert']->decode($domain);
-    }
-}
-
-BowerCmd::check();
-
-if (file_exists('vendor/autoload.php')) {
-    include_once 'vendor/autoload.php';
-}
-if (file_exists(App::$primary->path . '/vendor/autoload.php')) {
-    include_once App::$primary->path . '/vendor/autoload.php';
-}
 Module::$cur = Module::resolveModule(App::$cur);
 
 if (Module::$cur === null) {
