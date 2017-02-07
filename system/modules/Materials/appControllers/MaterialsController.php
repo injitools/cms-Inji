@@ -17,7 +17,7 @@ class MaterialsController extends Controller {
         $path = trim(implode('/', $args));
 
         if (is_numeric($path)) {
-            $material = Materials\Category::get(['id', (int) $path], ['date_publish', null, 'IS NOT']);
+            $material = Materials\Material::get([['id', (int) $path], ['date_publish', null, 'IS NOT']]);
         }
         if (!$material) {
             foreach ($args as $key => $alias) {
@@ -27,11 +27,11 @@ class MaterialsController extends Controller {
                 }
             }
         }
-        if ($path) {
+        if (!$material && $path) {
             if ($category) {
                 $where = [
                     ['category_id', $category->id],
-                    ['alias', $args[count($args) - 1]], 
+                    ['alias', $args[count($args) - 1]],
                     ['date_publish', null, 'IS NOT']
                 ];
             } else {
@@ -42,7 +42,7 @@ class MaterialsController extends Controller {
                 if ($category) {
                     $where = [
                         ['category_id', $category->id],
-                        ['id', (int) $args[count($args) - 1]], 
+                        ['id', (int) $args[count($args) - 1]],
                         ['date_publish', null, 'IS NOT']
                     ];
                 } else {
@@ -56,7 +56,7 @@ class MaterialsController extends Controller {
                     $this->categoryAction($category->id);
                 }
             }
-        } else {
+        } elseif(!$material) {
             $material = Materials\Material::get(1, 'default');
         }
         if ($material) {
@@ -110,10 +110,10 @@ class MaterialsController extends Controller {
         $material = false;
         if ($alias) {
             if (is_numeric($alias)) {
-                $material = Materials\Material::get($alias);
+                $material = Materials\Material::get([['id', (int) $alias], ['date_publish', null, 'IS NOT']]);
             }
             if (!$material) {
-                $material = Materials\Material::get($alias, 'alias');
+                $material = Materials\Material::get([['alias', $alias], ['date_publish', null, 'IS NOT']]);
                 if (!$material) {
                     Tools::header('404');
                     $this->view->page([
