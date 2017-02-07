@@ -187,7 +187,7 @@ class Query extends \Object {
                 $concatenation = '';
             }
 
-            if ($this->whereString == NULL) {
+            if ($this->whereString == '') {
                 $this->whereString = ' WHERE ';
             }
 
@@ -235,7 +235,7 @@ class Query extends \Object {
                         $this->whereString .= "{$concatenation} ";
                     }
 
-                    if ($this->whereString != NULL) {
+                    if ($this->whereString != '') {
                         $this->whereString .= '(';
                     } else {
                         $this->whereString = 'WHERE (';
@@ -274,7 +274,7 @@ class Query extends \Object {
                 $concatenation = '';
             }
 
-            if ($this->havingString == NULL) {
+            if ($this->havingString == '') {
                 $this->havingString = ' HAVING ';
             }
 
@@ -301,8 +301,7 @@ class Query extends \Object {
                 $this->params[] = $value;
                 $value = "?";
             }
-
-            if (substr($this->havingString, -1, 1) == '(' || substr($this->havingString, -2, 2) == 'E ') {
+            if (substr($this->havingString, -1, 1) == '(' || substr($this->havingString, -2, 2) == 'G ') {
                 $this->havingString .= " {$where} {$operation} {$value} ";
             } else {
                 $this->havingString .= "{$concatenation} {$where} {$operation} {$value} ";
@@ -322,7 +321,7 @@ class Query extends \Object {
                         $this->havingString .= "{$concatenation} ";
                     }
 
-                    if ($this->havingString != NULL) {
+                    if ($this->havingString != '') {
                         $this->havingString .= '(';
                     } else {
                         $this->havingString = 'HAVING (';

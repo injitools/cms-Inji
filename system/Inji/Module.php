@@ -335,8 +335,19 @@ class Module {
         return $extensions;
     }
 
+    public function checkDbMigration() {
+        if (empty($this->info['migrations'])) {
+            return true;
+        }
+        $code = 'module:' . get_class();
+        $newMigrations = App::$cur->db->compareMigrations($code, $this->info['migrations']);
+        foreach ($newMigrations as $version => $migrationOption) {
+            $migration = include $this->path . '/migrations/' . $migrationOption . '.php';
+            App::$cur->db->makeMigration($code, $version, $migration);
+        }
+    }
+
     public function sitemap() {
         return [];
     }
-
 }

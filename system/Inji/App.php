@@ -16,6 +16,7 @@ class App {
      * @var App
      */
     public static $cur = null;
+
     /**
      * @var App
      */
@@ -114,6 +115,7 @@ class App {
             $this->_objects[$className][$paramsStr] = new $className($this);
         }
         if (isset($this->_objects[$className][$paramsStr])) {
+            $this->_objects[$className][$paramsStr]->checkDbMigration();
             if (method_exists($this->_objects[$className][$paramsStr], 'init')) {
                 call_user_func_array([$this->_objects[$className][$paramsStr], 'init'], $params);
             }
@@ -142,5 +144,4 @@ class App {
     public function __call($className, $params) {
         return $this->getObject($className, $params);
     }
-
 }

@@ -638,28 +638,32 @@ class Model {
         if (empty(static::$cols[$colName]) || static::$storage['type'] == 'moduleConfig') {
             return false;
         }
+        $notNull = '';
+        if (empty(static::$cols[$colName]['null'])) {
+            $notNull = ' NOT NULL';
+        }
 
         $params = false;
         switch (static::$cols[$colName]['type']) {
             case 'select':
                 switch (static::$cols[$colName]['source']) {
                     case 'relation':
-                        $params = 'int(11) UNSIGNED NOT NULL';
+                        $params = 'int(11) UNSIGNED' . $notNull;
                         break;
                     default:
-                        $params = 'varchar(255) NOT NULL';
+                        $params = 'varchar(255)' . $notNull;
                 }
                 break;
             case 'image':
             case 'file':
-                $params = 'int(11) UNSIGNED NOT NULL';
+                $params = 'int(11) UNSIGNED' . $notNull;
                 break;
             case 'number':
-                $params = 'int(11) NOT NULL';
+                $params = 'int(11)' . $notNull;
                 break;
             case 'text':
             case 'email':
-                $params = 'varchar(255) NOT NULL';
+                $params = 'varchar(255)' . $notNull;
                 break;
             case 'html':
             case 'textarea':
@@ -667,19 +671,19 @@ class Model {
             case 'password':
             case 'dynamicType':
             case 'map':
-                $params = 'text NOT NULL';
+                $params = 'text' . $notNull;
                 break;
             case 'bool':
-                $params = 'tinyint(1) UNSIGNED NOT NULL';
+                $params = 'tinyint(1) UNSIGNED' . $notNull;
                 break;
             case 'decimal':
-                $params = 'decimal(8, 2) NOT NULL';
+                $params = 'decimal(8, 2)' . $notNull;
                 break;
             case 'date':
-                $params = 'date NOT NULL DEFAULT 0';
+                $params = 'date' . ($notNull ? $notNull . ' DEFAULT 0' : ' DEFAULT NULL');
                 break;
             case 'dateTime':
-                $params = 'timestamp NOT NULL DEFAULT 0';
+                $params = 'timestamp' . ($notNull ? $notNull . ' DEFAULT 0' : ' DEFAULT NULL');
                 break;
         }
         return $params;
@@ -692,6 +696,10 @@ class Model {
      * @return boolean|integer
      */
     public static function createCol($colName) {
+        $cols = static::cols();
+        if (!empty($cols[static::colPrefix() . $colName])) {
+            return true;
+        }
         $params = static::genColParams($colName);
         if ($params === false) {
             return false;
