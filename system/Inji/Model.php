@@ -638,9 +638,9 @@ class Model {
         if (empty(static::$cols[$colName]) || static::$storage['type'] == 'moduleConfig') {
             return false;
         }
-        $notNull = '';
+        $null = ' NULL';
         if (empty(static::$cols[$colName]['null'])) {
-            $notNull = ' NOT NULL';
+            $null = ' NOT NULL';
         }
 
         $params = false;
@@ -648,22 +648,22 @@ class Model {
             case 'select':
                 switch (static::$cols[$colName]['source']) {
                     case 'relation':
-                        $params = 'int(11) UNSIGNED' . $notNull;
+                        $params = 'int(11) UNSIGNED' . $null;
                         break;
                     default:
-                        $params = 'varchar(255)' . $notNull;
+                        $params = 'varchar(255)' . $null;
                 }
                 break;
             case 'image':
             case 'file':
-                $params = 'int(11) UNSIGNED' . $notNull;
+                $params = 'int(11) UNSIGNED' . $null;
                 break;
             case 'number':
-                $params = 'int(11)' . $notNull;
+                $params = 'int(11)' . $null;
                 break;
             case 'text':
             case 'email':
-                $params = 'varchar(255)' . $notNull;
+                $params = 'varchar(255)' . $null;
                 break;
             case 'html':
             case 'textarea':
@@ -671,19 +671,19 @@ class Model {
             case 'password':
             case 'dynamicType':
             case 'map':
-                $params = 'text' . $notNull;
+                $params = 'text' . $null;
                 break;
             case 'bool':
-                $params = 'tinyint(1) UNSIGNED' . $notNull;
+                $params = 'tinyint(1) UNSIGNED' . $null;
                 break;
             case 'decimal':
-                $params = 'decimal(8, 2)' . $notNull;
+                $params = 'decimal(8, 2)' . $null;
                 break;
             case 'date':
-                $params = 'date' . $notNull;
+                $params = 'date' . $null;
                 break;
             case 'dateTime':
-                $params = 'timestamp' . $notNull;
+                $params = 'timestamp' . $null;
                 break;
         }
         return $params;
