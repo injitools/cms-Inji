@@ -680,10 +680,10 @@ class Model {
                 $params = 'decimal(8, 2)' . $notNull;
                 break;
             case 'date':
-                $params = 'date' . ($notNull ? $notNull . ' DEFAULT 0' : ' DEFAULT NULL');
+                $params = 'date' . $notNull;
                 break;
             case 'dateTime':
-                $params = 'timestamp' . ($notNull ? $notNull . ' DEFAULT 0' : ' DEFAULT NULL');
+                $params = 'timestamp' . $notNull;
                 break;
         }
         return $params;
@@ -696,7 +696,7 @@ class Model {
      * @return boolean|integer
      */
     public static function createCol($colName) {
-        $cols = static::cols();
+        $cols = static::cols(true);
         if (!empty($cols[static::colPrefix() . $colName])) {
             return true;
         }
@@ -1962,7 +1962,7 @@ class Model {
         if (!$value && !empty(static::$cols[$shortName]) && in_array('emptyValue', array_keys(static::$cols[$shortName]))) {
             $value = static::$cols[$shortName]['emptyValue'];
         }
-        if(is_null($value) && empty(static::$cols[$shortName]['null'])){
+        if (is_null($value) && empty(static::$cols[$shortName]['null'])) {
             $value = '';
         }
         if (!empty($className::$cols[$shortName])) {
