@@ -339,7 +339,7 @@ class Module {
         if (empty($this->info['migrations'])) {
             return true;
         }
-        $code = 'module:' . get_class();
+        $code = 'module:' . get_called_class();
         $newMigrations = App::$cur->db->compareMigrations($code, $this->info['migrations']);
         foreach ($newMigrations as $version => $migrationOption) {
             $migration = include $this->path . '/migrations/' . $migrationOption . '.php';
