@@ -210,7 +210,7 @@ class Query extends \Object {
                 } elseif (preg_match('!\(!', $value) && preg_match('![^0-9,\.\(\) ]!', $value)) {
                     $value = "\"{$value}\"";
                 }
-            } elseif (!in_array($value, array('CURRENT_TIMESTAMP'))) {
+            } elseif (!in_array($value, array('CURRENT_TIMESTAMP', 'NULL'))) {
                 $this->params[] = $value;
                 $value = "?";
             }
@@ -297,7 +297,7 @@ class Query extends \Object {
                 } elseif (preg_match('!\(!', $value) && preg_match('![^0-9,\.\(\) ]!', $value)) {
                     $value = "\"{$value}\"";
                 }
-            } elseif (!in_array($value, array('CURRENT_TIMESTAMP'))) {
+            } elseif (!in_array($value, array('CURRENT_TIMESTAMP', 'NULL'))) {
                 $this->params[] = $value;
                 $value = "?";
             }
@@ -349,7 +349,7 @@ class Query extends \Object {
             case 'SELECT':
                 $query .= ' ' . ($this->distinct ? 'DISTINCT' : '');
                 $query .= ' ' . (!$this->cols ? '*' : ((is_array($this->cols) ? implode(',', $this->cols) : $this->cols)));
-                // no break
+            // no break
             case 'DELETE':
                 $query .= ' FROM';
                 break;
@@ -396,7 +396,7 @@ class Query extends \Object {
                 }
                 $update = implode(',', $updates);
                 $query .= " SET {$update}";
-                // no break
+            // no break
             case 'SELECT':
             case 'DELETE':
                 $this->buildWhere($this->where);
@@ -438,7 +438,12 @@ class Query extends \Object {
         }
 
         $prepare = $this->curInstance->pdo->prepare($query['query']);
-        $prepare->execute($query['params']);
+        $params = [];
+        $pos = 1;
+        foreach ($query['params'] as $param) {
+            $prepare->bindValue($pos++, $param, is_null($param) ? \PDO::PARAM_NULL : \PDO::PARAM_STR);
+        }
+        $prepare->execute();
 
         $this->curInstance->lastQuery = $query;
         $result = new Result();
@@ -449,5 +454,4 @@ class Query extends \Object {
 
         return $result;
     }
-
 }

@@ -1518,7 +1518,7 @@ class Model {
         $values = [];
 
         foreach ($this->cols() as $col => $param) {
-            if (isset($this->_params[$col])) {
+            if (in_array($col, array_keys($this->_params))) {
                 $values[$col] = $this->_params[$col];
             }
         }
@@ -1528,6 +1528,7 @@ class Model {
                 $this->_params[$colName] = $values[$colName] = $params['default'];
             }
         }
+
         if (empty($values) && empty($options['empty'])) {
             return false;
         }
@@ -1693,25 +1694,9 @@ class Model {
      * @param array $params
      */
     public function setParams($params) {
-        static::fixPrefix($params);
-        $className = get_called_class();
         foreach ($params as $paramName => $value) {
-            $shortName = preg_replace('!' . $this->colPrefix() . '!', '', $paramName);
-            if (!empty($className::$cols[$shortName])) {
-                switch ($className::$cols[$shortName]['type']) {
-                    case 'decimal':
-                        $params[$paramName] = (float) $value;
-                        break;
-                    case 'number':
-                        $params[$paramName] = (int) $value;
-                        break;
-                    case 'bool':
-                        $params[$paramName] = (bool) $value;
-                        break;
-                }
-            }
+            $this->$paramName = $value;
         }
-        $this->_params = array_merge($this->_params, $params);
     }
 
     /**
@@ -1974,6 +1959,12 @@ class Model {
         static::fixPrefix($name);
         $className = get_called_class();
         $shortName = preg_replace('!' . $this->colPrefix() . '!', '', $name);
+        if (!$value && !empty(static::$cols[$shortName]) && in_array('emptyValue', array_keys(static::$cols[$shortName]))) {
+            $value = static::$cols[$shortName]['emptyValue'];
+        }
+        if(is_null($value) && empty(static::$cols[$shortName]['null'])){
+            $value = '';
+        }
         if (!empty($className::$cols[$shortName])) {
             switch ($className::$cols[$shortName]['type']) {
                 case 'decimal':
@@ -1987,10 +1978,10 @@ class Model {
                     break;
             }
         }
-        if ((isset($this->_params[$name]) && $this->_params[$name] != $value) && !isset($this->_changedParams[$name])) {
+        $params = array_keys($this->_params);
+        if (in_array($name, $params) && $this->_params[$name] != $value && !in_array($name, array_keys($this->_changedParams))) {
             $this->_changedParams[$name] = $this->_params[$name];
         }
-
         $this->_params[$name] = $value;
     }
 
