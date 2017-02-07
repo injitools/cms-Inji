@@ -1,7 +1,7 @@
 <?php
 if (!empty($category) || (!empty($params[0]) && $category = Materials\Category::get((int) $params[0]))) {
-    $pages = new Ui\Pages($_GET, ['count' => Materials\Material::getCount(['where' => ['tree_path', $category->tree_path . $category->id . '/%', 'LIKE']]), 'limit' => 10]);
-    $materials = Materials\Material::getList(['where' => ['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], 'order' => ['date_create', 'desc'], 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
+    $pages = new Ui\Pages($_GET, ['count' => Materials\Material::getCount(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']]]), 'limit' => 10]);
+    $materials = Materials\Material::getList(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']], 'order' => ['date_create', 'desc'], 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
 } else {
     $materials = [];
 }

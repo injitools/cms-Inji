@@ -7,7 +7,7 @@
         </div>
         <div class="col-md-9">
             <div class="content">
-                <h2 class ='category-name'><?= $category->name; ?></h2>
+                <h1 class ='category-name'><?= $category->name; ?></h1>
                 <div class="category-description">
                     <?= Ui\FastEdit::block($category, 'description', null, true); ?>
                 </div>

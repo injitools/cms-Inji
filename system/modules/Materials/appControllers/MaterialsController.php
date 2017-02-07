@@ -17,7 +17,7 @@ class MaterialsController extends Controller {
         $path = trim(implode('/', $args));
 
         if (is_numeric($path)) {
-            $material = Materials\Category::get((int) $path);
+            $material = Materials\Category::get(['id', (int) $path], ['date_publish', null, 'IS NOT']);
         }
         if (!$material) {
             foreach ($args as $key => $alias) {
@@ -31,20 +31,22 @@ class MaterialsController extends Controller {
             if ($category) {
                 $where = [
                     ['category_id', $category->id],
-                    ['alias', $args[count($args) - 1]],
+                    ['alias', $args[count($args) - 1]], 
+                    ['date_publish', null, 'IS NOT']
                 ];
             } else {
-                $where = [['alias', $path]];
+                $where = [['alias', $path], ['date_publish', null, 'IS NOT']];
             }
             $material = Materials\Material::get($where);
             if (!$material) {
                 if ($category) {
                     $where = [
                         ['category_id', $category->id],
-                        ['id', (int) $args[count($args) - 1]],
+                        ['id', (int) $args[count($args) - 1]], 
+                        ['date_publish', null, 'IS NOT']
                     ];
                 } else {
-                    $where = [['alias', $path]];
+                    $where = [['alias', $path], ['date_publish', null, 'IS NOT']];
                 }
                 $material = Materials\Material::get($where);
             }
@@ -95,8 +97,8 @@ class MaterialsController extends Controller {
         } else {
             $this->view->setTitle($category->name);
 
-            $pages = new Ui\Pages($_GET, ['count' => Materials\Material::getCount(['where' => ['tree_path', $category->tree_path . $category->id . '/%', 'LIKE']]), 'limit' => 10]);
-            $materials = Materials\Material::getList(['where' => ['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], 'order' => ['date_create', 'desc'], 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
+            $pages = new Ui\Pages($_GET, ['count' => Materials\Material::getCount(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']]]), 'limit' => 10]);
+            $materials = Materials\Material::getList(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']], 'order' => ['date_create', 'desc'], 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
 
             $this->view->page(['page' => $category->resolveTemplate(), 'content' => $category->resolveViewer(), 'data' => compact('materials', 'pages', 'category')]);
         }
@@ -147,5 +149,4 @@ class MaterialsController extends Controller {
             'data' => compact('material', 'bread'),
         ]);
     }
-
 }

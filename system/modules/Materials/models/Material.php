@@ -28,6 +28,7 @@ class Material extends \Model {
         'keywords' => 'Ключевые слова',
         'user_id' => 'Создатель',
         'date_create' => 'Дата создания',
+        'date_publish' => 'Дата публикации',
         'tag_list' => 'Теги'
     ];
     public static $dataManagers = [
@@ -36,8 +37,9 @@ class Material extends \Model {
                 'name',
                 'alias',
                 'category_id',
-                'date_create',
-                'tag_list'
+                'tag_list',
+                'date_publish',
+                'date_create'
             ],
             'sortable' => [
                 'name',
@@ -80,8 +82,9 @@ class Material extends \Model {
         'link' => ['type' => 'dataManager', 'relation' => 'links'],
         'tree_path' => ['type' => 'text'],
         'weight' => ['type' => 'number'],
-        'date_create' => ['type' => 'dateTime'],
         'tag_list' => ['type' => 'text'],
+        'date_publish' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
+        'date_create' => ['type' => 'dateTime'],
     ];
     public static $forms = [
         'manager' => [
@@ -94,7 +97,7 @@ class Material extends \Model {
             ],
             'map' => [
                 ['name', 'category_id'],
-                ['alias', 'image_file_id'],
+                ['alias', 'image_file_id', 'date_publish'],
                 ['template', 'viewer'],
                 ['keywords', 'description'],
                 ['tag_list'],
@@ -163,5 +166,4 @@ class Material extends \Model {
             return 'default';
         }
     }
-
 }

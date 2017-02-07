@@ -5,6 +5,9 @@ return [
     'requires' => [
         'Files', 'Widgets'
     ],
+    'migrations' => [
+        'addPublishDate' => 'addPublishDate'
+    ],
     'menu' => [
         'appAdmin' => [
             [
