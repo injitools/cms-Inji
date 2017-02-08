@@ -127,10 +127,7 @@ class Modules extends Module {
         }
 
         $config = Config::app();
-
-        $type = 'modules';
-
-        $path = INJI_SYSTEM_DIR . '/modules/';
+        
         $location = 'modules';
 
         $config[$location][] = $module;
@@ -143,9 +140,13 @@ class Modules extends Module {
             }
         }
         Config::save('app', $config, null, App::$primary);
-        if (file_exists($path . $module . '/install_script.php')) {
-            $installFunction = include $path . $module . '/install_script.php';
-            $installFunction(1, $params);
+
+        $paths = Module::getModulePaths($module);
+        foreach ($paths as $path) {
+            if (file_exists($path . '/install_script.php')) {
+                $installFunction = include $path . '/install_script.php';
+                $installFunction(1, $params);
+            }
         }
     }
 

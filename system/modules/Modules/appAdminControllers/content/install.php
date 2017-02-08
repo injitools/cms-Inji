@@ -1,15 +1,15 @@
 <h1>Установка модулей</h1>
 <form>
   <?php
-    $config = Config::app(App::$primary ? App::$primary : App::$cur);
-    $modules = array_flip(Module::getInstalled(App::$cur));
-    $systemModules = array_slice(scandir(INJI_SYSTEM_DIR . '/modules'), 2);
-    foreach ($systemModules as $module) {
-        $info = Module::getInfo($module);
-        if (!$info || isset($modules[$module])) {
-                    continue;
-        }
-        ?>
+  $config = Config::app(App::$primary ? App::$primary : App::$cur);
+  $modules = array_flip(Module::getInstalled(App::$cur));
+  $systemModules = array_merge(array_slice(scandir(INJI_SYSTEM_DIR . '/modules'), 2), array_slice(scandir(App::$primary->path . '/modules'), 2));
+  foreach ($systemModules as $module) {
+      $info = Module::getInfo($module);
+      if (!$info || isset($modules[$module])) {
+          continue;
+      }
+      ?>
         <div class ="form-group">
             <div class="checkbox">
                 <label>
