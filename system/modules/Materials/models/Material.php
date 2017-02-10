@@ -29,13 +29,15 @@ class Material extends \Model {
         'user_id' => 'Создатель',
         'date_create' => 'Дата создания',
         'date_publish' => 'Дата публикации',
-        'tag_list' => 'Теги'
+        'tag_list' => 'Теги',
+        'default' => 'По умолчанию'
     ];
     public static $dataManagers = [
         'manager' => [
             'cols' => [
                 'name',
                 'alias',
+                'default',
                 'category_id',
                 'tag_list',
                 'date_publish',
@@ -51,6 +53,7 @@ class Material extends \Model {
                 'name',
                 'preview',
                 'text',
+                'default',
                 'alias',
                 'template',
                 'viewer',
@@ -98,7 +101,7 @@ class Material extends \Model {
             'map' => [
                 ['name', 'category_id'],
                 ['alias', 'image_file_id', 'date_publish'],
-                ['template', 'viewer'],
+                ['template', 'viewer', 'default'],
                 ['keywords', 'description'],
                 ['tag_list'],
                 ['preview'],
@@ -164,6 +167,12 @@ class Material extends \Model {
             return $this->category->resolveViewer(true);
         } else {
             return 'default';
+        }
+    }
+
+    public function beforeSave() {
+        if ($this->default) {
+            Material::update(['default', 0]);
         }
     }
 }

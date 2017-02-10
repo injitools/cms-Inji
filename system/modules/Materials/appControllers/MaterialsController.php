@@ -19,7 +19,7 @@ class MaterialsController extends Controller {
         if (is_numeric($path)) {
             $material = Materials\Material::get([['id', (int) $path], ['date_publish', null, 'IS NOT']]);
         }
-        if (!$material) {
+        if (!$material && $args) {
             foreach ($args as $key => $alias) {
                 $category = Materials\Category::get([['parent_id', $category ? $category->id : 0], ['alias', $alias]]);
                 if (!$category || $key + 2 == count($args)) {
@@ -120,7 +120,6 @@ class MaterialsController extends Controller {
                         'content' => '404',
                         'data' => ['text' => 'Такой страницы не найдено']
                     ]);
-                    exit();
                 }
             }
         }

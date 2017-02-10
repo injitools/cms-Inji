@@ -14,6 +14,7 @@ class Materials extends Module {
         $return = [
             'inherit' => 'Как у родителя',
             'default' => 'Стандартная страница',
+            'main_page' => 'Главная страница',
             'materialWithCategorys' => 'Страница со списком категорий',
         ];
         $conf = App::$primary->view->template->config;
