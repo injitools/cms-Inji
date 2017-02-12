@@ -1,6 +1,7 @@
 <?php
 
 $code = !empty($code) ? $code : (!empty($param[0]) ? $param[0] : false);
+$col = !empty($col) ? $col : 'text';
 if (!$code) {
     return;
 }
@@ -9,4 +10,4 @@ if (!$block) {
     $block = new TextBlocks\Block(['code' => $code]);
     $block->save();
 }
-echo \Ui\FastEdit::block($block, 'text');
+echo \Ui\FastEdit::block($block, $col);
