@@ -1,12 +1,11 @@
 <?php
-if (!empty($params[0])) {
-    $form_id = $params[0];
-}
-if (empty($form_id)) {
+$formId = !empty($formId) ? $formId : (!empty($params[0]) ? $params[0] : 0);
+if (empty($formId)) {
     echo('form not found');
     return;
 }
-$userForm = \UserForms\Form::get((int)$form_id);
+$btnText = !empty($btnText) ? $btnText : 'Отправить';
+$userForm = \UserForms\Form::get((int) $formId);
 if (!$userForm) {
     echo('form not found');
     return;
@@ -19,8 +18,8 @@ if ($userForm->description) {
     echo "<p class = 'text-center'>{$userForm->description}</p>";
 }
 foreach ($userForm->inputs(['order' => ['weight']]) as $input) {
-    $form->input($input->type, 'UserForms[' . (int)$form_id . '][input' . $input->id . ']', $input->label, ['required' => $input->required]);
+    $form->input($input->type, 'UserForms[' . (int) $formId . '][input' . $input->id . ']', $input->label, ['required' => $input->required]);
 }
 ?>
-<button class='btn btn-success btn-block'>Отправить</button>
+<button class='btn btn-success btn-block'><?= $btnText; ?></button>
 </form>
