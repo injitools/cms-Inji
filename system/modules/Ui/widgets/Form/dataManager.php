@@ -2,7 +2,11 @@
 if (class_exists($options['relation']['model'])) {
     if ($options['input']->activeForm->model && $options['input']->activeForm->model->pk()) {
         $dataManager = new \Ui\DataManager($options['relation']['type'] == 'relModel' ? $options['relation']['relModel'] : $options['relation']['model'], 'manager');
-        $dataManager->draw(['relation' => $options['input']->colParams['relation']], $options['input']->activeForm->model);
+        $params = ['relation' => $options['input']->colParams['relation']];
+        if (!empty($options['input']->activeFormParams['appType'])) {
+            $params['appType'] = $options['input']->activeFormParams['appType'];
+        }
+        $dataManager->draw($params, $options['input']->activeForm->model);
         ?>
         <script>
             inji.onLoad(function () {
