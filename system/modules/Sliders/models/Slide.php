@@ -51,7 +51,7 @@ class Slide extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name', 'link'],
+                ['name', 'link', 'slider_id'],
                 ['preview_image_file_id', 'image_file_id'],
                 ['description'],
             ],
@@ -78,5 +78,4 @@ class Slide extends \Model {
             ]
         ];
     }
-
 }
