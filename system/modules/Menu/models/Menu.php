@@ -63,7 +63,8 @@ class Menu extends \Model {
             'items' => [
                 'type' => 'many',
                 'model' => 'Menu\Item',
-                'col' => 'Menu_id'
+                'col' => 'Menu_id',
+                'where'=>[['parent_id',0]]
             ],
             'group' => [
                 'col' => 'group_id',

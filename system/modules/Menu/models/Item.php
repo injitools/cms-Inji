@@ -20,7 +20,8 @@ class Item extends \Model {
         'tooltip' => 'Подсказка',
         'href' => 'Ссылка',
         'Menu_id' => 'Меню',
-        'parent_id' => 'Дочерний пункт'
+        'parent_id' => 'Дочерний пункт',
+        'child' => 'Подпункты'
     ];
     public static $storage = ['type' => 'moduleConfig'];
     public static $cols = [
@@ -35,6 +36,7 @@ class Item extends \Model {
         'weight' => ['type' => 'number'],
         'Menu_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'menu'],
         'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent'],
+        'child' => ['type' => 'dataManager', 'relation' => 'childs'],
     ];
     public static $dataManagers = [
         'manager' => [
@@ -43,7 +45,7 @@ class Item extends \Model {
                 'name',
                 'tooltip',
                 'href',
-                'parent_id',
+                'child',
                 'Menu_id'
             ],
             'sortMode' => true
@@ -55,7 +57,8 @@ class Item extends \Model {
                 ['aditional'],
                 ['type', 'Menu_id'],
                 ['name', 'href'],
-                ['parent_id', 'tooltip']
+                ['parent_id', 'tooltip'],
+                ['child']
             ]
         ]
     ];
