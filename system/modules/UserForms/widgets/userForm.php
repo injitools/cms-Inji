@@ -4,7 +4,7 @@ if (empty($formId)) {
     echo('form not found');
     return;
 }
-$btnText = !empty($btnText) ? $btnText : 'Отправить';
+$btnText = !empty($btnText) ? $btnText : (!empty($params[1]) ? $params[1] : 'Отправить');
 $userForm = \UserForms\Form::get((int) $formId);
 if (!$userForm) {
     echo('form not found');
