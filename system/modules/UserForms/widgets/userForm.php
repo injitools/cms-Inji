@@ -21,5 +21,5 @@ foreach ($userForm->inputs(['order' => ['weight']]) as $input) {
     $form->input($input->type, 'UserForms[' . (int) $formId . '][input' . $input->id . ']', $input->label, ['required' => $input->required]);
 }
 ?>
-<button class='btn btn-success btn-block'><?= $btnText; ?></button>
+<button class='btn btn-success btn-block'><?= urldecode($btnText); ?></button>
 </form>
