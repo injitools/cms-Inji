@@ -33,7 +33,7 @@ class BowerCmd {
             $path = INJI_BASE_DIR . Cache::folder() . "static/bowerLibs/";
         }
         $json = [
-            "name" => get_current_user() . "/" . App::$primary->name,
+            "name" => get_current_user() . "/" . $_SERVER['SERVER_NAME'],
             "config" => [
                 "cache-dir" => INJI_BASE_DIR . Cache::folder() . "bower/"
             ],
