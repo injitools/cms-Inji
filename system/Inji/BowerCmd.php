@@ -99,7 +99,7 @@ class BowerCmd {
         if (file_exists(Cache::folder() . 'static/bowerLibs/' . $needPackageName)) {
             return true;
         }
-
+        set_time_limit(0);
         self::command('install ' . $packageName . ($version ? '#' . $version : '') . ' --save', false, $path);
         return true;
     }
