@@ -53,12 +53,12 @@ class adminController extends Controller {
             $comment->save();
             Tools::redirect($_SERVER['REQUEST_URI']);
         }
+        $viewOptions = !empty($fullModelName::$views['manager']) ? $fullModelName::$views['manager'] : [];
         $moduleName = $this->module->moduleName;
-        $pageParam = ['module' => 'Ui', 'content' => 'dataManager/view', 'data' => compact('item', 'moduleName')];
+        $pageParam = ['module' => 'Ui', 'content' => 'dataManager/view', 'data' => compact('item', 'moduleName', 'viewOptions')];
         if (isset($_GET['print'])) {
             $pageParam['page'] = 'print';
         }
         $this->view->page($pageParam);
     }
-
 }
