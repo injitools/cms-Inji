@@ -26,6 +26,7 @@ class ChangeParams extends \Ui\DataManager\Action {
                     $model->$col = $value;
                 }
                 $model->save();
+                $count++;
             }
         }
         return 'Измненено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['запись', 'записи', 'записей']);
