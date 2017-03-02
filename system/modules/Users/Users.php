@@ -197,6 +197,16 @@ class Users extends Module {
     }
 
     public function newSession($user) {
+        $session = $this->createSession($user);
+        if (!headers_sent()) {
+            setcookie($this->cookiePrefix . "_user_session_hash", $session->hash, time() + 360000, "/");
+            setcookie($this->cookiePrefix . "_user_id", $session->user_id, time() + 360000, "/");
+        } else {
+            Msg::add('Не удалось провести авторизацию. Попробуйте позже', 'info');
+        }
+    }
+
+    public function createSession($user) {
         do {
             $hash = Tools::randomString(255);
         } while (Users\Session::get($hash, 'hash'));
@@ -208,13 +218,7 @@ class Users extends Module {
             'hash' => $hash
         ]);
         $session->save();
-
-        if (!headers_sent()) {
-            setcookie($this->cookiePrefix . "_user_session_hash", $session->hash, time() + 360000, "/");
-            setcookie($this->cookiePrefix . "_user_id", $session->user_id, time() + 360000, "/");
-        } else {
-            Msg::add('Не удалось провести авторизацию. Попробуйте позже', 'info');
-        }
+        return $session;
     }
 
     /**
