@@ -213,7 +213,7 @@ Inji.prototype.parseQueryString = function (string) {
 
   string = string.indexOf('?') === 0 ? string.substr(1) : string;
   if (!string.length) {
-    return [];
+    return {};
   }
   string = decodeURIComponent(string.replace(/\[[\"\']/g, '[').replace(/[\"\']\]/g, ']'));
   var result = {};
