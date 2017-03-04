@@ -18,8 +18,9 @@ class Result extends \Object {
     public $successMsg = '';
     public $commands = [];
     public $scripts = [];
+    public $asObject = false;
 
-    public function send() {
+    public function send($applyCallback = false) {
         $return = [];
         $return['success'] = $this->success;
         if ($this->success) {
@@ -33,7 +34,14 @@ class Result extends \Object {
         }
         $return['commands'] = $this->commands;
         $return['scripts'] = \App::$cur->view->getScripts();
-        echo json_encode($return);
+        if ($applyCallback && !empty($_GET['callback'])) {
+            echo $_GET['callback'] . '(';
+        }
+        echo json_encode($return, $this->asObject ? JSON_FORCE_OBJECT : null);
+        if ($applyCallback && !empty($_GET['callback'])) {
+            echo ')';
+        }
+
         \Inji::$inst->stop();
         return true;
     }
