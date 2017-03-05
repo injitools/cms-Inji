@@ -302,7 +302,7 @@ class ecommerceController extends Controller {
         }
 
         $this->view->addMetaTag(['property' => 'og:title', 'content' => $item->name]);
-        $this->view->addMetaTag(['property' => 'og:description', 'content' => $item->description]);
+        $this->view->addMetaTag(['property' => 'og:description', 'content' => strip_tags($item->description)]);
         if ($item->image) {
             $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . INJI_DOMAIN_NAME . $item->image->path]);
         }
