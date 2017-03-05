@@ -63,7 +63,7 @@ class Images extends \Migrations\Parser {
             } else {
                 $image->weight = $key;
             }
-            if ($image && !$this->model->image_file_id) {
+            if (isset($image) && !$this->model->image_file_id) {
                 $this->model->image_file_id = $image->file_id;
             }
         }

@@ -19,9 +19,34 @@ class Options extends \Migrations\Parser {
         if (!Options::$options) {
             Options::$options = \Ecommerce\Item\Option::getList();
         }
+
+        if (!empty($this->data['ЗначенияСвойства'])) {
+            if (\Tools::isAssoc($this->data['ЗначенияСвойства'])) {
+                $data = [$this->data['ЗначенияСвойства']];
+            } else {
+                $data = &$this->data['ЗначенияСвойства'];
+            }
+        } else {
+            $data = [];
+        }
+
+
         $options = [];
-        foreach ($this->data['ЗначенияСвойства'] as $opt) {
-            $optionId = \App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option'][$opt['Ид']]->object_id;
+        $itemParams = \Ecommerce\Item\Param::getList(['where' => ['item_id', $this->model->id],'key'=>'item_option_id']);
+        foreach ($this->object->object->params as $param) {
+            if ($param->type == 'paramValue' && isset($itemParams[$param->value])) {
+                $options[$param->value] = $itemParams[$param->value]->value;
+            }
+        }
+        foreach ($data as $opt) {
+            if (empty($opt['Ид'])) {
+                var_dump($data, $opt);
+                exit();
+            }
+            $optionId = \App::$cur->migrations->findObject($opt['Ид'], 'Ecommerce\Item\Option');
+            if ($optionId) {
+                $optionId = $optionId->object_id;
+            }
             if ($optionId && !isset(Options::$options[$optionId])) {
                 Options::$options = \Ecommerce\Item\Option::getList();
             }
@@ -34,14 +59,15 @@ class Options extends \Migrations\Parser {
                         Options::$options[$optionId]->save();
                     }
                 }
-                if ($opt['Значение'] && isset(\App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option\Item'][$opt['Значение']])) {
-                    $options[$optionId][] = \App::$cur->migrations->ids['parseIds']['Ecommerce\Item\Option\Item'][$opt['Значение']]->object_id;
+                if ($opt['Значение'] && $value = \App::$cur->migrations->findObject($opt['Значение'], 'Ecommerce\Item\Option\Item')) {
+                    $options[$optionId][] = $value->object_id;
                 }
             } else {
                 $options[$optionId] = $opt['Значение'];
             }
         }
-        $itemParams = \Ecommerce\Item\Param::getList(['where' => ['item_id', $this->model->id]]);
+
+
         foreach ($itemParams as $itemParam) {
             if ($itemParam->item_option_id && !isset(Options::$options[$itemParam->item_option_id])) {
                 Options::$options = \Ecommerce\Item\Option::getList();
@@ -82,5 +108,4 @@ class Options extends \Migrations\Parser {
             }
         }
     }
-
 }
