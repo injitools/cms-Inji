@@ -148,9 +148,9 @@ class Cart extends \Model {
         'comment' => ['type' => 'textarea'],
         //Системные
         'exported' => ['type' => 'bool'],
-        'complete_data' => ['type' => 'dateTime'],
-        'date_status' => ['type' => 'dateTime'],
-        'date_last_activ' => ['type' => 'dateTime'],
+        'complete_data' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
+        'date_status' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
+        'date_last_activ' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
         'date_create' => ['type' => 'dateTime'],
         //Виджеты
         'sums' => [
