@@ -174,21 +174,23 @@ class OptionsParser extends \Object {
                         $optionIndex = Item\Option::index();
                         $table = Item\Param::table();
                     }
-                    foreach ($filter as $optionId => $optionValue) {
-                        $optionId = (int) $optionId;
-                        if (is_array($optionValue)) {
-                            $optionValueArr = [];
-                            foreach ($optionValue as $val) {
-                                $optionValueArr[] = \App::$cur->db->connection->pdo->quote($val);
+                    if ($filter) {
+                        foreach ($filter as $optionId => $optionValue) {
+                            $optionId = (int) $optionId;
+                            if (is_array($optionValue)) {
+                                $optionValueArr = [];
+                                foreach ($optionValue as $val) {
+                                    $optionValueArr[] = \App::$cur->db->connection->pdo->quote($val);
+                                }
+                                $qstr = 'IN (' . implode(',', $optionValueArr) . ')';
+                            } else {
+                                $qstr = '= ' . \App::$cur->db->connection->pdo->quote($optionValue);
                             }
-                            $qstr = 'IN (' . implode(',', $optionValueArr) . ')';
-                        } else {
-                            $qstr = '= ' . \App::$cur->db->connection->pdo->quote($optionValue);
+                            $selectOptions['join'][] = [$table, $itemIndex . ' = ' . 'option' . $optionId . '.' . $paramPrefix . $itemIndex . ' AND ' .
+                                'option' . $optionId . '.' . $paramPrefix . $optionIndex . ' = "' . (int) $optionId . '" AND ' .
+                                'option' . $optionId . '.' . $paramPrefix . 'value ' . $qstr . '',
+                                'inner', 'option' . $optionId];
                         }
-                        $selectOptions['join'][] = [$table, $itemIndex . ' = ' . 'option' . $optionId . '.' . $paramPrefix . $itemIndex . ' AND ' .
-                            'option' . $optionId . '.' . $paramPrefix . $optionIndex . ' = "' . (int) $optionId . '" AND ' .
-                            'option' . $optionId . '.' . $paramPrefix . 'value ' . $qstr . '',
-                            'inner', 'option' . $optionId];
                     }
             }
         }
