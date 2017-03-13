@@ -26,11 +26,11 @@ class Recaptcha extends Module {
         $data = [];
         $data['secret'] = $this->config['secret'];
         $data['response'] = $gResponse;
+        $dara['remoteip'] = $_SERVER['REMOTE_ADDR'];
         $response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?' . http_build_query($data));
         if ($response) {
             return json_decode($response);
         }
         return false;
     }
-
 }
