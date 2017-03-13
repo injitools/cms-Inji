@@ -425,7 +425,7 @@ class View extends \Module {
                     }
                     $timeStr .= filemtime($path);
                 } else {
-                    $noParsedScripts[$script] = $script;
+                    $noParsedScripts[$script['file']] = $script['file'];
                 }
             }
         }
