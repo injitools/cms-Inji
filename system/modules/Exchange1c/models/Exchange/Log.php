@@ -29,5 +29,13 @@ class Log extends \Model {
             ],
         ]
     ];
+    public static $forms = [
+        'manager' => [
+            'map' => [
+                ['type', 'info', 'status'],
+                ['query']
+            ]
+        ]
+    ];
 
 }
