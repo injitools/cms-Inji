@@ -357,12 +357,12 @@ class Ecommerce extends Module {
 
     public function sitemap() {
         $map = [];
-        $zeroItems = \Ecommerce\Item::getList(['where' => ['category_id', 0]]);
+        $zeroItems = \Ecommerce\Item::getList(['where' => ['category_id', 0], 'array' => true, 'cols' => ['item_id', 'item_name']]);
         foreach ($zeroItems as $item) {
             $map[] = [
-                'name' => $item->name,
+                'name' => $item['item_name'],
                 'url' => [
-                    'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . ($item->getHref())
+                    'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . '/ecommerce/view/' . $item['item_id']
                 ],
             ];
         }
@@ -371,11 +371,11 @@ class Ecommerce extends Module {
         $scan = function($category, $scan) {
             $map = [];
 
-            foreach ($category->items as $item) {
+            foreach ($category->items(['array' => true, 'cols' => ['item_id', 'item_name']]) as $item) {
                 $map[] = [
-                    'name' => $item->name,
+                    'name' => $item['item_name'],
                     'url' => [
-                        'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . ($item->getHref())
+                        'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . '/ecommerce/view/' . $item['item_id']
                     ],
                 ];
             }
