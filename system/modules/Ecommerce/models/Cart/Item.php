@@ -85,7 +85,7 @@ class Item extends \Model {
                         $discountSum += round($this->price->price * ($discount->amount / 100), 2);
                         break;
                     case 'amount':
-                        $discountSum += round($this->price->price + $discount->amount, 2);
+                        $discountSum += round($discount->amount, 2);
                         break;
                 }
             }

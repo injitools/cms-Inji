@@ -132,6 +132,9 @@ class Item extends \Model {
             'preSort' => [
                 'date_create' => 'desc'
             ],
+            'filters' => [
+                'name', 'best', 'deleted', 'date_create'
+            ],
             'sortMode' => true
         ]
     ];
