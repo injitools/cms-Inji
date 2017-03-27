@@ -14,16 +14,15 @@ namespace Libs;
 class TypeaheadBootstrap3 extends \Object {
 
     public static $name = 'Typeahead Bootstrap 3';
-    public static $composerPacks = [
-        'bassjobsen/bootstrap-3-typeahead' => '4.*'
+    public static $bowerPacks = [
+        'https://github.com/bassjobsen/Bootstrap-3-Typeahead' => '*'
     ];
     public static $files = [
-        'js' => [
-            'bassjobsen/bootstrap-3-typeahead/bootstrap3-typeahead.min.js'
+        'bower' => [
+            'js' => [
+                'Bootstrap-3-Typeahead/bootstrap3-typeahead.min.js',
+            ],
         ]
-    ];
-    public static $staticDirs = [
-        'bassjobsen/bootstrap-3-typeahead'
     ];
 
 }

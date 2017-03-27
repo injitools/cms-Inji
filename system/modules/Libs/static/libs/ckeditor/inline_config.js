@@ -6,7 +6,7 @@ CKEDITOR.plugins.addExternal('inlinesave', '/static/moduleAsset/libs/libs/ckedit
 CKEDITOR.plugins.addExternal('injiwidgets', '/static/moduleAsset/libs/libs/ckeditor/plugins/injiwidgets/');
 CKEDITOR.plugins.addExternal('font', '/static/moduleAsset/libs/libs/ckeditor/plugins/font/');
 CKEDITOR.plugins.addExternal('justify', '/static/moduleAsset/libs/libs/ckeditor/plugins/justify/');
-
+CKEDITOR.dtd.$removeEmpty['i'] = false;
 CKEDITOR.editorConfig = function (config) {
   config.enterMode = CKEDITOR.ENTER_BR;
   config.filebrowserBrowseUrl = '/admin/files/managerForEditor?folder=images';
@@ -48,6 +48,9 @@ CKEDITOR.editorConfig = function (config) {
     {name: 'inji'},
   ];
   config.extraPlugins = 'inlinesave,injiwidgets,font,justify,colorbutton';
+  config.pasteFilter = 'plain-text';
+  config.allowedContent = true;
+  config.extraAllowedContent = '*(*);*{*}';
 };
 CKEDITOR.basePath = '/cache/static/bowerLibs/ckeditor/';
 CKEDITOR.plugins.basePath = CKEDITOR.basePath + 'plugins/';
