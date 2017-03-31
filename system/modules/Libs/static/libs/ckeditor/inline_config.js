@@ -48,7 +48,6 @@ CKEDITOR.editorConfig = function (config) {
     {name: 'inji'},
   ];
   config.extraPlugins = 'inlinesave,injiwidgets,font,justify,colorbutton';
-  config.pasteFilter = 'plain-text';
   config.allowedContent = true;
   config.extraAllowedContent = '*(*);*{*}';
 };

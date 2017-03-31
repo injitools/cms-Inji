@@ -13,7 +13,6 @@ CKEDITOR.editorConfig = function (config) {
   config.allowedContent = true;
   config.height = '300px';
   config.extraPlugins = 'injiwidgets,justify,colorbutton';
-  config.pasteFilter = 'plain-text';
   config.allowedContent = true;
   config.extraAllowedContent = '*(*);*{*}';
 };

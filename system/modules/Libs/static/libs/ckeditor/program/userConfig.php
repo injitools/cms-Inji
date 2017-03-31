@@ -14,7 +14,6 @@ config.contentsCss = ['/view/editorcss'];
 config.allowedContent = true;
 config.height = '300px';
 config.extraPlugins = 'injiwidgets,justify,colorbutton,font';
-config.pasteFilter = 'plain-text';
 config.allowedContent = true;
 config.extraAllowedContent = '*(*);*{*}';
 
