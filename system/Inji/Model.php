@@ -1951,6 +1951,10 @@ class Model {
 
     public function extract($model) {
         $params = [];
+        if (empty($this->_params[$model::index()])) {
+            return false;
+        }
+        $params['id'] = $this->_params[$model::index()];
         $indexes = array_keys($this->_params);
         foreach ($model::$cols as $colName => $colParams) {
             if (in_array($model::colPrefix() . $colName, $indexes)) {
