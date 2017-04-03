@@ -17,12 +17,12 @@ function sortToggler($type, $default) {
     <div class="row">
         <div class="col-sm-6 ecommerce-showoptions-sort">
             <span class="caption">Сортировка:</span>
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => sortToggler('price','asc')]])); ?>">По цене<?= sortDirectionIcon('price'); ?></a> 
-            <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => sortToggler('sales','desc')]])); ?>">По популярности<?= sortDirectionIcon('sales'); ?></a>
+            <a rel="nofollow" href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => sortToggler('price','asc')]])); ?>">По цене<?= sortDirectionIcon('price'); ?></a>
+            <a rel="nofollow" href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => sortToggler('sales','desc')]])); ?>">По популярности<?= sortDirectionIcon('sales'); ?></a>
             <?php
             if (!empty(App::$cur->ecommerce->config['isset_sort'])) {
                 ?>
-                <a href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['isset' => sortToggler('isset','desc')]])); ?>">По наличию<?= sortDirectionIcon('isset'); ?></a>
+                <a rel="nofollow" href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['isset' => sortToggler('isset','desc')]])); ?>">По наличию<?= sortDirectionIcon('isset'); ?></a>
                 <?php
             }
             ?>
@@ -34,7 +34,7 @@ function sortToggler($type, $default) {
               for ($i = 2; $i < 5; $i++) {
                   $curLimit = $limit * $i;
                   $curQuery = http_build_query(array_merge($query, ['limit' => $curLimit]));
-                  echo " <a href='{$path}?{$curQuery}'>";
+                  echo " <a rel=\"nofollow\" href='{$path}?{$curQuery}'>";
                   echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '<b>' : '';
                   echo $curLimit;
                   echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '</b>' : '';
@@ -43,7 +43,7 @@ function sortToggler($type, $default) {
               if (!empty(App::$cur->ecommerce->config['list_all'])) {
                   $curLimit = 'all';
                   $curQuery = http_build_query(array_merge($query, ['limit' => $curLimit]));
-                  echo " <a href='{$path}?{$curQuery}'>";
+                  echo " <a rel=\"nofollow\" href='{$path}?{$curQuery}'>";
                   echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '<b>' : '';
                   echo 'Все';
                   echo!empty($_GET['limit']) && $_GET['limit'] == $curLimit ? '</b>' : '';
@@ -52,12 +52,12 @@ function sortToggler($type, $default) {
               ?>
             </span>
             <span class="group">
-                <a href ='#' onclick="inji.onLoad(function () {
+                <a rel="nofollow" href ='#' onclick="inji.onLoad(function () {
                         $('.items-icons').show();
                         $('.items-table').hide();
                       });
                       return false;" class="glyphicon glyphicon-th-large"></a>
-                <a href ='#' onclick="inji.onLoad(function () {
+                <a rel="nofollow" href ='#' onclick="inji.onLoad(function () {
                         $('.items-table').show();
                         $('.items-icons').hide();
                       });
