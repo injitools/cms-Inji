@@ -12,6 +12,24 @@
 function Server() {
 
 }
+Server.prototype.init = function () {
+  $.each($('form[csrf]'), function () {
+    var form = $(this);
+
+
+    form.submit(function (ev) {
+      if (!form.find('[name="csrfToken"]').val()) {
+        inji.Server.CSRF(function (key, token) {
+          form.append('<input type="hidden" name ="csrfKey" value="' + key + '" />');
+          form.append('<input type="hidden" name ="csrfToken" value="' + token + '" />');
+          form.submit();
+        }, undefined, form.find('button'));
+        return false;
+      }
+    });
+
+  })
+};
 Server.prototype.runCommands = function (commands) {
   for (var key in commands) {
     var command = commands[key];
@@ -29,7 +47,23 @@ Server.prototype.runCommands = function (commands) {
       curPath.apply(null, command.params);
     }
   }
-}
+};
+Server.prototype.CSRF = function (callback, err, btn) {
+  var key = inji.randomString();
+  this.request({
+    url: '/server/csrf/' + key,
+    success: function (token) {
+      if (callback !== undefined) {
+        callback(key, token);
+      }
+    },
+    error: function (e) {
+      if (err !== undefined) {
+        err(e);
+      }
+    }
+  }, btn);
+};
 Server.prototype.request = function (options, btn) {
   var ajaxOptions = {
     url: '',
@@ -43,7 +77,7 @@ Server.prototype.request = function (options, btn) {
   for (var key in options) {
     ajaxOptions[key] = options[key];
   }
-  if (options.url && options.url.indexOf('http:')!==0 && options.url.indexOf('https:')!==0 && options.url.indexOf(inji.options.appRoot) !== 0) {
+  if (options.url && options.url.indexOf('http:') !== 0 && options.url.indexOf('https:') !== 0 && options.url.indexOf(inji.options.appRoot) !== 0) {
     ajaxOptions.url = inji.options.appRoot + (options.url.replace(/^\//g, ''));
   }
   if (typeof btn != 'undefined') {
@@ -103,7 +137,12 @@ Server.prototype.request = function (options, btn) {
     if (errorCallback != null) {
       errorCallback(jqXHR, textStatus, errorThrown);
     } else if (textStatus != 'abort') {
-      noty({text: 'Во время запроса произошла ошибка: ' + textStatus, type: 'warning', timeout: 3500, layout: 'center'});
+      noty({
+        text: 'Во время запроса произошла ошибка: ' + textStatus,
+        type: 'warning',
+        timeout: 3500,
+        layout: 'center'
+      });
     }
   }
   return $.ajax(ajaxOptions);
