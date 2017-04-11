@@ -2,7 +2,7 @@
 
 /**
  * Tools object
- * 
+ *
  * Toolkit with most needed functions
  *
  * @author Alexey Krupskiy <admin@inji.ru>
@@ -14,7 +14,7 @@ class Tools extends Model {
 
     /**
      * Return random string
-     * 
+     *
      * @param int $length
      * @param string $characters
      * @return string
@@ -30,7 +30,7 @@ class Tools extends Model {
 
     /**
      * Clean and return user query params
-     * 
+     *
      * @param string $uri
      * @return array
      */
@@ -50,15 +50,18 @@ class Tools extends Model {
 
     /**
      * Recursive create dir
-     * 
+     *
      * @param string $path
      * @return boolean
      */
     public static function createDir($path) {
         if (file_exists($path)) {
-                    return true;
+            return true;
         }
-
+        $root = rtrim(str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER['DOCUMENT_ROOT']), '/') . '/';
+        if (strpos($path, $root) === 0) {
+            $path = str_replace($root, '', $path);
+        }
         $path = explode('/', $path);
         $cur = '';
         foreach ($path as $item) {
@@ -80,7 +83,7 @@ class Tools extends Model {
 
     /**
      * Resize image in path
-     * 
+     *
      * @param string $img_path
      * @param int $max_width
      * @param int $max_height
@@ -145,9 +148,9 @@ class Tools extends Model {
             $new_width = $max_width;
             $new_height = $max_height;
 //Находим начальные координаты (центрируем новое изображение)
-            $imgX = (int) (($ow / 2) - ($img_width / 2));
+            $imgX = (int)(($ow / 2) - ($img_width / 2));
             if ($pos == 'center') {
-                $imgY = (int) (($oh / 2) - ($img_height / 2));
+                $imgY = (int)(($oh / 2) - ($img_height / 2));
             } else {
                 $imgY = 0;
             }
@@ -178,7 +181,7 @@ class Tools extends Model {
 
     /**
      * Send mail
-     * 
+     *
      * @param string $from
      * @param string $to
      * @param string $subject
@@ -201,9 +204,9 @@ class Tools extends Model {
 
     /**
      * Redirect user from any place of code
-     * 
+     *
      * Also add message to message query for view
-     * 
+     *
      * @param string $href
      * @param string $text
      * @param string $status
@@ -225,8 +228,8 @@ class Tools extends Model {
 
     /**
      * Функция возвращает окончание для множественного числа слова на основании числа и массива окончаний
-     * @param  Integer $number  Число на основе которого нужно сформировать окончание
-     * @param  String[] $endingArray  Массив слов или окончаний для чисел (1, 4, 5),
+     * @param  Integer $number Число на основе которого нужно сформировать окончание
+     * @param  String[] $endingArray Массив слов или окончаний для чисел (1, 4, 5),
      *         например ['яблоко', 'яблока', 'яблок']
      * @return String
      */
@@ -254,7 +257,7 @@ class Tools extends Model {
 
     /**
      * Clean request path
-     * 
+     *
      * @param string $path
      * @return string
      */
@@ -284,14 +287,14 @@ class Tools extends Model {
 
     /**
      * Show date in rus
-     * 
+     *
      * @param string $date
      * @return string
      */
     public static function toRusDate($date) {
-        $yy = (int) substr($date, 0, 4);
-        $mm = (int) substr($date, 5, 2);
-        $dd = (int) substr($date, 8, 2);
+        $yy = (int)substr($date, 0, 4);
+        $mm = (int)substr($date, 5, 2);
+        $dd = (int)substr($date, 8, 2);
 
         $hours = substr($date, 11, 5);
 
@@ -304,7 +307,7 @@ class Tools extends Model {
 
     /**
      * Set header
-     * 
+     *
      * @param string $code
      * @param boolean $exit
      */
@@ -325,9 +328,9 @@ class Tools extends Model {
 
     /**
      * Return exist path from array
-     * 
+     *
      * If no exist path in array - return default
-     * 
+     *
      * @param array $paths
      * @param string|boolean $default
      * @return string|boolean
@@ -343,7 +346,7 @@ class Tools extends Model {
 
     /**
      * Convert acronyms to bites
-     * 
+     *
      * @param string $val
      * @return int
      */
@@ -366,7 +369,7 @@ class Tools extends Model {
 
     /**
      * Recursive copy directories and files
-     * 
+     *
      * @param string $from
      * @param string $to
      */
@@ -389,7 +392,7 @@ class Tools extends Model {
 
     /**
      * Translit function
-     * 
+     *
      * @param string $str
      * @return string
      */
@@ -404,7 +407,7 @@ class Tools extends Model {
      *
      * @author http://stackoverflow.com/a/6556662
      * @param string $url
-     * @return string Youtube video id or FALSE if none found. 
+     * @return string Youtube video id or FALSE if none found.
      */
     public static function youtubeIdFromUrl($url) {
         $pattern = '%^# Match any youtube URL
@@ -420,8 +423,7 @@ class Tools extends Model {
           )             # End path alternatives.
         )               # End host alternatives.
         ([\w-]{10,12})  # Allow 10-12 for 11 char youtube id.
-        $%x'
-        ;
+        $%x';
         $result = preg_match($pattern, $url, $matches);
         if (false !== $result) {
             return $matches[1];
