@@ -13,7 +13,7 @@ class ecommerceController extends Controller {
     public function submitReviewAction() {
         $result = new \Server\Result();
         if (!empty($_POST['review']['item_id']) && !empty($_POST['review']['name']) && !empty($_POST['review']['text'])) {
-            $item = Ecommerce\Item::get((int) $_POST['review']['item_id']);
+            $item = Ecommerce\Item::get((int)$_POST['review']['item_id']);
             if (!$item) {
                 $result->success = false;
                 $result->content = ['errorText' => 'Товар не найден'];
@@ -23,13 +23,13 @@ class ecommerceController extends Controller {
                 'item_id' => $item->id,
                 'user_id' => \Users\User::$cur->id,
                 'name' => htmlspecialchars($_POST['review']['name']),
-                'rating' => (int) $_POST['review']['rating'],
+                'rating' => (int)$_POST['review']['rating'],
                 'text' => htmlspecialchars($_POST['review']['text']),
                 'mail' => !empty($_POST['review']['email']) ? htmlspecialchars($_POST['review']['email']) : '',
                 'file_id' => !empty($_FILES['review']['tmp_name']['file']) ? App::$cur->files->upload([
-                            'tmp_name' => $_FILES['review']['tmp_name']['file'],
-                            'name' => $_FILES['review']['name']['file']
-                        ]) : 0
+                    'tmp_name' => $_FILES['review']['tmp_name']['file'],
+                    'name' => $_FILES['review']['name']['file']
+                ]) : 0
             ]);
             $review->save();
             $result->successMsg = 'Отзыв успешно оставлен, он появится после модерации';
@@ -47,7 +47,7 @@ class ecommerceController extends Controller {
         $user = Users\User::$cur;
         if (!empty($_POST) && !empty($_POST['card_id'])) {
             $error = false;
-            $card = \Ecommerce\Card::get((int) $_POST['card_id']);
+            $card = \Ecommerce\Card::get((int)$_POST['card_id']);
             if (!$card) {
                 $error = true;
                 Msg::add('Такой карты не существует', 'danger');
@@ -133,7 +133,7 @@ class ecommerceController extends Controller {
         //search
         if (!empty($_GET['search'])) {
             if (!empty($_GET['inCatalog'])) {
-                $category_id = (int) $_GET['inCatalog'];
+                $category_id = (int)$_GET['inCatalog'];
             }
             $search = $_GET['search'];
         } else {
@@ -175,10 +175,10 @@ class ecommerceController extends Controller {
 
         //items pages
         $pages = new \Ui\Pages($_GET, ['count' => $this->ecommerce->getItemsCount([
-                'parent' => $categorysList,
-                'search' => trim($search),
-                'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
-            ]),
+            'parent' => $categorysList,
+            'search' => trim($search),
+            'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
+        ]),
             'limit' => !empty($this->Ecommerce->config['default_limit']) ? $this->Ecommerce->config['default_limit'] : 18,
         ]);
         if (!empty(App::$cur->ecommerce->config['list_all']) && !empty($_GET['limit']) && $_GET['limit'] == 'all') {
@@ -275,7 +275,7 @@ class ecommerceController extends Controller {
     }
 
     public function viewAction($id = '', $quick = 0) {
-        $item = \Ecommerce\Item::get((int) $id);
+        $item = \Ecommerce\Item::get((int)$id);
         if (!$item) {
             Tools::redirect('/ecommerce/', 'Такой товар не найден');
         }
@@ -323,7 +323,7 @@ class ecommerceController extends Controller {
 
     public function toggleFavAction($itemId) {
         $result = new Server\Result();
-        $item = \Ecommerce\Item::get((int) $itemId);
+        $item = \Ecommerce\Item::get((int)$itemId);
         if (!$item) {
             $result->success = false;
             $result->content = 'Товар не найден';
@@ -333,7 +333,7 @@ class ecommerceController extends Controller {
             $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', $item->id]]);
             if ($fav) {
                 $fav->delete();
-                $result->content = ['count' => $this->module->getFavoriteCount()];
+                $result->content = ['count' => $this->module->getFavoriteCount(), 'newText' => 'В&nbsp;избранное'];
                 $result->successMsg = 'Товар успешно убран из избранного';
                 return $result->send();
             } else {
@@ -342,7 +342,7 @@ class ecommerceController extends Controller {
                     'item_id' => $item->id
                 ]);
                 $fav->save();
-                $result->content = ['count' => $this->module->getFavoriteCount()];
+                $result->content = ['count' => $this->module->getFavoriteCount(), 'newText' => 'Из&nbsp;избранного'];
                 $result->successMsg = 'Товар успешно добавлен в избранное';
                 return $result->send();
             }
@@ -351,13 +351,13 @@ class ecommerceController extends Controller {
             if (in_array($item->id, $favs)) {
                 unset($favs[array_search($item->id, $favs)]);
                 setcookie("ecommerce_favitems", json_encode($favs), time() + 360000, "/");
-                $result->content = ['count' => $this->module->getFavoriteCount()];
+                $result->content = ['count' => $this->module->getFavoriteCount(), 'newText' => 'В&nbsp;избранное'];
                 $result->successMsg = 'Товар успешно убран из избранного';
                 return $result->send();
             } else {
                 $favs[] = $item->id;
                 setcookie("ecommerce_favitems", json_encode($favs), time() + 360000, "/");
-                $result->content = ['count' => $this->module->getFavoriteCount()];
+                $result->content = ['count' => $this->module->getFavoriteCount(), 'newText' => 'Из&nbsp;избранного'];
                 $result->successMsg = 'Товар успешно добавлен в избранное';
                 return $result->send();
             }
