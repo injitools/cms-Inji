@@ -73,7 +73,7 @@ class Item extends \Model {
                     'type' => $_FILES['ActiveForm_simpleItem']['type']['Ecommerce\Item']['image'],
                     'size' => $_FILES['ActiveForm_simpleItem']['size']['Ecommerce\Item']['image'],
                     'error' => $_FILES['ActiveForm_simpleItem']['error']['Ecommerce\Item']['image'],
-                        ], [
+                ], [
                     'upload_code' => 'activeForm:' . 'Ecommerce\Item' . ':' . $item->pk(),
                     'accept_group' => 'image'
                 ]);
@@ -168,18 +168,18 @@ class Item extends \Model {
                 'price' => ['type' => 'text', 'label' => 'Цена'],
                 'currency' => ['type' => 'select', 'source' => 'model', 'model' => 'Money\Currency', 'label' => 'Валюта'],
                 'options' => ['type' => 'dynamicList', 'source' => 'options', 'options' => [
-                        'inputs' => [
-                            'option' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Item\Option', 'label' => 'Свойство'],
-                            'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType', 'label' => 'Значение'],
-                        ]
+                    'inputs' => [
+                        'option' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Item\Option', 'label' => 'Свойство'],
+                        'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType', 'label' => 'Значение'],
                     ]
+                ]
                 ],
                 'offerOptions' => ['type' => 'dynamicList', 'source' => 'options', 'options' => [
-                        'inputs' => [
-                            'option' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Item\Offer\Option', 'label' => 'Свойство предложения'],
-                            'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType', 'label' => 'Значение'],
-                        ]
-                    ], 'label' => 'Параметры предложения'
+                    'inputs' => [
+                        'option' => ['type' => 'select', 'source' => 'model', 'model' => 'Ecommerce\Item\Offer\Option', 'label' => 'Свойство предложения'],
+                        'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType', 'label' => 'Значение'],
+                    ]
+                ], 'label' => 'Параметры предложения'
                 ]
             ],
             'map' => [
@@ -320,8 +320,8 @@ class Item extends \Model {
             if (!$price->type) {
                 $curPrice = $price;
             } elseif (
-                    (!$price->type->roles && !$curPrice) ||
-                    ($price->type->roles && !$curPrice && strpos($price->type->roles, "|" . \Users\User::$cur->role_id . "|") !== false)
+                (!$price->type->roles && !$curPrice) ||
+                ($price->type->roles && !$curPrice && strpos($price->type->roles, "|" . \Users\User::$cur->role_id . "|") !== false)
             ) {
                 $curPrice = $price;
             }
@@ -359,5 +359,15 @@ class Item extends \Model {
 
     public function getHref() {
         return "/ecommerce/view/{$this->pk()}";
+    }
+
+    public function inFav() {
+        if (\Users\User::$cur->id) {
+            $fav = \Ecommerce\Favorite::get([['user_id', \Users\User::$cur->id], ['item_id', $this->id]]);
+            return (bool)$fav;
+        } else {
+            $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
+            return in_array($this->id, $favs);
+        }
     }
 }
