@@ -12,105 +12,105 @@ class Model {
 
     /**
      * Object storage type
-     * 
-     * @var array 
+     *
+     * @var array
      */
     public static $storage = ['type' => 'db'];
 
     /**
      * Object name
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public static $objectName = '';
 
     /**
      * App type for separate data storage
-     * 
+     *
      * @var string
      */
     public $appType = 'app';
 
     /**
      * Object current params
-     * 
+     *
      * @var array
      */
     public $_params = [];
 
     /**
      * List of changed params in current instance
-     * 
+     *
      * @var array
      */
     public $_changedParams = [];
 
     /**
      * Loaded relations
-     * 
-     * @var array 
+     *
+     * @var array
      */
     public $loadedRelations = [];
 
     /**
      * Model name where this model uses as category
-     * 
+     *
      * @var string
      */
     public static $treeCategory = '';
 
     /**
      * Model name who uses as category in this model
-     * 
+     *
      * @var string
      */
     public static $categoryModel = '';
 
     /**
      * Col labels
-     * 
+     *
      * @var array
      */
     public static $labels = [];
 
     /**
      * Model forms
-     * 
+     *
      * @var array
      */
     public static $forms = [];
 
     /**
      * Model cols
-     * 
+     *
      * @var array
      */
     public static $cols = [];
 
     /**
      * Options group for display inforamtion from model
-     * 
+     *
      * @var array
      */
     public static $view = [];
 
     /**
      * List of relations need loaded with item
-     * 
-     * @var array 
+     *
+     * @var array
      */
     public static $needJoin = [];
 
     /**
      * List of joins who need to laod
-     * 
-     * @var array 
+     *
+     * @var array
      */
     public static $relJoins = [];
 
     /**
      * Set params when model create
-     * 
+     *
      * @param array $params
      */
     public function __construct($params = []) {
@@ -121,7 +121,7 @@ class Model {
 
     /**
      * return object name
-     * 
+     *
      * @return string
      */
     public static function objectName() {
@@ -130,7 +130,7 @@ class Model {
 
     /**
      * Retrn col value with col params and relations path
-     * 
+     *
      * @param Model $object
      * @param string $valuePath
      * @param boolean $convert
@@ -161,7 +161,7 @@ class Model {
 
     /**
      * Retrun value for view
-     * 
+     *
      * @param Model $item
      * @param string $colName
      * @param boolean $manageHref
@@ -221,7 +221,7 @@ class Model {
                 if ($file) {
                     $photoId = Tools::randomString();
                     $value = '<a href = "' . $file->path . '" id="' . $photoId . '"><img src="' . $file->path . '?resize=60x120" /></a>';
-                    $value .='<script>inji.onLoad(function(){$("#' . $photoId . '").fancybox();});</script>';
+                    $value .= '<script>inji.onLoad(function(){$("#' . $photoId . '").fancybox();});</script>';
                 } else {
                     $value = '<img src="/static/system/images/no-image.png?resize=60x120" />';
                 }
@@ -250,29 +250,30 @@ class Model {
                     ob_start();
                     $uid = Tools::randomString();
                     ?>
-                    <div id='map<?= $uid; ?>_container' style="display:none;"><script>/*
-                     <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
-                     <script>
-                     var myMap<?= $uid; ?>;
-                     var myMap<?= $uid; ?>CurPin;
-                     inji.onLoad(function () {
-                     ymaps.ready(init<?= $uid; ?>);
-                     function init<?= $uid; ?>() {
-                     var myPlacemark;
-                     myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
-                     center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
-                     zoom: 13
-                     });
-                     myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
-                     myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
-                     {iconContent: "<?= $addres['address']; ?>"},
-                     {preset: 'islands#greenStretchyIcon'}
-                     );
-                     myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
-                     }
-                     window['init<?= $uid; ?>'] = init<?= $uid; ?>;
-                     });
-                     */</script>
+                    <div id='map<?= $uid; ?>_container' style="display:none;">
+                        <script>/*
+                             <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
+                             <script>
+                             var myMap<?= $uid; ?>;
+                             var myMap<?= $uid; ?>CurPin;
+                             inji.onLoad(function () {
+                             ymaps.ready(init<?= $uid; ?>);
+                             function init<?= $uid; ?>() {
+                             var myPlacemark;
+                             myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+                             center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
+                             zoom: 13
+                             });
+                             myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
+                             myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                             {iconContent: "<?= $addres['address']; ?>"},
+                             {preset: 'islands#greenStretchyIcon'}
+                             );
+                             myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+                             }
+                             window['init<?= $uid; ?>'] = init<?= $uid; ?>;
+                             });
+                             */</script>
                     </div>
                     <?php
                     $content = ob_get_contents();
@@ -321,29 +322,30 @@ class Model {
                                         ob_start();
                                         $uid = Tools::randomString();
                                         ?>
-                                        <div id='map<?= $uid; ?>_container' style="display:none;"><script>/*
-                                         <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
-                                         <script>
-                                         var myMap<?= $uid; ?>;
-                                         var myMap<?= $uid; ?>CurPin;
-                                         inji.onLoad(function () {
-                                         ymaps.ready(init<?= $uid; ?>);
-                                         function init<?= $uid; ?>() {
-                                         var myPlacemark;
-                                         myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
-                                         center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
-                                         zoom: 13
-                                         });
-                                         myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
-                                         myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
-                                         {iconContent: "<?= $addres['address']; ?>"},
-                                         {preset: 'islands#greenStretchyIcon'}
-                                         );
-                                         myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
-                                         }
-                                         window['init<?= $uid; ?>'] = init<?= $uid; ?>;
-                                         });
-                                         */</script>
+                                        <div id='map<?= $uid; ?>_container' style="display:none;">
+                                            <script>/*
+                                                 <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
+                                                 <script>
+                                                 var myMap<?= $uid; ?>;
+                                                 var myMap<?= $uid; ?>CurPin;
+                                                 inji.onLoad(function () {
+                                                 ymaps.ready(init<?= $uid; ?>);
+                                                 function init<?= $uid; ?>() {
+                                                 var myPlacemark;
+                                                 myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
+                                                 center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
+                                                 zoom: 13
+                                                 });
+                                                 myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
+                                                 myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
+                                                 {iconContent: "<?= $addres['address']; ?>"},
+                                                 {preset: 'islands#greenStretchyIcon'}
+                                                 );
+                                                 myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
+                                                 }
+                                                 window['init<?= $uid; ?>'] = init<?= $uid; ?>;
+                                                 });
+                                                 */</script>
                                         </div>
                                         <?php
                                         $content = ob_get_contents();
@@ -373,7 +375,7 @@ class Model {
 
     /**
      * Fix col prefix
-     * 
+     *
      * @param mixed $array
      * @param string $searchtype
      * @param string $rootModel
@@ -504,7 +506,7 @@ class Model {
 
     /**
      * Check model relations path and load need relations
-     * 
+     *
      * @param string $col
      * @param string $rootModel
      */
@@ -537,7 +539,7 @@ class Model {
 
     /**
      * Return full col information
-     * 
+     *
      * @param string $col
      * @return array
      */
@@ -547,7 +549,7 @@ class Model {
 
     /**
      * Information extractor for col relations path
-     * 
+     *
      * @param string $info
      * @return array
      */
@@ -601,7 +603,7 @@ class Model {
 
     /**
      * Return actual cols from data base
-     * 
+     *
      * @param boolean $refresh
      * @return array
      */
@@ -621,7 +623,7 @@ class Model {
 
     /**
      * Return cols indexes for create tables
-     * 
+     *
      * @return array
      */
     public static function indexes() {
@@ -630,7 +632,7 @@ class Model {
 
     /**
      * Generate params string for col by name
-     * 
+     *
      * @param string $colName
      * @return false|string
      */
@@ -679,6 +681,9 @@ class Model {
             case 'decimal':
                 $params = 'decimal(8, 2)' . $null;
                 break;
+            case 'time':
+                $params = 'time' . $null;
+                break;
             case 'date':
                 $params = 'date' . $null;
                 break;
@@ -691,7 +696,7 @@ class Model {
 
     /**
      * Create new col in data base
-     * 
+     *
      * @param string $colName
      * @return boolean|integer
      */
@@ -764,7 +769,7 @@ class Model {
 
     /**
      * Return table name
-     * 
+     *
      * @return string
      */
     public static function table() {
@@ -773,7 +778,7 @@ class Model {
 
     /**
      * Return table index col name
-     * 
+     *
      * @return string
      */
     public static function index() {
@@ -783,7 +788,7 @@ class Model {
 
     /**
      * Return col prefix
-     * 
+     *
      * @return string
      */
     public static function colPrefix() {
@@ -794,7 +799,7 @@ class Model {
 
     /**
      * return relations list
-     * 
+     *
      * @return string
      */
     public static function relations() {
@@ -803,14 +808,14 @@ class Model {
 
     /**
      * views list
-     * 
+     *
      * @return array
      */
     public static $views = [];
 
     /**
      * Return name of col with object name
-     * 
+     *
      * @return string
      */
     public static function nameCol() {
@@ -819,7 +824,7 @@ class Model {
 
     /**
      * Return object name
-     * 
+     *
      * @return string
      */
     public function name() {
@@ -828,11 +833,11 @@ class Model {
 
     /**
      * Get single object from data base
-     * 
+     *
      * @param mixed $param
      * @param string $col
      * @param array $options
-     * @return boolean|\Model
+     * @return boolean|static
      */
     public static function get($param, $col = null, $options = []) {
         if (static::$storage['type'] == 'moduleConfig') {
@@ -906,7 +911,7 @@ class Model {
 
     /**
      * Old method
-     * 
+     *
      * @param type $options
      * @return Array
      */
@@ -962,12 +967,12 @@ class Model {
         static::$needJoin = [];
 
         if (!empty($options['limit'])) {
-            $limit = (int) $options['limit'];
+            $limit = (int)$options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int) $options['start'];
+            $start = (int)$options['start'];
         } else {
             $start = 0;
         }
@@ -1009,9 +1014,9 @@ class Model {
 
     /**
      * Return list of objects from data base
-     * 
-     * @param type $options
-     * @return type
+     *
+     * @param array $options
+     * @return static[]
      */
     public static function getList($options = []) {
         if (static::$storage['type'] != 'db') {
@@ -1034,7 +1039,7 @@ class Model {
 
     /**
      * Get single item from module storage
-     * 
+     *
      * @param array $param
      * @param string $col
      * @param array $options
@@ -1084,7 +1089,7 @@ class Model {
 
     /**
      * Return list items from module storage
-     * 
+     *
      * @param array $options
      * @return array
      */
@@ -1120,7 +1125,7 @@ class Model {
                 $items[$item[$arrayKey]] = new $class($item);
             }
             if (!empty($options['order'])) {
-                usort($items, function($a, $b) use($options) {
+                usort($items, function ($a, $b) use ($options) {
                     if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && $options['order'][1] = 'asc') {
                         return 1;
                     } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && $options['order'][1] = 'asc') {
@@ -1143,7 +1148,7 @@ class Model {
 
     /**
      * Return count of records from module storage
-     * 
+     *
      * @param array $options
      * @return int
      */
@@ -1181,7 +1186,7 @@ class Model {
 
     /**
      * Check where for module storage query
-     * 
+     *
      * @param array $item
      * @param array|string $where
      * @param string $value
@@ -1225,7 +1230,7 @@ class Model {
 
     /**
      * Return count of records from data base
-     * 
+     *
      * @param array $options
      * @return array|int
      */
@@ -1256,12 +1261,12 @@ class Model {
             $query->order($options['order']);
         }
         if (!empty($options['limit'])) {
-            $limit = (int) $options['limit'];
+            $limit = (int)$options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int) $options['start'];
+            $start = (int)$options['start'];
         } else {
             $start = 0;
         }
@@ -1303,7 +1308,7 @@ class Model {
         } else {
             $cols .= '*';
         }
-        $cols .=') as `count`' . (!empty($options['cols']) ? ',' . $options['cols'] : '');
+        $cols .= ') as `count`' . (!empty($options['cols']) ? ',' . $options['cols'] : '');
         $query->cols = $cols;
         if (!empty($options['group'])) {
             $query->group($options['group']);
@@ -1329,7 +1334,7 @@ class Model {
 
     /**
      * Update records in data base
-     * 
+     *
      * @param array $params
      * @param array $where
      * @return false|null
@@ -1359,7 +1364,7 @@ class Model {
 
     /**
      * Return primary key of object
-     * 
+     *
      * @return mixed
      */
     public function pk() {
@@ -1370,12 +1375,12 @@ class Model {
      * Before save trigger
      */
     public function beforeSave() {
-        
+
     }
 
     /**
      * Save object to module storage
-     * 
+     *
      * @param array $options
      * @return boolean
      */
@@ -1462,7 +1467,7 @@ class Model {
 
     /**
      * Return tree path
-     * 
+     *
      * @param \Model $catalog
      * @return string
      */
@@ -1495,7 +1500,7 @@ class Model {
 
     /**
      * Save object to data base
-     * 
+     *
      * @param array $options
      * @return boolean|int
      */
@@ -1568,19 +1573,19 @@ class Model {
      * After save trigger
      */
     public function afterSave() {
-        
+
     }
 
     /**
      * Before delete trigger
      */
     public function beforeDelete() {
-        
+
     }
 
     /**
      * Delete item from module storage
-     * 
+     *
      * @param array $options
      * @return boolean
      */
@@ -1631,7 +1636,7 @@ class Model {
 
     /**
      * Delete item from data base
-     * 
+     *
      * @param array $options
      * @return boolean
      */
@@ -1654,7 +1659,7 @@ class Model {
 
     /**
      * Delete items from data base
-     * 
+     *
      * @param array $where
      */
     public static function deleteList($where = []) {
@@ -1669,12 +1674,12 @@ class Model {
      * After delete trigger
      */
     public function afterDelete() {
-        
+
     }
 
     /**
      * find relation for col name
-     * 
+     *
      * @param string $col
      * @return array|null
      */
@@ -1690,7 +1695,7 @@ class Model {
 
     /**
      * Set params for model
-     * 
+     *
      * @param array $params
      */
     public function setParams($params) {
@@ -1701,7 +1706,7 @@ class Model {
 
     /**
      * Return relation
-     * 
+     *
      * @param string $relName
      * @return array|boolean
      */
@@ -1712,7 +1717,7 @@ class Model {
 
     /**
      * Load relation
-     * 
+     *
      * @param string $name
      * @param array $params
      * @return null|array|integer|\Model
@@ -1807,7 +1812,7 @@ class Model {
 
     /**
      * Add relation item
-     * 
+     *
      * @param string $relName
      * @param \Model $objectId
      * @return \Model|boolean
@@ -1830,7 +1835,7 @@ class Model {
 
     /**
      * Check user access for form
-     * 
+     *
      * @param string $formName
      * @return boolean
      */
@@ -1843,7 +1848,7 @@ class Model {
 
     /**
      * Check access for model
-     * 
+     *
      * @param string $mode
      * @param \Users\User $user
      * @return boolean
@@ -1857,7 +1862,7 @@ class Model {
 
     /**
      * Param and relation with params getter
-     * 
+     *
      * @param string $name
      * @param array $params
      * @return \Value|mixed
@@ -1875,7 +1880,7 @@ class Model {
 
     /**
      * Param and relation getter
-     * 
+     *
      * @param string $name
      * @return mixed
      */
@@ -1893,7 +1898,7 @@ class Model {
 
     /**
      * Return model value in object
-     * 
+     *
      * @param string $name
      * @return \Value|null
      */
@@ -1910,7 +1915,7 @@ class Model {
 
     /**
      * Return manager filters
-     * 
+     *
      * @return array
      */
     public static function managerFilters() {
@@ -1919,7 +1924,7 @@ class Model {
 
     /**
      * Return validators for cols
-     * 
+     *
      * @return array
      */
     public static function validators() {
@@ -1928,7 +1933,7 @@ class Model {
 
     /**
      * Return validator by name
-     * 
+     *
      * @param string $name
      * @return array
      */
@@ -1969,7 +1974,7 @@ class Model {
 
     /**
      * Set handler for model params
-     * 
+     *
      * @param string $name
      * @param mixed $value
      */
@@ -1986,13 +1991,13 @@ class Model {
         if (!empty($className::$cols[$shortName])) {
             switch ($className::$cols[$shortName]['type']) {
                 case 'decimal':
-                    $value = (float) $value;
+                    $value = (float)$value;
                     break;
                 case 'number':
-                    $value = (int) $value;
+                    $value = (int)$value;
                     break;
                 case 'bool':
-                    $value = (bool) $value;
+                    $value = (bool)$value;
                     break;
             }
         }
@@ -2007,7 +2012,7 @@ class Model {
 
     /**
      * Isset handler for model params
-     * 
+     *
      * @param string $name
      * @return boolean
      */
@@ -2018,7 +2023,7 @@ class Model {
 
     /**
      * Convert object to string
-     * 
+     *
      * @return string
      */
     public function __toString() {
