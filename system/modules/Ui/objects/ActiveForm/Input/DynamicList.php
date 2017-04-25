@@ -166,7 +166,7 @@ class DynamicList extends \Ui\ActiveForm\Input {
                             $input->activeFormParams = $this->activeFormParams;
                             $input->modelName = $relation['model'];
                             $input->colName = "[{$this->colName}]";
-                            $input->colParams = $col;
+                            $input->colParams = $col['colParams'];
                             $input->options = !empty($col['options']) ? $col['options'] : [];
                             $cols[$colName] = ['input' => $input, 'col' => $col];
                         }
