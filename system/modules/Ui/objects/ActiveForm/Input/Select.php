@@ -21,7 +21,7 @@ class Select extends \Ui\ActiveForm\Input {
         $inputOptions = [
             'value' => $this->value(),
             'disabled' => $this->readOnly(),
-            'values' => \Ui\ActiveForm::getOptionsList($this->colParams, $this->activeFormParams, $this->activeForm->modelName, $inputName)
+            'values' => \Ui\ActiveForm::getOptionsList($this->colParams, $this->activeFormParams, !empty($this->modelName)?$this->modelName:$this->activeForm->modelName, $inputName)
         ];
         $modelName = '';
         switch ($inputParams['source']) {
