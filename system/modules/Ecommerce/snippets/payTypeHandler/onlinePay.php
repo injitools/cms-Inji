@@ -2,17 +2,19 @@
 
 return [
     'name' => 'Онлайн оплата',
-    'handler' => function($cart) {
+    'handler' => function ($cart) {
         if (\App::$cur->money) {
             $sums = $cart->finalSum();
             foreach ($sums->sums as $currency_id => $sum) {
-                if (!$currency_id) {
+                if (!$currency_id && empty(\App::$cur->money->config['defaultCurrency'])) {
                     continue;
+                } elseif (!$currency_id) {
+                    $currency_id = \App::$cur->money->config['defaultCurrency'];
                 }
                 $pay = \Money\Pay::get([
-                            ['data', $cart->id],
-                            ['currency_id', $currency_id],
-                            ['user_id', \Users\User::$cur->id]
+                    ['data', $cart->id],
+                    ['currency_id', $currency_id],
+                    ['user_id', \Users\User::$cur->id]
                 ]);
                 if (!$pay) {
                     $pay = new Money\Pay([
@@ -35,5 +37,5 @@ return [
             return ['/money/merchants/pay/?data=' . $cart->id, 'Ваш заказ был создан. Вам необходимо оплатить счета, после чего с вами свяжется администратор для уточнения дополнительной информации', 'success'];
         }
     }
-        ];
+];
         
