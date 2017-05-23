@@ -32,7 +32,7 @@ class Info extends \Model {
             ]
         ],
         'photo_file_id' => ['type' => 'image'],
-        'bday' => ['type' => 'date'],
+        'bday' => ['type' => 'date', 'null' => true],
     ];
     public static $forms = [
         'manager' => [
