@@ -3,12 +3,14 @@ $modelName = get_class($item);
 $table = new Ui\Table();
 $table->name = $item->name();
 $formParams = ['formName' => 'manager'];
-$aform = new \Ui\ActiveForm($item, $formParams['formName']);
-if ($aform->checkAccess()) {
-    $table->addButton([
-        'text' => 'Редактировать',
-        'onclick' => 'inji.Ui.forms.popUp("' . addcslashes($modelName, '\\') . ':' . $item->pk() . '",' . json_encode($formParams) . ');',
-    ]);
+if (!empty($modelName::$forms[$formParams['formName']])) {
+    $aform = new \Ui\ActiveForm($item, $formParams['formName']);
+    if ($aform->checkAccess()) {
+        $table->addButton([
+            'text' => 'Редактировать',
+            'onclick' => 'inji.Ui.forms.popUp("' . addcslashes($modelName, '\\') . ':' . $item->pk() . '",' . json_encode($formParams) . ');',
+        ]);
+    }
 }
 $row = [];
 $cols = !empty($modelName::$views['manager']['cols']) ? $modelName::$views['manager']['cols'] : array_keys($modelName::$cols);
@@ -36,19 +38,19 @@ foreach ($cols as $colName) {
 <div>
     <h3>Комментарии (<?=
         \Dashboard\Comment::getCount(['where' => [
-                ['item_id', $item->id],
-                ['model', $modelName],
+            ['item_id', $item->id],
+            ['model', $modelName],
         ]]);
         ?>)</h3>
     <?php
     foreach (\Dashboard\Comment::getList(['where' => [
-            ['item_id', $item->id],
-            ['model', $modelName],
-        ], 'order' => ['date_create', 'desc']]) as $comment) {
+        ['item_id', $item->id],
+        ['model', $modelName],
+    ], 'order' => ['date_create', 'desc']]) as $comment) {
         ?>
         <div class="row">
             <div class="col-sm-3" style="max-width: 300px;">
-                <a href='/admin/Users/view/User/<?= $comment->user->pk(); ?>'><?= $comment->user->name(); ?></a><br />
+                <a href='/admin/Users/view/User/<?= $comment->user->pk(); ?>'><?= $comment->user->name(); ?></a><br/>
                 <?= $comment->date_create; ?>
             </div>
             <div class="col-sm-9">
@@ -60,7 +62,7 @@ foreach ($cols as $colName) {
     ?>
 </div>
 <div>
-  <?php
+    <?php
     $form = new \Ui\Form();
     $form->begin('Оставить комментарий');
     $form->input('textarea', 'comment', 'Комментарий');
@@ -72,8 +74,8 @@ foreach ($cols as $colName) {
     <?php
     $dataManager = new \Ui\DataManager('Dashboard\Activity');
     $dataManager->draw(['filters' => [
-            'item_id' => ['max' => $item->id, 'min' => $item->id],
-            'model' => ['compareType' => 'equals', 'value' => $modelName]
+        'item_id' => ['max' => $item->id, 'min' => $item->id],
+        'model' => ['compareType' => 'equals', 'value' => $modelName]
     ]]);
     ?>
 </div>

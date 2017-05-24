@@ -22,6 +22,10 @@ class Edit extends \Ui\DataManager\Action {
             'dataManagerParams' => $params,
             'formName' => !empty($dataManager->managerOptions['editForm']) ? $dataManager->managerOptions['editForm'] : 'manager'
         ];
+        $modelName = get_class($item);
+        if (empty($modelName::$forms[$formParams['formName']])) {
+            return '';
+        }
 
         return '<a href ="#" onclick=\'inji.Ui.forms.popUp("' . addcslashes(get_class($item), '\\') . ':' . $item->pk() . '",' . json_encode($formParams) . ');
                                       return false;\'><i class="glyphicon glyphicon-edit"></i></a>';
