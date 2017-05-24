@@ -3,7 +3,13 @@
   <?php
   $config = Config::app(App::$primary ? App::$primary : App::$cur);
   $modules = array_flip(Module::getInstalled(App::$cur));
-  $systemModules = array_merge(array_slice(scandir(INJI_SYSTEM_DIR . '/modules'), 2), array_slice(scandir(App::$primary->path . '/modules'), 2));
+  if (file_exists(App::$primary->path . '/modules')) {
+      $appModules = array_slice(scandir(App::$primary->path . '/modules'), 2);
+  }
+  else {
+      $appModules=[];
+  }
+  $systemModules = array_merge(array_slice(scandir(INJI_SYSTEM_DIR . '/modules'), 2), $appModules);
   foreach ($systemModules as $module) {
       $info = Module::getInfo($module);
       if (!$info || isset($modules[$module])) {
