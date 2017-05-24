@@ -92,6 +92,9 @@ class Controller {
 
     /**
      * Reference to short access core modules
+     *
+     * @param $name
+     * @return Module|null
      */
     public function __get($name) {
         return App::$cur->__get($name);
@@ -99,6 +102,10 @@ class Controller {
 
     /**
      * Reference to short access core modules
+     *
+     * @param $name
+     * @param $params
+     * @return null|Module
      */
     public function __call($name, $params) {
         return App::$cur->__call($name, $params);
