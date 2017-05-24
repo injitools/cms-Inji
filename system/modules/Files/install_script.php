@@ -1,6 +1,6 @@
 <?php
 
-return function($step = null, $params = []) {
+return function ($step = null, $params = []) {
     $options = ['max_height' => 1200, 'max_width' => 1200];
     $types = [
         [
@@ -48,6 +48,13 @@ return function($step = null, $params = []) {
         [
             'dir' => '/static/mediafiles/docs/',
             'ext' => 'docx',
+            'group' => 'doc',
+            'allow_resize' => 0,
+            'options' => ''
+        ],
+        [
+            'dir' => '/static/mediafiles/docs/',
+            'ext' => 'doc',
             'group' => 'doc',
             'allow_resize' => 0,
             'options' => ''
