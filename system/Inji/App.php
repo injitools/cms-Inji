@@ -139,7 +139,7 @@ class App {
      *
      * @param string $className
      * @param array $params
-     * @return object|null
+     * @return Module|null
      */
     public function __call($className, $params) {
         return $this->getObject($className, $params);
