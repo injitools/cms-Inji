@@ -915,7 +915,7 @@ class Model {
      * @param type $options
      * @return Array
      */
-    public static function get_list($options = []) {
+    public static function get_list($options = [], $debug = false) {
         $query = App::$cur->db->newQuery();
         if (!$query) {
             return [];
@@ -984,6 +984,12 @@ class Model {
         } else {
             $key = static::index();
         }
+
+        if ($debug) {
+            $query->operation = 'SELECT';
+            $query->table = static::table();
+            return $query->buildQuery();
+        }
         try {
             $query->operation = 'SELECT';
             $query->table = static::table();
@@ -1018,7 +1024,7 @@ class Model {
      * @param array $options
      * @return static[]
      */
-    public static function getList($options = []) {
+    public static function getList($options = [], $debug = false) {
         if (static::$storage['type'] != 'db') {
             return static::getListFromModuleStorage($options);
         }
@@ -1034,7 +1040,7 @@ class Model {
         if (!empty($options['having'])) {
             static::fixPrefix($options['having'], 'first');
         }
-        return static::get_list($options);
+        return static::get_list($options, $debug);
     }
 
     /**
