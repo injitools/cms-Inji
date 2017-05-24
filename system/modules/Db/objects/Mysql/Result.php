@@ -18,13 +18,12 @@ class Result extends \Object {
     public function getArray($keyCol = '') {
         if (!$keyCol) {
             return $this->pdoResult->fetchAll(\PDO::FETCH_ASSOC);
-        } else {
-            $array = [];
-            while ($row = $this->pdoResult->fetch(\PDO::FETCH_ASSOC)) {
-                $array[$row[$keyCol]] = $row;
-            }
-            return $array;
         }
+        $array = [];
+        while ($row = $this->pdoResult->fetch(\PDO::FETCH_ASSOC)) {
+            $array[$row[$keyCol]] = $row;
+        }
+        return $array;
     }
 
     public function getObjects($class, $keyCol = '') {
@@ -48,5 +47,4 @@ class Result extends \Object {
             return $this->pdoResult->fetch(\PDO::FETCH_ASSOC);
         }
     }
-
 }
