@@ -16,6 +16,7 @@ class Wallet extends \Model {
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'currency_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'currency'],
+        'historyMgr' => ['type' => 'dataManager', 'relation' => 'history'],
         'amount' => ['type' => 'decimal'],
         'date_create' => ['type' => 'dateTime']
     ];
@@ -23,6 +24,7 @@ class Wallet extends \Model {
         'user_id' => 'Пользователь',
         'currency_id' => 'Валюта',
         'amount' => 'Сумма',
+        'historyMgr' => 'История',
     ];
 
     public static function relations() {
@@ -30,6 +32,12 @@ class Wallet extends \Model {
             'currency' => [
                 'model' => 'Money\Currency',
                 'col' => 'currency_id'
+            ],
+            'history' => [
+                'type' => 'many',
+                'model' => 'Money\Wallet\History',
+                'col' => 'wallet_id',
+
             ],
             'user' => [
                 'model' => 'Users\User',
@@ -40,9 +48,25 @@ class Wallet extends \Model {
 
     public static $dataManagers = [
         'manager' => [
-            'cols' => ['user:id', 'user_id', 'currency_id', 'amount'],
+            'cols' => ['user:id', 'user_id', 'currency_id', 'amount', 'historyMgr'],
             'sortable' => ['user:id', 'user_id', 'currency_id', 'amount'],
-            'filters' => ['currency_id'],
+            'filters' => ['user:info:first_name', 'user:info:last_name', 'currency_id'],
+            'actions' => [
+                'Delete' => false,
+                'diff' => [
+                    'name' => 'Списать/пополнить',
+                    'className' => 'Money\WalletDiff',
+                    'aditionalInfo' => [
+                        'amount' => [
+                            'type' => 'text',
+                            'label' => 'Сумма(отрицательна для списания)',
+                        ],
+                        'comment' => [
+                            'type' => 'text',
+                            'label' => 'Комментарий',
+                        ],
+                    ]
+                ],],
         ]
     ];
 
@@ -61,7 +85,7 @@ class Wallet extends \Model {
     }
 
     public function diff($amount, $comment = '') {
-        $amount = (float) $amount;
+        $amount = (float)$amount;
         $query = \App::$cur->db->newQuery();
         $string = 'UPDATE ' . \App::$cur->db->table_prefix . $this->table() . ' SET `' . $this->colPrefix() . 'amount`=`' . $this->colPrefix() . 'amount`+' . $amount . ' where `' . $this->index() . '` = ' . $this->id;
         $query->query($string);
@@ -81,7 +105,7 @@ class Wallet extends \Model {
     public function showAmount() {
         switch ($this->currency->round_type) {
             case 'floor':
-                $dif = (float) ('1' . str_repeat('0', $this->currency->round_precision));
+                $dif = (float)('1' . str_repeat('0', $this->currency->round_precision));
                 return floor($this->amount * $dif) / $dif;
             default:
                 return $this->amount;

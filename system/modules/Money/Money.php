@@ -86,11 +86,11 @@ class Money extends Module {
     public function getUserBlocks($userId = null) {
         $userId = $userId ? $userId : \Users\User::$cur->id;
         $blocked = \Money\Wallet\Block::getList(['where' => [
-                        ['wallet:user_id', $userId],
-                        [
-                            ['date_expired', '0000-00-00 00:00:00'],
-                            ['date_expired', date('Y-m-d H:i:s'), '>', 'OR']
-                        ]
+            ['wallet:user_id', $userId],
+            [
+                ['date_expired', '0000-00-00 00:00:00'],
+                ['date_expired', date('Y-m-d H:i:s'), '>', 'OR']
+            ]
         ]]);
         $blocks = [];
         foreach ($blocked as $block) {
@@ -103,6 +103,13 @@ class Money extends Module {
         return $blocks;
     }
 
+    /**
+     * @param null $userId
+     * @param bool $walletIdasKey
+     * @param bool $forSelect
+     * @param bool $transferOnly
+     * @return \Money\Wallet[]
+     */
     public function getUserWallets($userId = null, $walletIdasKey = false, $forSelect = false, $transferOnly = false) {
         $userId = $userId ? $userId : \Users\User::$cur->id;
         if (!$userId) {
