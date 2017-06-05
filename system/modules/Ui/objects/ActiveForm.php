@@ -25,7 +25,7 @@ class ActiveForm extends \Object {
     public $parent = null;
 
     /**
-     * 
+     *
      * @param array|\Model $model
      * @param array|string $form
      */
@@ -82,8 +82,10 @@ class ActiveForm extends \Object {
                             $this->model->_params[$modelName::index()] = 0;
                         }
                         $relOptions['model']::fixPrefix($relOptions['col']);
-                        $inputs[$col] = new ActiveForm(new $relOptions['model']([$relOptions['col'] => &$this->model->_params[$modelName::index()]]), $colPath[2]);
+                        $inputs[$col] = new ActiveForm(new $relOptions['model'](), $colPath[2]);
                     }
+                    $inputs[$col]->parent = $this;
+
                     $inputs[$col]->parent = $this;
                 } elseif (!empty($modelName::$cols[$col])) {
                     $inputs[$col] = $modelName::$cols[$col];
@@ -99,11 +101,12 @@ class ActiveForm extends \Object {
             return [];
         }
         $successId = 0;
+        $modelName = $this->model;
         if (!empty($_POST[$this->requestFormName][$this->modelName]) || !empty($_FILES[$this->requestFormName]['tmp_name'][$this->modelName])) {
             $request = !empty($_POST[$this->requestFormName][$this->modelName]) ? $_POST[$this->requestFormName][$this->modelName] : [];
             if ($this->model) {
                 if (!empty($this->form['handler']) && empty($_GET['notSave'])) {
-                    $modelName = $this->model;
+
                     $modelName::{$this->form['handler']}($request);
                     $text = 'Новый элемент был успешно добавлен';
                     \Msg::add($text, 'success');
@@ -120,7 +123,7 @@ class ActiveForm extends \Object {
                             continue;
                         }
                         if (is_object($param)) {
-                            $afterSave[] = $param;
+                            $afterSave[$col] = $param;
                             continue;
                         }
                         if (!empty($this->form['userGroupReadonly'][\Users\User::$cur->group_id]) && in_array($col, $this->form['userGroupReadonly'][\Users\User::$cur->group_id])) {
@@ -165,158 +168,174 @@ class ActiveForm extends \Object {
                         }
 
                         $this->model->save(!empty($params['dataManagerParams']) ? $params['dataManagerParams'] : []);
-                        foreach ($afterSave as $form) {
+                        foreach ($afterSave as $col => $form) {
+                            if (strpos($col, 'form:') === 0) {
+                                $colPath = explode(':', $col);
+                                if (!$this->model->{$colPath[1]}) {
+                                    $relOptions = $modelName::getRelation($colPath[1]);
+                                    if (!isset($this->model->_params[$modelName::index()])) {
+                                        $this->model->_params[$modelName::index()] = 0;
+                                    }
+                                    $relOptions['model']::fixPrefix($relOptions['col']);
+                                    $form->model->{$relOptions['col']} = $this->model->_params[$modelName::index()];
+                                }
+                            }
                             $form->checkRequest();
                         }
-                        if ($ajax) {
-                            \Msg::show();
-                        } elseif (!empty($_GET['redirectUrl'])) {
-                            \Tools::redirect($_GET['redirectUrl'] . (!empty($_GET['dataManagerHash']) ? '#' . $_GET['dataManagerHash'] : ''));
-                        }
-                        $successId = $this->model->pk();
+                    if ($ajax) {
+                        \Msg::show();
+                    } elseif (!empty($_GET['redirectUrl'])) {
+                        \Tools::redirect($_GET['redirectUrl'] . (!empty($_GET['dataManagerHash']) ? '#' . $_GET['dataManagerHash'] : ''));
                     }
+                    $successId = $this->model->pk();
                 }
             }
-            if (!is_array($params) && is_callable($params)) {
-                $params($request);
+        }
+        if (!is_array($params) && is_callable($params)) {
+            $params($request);
+        }
+    }
+return $successId;
+}
+
+public
+function draw($params = [], $ajax = false) {
+    if (!$this->checkAccess()) {
+        $this->drawError('you not have access to "' . $this->modelName . '" form with name: "' . $this->formName . '"');
+        return [];
+    }
+    $form = new Form(!empty($this->form['formOptions']) ? $this->form['formOptions'] : []);
+    \App::$cur->view->widget('Ui\ActiveForm', ['form' => $form, 'activeForm' => $this, 'ajax' => $ajax, 'params' => $params]);
+}
+
+public
+function drawCol($colName, $options, $form, $params = []) {
+    if (is_object($options)) {
+        $options->draw();
+    } else {
+        $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($options['type']);
+        $input = new $inputClassName();
+        $input->form = $form;
+        $input->activeForm = $this;
+        $input->activeFormParams = $params;
+        $input->modelName = $this->modelName;
+        $input->colName = $colName;
+        $input->colParams = $options;
+        $input->options = !empty($options['options']) ? $options['options'] : [];
+        $input->draw();
+    }
+    return true;
+}
+
+public
+static function getOptionsList($inputParams, $params = [], $modelName = '', $aditionalInputNamePrefix = 'aditional', $options = []) {
+    $values = [];
+    switch ($inputParams['source']) {
+        case 'model':
+            $values = $inputParams['model']::getList(['forSelect' => true]);
+            break;
+        case 'array':
+            $values = $inputParams['sourceArray'];
+            break;
+        case 'method':
+            if (!empty($inputParams['params'])) {
+                $values = call_user_func_array([\App::$cur->$inputParams['module'], $inputParams['method']], $inputParams['params']);
+            } else {
+                $values = \App::$cur->$inputParams['module']->$inputParams['method']();
             }
-        }
-        return $successId;
-    }
-
-    public function draw($params = [], $ajax = false) {
-        if (!$this->checkAccess()) {
-            $this->drawError('you not have access to "' . $this->modelName . '" form with name: "' . $this->formName . '"');
-            return [];
-        }
-        $form = new Form(!empty($this->form['formOptions']) ? $this->form['formOptions'] : []);
-        \App::$cur->view->widget('Ui\ActiveForm', ['form' => $form, 'activeForm' => $this, 'ajax' => $ajax, 'params' => $params]);
-    }
-
-    public function drawCol($colName, $options, $form, $params = []) {
-        if (is_object($options)) {
-            $options->draw();
-        } else {
-            $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($options['type']);
-            $input = new $inputClassName();
-            $input->form = $form;
-            $input->activeForm = $this;
-            $input->activeFormParams = $params;
-            $input->modelName = $this->modelName;
-            $input->colName = $colName;
-            $input->colParams = $options;
-            $input->options = !empty($options['options']) ? $options['options'] : [];
-            $input->draw();
-        }
-        return true;
-    }
-
-    public static function getOptionsList($inputParams, $params = [], $modelName = '', $aditionalInputNamePrefix = 'aditional', $options = []) {
-        $values = [];
-        switch ($inputParams['source']) {
-            case 'model':
-                $values = $inputParams['model']::getList(['forSelect' => true]);
-                break;
-            case 'array':
-                $values = $inputParams['sourceArray'];
-                break;
-            case 'method':
-                if (!empty($inputParams['params'])) {
-                    $values = call_user_func_array([\App::$cur->$inputParams['module'], $inputParams['method']], $inputParams['params']);
-                } else {
-                    $values = \App::$cur->$inputParams['module']->$inputParams['method']();
+            break;
+        case 'relation':
+            if (!$modelName) {
+                return [];
+            }
+            $relation = $modelName::getRelation($inputParams['relation']);
+            if (!empty($params['dataManagerParams']['appType'])) {
+                $options['appType'] = $params['dataManagerParams']['appType'];
+            }
+            $items = [];
+            if (class_exists($relation['model'])) {
+                $filters = $relation['model']::managerFilters();
+                if (!empty($filters['getRows']['where'])) {
+                    $options['where'][] = $filters['getRows']['where'];
                 }
-                break;
-            case 'relation':
-                if (!$modelName) {
-                    return [];
+                if (!empty($relation['where'])) {
+                    $options['where'][] = $relation['where'];
                 }
-                $relation = $modelName::getRelation($inputParams['relation']);
-                if (!empty($params['dataManagerParams']['appType'])) {
-                    $options['appType'] = $params['dataManagerParams']['appType'];
+                if (!empty($relation['order'])) {
+                    $options['order'] = $relation['order'];
                 }
-                $items = [];
-                if (class_exists($relation['model'])) {
-                    $filters = $relation['model']::managerFilters();
-                    if (!empty($filters['getRows']['where'])) {
-                        $options['where'][] = $filters['getRows']['where'];
-                    }
-                    if (!empty($relation['where'])) {
-                        $options['where'][] = $relation['where'];
-                    }
-                    if (!empty($relation['order'])) {
-                        $options['order'] = $relation['order'];
-                    }
-                    if (!empty($inputParams['itemName'])) {
-                        $options['itemName'] = $inputParams['itemName'];
-                    }
-                    $items = $relation['model']::getList($options);
+                if (!empty($inputParams['itemName'])) {
+                    $options['itemName'] = $inputParams['itemName'];
                 }
-                if (!empty($params['noEmptyValue'])) {
-                    $values = [];
-                } else {
-                    $values = [0 => 'Не задано'];
-                }
-                foreach ($items as $key => $item) {
-                    if (!empty($inputParams['showCol'])) {
-                        if (is_array($inputParams['showCol'])) {
-                            switch ($inputParams['showCol']['type']) {
-                                case 'staticMethod':
-                                    $values[$key] = $inputParams['showCol']['class']::{$inputParams['showCol']['method']}($item);
-                                    break;
-                            }
-                        } else {
-                            $values[$key] = $item->$inputParams['showCol'];
+                $items = $relation['model']::getList($options);
+            }
+            if (!empty($params['noEmptyValue'])) {
+                $values = [];
+            } else {
+                $values = [0 => 'Не задано'];
+            }
+            foreach ($items as $key => $item) {
+                if (!empty($inputParams['showCol'])) {
+                    if (is_array($inputParams['showCol'])) {
+                        switch ($inputParams['showCol']['type']) {
+                            case 'staticMethod':
+                                $values[$key] = $inputParams['showCol']['class']::{$inputParams['showCol']['method']}($item);
+                                break;
                         }
                     } else {
-                        $values[$key] = $item->name();
+                        $values[$key] = $item->$inputParams['showCol'];
                     }
+                } else {
+                    $values[$key] = $item->name();
                 }
-                break;
-        }
-        foreach ($values as $key => $value) {
-            if (is_array($value) && !empty($value['input']) && empty($value['input']['noprefix'])) {
-                $values[$key]['input']['name'] = $aditionalInputNamePrefix . "[{$value['input']['name']}]";
             }
-        }
-        return $values;
+            break;
     }
-
-    /**
-     * Draw error message
-     * 
-     * @param string $errorText
-     */
-    public function drawError($errorText) {
-        echo $errorText;
+    foreach ($values as $key => $value) {
+        if (is_array($value) && !empty($value['input']) && empty($value['input']['noprefix'])) {
+            $values[$key]['input']['name'] = $aditionalInputNamePrefix . "[{$value['input']['name']}]";
+        }
     }
+    return $values;
+}
 
-    /**
-     * Check access cur user to form with name in param and $model
-     * 
-     * @return boolean
-     */
-    public function checkAccess() {
-        if (empty($this->form)) {
-            $this->drawError('"' . $this->modelName . '" form with name: "' . $this->formName . '" not found');
-            return false;
-        }
-        if (\App::$cur->Access && !\App::$cur->Access->checkAccess($this)) {
-            return false;
-        }
-        if (!empty($this->form['options']['access']['apps']) && !in_array(\App::$cur->name, $this->form['options']['access']['apps'])) {
-            return false;
-        }
-        if (!empty($this->form['options']['access']['groups']) && in_array(\Users\User::$cur->group_id, $this->form['options']['access']['groups'])) {
-            return true;
-        }
-        if ($this->model && !empty($this->form['options']['access']['self']) && \Users\User::$cur->id == $this->model->user_id) {
-            return true;
-        }
-        if ($this->formName == 'manager' && !\Users\User::$cur->isAdmin()) {
-            return false;
-        }
+/**
+ * Draw error message
+ *
+ * @param string $errorText
+ */
+public
+function drawError($errorText) {
+    echo $errorText;
+}
+
+/**
+ * Check access cur user to form with name in param and $model
+ *
+ * @return boolean
+ */
+public
+function checkAccess() {
+    if (empty($this->form)) {
+        $this->drawError('"' . $this->modelName . '" form with name: "' . $this->formName . '" not found');
+        return false;
+    }
+    if (\App::$cur->Access && !\App::$cur->Access->checkAccess($this)) {
+        return false;
+    }
+    if (!empty($this->form['options']['access']['apps']) && !in_array(\App::$cur->name, $this->form['options']['access']['apps'])) {
+        return false;
+    }
+    if (!empty($this->form['options']['access']['groups']) && in_array(\Users\User::$cur->group_id, $this->form['options']['access']['groups'])) {
         return true;
     }
+    if ($this->model && !empty($this->form['options']['access']['self']) && \Users\User::$cur->id == $this->model->user_id) {
+        return true;
+    }
+    if ($this->formName == 'manager' && !\Users\User::$cur->isAdmin()) {
+        return false;
+    }
+    return true;
+}
 
 }
