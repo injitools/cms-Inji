@@ -11,6 +11,6 @@
 class UserFormsController extends Controller {
 
     public function getFormHtmlAction($userForm_id) {
-        $this->view->widget('UserForms\userForm', ['form_id' => $userForm_id]);
+        $this->view->widget('UserForms\userForm', ['formId' => $userForm_id]);
     }
 }
