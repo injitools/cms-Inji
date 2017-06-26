@@ -315,7 +315,9 @@ class Item extends \Model {
     public function getPrice() {
         $offers = $this->offers(['key' => false]);
         $curPrice = null;
-
+        if (!$offers) {
+            return false;
+        }
         foreach ($offers[0]->prices as $price) {
             if (!$price->type) {
                 $curPrice = $price;
