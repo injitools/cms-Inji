@@ -21,15 +21,15 @@ class WarehouseSum extends \Migrations\Parser {
             $warehouse->name = 'Общий склад 1с';
             $warehouse->save();
         }
-        $modelName = get_class($this->object->model);
+        $modelName = get_class($this->model);
 
         $warehouseOffer = \Ecommerce\Item\Offer\Warehouse::get([
-                    [$modelName::index(), $this->object->model->pk()],
+                    [$modelName::index(), $this->model->pk()],
                     [\Ecommerce\Warehouse::index(), $warehouse->id]
         ]);
         if (!$warehouseOffer) {
             $warehouseOffer = new \Ecommerce\Item\Offer\Warehouse([
-                $modelName::index() => $this->object->model->pk(),
+                $modelName::index() => $this->model->pk(),
                 \Ecommerce\Warehouse::index() => $warehouse->id,
                 'count' => $count
             ]);
