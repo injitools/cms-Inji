@@ -10,7 +10,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-define('mdebug',true);
+//define('mdebug',true);
 class Migrations extends \Module {
 
     public $ids = [];
