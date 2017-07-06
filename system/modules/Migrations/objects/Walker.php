@@ -26,9 +26,12 @@ class Walker {
         $walked = [];
         //walk know pathes
         foreach ($this->map->paths(['where' => ['path', $this->curPath]]) as $path) {
+            if (defined('mdebug')) {
+                echo $path->item ;
+            }
             if (isset($this->data[$path->item])) {
                 if ($path->type == 'container') {
-//create walker for container
+                    //create walker for container
                     $walker = new Walker();
                     $walker->migration = $this->migration;
                     $walker->map = $this->map;
@@ -39,11 +42,14 @@ class Walker {
                     $walker->migtarionLog = $this->migtarionLog;
                     $walker->walk();
                 } elseif ($path->type == 'object') {
-//start parse path data
+                    //start parse path data
                     $this->startObjectParse($path->object_id, $this->data[$path->item]);
                 }
             }
             $walked[$path->item] = true;
+            if (defined('mdebug')) {
+                echo " -> end $path->item<br />";
+            }
         }
         //check unparsed paths
         foreach ($this->data as $key => &$data) {
@@ -53,8 +59,8 @@ class Walker {
             }
             //search object for parse
             $object = Migration\Object::get([
-                        ['code', $key],
-                        ['migration_id', $this->migration->id]
+                ['code', $key],
+                ['migration_id', $this->migration->id]
             ]);
             if ($object) {
 //parse as object
@@ -76,6 +82,9 @@ class Walker {
         $objectParser->object = is_object($object_id) ? $object_id : \App::$cur->migrations->getMigrationObject($object_id);
         $objectParser->data = $data;
         $objectParser->walker = $this;
+        if (defined('mdebug')) {
+            echo " -> object $object_id";
+        }
         $ids = $objectParser->parse();
 
         if ($objectParser->object->clear && json_decode($objectParser->object->clear, true)) {

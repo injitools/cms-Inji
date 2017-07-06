@@ -47,6 +47,9 @@ class Object extends \Object {
 
             $walked = [];
             foreach ($this->object->params as $param) {
+                if(defined('mdebug')){
+                    echo " -> param ($param->id,$param->type,$param->value) ";
+                }
                 if ($model && $param->type && $param->type != 'item_key') {
                     if ($param->type == 'object') {
                         $object = \App::$cur->migrations->getMigrationObject($param->value);
@@ -56,6 +59,9 @@ class Object extends \Object {
                         $parser->parentObject = $this;
                         $parser->parentModel = $model;
                         $parser->walker = $this->walker;
+                        if(defined('mdebug')){
+                            echo " -> objectParse ";
+                        }
                         $parser->parse();
                     } else {
                         if ($param->type == 'custom') {
@@ -68,6 +74,9 @@ class Object extends \Object {
                         $parser->param = $param;
                         $parser->model = $model;
                         $parser->object = $this;
+                        if(defined('mdebug')){
+                            echo " -> parser ($parserName) ";
+                        }
                         $parser->parse();
                     }
                 }

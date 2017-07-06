@@ -95,7 +95,7 @@ class Relation extends \Migrations\Parser {
             $ids = [];
             if (!\Tools::isAssoc($this->data)) {
                 foreach ($this->data as &$data) {
-                    $model = $objectParser->setModel($this->data);
+                    $model = $objectParser->setModel($data);
                     if ($model && $model->id) {
                         $ids[] = $model->id;
                     }
