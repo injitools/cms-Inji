@@ -16,9 +16,9 @@ class Ecommerce extends Module {
             $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             if ($favs) {
                 foreach ($favs as $itemId) {
-                    $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', (int) $itemId]]);
+                    $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', (int)$itemId]]);
                     if (!$fav) {
-                        $item = \Ecommerce\Item::get((int) $itemId);
+                        $item = \Ecommerce\Item::get((int)$itemId);
                         if ($item) {
                             $fav = new \Ecommerce\Favorite([
                                 'user_id' => Users\User::$cur->id,
@@ -180,7 +180,7 @@ class Ecommerce extends Module {
     public function getCurCart($create = true) {
         $cart = false;
         if (!empty($_SESSION['cart']['cart_id'])) {
-            $cart = Ecommerce\Cart::get((int) $_SESSION['cart']['cart_id']);
+            $cart = Ecommerce\Cart::get((int)$_SESSION['cart']['cart_id']);
         }
         if (!$cart && $create) {
             $cart = new Ecommerce\Cart();
@@ -198,7 +198,7 @@ class Ecommerce extends Module {
 
     /**
      * Getting items params with params
-     * 
+     *
      * @param array $params
      * @return array
      */
@@ -231,7 +231,7 @@ class Ecommerce extends Module {
 
     /**
      * Getting items with params
-     * 
+     *
      * @param array $params
      * @return array
      */
@@ -243,7 +243,7 @@ class Ecommerce extends Module {
 
     /**
      * Return count of items with params
-     * 
+     *
      * @param array $params
      * @return int
      */
@@ -368,7 +368,7 @@ class Ecommerce extends Module {
         }
 
         $categorys = \Ecommerce\Category::getList(['where' => ['parent_id', 0]]);
-        $scan = function($category, $scan) {
+        $scan = function ($category, $scan) {
             $map = [];
 
             foreach ($category->items(['array' => true, 'cols' => ['item_id', 'item_name']]) as $item) {
@@ -397,5 +397,39 @@ class Ecommerce extends Module {
             $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             return count($favs);
         }
+    }
+
+    public function siteSearch($search) {
+        //items pages
+        $count = $this->getItemsCount([
+            'search' => trim($search),
+        ]);
+        //items
+        $items = $this->getItems([
+            'start' => 0,
+            'count' => 10,
+            'search' => trim($search),
+        ]);
+        $searchResult = [];
+        foreach ($items as $item) {
+            $details = '<div>';
+            if ($item->image) {
+                $details .= "<img style='margin-right:10px;margin-bottom:10px;' class='pull-left' src ='" . Statics::file($item->image->path, '70x70', 'q') . "' />";
+            }
+            $details .= '<b>' . $item->category->name . '</b><br />';
+            $shortdes = mb_substr($item->description, 0, 200);
+            $shortdes = mb_substr($shortdes, 0, mb_strrpos($shortdes, ' '));
+            $details .= $shortdes;
+            if (mb_strlen($item->description) > $shortdes) {
+                $details .= '...';
+            }
+            $details .= '<div class="clearfix"></div> </div>';
+            $searchResult[] = [
+                'title' => $item->name(),
+                'details' => $details,
+                'href' => '/ecommerce/view/' . $item->id
+            ];
+        }
+        return ['name' => 'Онлайн магазин', 'count' => $count, 'result' => $searchResult, 'detailSearch' => '/ecommerce/itemList?search=' . $search];
     }
 }

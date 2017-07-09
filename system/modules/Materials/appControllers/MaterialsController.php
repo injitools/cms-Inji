@@ -17,7 +17,7 @@ class MaterialsController extends Controller {
         $path = trim(implode('/', $args));
 
         if (is_numeric($path)) {
-            $material = Materials\Material::get([['id', (int) $path], ['date_publish', null, 'IS NOT']]);
+            $material = Materials\Material::get([['id', (int)$path], ['date_publish', null, 'IS NOT']]);
         }
         if (!$material && $args) {
             foreach ($args as $key => $alias) {
@@ -42,7 +42,7 @@ class MaterialsController extends Controller {
                 if ($category) {
                     $where = [
                         ['category_id', $category->id],
-                        ['id', (int) $args[count($args) - 1]],
+                        ['id', (int)$args[count($args) - 1]],
                         ['date_publish', null, 'IS NOT']
                     ];
                 } else {
@@ -56,7 +56,7 @@ class MaterialsController extends Controller {
                     $this->categoryAction($category->id);
                 }
             }
-        } elseif(!$material) {
+        } elseif (!$material) {
             $material = Materials\Material::get(1, 'default');
         }
         if ($material) {
@@ -75,7 +75,7 @@ class MaterialsController extends Controller {
         $path = trim(implode('/', $args));
         $category = null;
         if (is_numeric($path)) {
-            $category = Materials\Category::get((int) $path);
+            $category = Materials\Category::get((int)$path);
         }
         if (!$category) {
             foreach ($args as $alias) {
@@ -110,7 +110,7 @@ class MaterialsController extends Controller {
         $material = false;
         if ($alias) {
             if (is_numeric($alias)) {
-                $material = Materials\Material::get([['id', (int) $alias], ['date_publish', null, 'IS NOT']]);
+                $material = Materials\Material::get([['id', (int)$alias], ['date_publish', null, 'IS NOT']]);
             }
             if (!$material) {
                 $material = Materials\Material::get([['alias', $alias], ['date_publish', null, 'IS NOT']]);
@@ -147,5 +147,13 @@ class MaterialsController extends Controller {
             'content' => $material->resolveViewer(),
             'data' => compact('material', 'bread'),
         ]);
+    }
+
+    function detailSearchAction() {
+        $result = [];
+        if (!empty($_GET['search']) && is_string($_GET['search'])) {
+            $result = $this->module->search($_GET['search']);
+        }
+        $this->view->page(['data' => ['result' => $result]]);
     }
 }

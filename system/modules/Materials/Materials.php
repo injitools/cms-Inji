@@ -93,7 +93,7 @@ class Materials extends Module {
         }
 
         $categorys = \Materials\Category::getList(['where' => ['parent_id', 0]]);
-        $scan = function($category, $scan) {
+        $scan = function ($category, $scan) {
             $map = [];
 
             foreach ($category->items as $mat) {
@@ -115,4 +115,39 @@ class Materials extends Module {
         return $map;
     }
 
+    function search($search) {
+        $query = 'select material_id from ' . App::$cur->db->table_prefix . \Materials\Material::table() . ' where MATCH (material_name,material_text,material_keywords,material_description) AGAINST (\'' . $search . '\')';
+        $ids = array_keys(App::$cur->db->query($query)->getArray('material_id'));
+        $count = count($ids);
+        $pages = new \Ui\Pages($_GET, ['count' => $count]);
+        //items
+        //items
+        $items = \Materials\Material::getList([
+            'where' => ['id', $ids, 'IN'],
+            'start' => $pages->params['start'],
+            'limit' => $pages->params['limit']
+        ]);
+        return ['count' => $count, 'items' => $items, 'pages' => $pages];
+    }
+
+    public function siteSearch($search) {
+        $result = $this->search($search);
+        $searchResult = [];
+        foreach ($result['items'] as $item) {
+            $details = '<div>';
+            $shortdes = mb_substr(strip_tags($item->text), 0, 300);
+            $shortdes = mb_substr($shortdes, 0, mb_strrpos($shortdes, ' '));
+            $details .= $shortdes;
+            if (mb_strlen($item->description) > $shortdes) {
+                $details .= '...';
+            }
+            $details .= '</div>';
+            $searchResult[] = [
+                'title' => $item->name(),
+                'details' => $details,
+                'href' => '/materials/view/' . $item->id
+            ];
+        }
+        return ['name' => 'Материалы', 'count' => $result['count'], 'result' => $searchResult, 'detailSearch' => ' / materials / detailSearch ? search = ' . $search];
+    }
 }
