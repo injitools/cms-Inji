@@ -150,6 +150,7 @@ class MaterialsController extends Controller {
     }
 
     function detailSearchAction() {
+        $this->view->setTitle('Поиск материалов');
         $result = [];
         if (!empty($_GET['search']) && is_string($_GET['search'])) {
             $result = $this->module->search($_GET['search']);
