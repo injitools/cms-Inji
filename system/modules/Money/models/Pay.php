@@ -10,7 +10,24 @@
  */
 
 namespace Money;
-
+/**
+ * @property int $id
+ * @property int $currency_id
+ * @property int $pay_status_id
+ * @property int $user_id
+ * @property float $sum
+ * @property string $type
+ * @property string $callback_module
+ * @property string $callback_method
+ * @property string $description
+ * @property string $data
+ * @property string $merchant_id
+ * @property string $date_recive
+ * @property string $date_create
+ * @property-read \Money\Currency $currency
+ * @property-read \Money\Pay\Status $status
+ * @property-read \Users\User $user
+ */
 class Pay extends \Model {
 
     public static function relations() {
@@ -40,6 +57,7 @@ class Pay extends \Model {
         'callback_method' => ['type' => 'text'],
         'description' => ['type' => 'textarea'],
         'data' => ['type' => 'text'],
+        'merchant_id' => ['type' => 'textarea'],
         'date_recive' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
         'date_create' => ['type' => 'dateTime']
     ];

@@ -71,6 +71,9 @@ class MerchantsController extends Controller {
                 $where[] = ['data', $_GET['data']];
             }
             $pays = Money\Pay::getList(['where' => $where, 'order' => ['date_create', 'DESC']]);
+            if(count($pays)===1){
+                Tools::redirect('/money/merchants/pay/'.current($pays)->id);
+            }
             $this->view->page(['content' => 'pays', 'data' => compact('bread', 'pays')]);
         } else {
             $where = [['active', 1]];
