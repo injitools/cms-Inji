@@ -15,7 +15,7 @@ function sortToggler($type, $default) {
 ?>
 <div class="ecommerce-showoptions">
     <div class="row">
-        <div class="col-sm-6 ecommerce-showoptions-sort">
+        <div class="col-sm-7 ecommerce-showoptions-sort">
             <span class="caption">Сортировка:</span>
             <a rel="nofollow" href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['price' => sortToggler('price','asc')]])); ?>">По цене<?= sortDirectionIcon('price'); ?></a>
             <a rel="nofollow" href="<?= $path; ?>?<?= http_build_query(array_merge($query, ['sort' => ['sales' => sortToggler('sales','desc')]])); ?>">По популярности<?= sortDirectionIcon('sales'); ?></a>
@@ -27,7 +27,7 @@ function sortToggler($type, $default) {
             }
             ?>
         </div>
-        <div class="col-sm-6 text-right ecommerce-showoptions-view">
+        <div class="col-sm-5 text-right ecommerce-showoptions-view">
             <span class="caption">Вид:</span>
             <span class="group">
               <?php

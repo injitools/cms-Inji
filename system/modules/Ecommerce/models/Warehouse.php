@@ -20,6 +20,7 @@ class Warehouse extends \Model {
     public static $cols = [
         //Основные параметры
         'name' => ['type' => 'text'],
+        'type' => ['type' => 'text'],
         //Системные
         'date_create' => ['type' => 'dateTime'],
     ];
@@ -28,14 +29,15 @@ class Warehouse extends \Model {
             'name' => 'Склады',
             'cols' => [
                 'name',
+                'type',
             ],
         ],
     ];
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name'],
+                ['name', 'type'],
             ]
-    ]];
+        ]];
 
 }
