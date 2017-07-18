@@ -57,6 +57,9 @@ class OptionsParser extends \Object {
         self::warehouse($selectOptions);
 
         $selectOptions['group'] = Item::index();
+        if(isset($options['array'])){
+            $selectOptions['array'] = $options['array'];
+        }
 
         return $selectOptions;
     }
