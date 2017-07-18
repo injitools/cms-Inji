@@ -20,11 +20,12 @@ class Access extends Module {
         if (!$app) {
             $app = $this->app->type;
         }
+        $url = '/';
         if (!empty($this->config['access']['accessTree'][$app]['deniedUrl'])) {
-            return $this->config['access']['accessTree'][$app]['deniedUrl'];
+            $url = $this->config['access']['accessTree'][$app]['deniedUrl'];
         }
-
-        return '/';
+        $url .= '?' . http_build_query(['ref' => $_SERVER['REQUEST_URI']]);
+        return $url;
     }
 
     public function checkAccess($element, $user = null) {
