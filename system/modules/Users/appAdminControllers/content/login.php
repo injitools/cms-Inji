@@ -13,7 +13,8 @@
                     <div class="form-group">    
                         <input type="password" placeholder="Пароль" class="form-control bottom" name = 'user_pass' />
                     </div>
-                    <div class="form-group">    
+                    <div class="form-group">
+                        <input type='hidden' name='ref' value='<?= !empty($_GET['ref']) && is_string($_GET['ref']) ? $_GET['ref'] : ''; ?>'/>
                         <input type="hidden"  name = 'autorization' value = '1'>
                         <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
                     </div>

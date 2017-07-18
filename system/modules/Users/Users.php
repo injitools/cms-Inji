@@ -31,18 +31,18 @@ class Users extends Module {
         }
         if (isset($_POST['autorization']) && trim(filter_input(INPUT_POST, 'user_login')) && trim(filter_input(INPUT_POST, 'user_pass'))) {
             unset($_POST['autorization']);
-            return $this->autorization(trim(filter_input(INPUT_POST, 'user_login')), trim(filter_input(INPUT_POST, 'user_pass')), strpos(filter_input(INPUT_POST, 'user_login'), '@') ? 'mail' : 'login', false);
+            return $this->autorization(trim(filter_input(INPUT_POST, 'user_login')), trim(filter_input(INPUT_POST, 'user_pass')), strpos(filter_input(INPUT_POST, 'user_login'), '@') ? 'mail' : 'login', false, false, trim(filter_input(INPUT_POST, 'ref')));
         }
-        if (filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash') && filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id')) {
-            return $this->cuntinueSession(filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_session_hash'), filter_input(INPUT_COOKIE, $this->cookiePrefix . '_user_id'));
+        if (!empty($_COOKIE[$this->cookiePrefix . '_user_session_hash']) && is_string($_COOKIE[$this->cookiePrefix . '_user_session_hash']) && !empty($_COOKIE[$this->cookiePrefix . '_user_id']) && is_string($_COOKIE[$this->cookiePrefix . '_user_id'])) {
+            return $this->cuntinueSession($_COOKIE[$this->cookiePrefix . '_user_session_hash'], $_COOKIE[$this->cookiePrefix . '_user_id']);
         }
     }
 
     public function logOut($redirect = true) {
         if (!empty($_COOKIE[$this->cookiePrefix . "_user_session_hash"]) && !empty($_COOKIE[$this->cookiePrefix . "_user_id"])) {
             $session = Users\Session::get([
-                        ['user_id', $_COOKIE[$this->cookiePrefix . "_user_id"]],
-                        ['hash', $_COOKIE[$this->cookiePrefix . "_user_session_hash"]]
+                ['user_id', $_COOKIE[$this->cookiePrefix . "_user_id"]],
+                ['hash', $_COOKIE[$this->cookiePrefix . "_user_session_hash"]]
             ]);
             if ($session) {
                 $session->delete();
@@ -62,9 +62,12 @@ class Users extends Module {
 
     public function cuntinueSession($hash, $userId) {
         $session = Users\Session::get([
-                    ['user_id', $userId],
-                    ['hash', $hash]
+            ['user_id', $userId],
+            ['hash', $hash]
         ]);
+        if ($session->user->id != $userId) {
+            Tools::redirect('/', 'Произошла непредвиденная ошибка при авторизации сессии');
+        }
         if ($session && $session->user && $session->user->blocked) {
             if (!headers_sent()) {
                 setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
@@ -137,7 +140,7 @@ class Users extends Module {
         }
     }
 
-    public function autorization($login, $pass, $ltype = 'login', $noMsg = true, $skipErrorCheck = false) {
+    public function autorization($login, $pass, $ltype = 'login', $noMsg = true, $skipErrorCheck = false, $redirect = '') {
         $user = $this->get($login, $ltype);
         if ($user && !$skipErrorCheck) {
             $lastSuccessLogin = \Users\User\LoginHistory::lastSuccessLogin($user->id);
@@ -172,9 +175,13 @@ class Users extends Module {
             Users\User::$cur = $user;
             Users\User::$cur->date_last_active = 'CURRENT_TIMESTAMP';
             Users\User::$cur->save();
-            if (!$noMsg && !empty($this->config['loginUrl'][$this->app->type])) {
-                Tools::redirect($this->config['loginUrl'][$this->app->type]);
+            if (!$noMsg) {
+                if (!empty($this->config['loginUrl'][$this->app->type]) && !$redirect) {
+                    $redirect = $this->config['loginUrl'][$this->app->type];
+                }
+                Tools::redirect($redirect);
             }
+
             return true;
         }
         if (!$noMsg) {
@@ -200,7 +207,7 @@ class Users extends Module {
         $session = $this->createSession($user);
         if (!headers_sent()) {
             setcookie($this->cookiePrefix . "_user_session_hash", $session->hash, time() + 360000, "/");
-            setcookie($this->cookiePrefix . "_user_id", $session->user_id, time() + 360000, "/");
+            setcookie($this->cookiePrefix . "_user_id", $user->id, time() + 360000, "/");
         } else {
             Msg::add('Не удалось провести авторизацию. Попробуйте позже', 'info');
         }
@@ -225,8 +232,8 @@ class Users extends Module {
      * Return user
      *
      * @param integer|string $idn
-     * @param type $ltype
-     * @return boolean|\User\User
+     * @param string $ltype
+     * @return boolean|\Users\User
      */
     public function get($idn, $ltype = 'id') {
         if (!$idn)
