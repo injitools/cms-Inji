@@ -1529,14 +1529,16 @@ class Model {
         $values = [];
 
         foreach ($this->cols() as $col => $param) {
-            if (in_array($col, array_keys($this->_params))) {
+            if (in_array($col, array_keys($this->_params)) && (!$this->pk() || ($this->pk() && in_array($col, array_keys($this->_changedParams))))) {
                 $values[$col] = $this->_params[$col];
             }
         }
-        foreach ($class::$cols as $colName => $params) {
-            $class::fixPrefix($colName);
-            if (isset($params['default']) && !isset($values[$colName])) {
-                $this->_params[$colName] = $values[$colName] = $params['default'];
+        if (!$this->pk()) {
+            foreach ($class::$cols as $colName => $params) {
+                $class::fixPrefix($colName);
+                if (isset($params['default']) && !isset($values[$colName])) {
+                    $this->_params[$colName] = $values[$colName] = $params['default'];
+                }
             }
         }
 
@@ -1555,6 +1557,7 @@ class Model {
             }
         } else {
             $new = true;
+            //print_r($this->_params);
             $this->_params[$this->index()] = App::$cur->db->insert($this->table(), $values);
         }
         $this->logChanges($new);
