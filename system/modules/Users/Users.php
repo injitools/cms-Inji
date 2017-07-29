@@ -65,6 +65,13 @@ class Users extends Module {
             ['user_id', $userId],
             ['hash', $hash]
         ]);
+        if(!$session){
+            if (!headers_sent()) {
+                setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
+                setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
+            }
+            Tools::redirect('/', 'Произошла непредвиденная ошибка при авторизации сессии');
+        }
         if ($session->user->id != $userId) {
             Tools::redirect('/', 'Произошла непредвиденная ошибка при авторизации сессии');
         }
