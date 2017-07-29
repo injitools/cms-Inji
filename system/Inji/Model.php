@@ -220,8 +220,8 @@ class Model {
                 $file = Files\File::get($item->$colName);
                 if ($file) {
                     $photoId = Tools::randomString();
-                    $value = '<a href = "' . $file->path . '" id="' . $photoId . '"><img src="' . $file->path . '?resize=60x120" /></a>';
-                    $value .= '<script>inji.onLoad(function(){$("#' . $photoId . '").fancybox();});</script>';
+                    $value = '<a href = "' . $file->path . '" id="' . $photoId . '" rel="fgall[allimg]"><img src="' . $file->path . '?resize=60x120" /></a>';
+                    $value .= '<script>inji.onLoad(function(){$("[rel]").fancybox();});</script>';
                 } else {
                     $value = '<img src="/static/system/images/no-image.png?resize=60x120" />';
                 }
