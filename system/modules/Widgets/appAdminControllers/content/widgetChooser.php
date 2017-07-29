@@ -13,7 +13,7 @@
     function genCode() {
       if ($('#widgetChooser')) {
         var code = '{WIDGET:' + ($('#widgetChooser option:selected').data('filename'));
-        $.each($('#params' + $('#widgetChooser').val() + ' .form-control'), function () {
+        $.each($('#params_' + $('#widgetChooser').val() + ' .form-control'), function () {
           code += ':' + encodeURIComponent($(this).val());
         })
         code += '}';
@@ -31,7 +31,7 @@
     <?php
     foreach ($widgets as $code => $options) {
         $name = is_string($options) ? $options : $options['name'];
-        echo "<option value = '{$code}' data-filename='{$code}'>{$name}</option>";
+        echo "<option value = '" . str_replace('\\', '-', $code) . "' data-filename='{$code}'>{$name}</option>";
     }
     ?>
 </select>
@@ -49,8 +49,8 @@ foreach ($widgets as $code => $options) {
                     echo "<div class = 'form-group'>
                         <label>{$param['name']}</label>
                         <select name = 'params[" . str_replace('\\', '-', $code) . "][]' class = 'form-control' >";
-                    foreach ($param['model']::get_list() as $item) {
-                        echo "<option value = '{$item->pk()}'>{$item->$param['showCol']}</option>";
+                    foreach ($param['model']::getList() as $item) {
+                        echo "<option value = '{$item->pk()}'>{$item->name()}</option>";
                     }
                     echo "</select>
                         </div>";
