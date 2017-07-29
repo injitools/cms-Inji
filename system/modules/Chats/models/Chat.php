@@ -16,10 +16,11 @@ class Chat extends \Model {
     public static $cols = [
         'name' => ['type' => 'text'],
         'code' => ['type' => 'text'],
+        'message' => ['type' => 'dataManager','relation'=>'messages'],
     ];
     public static $dataManagers = [
         'manager' => [
-            'cols' => ['name', 'code']
+            'cols' => ['name', 'code','message']
         ]
     ];
     public static $forms = [

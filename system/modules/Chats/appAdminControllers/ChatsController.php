@@ -16,6 +16,6 @@
  *
  * @author inji
  */
-class ChatController extends adminController {
+class ChatsController extends adminController {
     //put your code here
 }

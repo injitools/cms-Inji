@@ -20,9 +20,14 @@ class Message extends \Model {
         'chat_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'chat'],
         'delete' => ['type' => 'bool']
     ];
+    public static $dataManagers = [
+        'manager' => [
+            'cols' => ['user_id', 'text', 'parent_id', 'chat_id', 'delete']
+        ]
+    ];
 
     public static function relations() {
-        return[
+        return [
             'user' => [
                 'model' => 'Users\User',
                 'col' => 'user_id'
