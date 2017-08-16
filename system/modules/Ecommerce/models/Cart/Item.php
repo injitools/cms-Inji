@@ -10,7 +10,21 @@
  */
 
 namespace Ecommerce\Cart;
-
+/**
+ * Class Cart
+ *
+ * @property int $cart_id
+ * @property number $count
+ * @property int $item_offer_price_id
+ * @property int $item_id
+ * @property number $final_price
+ * @property number $discount
+ * @property string $date_create
+ *
+ * @property \Ecommerce\Item $item
+ * @property \Ecommerce\Item\Offer\Price $price
+ * @property \Ecommerce\Cart $cart
+ */
 class Item extends \Model {
 
     public function beforeSave() {

@@ -10,7 +10,37 @@
  */
 
 namespace Ecommerce;
-
+/**
+ * Class Cart
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $cart_status_id
+ * @property int $delivery_id
+ * @property int $paytype_id
+ * @property int $card_item_id
+ * @property bool $warehouse_block
+ * @property bool $payed
+ * @property string $comment
+ * @property bool $exported
+ * @property string $complete_data
+ * @property string $date_status
+ * @property string $date_last_activ
+ * @property string $date_create
+ *
+ * @property \Users\User $user
+ * @property \Ecommerce\Cart\Item[] $cartItems
+ * @property \Ecommerce\Cart\Event[] $events
+ * @property \Ecommerce\Cart\Status $status
+ * @property \Ecommerce\Delivery $delivery
+ * @property \Ecommerce\PayType $payType
+ * @property \Ecommerce\Cart\Info[] $infos
+ * @property \Ecommerce\Cart\DeliveryInfo[] $deliveryInfos
+ * @property \Ecommerce\Cart\Extra[] $extras
+ * @property \Ecommerce\Card\Item $card
+ * @property \Money\Pay[] $pays
+ * @property \Ecommerce\Cart\Discount[] $discounts
+ */
 class Cart extends \Model {
 
     public static $objectName = 'Корзины';
@@ -299,7 +329,7 @@ class Cart extends \Model {
 
     public function needDelivery() {
         foreach ($this->cartItems as $cartItem) {
-            if ($cartItem->item->type && $cartItem->item->type->delivery) {
+            if ((!$cartItem->item->type && !empty(\App::$cur->ecommerce->config['defaultNeedDelivery'])) || ($cartItem->item->type && $cartItem->item->type->delivery)) {
                 return true;
             }
         }
@@ -324,14 +354,19 @@ class Cart extends \Model {
                     $sum->sums = [$this->delivery->currency_id => $this->delivery->price];
                 }
             } else {
-                $sum->sums = [$this->delivery->currency_id => $this->delivery->price];
+                if (!$this->delivery->provider) {
+                    $sum->sums = [$this->delivery->currency_id => $this->delivery->price];
+                } else {
+                    $className = 'Ecommerce\DeliveryProvider\\' . $this->delivery->provider->object;
+                    $sum = $className::calcPrice($this);
+                }
             }
         }
         return $sum;
     }
 
     public function hasDiscount() {
-        return (bool) $this->card || $this->discounts;
+        return (bool)$this->card || $this->discounts;
     }
 
     public function discountSum() {
@@ -362,7 +397,7 @@ class Cart extends \Model {
     }
 
     public function addItem($offer_price_id, $count = 1, $final_price = 0) {
-        $price = Item\Offer\Price::get((int) $offer_price_id);
+        $price = Item\Offer\Price::get((int)$offer_price_id);
 
         if (!$price) {
             return false;

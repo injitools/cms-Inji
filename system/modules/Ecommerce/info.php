@@ -2,6 +2,9 @@
 
 return array(
     'name' => 'Онлайн-магазин',
+    'migrations' => [
+        'cdekCities' => 'cdekCities'
+    ],
     'menu' => [
         'appAdmin' => [
             [

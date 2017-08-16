@@ -10,7 +10,22 @@
  */
 
 namespace Ecommerce\Item;
-
+/**
+ * Class Cart
+ *
+ * @property int $id
+ * @property int $item_id
+ * @property string $name
+ * @property string $article
+ * @property int $weight
+ * @property string $date_create
+ *
+ * @property-read \Ecommerce\Item\Offer\Warehouse[] $warehouses
+ * @property-read \Ecommerce\Item\Offer\Price[] $prices
+ * @property-read \Ecommerce\Item\Offer\Bonus[] $bonuses
+ * @property-read \Ecommerce\Item\Offer\Param[] $options
+ * @property-read \Ecommerce\Item[] $item
+ */
 class Offer extends \Model {
 
     public static $objectName = 'Торговое предложение';

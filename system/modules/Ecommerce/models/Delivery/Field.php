@@ -18,6 +18,8 @@ class Field extends \Model {
         //Основные параметры
         'name' => ['type' => 'text'],
         'type' => ['type' => 'text'],
+        'code' => ['type' => 'text'],
+        'options' => ['type' => 'textarea'],
         'userfield' => ['type' => 'text'],
         'required' => ['type' => 'bool'],
         'save' => ['type' => 'bool'],
@@ -28,6 +30,7 @@ class Field extends \Model {
     public static $labels = [
         'name' => 'Название',
         'type' => 'Тип',
+        'options' => 'Опции поля',
         'userfield' => 'Связь с данными пользователя',
         'required' => 'Обязательно',
         'save' => 'Сохраняется',
@@ -36,7 +39,7 @@ class Field extends \Model {
     public static $dataManagers = [
         'manager' => [
             'cols' => [
-                'name', 'type', 'userfield', 'required', 'fieldItem', 'save'
+                'name','code', 'type', 'userfield', 'required', 'fieldItem', 'save'
             ],
         ]
     ];
@@ -44,9 +47,13 @@ class Field extends \Model {
         'manager' => [
             'map' => [
                 ['name', 'type'],
-                ['required', 'save'],
-                ['userfield']
+                ['code', 'required', 'save'],
+                ['userfield'],
+                ['options']
             ]
+        ],
+        'public'=>[
+            'map'=>[]
         ]
     ];
 

@@ -29,6 +29,7 @@ class EcommerceController extends adminController {
             $config['show_zero_price'] = empty($_POST['config']['show_zero_price']) ? false : true;
             $config['show_without_price'] = empty($_POST['config']['show_without_price']) ? false : true;
             $config['filtersInLast'] = empty($_POST['config']['filtersInLast']) ? false : true;
+            $config['defaultNeedDelivery'] = empty($_POST['config']['defaultNeedDelivery']) ? false : true;
             Config::save('module', $config, 'Ecommerce');
             Tools::redirect('/admin/ecommerce/configure', 'Настройки были изменены', 'success');
         }
@@ -47,6 +48,7 @@ class EcommerceController extends adminController {
             'Ecommerce\UserAdds\Field',
             'Ecommerce\Cart\Status',
             'Ecommerce\Delivery\Field',
+            'Ecommerce\Delivery\Provider',
         ];
         $this->view->setTitle('Настройки магазина');
         $this->view->page(['data' => compact('managers')]);

@@ -10,7 +10,18 @@
  */
 
 namespace Ecommerce\Item\Offer;
-
+/**
+ * Class Delivery
+ *
+ * @property int $id
+ * @property int $warehouse_id
+ * @property int $item_offer_id
+ * @property number $count
+ * @property string $date_create
+ *
+ * @property-read \Ecommerce\Warehouse $warehouse
+ * @property-read \Ecommerce\Item\Offer $offer
+ */
 class Warehouse extends \Model {
 
     public static $objectName = 'Товар на складе';

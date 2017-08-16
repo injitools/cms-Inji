@@ -432,4 +432,12 @@ class Ecommerce extends Module {
         }
         return ['name' => 'Онлайн магазин', 'count' => $count, 'result' => $searchResult, 'detailSearch' => '/ecommerce/itemList?search=' . $search];
     }
+
+    public function priceTypes() {
+        $payTypes = ['custom' => 'Настраиваемая стоимость'];
+        foreach ($this->getObjects('Ecommerce\\DeliveryHelper') as $className) {
+            $payTypes[$className] = $className::$name;
+        }
+        return $payTypes;
+    }
 }

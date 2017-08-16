@@ -10,13 +10,34 @@
  */
 
 namespace Ecommerce;
-
+/**
+ * Class Delivery
+ *
+ * @property int $id
+ * @property int $delivery_provider_id
+ * @property string $name
+ * @property string $price_type
+ * @property number $price
+ * @property int $currency_id
+ * @property string $price_text
+ * @property number $max_cart_price
+ * @property int $icon_file_id
+ * @property string $info
+ * @property bool $disabled
+ * @property number $weight
+ * @property string $date_create
+ * @property \Files\File $icon
+ * @property \Money\Currency $currency
+ * @property \Ecommerce\Delivery\Field[] $fields
+ * @property \Ecommerce\Delivery\Price[] $prices
+ */
 class Delivery extends \Model {
 
     public static $objectName = 'Доставка';
     public static $cols = [
         //Основные параметры
         'name' => ['type' => 'text'],
+        'delivery_provider_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'provider'],
         'price' => ['type' => 'decimal'],
         'currency_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'currency'],
         'price_text' => ['type' => 'textarea'],
@@ -33,6 +54,7 @@ class Delivery extends \Model {
     ];
     public static $labels = [
         'name' => 'Название',
+        'price_type' => 'Тип расчета стоимости',
         'price' => 'Стоимость',
         'price_text' => 'Текстовое описание стоимости (отображается вместо цены)',
         'max_cart_price' => 'Басплатно при',
@@ -48,6 +70,7 @@ class Delivery extends \Model {
             'name' => 'Варианты доставки',
             'cols' => [
                 'name',
+                'delivery_provider_id',
                 'price',
                 'currency_id',
                 'max_cart_price',
@@ -61,15 +84,15 @@ class Delivery extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name', 'disabled'],
-                ['max_cart_price', 'icon_file_id'],
+                ['name','delivery_provider_id', 'disabled'],
                 ['price', 'currency_id'],
+                ['max_cart_price', 'icon_file_id'],
                 ['price_text'],
                 ['info'],
                 ['priceChanger'],
                 ['field']
             ]
-    ]];
+        ]];
 
     public static function relations() {
         return [
@@ -90,6 +113,10 @@ class Delivery extends \Model {
                 'type' => 'many',
                 'model' => 'Ecommerce\Delivery\Price',
                 'col' => 'delivery_id'
+            ],
+            'provider' => [
+                'model' => 'Ecommerce\Delivery\Provider',
+                'col' => 'delivery_provider_id'
             ]
         ];
     }

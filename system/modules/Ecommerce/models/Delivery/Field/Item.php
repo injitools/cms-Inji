@@ -18,22 +18,24 @@ class Item extends \Model {
         //Основные параметры
         'delivery_field_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'field'],
         'value' => ['type' => 'text'],
+        'data' => ['type' => 'textarea'],
         //Системные
         'weight' => ['type' => 'number'],
         'date_create' => ['type' => 'dateTime']
     ];
     public static $labels = [
-        'value' => 'Значение'
+        'value' => 'Значение',
+        'data' => 'Дополнительные данные',
     ];
     public static $dataManagers = [
         'manager' => [
-            'cols' => ['value', 'date_create']
+            'cols' => ['value', 'data', 'date_create']
         ]
     ];
     public static $forms = [
         'manager' => [
             'map' => [
-                ['delivery_field_id', 'value']
+                ['delivery_field_id', 'value', 'data']
             ]
         ]
     ];

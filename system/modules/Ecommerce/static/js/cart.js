@@ -32,8 +32,7 @@ inji.Ecommerce = {
         dataType: 'html',
         processData: false,
         success: function (data) {
-          var html = $('<div>' + data.replace(/\n/g, " ") + '</div>');
-          $('.ecommerce .cart-order_page').html(html.find('.ecommerce .cart-order_page'));
+          $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
         }
       });
     }
@@ -49,8 +48,7 @@ inji.Ecommerce = {
         dataType: 'html',
         processData: false,
         success: function (data) {
-          var html = $('<div>' + data.replace(/\n/g, " ") + '</div>');
-          $('.ecommerce .cart-order_page').html(html.find('.ecommerce .cart-order_page'));
+          $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
         }
       });
     }

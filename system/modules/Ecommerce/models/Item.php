@@ -10,7 +10,39 @@
  */
 
 namespace Ecommerce;
-
+/**
+ * Class Cart
+ *
+ * @property int $id
+ * @property int $category_id
+ * @property int $image_file_id
+ * @property string $name
+ * @property string $alias
+ * @property string $description
+ * @property int $item_type_id
+ * @property bool $best
+ * @property int $item_badge_id
+ * @property bool $deleted
+ * @property int $user_id
+ * @property int $weight
+ * @property int $sales
+ * @property string $imported
+ * @property string $tree_path
+ * @property string $search_index
+ * @property string $date_create
+ * @property string $widget
+ * @property string $view
+ *
+ * @property-read \Ecommerce\Item\Badge $badge
+ * @property-read \Ecommerce\Category $category
+ * @property-read \Ecommerce\Item\Param[] $options
+ * @property-read \Ecommerce\Item\Offer[] $offers
+ * @method  \Ecommerce\Item\Offer[] offers()
+ * @property-read \Ecommerce\Item\Type $type
+ * @property-read \Files\File $image
+ * @property-read \Ecommerce\Item\Image[] $images
+ * @property-read \Users\User $user
+ */
 class Item extends \Model {
 
     public static $categoryModel = 'Ecommerce\Category';
