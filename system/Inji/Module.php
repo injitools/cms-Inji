@@ -319,6 +319,40 @@ class Module {
     }
 
     /**
+     * Return module objects
+     *
+     * @return array
+     */
+    public function getObjects($filterNamespace = '') {
+        $moduleName = $this->moduleName;
+        $modulePaths = Module::getModulePaths($moduleName);
+        $modulePaths = array_reverse($modulePaths);
+        $scanFn = function ($path, $namespace, &$files = []) use (&$scanFn, $filterNamespace) {
+            if (file_exists($path)) {
+                foreach (scandir($path) as $item) {
+                    if (in_array($item, ['..', '.'])) {
+                        continue;
+                    }
+                    $filename = pathinfo($item)['filename'];
+                    if (is_dir($path . '/' . $item)) {
+                        $scanFn($path . '/' . $item, $namespace . '\\' . $filename, $files);
+                    } else {
+                        if (!$filterNamespace || strpos($namespace, $filterNamespace) === 0) {
+                            $files[$path . '/' . $item] = $namespace . '\\' . $filename;
+                        }
+                    }
+                }
+            }
+            return $files;
+        };
+        $files = [];
+        foreach ($modulePaths as $path) {
+            $scanFn($path . '/objects', 'Ecommerce', $files);
+        }
+        return $files;
+    }
+
+    /**
      * Return extensions for type
      *
      * @param string $extensionType
