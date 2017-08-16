@@ -68,4 +68,14 @@ class UiController extends Controller {
         }
     }
 
+    public function autocompleteAction() {
+        $snippets = $this->module->getSnippets('autocomplete');
+        if (!is_string($_GET['snippet']) || !isset($snippets[$_GET['snippet']])) {
+            exit();
+        }
+        $snippet = $snippets[$_GET['snippet']];
+        $result = new \Server\Result();
+        $result->content = $snippet['find']($_GET['search'], $_GET['snippetParams']);
+        $result->send();
+    }
 }
