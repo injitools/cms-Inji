@@ -8,7 +8,12 @@ if (!empty($sliderId)) {
 if (!empty($alias)) {
     $slider = Sliders\Slider::get($alias, 'alias');
 }
+if(empty($slider)){
+    echo 'Slider not found';
+    return;
+}
 $slides = $slider->slides(['order' => ['weight', 'ASC']]);
+
 ?>
 <div id="sliderWidget-<?= $slider->id; ?>" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
