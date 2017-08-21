@@ -11,7 +11,7 @@
 
 namespace Ecommerce\Item;
 /**
- * Class Cart
+ * Class Offer
  *
  * @property int $id
  * @property int $item_id
@@ -22,6 +22,7 @@ namespace Ecommerce\Item;
  *
  * @property-read \Ecommerce\Item\Offer\Warehouse[] $warehouses
  * @property-read \Ecommerce\Item\Offer\Price[] $prices
+ * @method \Ecommerce\Item\Offer\Price[] prices($options)
  * @property-read \Ecommerce\Item\Offer\Bonus[] $bonuses
  * @property-read \Ecommerce\Item\Offer\Param[] $options
  * @property-read \Ecommerce\Item[] $item
@@ -101,12 +102,12 @@ class Offer extends \Model {
     public function changeWarehouse($count) {
         $warehouse = Offer\Warehouse::get([['count', '0', '>'], ['item_offer_id', $this->id]]);
         if ($warehouse) {
-            $warehouse->count += (float) $count;
+            $warehouse->count += (float)$count;
             $warehouse->save();
         } else {
             $warehouse = Offer\Warehouse::get([['item_offer_id', $this->id]]);
             if ($warehouse) {
-                $warehouse->count += (float) $count;
+                $warehouse->count += (float)$count;
                 $warehouse->save();
             }
         }
@@ -132,7 +133,7 @@ class Offer extends \Model {
         \App::$cur->db->cols = 'COALESCE(sum(' . \Ecommerce\Warehouse\Block::colPrefix() . 'count) ,0) as `sum` ';
         \App::$cur->db->where(\Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Item\Offer::index(), $this->id);
         if ($cart_id) {
-            \App::$cur->db->where(\Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Cart::index(), (int) $cart_id, '!=');
+            \App::$cur->db->where(\Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Cart::index(), (int)$cart_id, '!=');
         }
         $on = '
             ' . \Ecommerce\Cart::index() . ' = ' . \Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Cart::index() . ' AND (
@@ -143,7 +144,7 @@ class Offer extends \Model {
         \App::$cur->db->join(\Ecommerce\Cart::table(), $on, 'inner');
 
         $blocked = \App::$cur->db->select(\Ecommerce\Warehouse\Block::table())->fetch();
-        return (float) $warehouse['sum'] - (float) $blocked['sum'];
+        return (float)$warehouse['sum'] - (float)$blocked['sum'];
     }
 
     public function beforeDelete() {

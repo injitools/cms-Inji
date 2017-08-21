@@ -25,6 +25,7 @@
         $form->input('checkbox', 'config[show_without_price]', 'Показывать товары без цен', ['value' => App::$cur->ecommerce->config['show_without_price']]);
         $form->input('checkbox', 'config[filtersInLast]', 'Показывать Фильтры только текущей и дочерних категорий', ['value' => App::$cur->ecommerce->config['filtersInLast']]);
         $form->input('checkbox', 'config[defaultNeedDelivery]', 'По умолчанию для всех товаров доставка осуществляется', ['value' => App::$cur->ecommerce->config['defaultNeedDelivery']]);
+        $form->input('checkbox', 'config[catalogPresentPage]', 'Заглавная страница магазина', ['value' => App::$cur->ecommerce->config['catalogPresentPage']]);
         $form->input('select', 'config[defaultCategoryView]', 'Стандартный вид категории', ['value' => App::$cur->ecommerce->config['defaultCategoryView'], 'values' => App::$cur->ecommerce->viewsCategoryList()]);
         if (App::$cur->money) {
             $form->input('select', 'config[defaultCurrency]', 'Валюта по умолчанию', ['value' => App::$cur->ecommerce->config['defaultCurrency'], 'values' => ['' => 'Выберите'] + \Money\Currency::getList()]);

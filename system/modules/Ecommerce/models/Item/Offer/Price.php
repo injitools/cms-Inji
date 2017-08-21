@@ -10,7 +10,25 @@
  */
 
 namespace Ecommerce\Item\Offer;
-
+/**
+ * Class Price
+ *
+ * @property int $id
+ * @property int $item_offer_id
+ * @property int $item_offer_price_type_id
+ * @property string $name
+ * @property number $price
+ * @property int $currency_id
+ * @property int $weight
+ * @property string $date_create
+ *
+ * @property-read \Ecommerce\Item\Offer $offer
+ * @method \Ecommerce\Item\Offer offer($options)
+ * @property-read \Ecommerce\Item\Offer\Price\Type $type
+ * @method \Ecommerce\Item\Offer\Price\Type type($options)
+ * @property-read \Money\Currency $currency
+ * @method \Money\Currency currency($options)
+ */
 class Price extends \Model {
 
     public static $objectName = 'Цена';
@@ -47,7 +65,7 @@ class Price extends \Model {
                 ['price', 'currency_id'],
                 ['item_offer_price_type_id', 'item_offer_id']
             ]
-    ]];
+        ]];
 
     public static function relations() {
         return [

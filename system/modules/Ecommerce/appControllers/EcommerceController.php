@@ -166,6 +166,10 @@ class ecommerceController extends Controller {
         } else {
             $category_id = 0;
         }
+        if($category){
+            $category->views++;
+            $category->save();
+        }
         $active = $category_id;
         if (!empty($_GET['categorys'])) {
             $categorysList = $_GET['categorys'];

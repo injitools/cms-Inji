@@ -37,7 +37,7 @@ namespace Ecommerce;
  * @property-read \Ecommerce\Category $category
  * @property-read \Ecommerce\Item\Param[] $options
  * @property-read \Ecommerce\Item\Offer[] $offers
- * @method  \Ecommerce\Item\Offer[] offers()
+ * @method  \Ecommerce\Item\Offer[] offers($options)
  * @property-read \Ecommerce\Item\Type $type
  * @property-read \Files\File $image
  * @property-read \Ecommerce\Item\Image[] $images

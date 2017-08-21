@@ -24,9 +24,11 @@ class Category extends \Model {
         'template' => ['type' => 'select', 'source' => 'method', 'method' => 'templatesCategoryList', 'module' => 'Ecommerce'],
         'description' => ['type' => 'html'],
         'image_file_id' => ['type' => 'image'],
+        'icon_file_id' => ['type' => 'image'],
         'options_inherit' => ['type' => 'bool'],
         'hidden' => ['type' => 'bool'],
         //Системные
+        'views' => ['type' => 'number'],
         'imported' => ['type' => 'bool'],
         'weight' => ['type' => 'number'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -49,7 +51,7 @@ class Category extends \Model {
         'manager' => [
             'map' => [
                 ['name', 'alias'],
-                ['parent_id', 'image_file_id'],
+                ['parent_id', 'icon_file_id', 'image_file_id'],
                 ['viewer', 'template'],
                 ['options_inherit', 'hidden'],
                 ['options'],
@@ -94,6 +96,10 @@ class Category extends \Model {
             'image' => [
                 'model' => 'Files\File',
                 'col' => 'image_file_id'
+            ],
+            'icon' => [
+                'model' => 'Files\File',
+                'col' => 'icon_file_id'
             ],
             'user' => [
                 'model' => 'Users\User',

@@ -16,5 +16,8 @@ return [
     'show_without_price' => false,
     'default_limit' => 18,
     'list_all' => false,
-    'isset_sort' => false
+    'isset_sort' => false,
+    'filtersInLast'=>false,
+    'defaultNeedDelivery'=>false,
+
 ];
