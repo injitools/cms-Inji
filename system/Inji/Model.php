@@ -1748,17 +1748,11 @@ class Model {
                     }
                     $fixedCol = $relation['model']::index();
                     $relation['relModel']::fixPrefix($fixedCol);
-                    $ids = array_keys($relation['relModel']::getList(['where' => [$this->index(), $this->pk()], 'array' => true, 'key' => $fixedCol]));
-                    if (empty($ids)) {
-                        if (empty($params['count'])) {
-                            return [];
-                        } else {
-                            return 0;
-                        }
-                    }
+                    $join = [$relation['relModel']::table(), $relation['relModel']::colPrefix() . $this->index() . ' = ' . $this->pk() . ' and ' . $relation['relModel']::colPrefix() . $relation['model']::index() . ' = ' . $relation['model']::index(), 'INNER'];
                     $getType = 'getList';
                     $options = [
-                        'where' => [$relation['model']::index(), implode(',', $ids), 'IN'],
+                        'join' => [$join],
+                        'where' => (isset($params['where'])) ? $params['where'] : ((isset($relation['where'])) ? $relation['where'] : null),
                         'array' => (!empty($params['array'])) ? true : false,
                         'key' => (isset($params['key'])) ? $params['key'] : ((isset($relation['resultKey'])) ? $relation['resultKey'] : null),
                         'start' => (isset($params['start'])) ? $params['start'] : ((isset($relation['start'])) ? $relation['start'] : null),
