@@ -9,11 +9,11 @@ foreach ($options['values'] as $key => $value) {
     $primaryValue = isset($options['value']) ? $options['value'] : null;
     $primaryValue = is_array($primaryValue) && isset($primaryValue['primary']) ? $primaryValue['primary'] : $primaryValue;
     if (is_numeric($key) && !is_array($primaryValue) && $primaryValue !== '') {
-        $primaryValue = (int) $primaryValue;
+        $primaryValue = (int)$primaryValue;
     }
     if (
-            (!is_array($primaryValue) && ($key === $primaryValue || (isset($form->userDataTree[$name]) && $form->userDataTree[$name] === $key))) ||
-            (is_array($primaryValue) && (in_array($key, $primaryValue) || (isset($form->userDataTree[$name]) && in_array($key, $form->userDataTree[$name]))))
+        (!is_array($primaryValue) && ($key === $primaryValue || (isset($form->userDataTree[$name]) && $form->userDataTree[$name] === $key))) ||
+        (is_array($primaryValue) && (in_array($key, $primaryValue) || (isset($form->userDataTree[$name]) && in_array($key, $form->userDataTree[$name]))))
     ) {
         $selected = ' selected="selected"';
     }
@@ -37,10 +37,30 @@ if ($label !== false && !empty($options['createBtn'])) {
 }
 ?>
 <?= $label !== false ? "</label>" : ''; ?>
-<select <?= !empty($options['multiple']) ? 'multiple ' : ''; ?><?= ($showedInput !== false) ? 'data-aditionalEnabled="1"' : ''; ?> <?= !empty($options['disabled']) ? 'disabled="disabled"' : ''; ?> onchange="inji.Ui.forms.checkAditionals(this);" class="form-control <?= !empty($options['class']) ? $options['class'] : ''; ?>" name = '<?= $name; ?>'>
-    <?= $optionsHtml; ?>
-</select>
 <?php
+$attributes = [
+    'name' => $name,
+    'class' => 'form-control',
+];
+if (!empty($options['multiple'])) {
+    $attributes['multiple'] = 'multiple';
+}
+if ($showedInput !== false) {
+    $attributes['data-aditionalEnabled'] = 1;
+}
+if (!empty($options['disabled'])) {
+    $attributes['disabled'] = 'disabled';
+}
+if (!empty($options['class'])) {
+    $attributes['class'] .= ' ' . $options['class'];
+}
+if (!empty($options['attributes'])) {
+    $attributes = array_merge($attributes, $options['attributes']);
+}
+if (!empty($attributes['onchange'])) {
+    $attributes['onchange'] .= ';inji.Ui.forms.checkAditionals(this);';
+}
+echo Html::el('select', $attributes, $optionsHtml);
 foreach ($aditionalInputs as $key => $input) {
     $input['options']['noContainer'] = true;
 
