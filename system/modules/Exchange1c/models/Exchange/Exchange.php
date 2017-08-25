@@ -29,7 +29,7 @@ class Exchange extends \Model {
         'log' => ['type' => 'dataManager', 'relation' => 'logs'],
         'file' => ['type' => 'dataManager', 'relation' => 'files'],
         'date_create' => ['type' => 'dateTime'],
-        'date_end' => ['type' => 'dateTime'],
+        'date_end' => ['type' => 'dateTime', 'null' => true],
     ];
     public static $dataManagers = [
         'manager' => [
@@ -57,7 +57,7 @@ class Exchange extends \Model {
     ];
 
     public static function relations() {
-        return[
+        return [
             'logs' => [
                 'type' => 'many',
                 'model' => 'Exchange1c\Exchange\Log',
