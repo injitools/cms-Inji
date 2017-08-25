@@ -24,6 +24,7 @@ class Field extends \Model {
         'required' => ['type' => 'bool'],
         'save' => ['type' => 'bool'],
         'fieldItem' => ['type' => 'dataManager', 'relation' => 'fieldItems'],
+        'weight' => ['type' => 'number'],
         //Системные
         'date_create' => ['type' => 'dateTime'],
     ];
@@ -35,11 +36,12 @@ class Field extends \Model {
         'required' => 'Обязательно',
         'save' => 'Сохраняется',
         'fieldItem' => 'Значения для списка',
+        'date_create' => 'Дата создания',
     ];
     public static $dataManagers = [
         'manager' => [
             'cols' => [
-                'name','code', 'type', 'userfield', 'required', 'fieldItem', 'save'
+                'name', 'code', 'type', 'userfield', 'required', 'fieldItem', 'save'
             ],
         ]
     ];
@@ -52,8 +54,8 @@ class Field extends \Model {
                 ['options']
             ]
         ],
-        'public'=>[
-            'map'=>[]
+        'public' => [
+            'map' => []
         ]
     ];
 
@@ -63,6 +65,10 @@ class Field extends \Model {
                 'model' => 'Ecommerce\Delivery\Field\Item',
                 'col' => 'delivery_field_id',
                 'type' => 'many'
+            ],
+            'fieldRel' => [
+                'model' => 'Ecommerce\Delivery\DeliveryFieldLink',
+                'col' => 'delivery_field_id',
             ],
         ];
     }

@@ -15,7 +15,8 @@ class DeliveryFieldLink extends \Model {
 
     public static $labels = [
         'delivery_id' => 'Тип доставки',
-        'delivery_field_id' => 'Поле доставки'
+        'delivery_field_id' => 'Поле доставки',
+        'date_create' => 'Дата создания'
     ];
     public static $cols = [
         'delivery_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'delivery'],
@@ -27,6 +28,7 @@ class DeliveryFieldLink extends \Model {
         'manager' => [
             'name' => 'Поля для доставки',
             'cols' => ['delivery_id', 'delivery_field_id', 'date_create'],
+            'sortMode' => true
         ]
     ];
     public static $forms = [

@@ -25,11 +25,18 @@ class CDEK extends \Ecommerce\DeliveryProvider {
         $fields = [];
         $cityId = 0;
         $senderCity = 44;
+        $tariff = 136;
         foreach ($cart->delivery->fields as $field) {
             if ($field->code === 'city' && !empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
                 $item = Item::get([['id', $_POST['deliveryFields'][$field->id]], ['delivery_field_id', $field->id]]);
                 if ($item) {
                     $cityId = json_decode($item->data, true)['ID'];
+                }
+            }
+            if ($field->code === 'cdektype' && !empty($_POST['deliveryFields'][$field->id]) && is_numeric($_POST['deliveryFields'][$field->id])) {
+                $item = Item::get([['id', $_POST['deliveryFields'][$field->id]], ['delivery_field_id', $field->id]]);
+                if ($item) {
+                    $tariff = $item->data;
                 }
             }
         }
@@ -62,12 +69,12 @@ class CDEK extends \Ecommerce\DeliveryProvider {
             $calc->setSenderCityId($senderCity);
             //устанавливаем город-получатель
             $calc->setReceiverCityId($cityId);
-            $calc->setTariffId('136');
+            $calc->setTariffId($tariff);
             $calc->addGoodsItemBySize(3, 25, 25, 24);
             if ($calc->calculate()) {
                 return new \Money\Sums([$cart->delivery->currency_id => $calc->getResult()['result']['price']]);
             } else {
-                //var_dump($calc->getError());
+                //var_dump($tariff,$calc->getError());
             }
 
         }
