@@ -23,9 +23,14 @@ class OptionsParser extends \Object {
         $selectOptions['join'][] = [Item\Offer::table(), Item::index() . ' = ' . Item\Offer::colPrefix() . Item::index(), 'inner'];
 
         //joined prices, check price configs
-        $selectOptions['join'][] = [Item\Offer\Price::table(),
-            Item\Offer::index() . ' = ' . Item\Offer\Price::colPrefix() . Item\Offer::index() .
-            (empty(\App::$cur->Ecommerce->config['show_zero_price']) ? ' and ' . Item\Offer\Price::colPrefix() . 'price>0' : ''),
+        $comparision = Item\Offer::index() . ' = ' . Item\Offer\Price::colPrefix() . Item\Offer::index();
+        if (empty(\App::$cur->Ecommerce->config['show_zero_price'])) {
+            $comparision .= ' and ' . Item\Offer\Price::colPrefix() . 'price>0';
+        }
+        if (!empty(\App::$cur->Ecommerce->config['available_price_types'])) {
+            $comparision .= ' and ' . Item\Offer\Price::colPrefix() . 'item_offer_price_type_id in (' . implode(',', \App::$cur->Ecommerce->config['available_price_types']) . ')';
+        }
+        $selectOptions['join'][] = [Item\Offer\Price::table(), $comparision,
             empty(\App::$cur->Ecommerce->config['show_without_price']) ? 'inner' : 'left'];
 
         //join item types

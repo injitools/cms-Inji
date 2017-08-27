@@ -9,9 +9,6 @@
                   <?php $this->widget('Ecommerce\items/item-tablerow', ['item' => $item]); ?>
                 </tr>
                 <?php
-                if (!( ++$i % 3)) {
-                    echo '</div><div class="row">';
-                }
             }
             ?>
         </table></div>
