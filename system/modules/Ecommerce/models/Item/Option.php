@@ -10,7 +10,30 @@
  */
 
 namespace Ecommerce\Item;
-
+/**
+ * Class Offer
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $filter_name
+ * @property int $image_file_id
+ * @property string $code
+ * @property string $type
+ * @property string $postfix
+ * @property string $default_val
+ * @property bool $view
+ * @property bool $searchable
+ * @property int $item_option_group_id
+ * @property int $weight
+ * @property int $user_id
+ * @property string $advance
+ * @property string $date_create
+ *
+ * @property-read \Users\User $user
+ * @property-read \Ecommerce\Item\Option\Group $group
+ * @property-read \Ecommerce\Item\Option\Item[] $items
+ * @property-read \Files\File $image
+ */
 class Option extends \Model {
 
     public static $objectName = 'Свойство';
@@ -25,6 +48,7 @@ class Option extends \Model {
         'default_val' => ['type' => 'text'],
         'view' => ['type' => 'bool'],
         'searchable' => ['type' => 'bool'],
+        'item_option_group_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'group'],
         //Системные
         'weight' => ['type' => 'number'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -40,6 +64,7 @@ class Option extends \Model {
         'code' => 'Код',
         'type' => 'Тип',
         'postfix' => 'Постфикс',
+        'item_option_group_id' => 'Группа опций',
         'default_val' => 'Значение по умолчанию',
         'view' => 'Отображается',
         'searchable' => 'Используется при поиске',
@@ -53,7 +78,7 @@ class Option extends \Model {
         'manager' => [
             'name' => 'Свойства товаров',
             'cols' => [
-                'name', 'code', 'type', 'item', 'view', 'searchable', 'user_id', 'date_create'
+                'name','item_option_group_id', 'code', 'type', 'item', 'view', 'searchable', 'user_id', 'date_create'
             ],
             'sortMode' => true
         ]
@@ -64,7 +89,7 @@ class Option extends \Model {
                 ['name', 'filter_name'],
                 ['code', 'type', 'image_file_id'],
                 ['default_val', 'postfix'],
-                ['view', 'searchable'],
+                ['view', 'searchable','item_option_group_id'],
                 ['item']
             ]
         ]
@@ -75,6 +100,10 @@ class Option extends \Model {
             'user' => [
                 'model' => 'Users\User',
                 'col' => 'user_id'
+            ],
+            'group' => [
+                'model' => 'Ecommerce\Item\Option\Group',
+                'col' => 'item_option_group_id'
             ],
             'items' => [
                 'type' => 'many',

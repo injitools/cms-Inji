@@ -151,28 +151,36 @@ class ecommerceController extends Controller {
 
         //category
         $category = null;
+        $categoryClass = 'Ecommerce\Category';
+        if (!empty($this->module->config['catalogReplace'])) {
+            $categoryClass = 'Ecommerce\Catalog';
+        }
         if ($category_id) {
+
             if (is_numeric($category_id)) {
-                $category = \Ecommerce\Category::get($category_id);
+                $category = $categoryClass::get((int)$category_id);
             }
             if (!$category) {
-                $category = \Ecommerce\Category::get($category_id, 'alias');
+                $category = $categoryClass::get((int)$category_id, 'alias');
             }
             if ($category) {
                 $category_id = $category->id;
             } else {
                 $category_id = 0;
             }
+
         } else {
             $category_id = 0;
         }
-        if($category){
+        if ($category) {
             $category->views++;
             $category->save();
         }
         $active = $category_id;
         if (!empty($_GET['categorys'])) {
             $categorysList = $_GET['categorys'];
+        } elseif ($categoryClass === 'Ecommerce\Catalog' && $category) {
+            $categorysList = array_keys($category->categories(['key' => 'category_id']));
         } else {
             $categorysList = $category_id;
         }
@@ -217,8 +225,24 @@ class ecommerceController extends Controller {
             'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
         ]);
 
-        //params 
-        if (empty(App::$cur->ecommerce->config['filtersInLast'])) {
+        //params
+        if (!empty(App::$cur->ecommerce->config['filtersByRel'])) {
+            $categorysList = is_array($categorysList) ? $categorysList : explode(',', $categorysList);
+            $categorysList = array_filter($categorysList);
+            $opts = [];
+            foreach ($categorysList as $categoryId) {
+
+                $cat = \Ecommerce\Category::get($categoryId);
+                $opts = array_merge($opts, array_keys($cat->options(['key' => 'item_option_id'])));
+            }
+            $opts = array_unique($opts);
+            if($opts) {
+                $options = \Ecommerce\Item\Option::getList(['where' => [['item_option_searchable', 1], ['id', $opts, 'IN']], 'order' => ['weight', 'asc']]);
+            }
+            else {
+                $options=[];
+            }
+        } elseif (empty(App::$cur->ecommerce->config['filtersInLast'])) {
             $options = \Ecommerce\Item\Option::getList(['where' => ['item_option_searchable', 1], 'order' => ['weight', 'asc']]);
         } else {
             $params = $this->ecommerce->getItemsParams([

@@ -17,6 +17,7 @@ namespace Ecommerce;
  * @property int $category_id
  * @property int $image_file_id
  * @property string $name
+ * @property string $subtitle
  * @property string $alias
  * @property string $description
  * @property int $item_type_id
@@ -49,6 +50,8 @@ class Item extends \Model {
     public static $objectName = 'Товар';
     public static $labels = [
         'name' => 'Название',
+        'title' => 'Торговое название',
+        'subtitle' => 'Подзаголовок',
         'alias' => 'Алиас',
         'item_badge_id' => 'Наклейка',
         'category_id' => 'Раздел',
@@ -69,6 +72,8 @@ class Item extends \Model {
         'category_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'category'],
         'image_file_id' => ['type' => 'image'],
         'name' => ['type' => 'text'],
+        'title' => ['type' => 'text'],
+        'subtitle' => ['type' => 'text'],
         'alias' => ['type' => 'text'],
         'description' => ['type' => 'html'],
         'item_type_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'type'],
@@ -174,6 +179,7 @@ class Item extends \Model {
         'manager' => [
             'map' => [
                 ['name', 'alias'],
+                ['title', 'subtitle'],
                 ['category_id', 'item_type_id', 'deleted'],
                 ['widget', 'view'],
                 ['best', 'item_badge_id', 'image_file_id'],
@@ -272,14 +278,24 @@ class Item extends \Model {
             if ($this->category) {
                 $this->search_index .= $this->category->name . ' ';
             }
+
             if ($this->options) {
+                $category = $this->category;
+                $categoryOptions = $category->options(['key' => 'item_option_id']);
                 foreach ($this->options as $option) {
                     if ($option->item_option_searchable && $option->value) {
                         if ($option->item_option_type != 'select') {
                             $this->search_index .= $option->value . ' ';
                         } elseif (!empty($option->option->items[$option->value])) {
-                            $option->option->items[$option->value]->value . ' ';
+                            $option->option->items(['where' => ['id', $option->value]])[$option->value]->value . ' ';
                         }
+                    }
+                    if ($option->item_option_view && !isset($categoryOptions[$option->item_option_id])) {
+                        $this->category->addRelation('options', $option->item_option_id);
+                        $categoryOptions = $this->category->options(['key' => 'item_option_id']);
+                    } elseif (!$option->item_option_view && isset($categoryOptions[$option->item_option_id])) {
+                        $categoryOptions[$option->item_option_id]->delete();
+                        unset($categoryOptions[$option->item_option_id]);
                     }
                 }
             }
