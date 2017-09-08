@@ -14,13 +14,13 @@ class UserForms extends \Module {
         \App::$cur->view->customAsset('js', '/static/moduleAsset/UserForms/js/formCatcher.js');
         if (!empty($_POST['UserForms'])) {
             foreach ($_POST['UserForms'] as $form_id => $inputs) {
-                $form = \UserForms\Form::get((int) $form_id);
+                $form = \UserForms\Form::get((int)$form_id);
                 if (!$form) {
-                                    continue;
+                    continue;
                 }
                 $formRecive = new \UserForms\Recive();
-                $formRecive->user_id = (int) \Users\User::$cur->id;
-                $formRecive->form_id = (int) $form_id;
+                $formRecive->user_id = (int)\Users\User::$cur->id;
+                $formRecive->form_id = (int)$form_id;
                 $data = [];
                 $error = false;
                 foreach ($form->inputs as $input) {
@@ -48,7 +48,8 @@ class UserForms extends \Module {
                 }
                 if ($text) {
                     $text = 'Дата получения по серверному времени: ' . date('Y-m-d H:i:s') . '<br />Заполненые поля:<br />' . $text;
-                    Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, App::$cur->config['site']['email'], $form->name, $text);
+                    $from = !empty(\App::$cur->config['site']['domain']) ? \App::$cur->config['site']['domain'] : INJI_DOMAIN_NAME;
+                    Tools::sendMail('noreply@' . $from, App::$cur->config['site']['email'], $form->name, $text);
                 }
             }
             Tools::redirect($_SERVER['REQUEST_URI'], 'Ваша форма была успешно отправлена', 'success');
