@@ -448,7 +448,7 @@ class Model {
             return false;
         }
         $class = get_class($this);
-        if (!$class::$logging) {
+        if (!Model::$logging || !$class::$logging) {
             return false;
         }
         $user_id = class_exists('Users\User') ? \Users\User::$cur->id : 0;
@@ -1135,6 +1135,10 @@ class Model {
                     if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && $options['order'][1] = 'asc') {
                         return 1;
                     } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && $options['order'][1] = 'asc') {
+                        return -1;
+                    } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id > $b->id) {
+                        return 1;
+                    } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id < $b->id) {
                         return -1;
                     }
                     return 0;
