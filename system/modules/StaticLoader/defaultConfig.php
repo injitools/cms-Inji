@@ -50,6 +50,7 @@ return [
         'isp' => 'application/x-internet-signup',
         'jfif' => 'image/pipeg',
         'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
         'js' => 'application/x-javascript',
         'latex' => 'application/x-latex',
         'lsx' => 'video/x-la-asf',

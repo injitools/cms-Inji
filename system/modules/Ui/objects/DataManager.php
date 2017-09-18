@@ -26,7 +26,7 @@ class DataManager extends \Object {
 
     /**
      * Construct new data manager
-     * 
+     *
      * @param string|array $modelNameOrOptions
      * @param string $managerName
      * @throws Exception
@@ -62,7 +62,7 @@ class DataManager extends \Object {
 
     /**
      * Get buttons for manager
-     * 
+     *
      * @param string $params
      * @param object $model
      */
@@ -160,31 +160,35 @@ class DataManager extends \Object {
 
     /**
      * Get cols for manager
-     * 
+     *
      * @return string
      */
     public function getCols() {
-        $actions = $this->getActions();
+        $actions = $this->getActions(true);
         ob_start();
         ?>
         <div class="dropdown">
-            <a id="dLabel" data-target="#" href="" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <a id="dLabel" data-target="#" href="" data-toggle="dropdown" role="button" aria-haspopup="true"
+               aria-expanded="false">
                 <i class="glyphicon glyphicon-cog"></i>
                 <span class="caret"></span>
             </a>
 
             <ul class="dropdown-menu" aria-labelledby="dLabel">
-                <li><a href ='' onclick='inji.Ui.dataManagers.get(this).rowSelection("selectAll");return false;'>Выделить все</a></li>
-                <li><a href ='' onclick='inji.Ui.dataManagers.get(this).rowSelection("unSelectAll");return false;'>Снять все</a></li>
-                <li><a href ='' onclick='inji.Ui.dataManagers.get(this).rowSelection("inverse");return false;'>Инвертировать</a></li>
+                <li><a href='' onclick='inji.Ui.dataManagers.get(this).rowSelection("selectAll");return false;'>Выделить
+                        все</a></li>
+                <li><a href='' onclick='inji.Ui.dataManagers.get(this).rowSelection("unSelectAll");return false;'>Снять
+                        все</a></li>
+                <li><a href='' onclick='inji.Ui.dataManagers.get(this).rowSelection("inverse");return false;'>Инвертировать</a>
+                </li>
                 <li role="separator" class="divider"></li>
-                    <?php
-                    foreach ($actions as $action => $actionParams) {
-                        if (class_exists($actionParams['className']) && $actionParams['className']::$groupAction) {
-                            echo "<li><a role='button' href ='#' onclick='inji.Ui.dataManagers.get(this).groupAction(\"" . str_replace('\\', '\\\\', $action) . "\");return false;'>{$actionParams['className']::$name}</a></li>";
-                        }
+                <?php
+                foreach ($actions as $action => $actionParams) {
+                    if (class_exists($actionParams['className']) && $actionParams['className']::$groupAction) {
+                        echo "<li><a role='button' href ='#' onclick='inji.Ui.dataManagers.get(this).groupAction(\"" . str_replace('\\', '\\\\', $action) . "\");return false;'>{$actionParams['className']::$name}</a></li>";
                     }
-                    ?>
+                }
+                ?>
             </ul>
         </div>
         <?php
@@ -192,7 +196,9 @@ class DataManager extends \Object {
         ob_end_clean();
 
         $cols = [];
-        $cols[] = ['label' => $dropdown];
+        if($actions) {
+            $cols[] = ['label' => $dropdown];
+        }
         $cols['id'] = ['label' => '№', 'sortable' => true];
 
         $modelName = $this->modelName;
@@ -220,10 +226,10 @@ class DataManager extends \Object {
 
     /**
      * Get rows for manager
-     * 
+     *
      * @param array $params
      * @param object $model
-     * @return type
+     * @return array
      */
     public function getRows($params = [], $model = null) {
         $modelName = $this->modelName;
@@ -238,10 +244,10 @@ class DataManager extends \Object {
         $queryParams = [];
         if (empty($params['all'])) {
             if (!empty($params['limit'])) {
-                $this->limit = (int) $params['limit'];
+                $this->limit = (int)$params['limit'];
             }
             if (!empty($params['page'])) {
-                $this->page = (int) $params['page'];
+                $this->page = (int)$params['page'];
             }
             $queryParams['limit'] = $this->limit;
             $queryParams['start'] = $this->page * $this->limit - $this->limit;
@@ -369,13 +375,16 @@ class DataManager extends \Object {
             $items = $modelName::getList($queryParams);
         }
         $rows = [];
+        $actions = $this->getActions(true);
         foreach ($items as $item) {
             if ($relation && !empty($relation['relModel'])) {
                 $item = $relation['relModel']::get([[$item->index(), $item->id], [$model->index(), $model->id]]);
             }
             $row = [];
             if (empty($params['download'])) {
-                $row[] = '<input type ="checkbox" name = "pk[]" value =' . $item->pk() . '>';
+                if ($actions) {
+                    $row[] = '<input type ="checkbox" name = "pk[]" value =' . $item->pk() . '>';
+                }
                 $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '%5C', get_class($this));
                 $row[] = "<a href ='/admin/" . $item->genViewLink() . "?redirectUrl={$redirectUrl}'>{$item->pk()}</a>";
             } else {
@@ -548,10 +557,10 @@ class DataManager extends \Object {
             return [];
         }
         if (!empty($params['limit'])) {
-            $this->limit = (int) $params['limit'];
+            $this->limit = (int)$params['limit'];
         }
         if (!empty($params['page'])) {
-            $this->page = (int) $params['page'];
+            $this->page = (int)$params['page'];
         }
         $queryParams = [
             'count' => true
@@ -665,7 +674,7 @@ class DataManager extends \Object {
         $pages = new Pages([
             'limit' => $this->limit,
             'page' => $this->page,
-                ], [
+        ], [
             'count' => $count,
             'dataManager' => $this
         ]);
@@ -716,7 +725,7 @@ class DataManager extends \Object {
             return [];
         }
         $tree = new Tree();
-        $tree->ul($this->managerOptions['categorys']['model'], 0, function($category) {
+        $tree->ul($this->managerOptions['categorys']['model'], 0, function ($category) {
             $path = $category->tree_path . ($category->pk() ? $category->pk() . "/" : '');
             $cleanClassName = str_replace('\\', '\\\\', get_class($category));
             return "<a href='#' onclick='inji.Ui.dataManagers.get(this).switchCategory(this);return false;' data-index='{$category->index()}' data-path ='{$path}' data-id='{$category->pk()}' data-model='{$this->managerOptions['categorys']['model']}'> {$category->name}</a> 
@@ -730,7 +739,7 @@ class DataManager extends \Object {
 
     /**
      * Draw error message
-     * 
+     *
      * @param string $errorText
      */
     public function drawError($errorText) {
@@ -739,7 +748,7 @@ class DataManager extends \Object {
 
     /**
      * Check access cur user to manager with name in param
-     * 
+     *
      * @return boolean
      */
     public function checkAccess() {

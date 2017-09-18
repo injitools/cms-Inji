@@ -23,6 +23,11 @@ class Catalog extends \Model {
                 'model' => 'Ecommerce\Catalog',
                 'col' => 'parent_id'
             ],
+            'childs'=>[
+                'type'=>'many',
+                'col'=>'parent_id',
+                'model'=>'Ecommerce\Catalog'
+            ],
             'categories'=>[
                 'type'=>'many',
                 'col'=>'catalog_id',

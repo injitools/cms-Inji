@@ -10,7 +10,24 @@
  */
 
 namespace Files;
-
+/**
+ * @property int $id
+ * @property string $code
+ * @property int $type_id
+ * @property int $folder_id
+ * @property string $upload_code
+ * @property string $path
+ * @property string $name
+ * @property string $about
+ * @property string $original_name
+ * @property string $md5
+ * @property string $date_create
+ *
+ * @property-read \Files\Type $type
+ * @method  \Files\Type type($options)
+ * @property-read \Files\Folder $folder
+ * method  \Files\Folder folder($options)
+ */
 class File extends \Model {
 
     public static $cols = [

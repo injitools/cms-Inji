@@ -11,8 +11,6 @@
 
 namespace Ecommerce\Item;
 /**
- * Class Offer
- *
  * @property int $id
  * @property string $name
  * @property string $filter_name

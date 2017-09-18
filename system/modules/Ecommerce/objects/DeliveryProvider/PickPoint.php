@@ -10,7 +10,6 @@
 
 namespace Ecommerce\DeliveryProvider;
 
-use Ecommerce\Delivery\Field\Item;
 use Ecommerce\Delivery\Provider\ConfigItem;
 
 class PickPoint extends \Ecommerce\DeliveryProvider {

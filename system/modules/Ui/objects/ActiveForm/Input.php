@@ -55,7 +55,26 @@ class Input extends \Object {
     }
 
     public function value() {
-        $value = isset($this->colParams['default']) ? $this->colParams['default'] : '';
+        $value = '';
+        if (isset($this->colParams['default'])) {
+            if (is_array($this->colParams['default'])) {
+                switch ($this->colParams['default']['type']) {
+                    case 'relPath':
+                        $val = $this->activeForm->model;
+                        foreach (explode(':', $this->colParams['default']['relPath']) as $path) {
+                            if ($val->$path) {
+                                $val = $val->$path;
+                            } else {
+                                break 2;
+                            }
+                            $value = $val;
+                        }
+                        break;
+                }
+            } else {
+                $value = $this->colParams['default'];
+            }
+        }
         if ($this->activeForm) {
             $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
             $value = ($this->activeForm && $this->activeForm->model && isset($this->activeForm->model->{$colName})) ? $this->activeForm->model->{$colName} : $value;

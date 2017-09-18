@@ -10,7 +10,18 @@
  */
 
 namespace Ecommerce\Item\Offer;
-
+/**
+ * @property int $id
+ * @property int $item_offer_option_id
+ * @property int $item_offer_id
+ * @property string $value
+ * @property string $date_create
+ *
+ * @property-read \Ecommerce\Item\Offer\Option $option
+ * @property-read \Ecommerce\Item\Offer\Option\Item $optionItem
+ * @property-read \Ecommerce\Item\Offer $offer
+ * @property-read \Files\File $file
+ */
 class Param extends \Model {
 
     public static $objectName = 'Параметр товара';

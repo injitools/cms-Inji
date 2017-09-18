@@ -11,8 +11,6 @@
 
 namespace Ecommerce;
 /**
- * Class Cart
- *
  * @property int $id
  * @property int $category_id
  * @property int $image_file_id
@@ -360,6 +358,9 @@ class Item extends \Model {
         ];
     }
 
+    /**
+     * @return bool|Item\Offer\Price|null
+     */
     public function getPrice() {
         $offers = $this->offers(['key' => false]);
         $curPrice = null;
