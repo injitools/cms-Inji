@@ -20,6 +20,7 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
      * @return \Money\Sums
      */
     static function curl_get_file_contents($URL, $data) {
+        //var_dump($URL,$data);
         $xml = json_encode($data);
         $headers = array(
             "Content-type: text/json",
@@ -42,7 +43,7 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
     static function calcPrice($cart) {
 
 
-        $sessionId = \Cache::get('PickPointSession');
+        $sessionId = \Cache::get('PickPointSession', []);
         if (!$sessionId) {
             $config = ConfigItem::getList(['where' => ['delivery_provider_id', $cart->delivery->delivery_provider_id], 'key' => 'name']);
             $result = self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/login', [
@@ -59,7 +60,7 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
                 //print_r($result['PostamatList'][0]);
                 if (!empty($result['PostamatList'][0]['CitiName'])) {
                     $city = $result['PostamatList'][0]['CitiName'];
-                    $toId = $result['PostamatList'][0]['Id'];
+                    $toId = $result['PostamatList'][0]['Number'];
                 }
             }
         }
@@ -72,15 +73,19 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
             $senderCity = 'Москва';
         }
         $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/calctariff', [
-            'SessionId'=>$sessionId,
-            'FromCity'=>$senderCity,
-            'IKN'=>$config['ikn']->value,
-            'PTNumber'=>$toId,
-            'Length'=>25,
-            'Depth'=>25,
-            'Width'=>25,
+            'SessionId' => $sessionId,
+            'FromCity' => $senderCity,
+            'IKN' => $config['ikn']->value,
+            'PTNumber' => $toId,
+            'Length' => 25,
+            'Depth' => 25,
+            'Width' => 25,
         ]), true);
-        //print_r($result);
-        return new \Money\Sums([$cart->delivery->currency_id => 0]);
+        $summ = 0;
+        if (!empty($result['Services'][0]['Tariff'])) {
+            $summ = $result['Services'][0]['Tariff'] + $result['Services'][0]['NDS'];
+        }
+
+        return new \Money\Sums([$cart->delivery->currency_id => $summ]);
     }
 }
