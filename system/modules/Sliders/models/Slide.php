@@ -10,7 +10,21 @@
  */
 
 namespace Sliders;
-
+/**
+ * @property string $name
+ * @property string $link href
+ * @property string $description
+ * @property int $image_file_id
+ * @property int $preview_image_file_id
+ * @property int $slider_id
+ * @property int $user_id
+ * @property int $weight
+ * @property string $date_create
+ * @property-read \Sliders\Slider $slider
+ * @property-read \Files\File $pieview
+ * @property-read \Files\File $image
+ * @property-read \Users\User $user
+ */
 class Slide extends \Model {
 
     public static $objectName = "Слайд";

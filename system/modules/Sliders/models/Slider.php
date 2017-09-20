@@ -11,6 +11,18 @@
 
 namespace Sliders;
 
+/**
+ * @property string $name
+ * @property string $alias
+ * @property string $description
+ * @property int $user_id
+ * @property int $image_file_id
+ * @property string $date_create
+ * @property-read \Sliders\Slide[] $slides
+ * @method \Sliders\Slide[] slides($options)
+ * @property-read \Files\File $image
+ * @property-read \Users\User $user
+ */
 class Slider extends \Model {
 
     public static $objectName = "Слайдер";
