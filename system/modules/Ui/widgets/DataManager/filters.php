@@ -4,10 +4,11 @@ if (!$dataManager->checkAccess()) {
     return false;
 }
 ?>
-<form accept-charset="UTF-8" action="" class="dataManagerFilters" method="get" onsubmit="inji.Ui.dataManagers.get(document.getElementById('<?= $dataManager->managerId; ?>')).reload();
-      return false;">
-    <div class="row">       
-      <?php
+<form accept-charset="UTF-8" action="" class="dataManagerFilters" method="get"
+      onsubmit="inji.Ui.dataManagers.get(document.getElementById('<?= $dataManager->managerId; ?>')).reload();
+              return false;">
+    <div class="row">
+        <?php
         $i = -1;
         $form = new Ui\Form();
         foreach ($dataManager->managerOptions['filters'] as $col) {
@@ -52,22 +53,22 @@ if (!$dataManager->checkAccess()) {
             if (!empty($colInfo['colParams']['type'])) {
                 switch ($colInfo['colParams']['type']) {
                     case 'select':
-                      switch ($colInfo['colParams']['source']) {
+                        switch ($colInfo['colParams']['source']) {
                             case 'array':
-                              $values = ['' => 'Не важно'] + $colInfo['colParams']['sourceArray'];
+                                $values = ['' => 'Не важно'] + $colInfo['colParams']['sourceArray'];
                                 break;
                             case 'method':
-                              if (!empty($colInfo['colParams']['params'])) {
+                                if (!empty($colInfo['colParams']['params'])) {
                                     $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
                                 } else {
                                     $values = ['' => 'Не важно'] + App::$cur->$colInfo['colParams']['module']->$colInfo['colParams']['method']();
                                 }
                                 break;
                             case 'model':
-                              $values = ['' => 'Не важно'] + $colInfo['colParams']['model']::getList(['forSelect' => true]);
+                                $values = ['' => 'Не важно'] + $colInfo['colParams']['model']::getList(['forSelect' => true]);
                                 break;
                             case 'relation':
-                              $relations = $colInfo['modelName']::relations();
+                                $relations = $colInfo['modelName']::relations();
                                 $filters = $relations[$colInfo['colParams']['relation']]['model']::managerFilters();
                                 $cols = $relations[$colInfo['colParams']['relation']]['model']::cols();
                                 $options = [
@@ -78,6 +79,9 @@ if (!$dataManager->checkAccess()) {
                                 }
                                 $items = $relations[$colInfo['colParams']['relation']]['model']::getList($options);
                                 $values = ['' => 'Не задано'];
+                                if (!empty($colInfo['colParams']['extraValues'])) {
+                                    $values += $colInfo['colParams']['extraValues'];
+                                }
                                 foreach ($items as $key => $item) {
                                     if (!empty($inputParams['showCol'])) {
                                         $values[$key] = $item->$inputParams['showCol'];
@@ -85,10 +89,9 @@ if (!$dataManager->checkAccess()) {
                                         $values[$key] = $item->name();
                                     }
                                 }
-                                $values;
                                 break;
                         }
-                        $value = !empty($_GET['datamanagerFilters'][$col]['value']) ? $_GET['datamanagerFilters'][$col]['value'] : (!empty($params['filters'][$col]['value']) ? $params['filters'][$col]['value'] : '');
+                        $value = isset($_GET['datamanagerFilters'][$col]['value']) ? $_GET['datamanagerFilters'][$col]['value'] : (isset($params['filters'][$col]['value']) ? $params['filters'][$col]['value'] : '');
                         $inputOptions = ['value' => $value, 'values' => $values, 'multiple' => true];
                         if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
 
@@ -112,23 +115,34 @@ if (!$dataManager->checkAccess()) {
                         $form->input('select', "datamanagerFilters[{$col}][value]", $colInfo['label'], $inputOptions);
                         break;
                     case 'email':
-                  case 'text':
-                  case 'textarea':
-                  case 'html':
-                      ?>
+                    case 'text':
+                    case 'textarea':
+                    case 'html':
+                        ?>
                         <div class="form-group">
                             <label><?= $colInfo['label']; ?></label>
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <select name="datamanagerFilters[<?= $col; ?>][compareType]" class="form-control input-sm">
-                                        <option value="contains" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'contains' ? 'selected' : ''; ?>>Содержит</option>
-                                        <option value="equals" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'equals' ? 'selected' : ''; ?>>=</option>
-                                        <option value="starts_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'starts_with' ? 'selected' : ''; ?>>Начинается с</option>
-                                        <option value="ends_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'ends_with' ? 'selected' : ''; ?>>Заканчивается</option>
+                                    <select name="datamanagerFilters[<?= $col; ?>][compareType]"
+                                            class="form-control input-sm">
+                                        <option value="contains" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'contains' ? 'selected' : ''; ?>>
+                                            Содержит
+                                        </option>
+                                        <option value="equals" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'equals' ? 'selected' : ''; ?>>
+                                            =
+                                        </option>
+                                        <option value="starts_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'starts_with' ? 'selected' : ''; ?>>
+                                            Начинается с
+                                        </option>
+                                        <option value="ends_with" <?= !empty($params['filters'][$col]['compareType']) && $params['filters'][$col]['compareType'] == 'ends_with' ? 'selected' : ''; ?>>
+                                            Заканчивается
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-xs-6">
-                                    <input  class="form-control input-sm" name="datamanagerFilters[<?= $col; ?>][value]" type="text" value="<?= !empty($params['filters'][$col]['value']) ? $params['filters'][$col]['value'] : ''; ?>">
+                                    <input class="form-control input-sm" name="datamanagerFilters[<?= $col; ?>][value]"
+                                           type="text"
+                                           value="<?= !empty($params['filters'][$col]['value']) ? $params['filters'][$col]['value'] : ''; ?>">
                                 </div>
                             </div>
                         </div>
@@ -137,7 +151,7 @@ if (!$dataManager->checkAccess()) {
                     case 'bool':
                         ?>
                         <div class="filter_form_field filter_select">
-                          <?php
+                            <?php
                             if (!empty($_GET['datamanagerFilters'][$col]['value'])) {
                                 $value = 1;
                             } elseif (isset($_GET['datamanagerFilters'][$col]['value'])) {
@@ -146,10 +160,10 @@ if (!$dataManager->checkAccess()) {
                                 $value = '';
                             }
                             $inputOptions = ['value' => $value, 'values' => [
-                                    '' => 'Не важно',
-                                    '1' => $colInfo['label'],
-                                    '0' => 'Нет'
-                                ]
+                                '' => 'Не важно',
+                                '1' => $colInfo['label'],
+                                '0' => 'Нет'
+                            ]
                             ];
                             if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
 
@@ -183,10 +197,10 @@ if (!$dataManager->checkAccess()) {
                             <label><?= $colInfo['label']; ?></label>
                             <div class="row">
                                 <div class="col-xs-6">
-                                  <?php $form->input('number', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : '']); ?>
+                                    <?php $form->input('number', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : '']); ?>
                                 </div>
                                 <div class="col-xs-6">
-                                  <?php $form->input('number', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : '']); ?>
+                                    <?php $form->input('number', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : '']); ?>
                                 </div>
                             </div>
                         </div>
@@ -199,10 +213,10 @@ if (!$dataManager->checkAccess()) {
                             <label><?= $colInfo['label']; ?></label>
                             <div class="row">
                                 <div class="col-xs-6">
-                                  <?php $form->input('dateTime', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : '']); ?>
+                                    <?php $form->input('dateTime', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : '']); ?>
                                 </div>
                                 <div class="col-xs-6">
-                                  <?php $form->input('dateTime', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : '']); ?>
+                                    <?php $form->input('dateTime', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : '']); ?>
                                 </div>
                             </div>
                         </div>
@@ -214,10 +228,10 @@ if (!$dataManager->checkAccess()) {
                             <label><?= $colInfo['label']; ?></label>
                             <div class="row">
                                 <div class="col-xs-6">
-                                  <?php $form->input('date', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : '']); ?>
+                                    <?php $form->input('date', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : '']); ?>
                                 </div>
                                 <div class="col-xs-6">
-                                  <?php $form->input('date', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : '']); ?>
+                                    <?php $form->input('date', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : '']); ?>
                                 </div>
                             </div>
                         </div>

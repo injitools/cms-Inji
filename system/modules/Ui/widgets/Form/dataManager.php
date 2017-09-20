@@ -6,12 +6,13 @@ if (class_exists($options['relation']['model'])) {
         if (!empty($options['input']->activeFormParams['appType'])) {
             $params['appType'] = $options['input']->activeFormParams['appType'];
         }
+        $params['noFilters'] = true;
         $dataManager->draw($params, $options['input']->activeForm->model);
         ?>
         <script>
-            inji.onLoad(function () {
-              inji.Ui.dataManagers.get($('#<?= $dataManager->managerId; ?>'));
-            })
+          inji.onLoad(function () {
+            inji.Ui.dataManagers.get($('#<?= $dataManager->managerId; ?>'));
+          })
         </script>
         <?php
     } else {

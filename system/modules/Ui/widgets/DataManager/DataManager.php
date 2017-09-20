@@ -33,7 +33,7 @@ if (!empty($dataManager->managerOptions['categorys'])) {
     $this->widget('Ui\DataManager/categorys', compact('dataManager'));
     echo '</div>';
 }
-if (!empty($dataManager->managerOptions['filters'])) {
+if (empty($params['noFilters']) && !empty($dataManager->managerOptions['filters'])) {
     ?>
     <div class="modal fade" id = "<?= $dataManager->managerId; ?>_filters" >
         <div class="modal-dialog modal-lg">
