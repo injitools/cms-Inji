@@ -98,7 +98,7 @@ class DataManager extends \Object {
                 'text' => 'Сортировать',
             ];
         }
-        if (!empty($this->managerOptions['filters'])) {
+        if (empty($params['noFilters']) && !empty($this->managerOptions['filters'])) {
             $buttons[] = [
                 'text' => 'Фильтры',
                 'onclick' => '  var modal = $("#' . $this->managerId . '_filters");
