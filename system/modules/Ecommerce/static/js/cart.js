@@ -52,6 +52,17 @@ inji.Ecommerce = {
         }
       });
     }
+    this.delItemWidget = function (cart_item_id, callback) {
+      inji.Server.request({
+        url: '/ecommerce/cart/deleteItem?cartItemId=' + cart_item_id,
+        success: function (data) {
+          $("#cart,.cartplace").html(data);
+          if (callback !== undefined) {
+            callback();
+          }
+        }
+      });
+    }
   },
   toggleFav: function (itemId, btn) {
     inji.Server.request({

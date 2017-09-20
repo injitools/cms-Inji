@@ -299,7 +299,31 @@ class CartController extends Controller {
         }
         $cart->date_last_activ = date('Y-m-d H:i:s');
         $cart->calc();
+
         $result->successMsg = '<a href="/ecommerce/view/' . $item->id . '">' . $item->name() . ($price->offer->name() ? ' (' . $price->offer->name() . ')' : '') . '</a> добавлен <a href="/ecommerce/cart">в корзину покупок</a>!';
+        $result->send();
+    }
+
+    public function deleteItemAction() {
+        $result = new Server\Result();
+        if (empty($_GET['cartItemId'])) {
+            $result->success = false;
+            $result->content = 'Произошла непредвиденная ошибка при добавлении товара';
+            $result->send();
+        }
+
+        $cart = $this->ecommerce->getCurCart();
+        if (!isset($cart->cartItems[$_GET['cartItemId']])) {
+            $result->success = false;
+            $result->content = 'Такого товара нет в вашей корзине';
+            $result->send();
+        }
+        $cart->cartItems[$_GET['cartItemId']]->delete();
+        ob_start();
+        $this->view->widget('Ecommerce\cart');
+        $result->content = ob_get_contents();
+        ob_end_clean();
+        $result->successMsg = 'Товар был удален';
         $result->send();
     }
 

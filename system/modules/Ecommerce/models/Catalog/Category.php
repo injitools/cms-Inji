@@ -14,6 +14,14 @@ class Category extends \Model {
         'catalog_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'catalog'],
         'category_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'category'],
     ];
+    static $dataManagers = [
+        'manager' => [
+            'cols' => ['category_id']
+        ]
+    ];
+    static $forms = [
+        'map' => [['category_id']]
+    ];
 
     static function relations() {
         return [
