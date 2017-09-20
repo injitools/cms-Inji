@@ -74,9 +74,46 @@ class UsersController extends Controller {
         $this->view->page(['data' => compact('bread')]);
     }
 
+    public function fastRegistrationAction() {
+        $result = new \Server\Result();
+        if (Users\User::$cur->user_id) {
+            $result->success = false;
+            $result->content = 'Вы уже зарегистрированы';
+            return $result->send();
+        }
+        if (!empty($_POST)) {
+            $error = false;
+            if ($this->Recaptcha) {
+                $response = $this->Recaptcha->check($_POST['g-recaptcha-response']);
+                if ($response) {
+                    if (!$response->success) {
+                        $result->success = false;
+                        $result->content = 'Вы не прошли проверку на робота';
+                        return $result->send();
+                    }
+                } else {
+                    $result->success = false;
+                    $result->content = 'Произошла ошибка, попробуйте ещё раз';
+                    return $result->send();
+                }
+            }
+            if (!$error) {
+                $resultReg = $this->Users->registration($_POST, true, false);
+                if (is_numeric($resultReg)) {
+                    return $result->send();
+                } else {
+                    $result->success = false;
+                    $result->content = $resultReg['error'];
+                    return $result->send();
+                }
+
+            }
+        }
+    }
+
     public function activationAction($userId = 0, $hash = '') {
-        $user = \Users\User::get((int) $userId);
-        if (!$user || !$hash || $user->activation !== (string) $hash) {
+        $user = \Users\User::get((int)$userId);
+        if (!$user || !$hash || $user->activation !== (string)$hash) {
             Tools::redirect('/', 'Во время активации произошли ошибки', 'danger');
         }
         $user->activation = '';
@@ -119,7 +156,7 @@ class UsersController extends Controller {
     }
 
     public function resendActivationAction($userId = 0) {
-        $user = \Users\User::get((int) $userId);
+        $user = \Users\User::get((int)$userId);
         if (!$user) {
             Tools::redirect('/', 'Не указан пользователь', 'danger');
         }
@@ -135,7 +172,7 @@ class UsersController extends Controller {
     }
 
     public function getPartnerInfoAction($userId = 0) {
-        $userId = (int) $userId;
+        $userId = (int)$userId;
         $result = new \Server\Result();
         if (!$userId) {
             $result->success = false;
@@ -159,17 +196,18 @@ class UsersController extends Controller {
                 ?>
                 <h5 class="<?= $complete ? 'text-success' : 'text-danger'; ?>"><?= $condition->name(); ?></h5>
                 <ul>
-                  <?php
+                    <?php
                     foreach ($condition->items as $item) {
                         $itemComplete = $item->checkComplete($userId);
                         switch ($item->type) {
                             case 'event':
-                              $name = \Events\Event::get($item->value, 'event')->name();
+                                $name = \Events\Event::get($item->value, 'event')->name();
                                 break;
                         }
                         ?>
-                        <li> 
-                            <b class="<?= $itemComplete ? 'text-success' : 'text-danger'; ?>"><?= $name; ?> <?= $item->recivedCount($userId); ?></b>/<?= $item->count; ?> <br />
+                        <li>
+                            <b class="<?= $itemComplete ? 'text-success' : 'text-danger'; ?>"><?= $name; ?> <?= $item->recivedCount($userId); ?></b>/<?= $item->count; ?>
+                            <br/>
                         </li>
                         <?php
                     }

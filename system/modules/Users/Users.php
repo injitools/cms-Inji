@@ -65,7 +65,7 @@ class Users extends Module {
             ['user_id', $userId],
             ['hash', $hash]
         ]);
-        if(!$session){
+        if (!$session) {
             if (!headers_sent()) {
                 setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
                 setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
@@ -258,22 +258,29 @@ class Users extends Module {
         return $user;
     }
 
-    public function registration($data, $autorization = false) {
+    private function msgOrErr($err, $msg) {
+        if ($msg) {
+            Msg::add($err, 'danger');
+            return false;
+        }
+        return ['success' => false, 'error' => $err];
+
+    }
+
+    public function registration($data, $autorization = false, $msg = true) {
 
         if (empty($data['user_mail'])) {
-            Msg::add('Вы не ввели E-mail', 'danger');
-            return false;
+            return $this->msgOrErr('Вы не ввели E-mail', $msg);
         }
         $data['user_mail'] = trim($data['user_mail']);
         if (!filter_var($data['user_mail'], FILTER_VALIDATE_EMAIL)) {
-            Msg::add('Вы ввели не корректный E-mail', 'danger');
-            return false;
+            return $this->msgOrErr('Вы ввели не корректный E-mail', $msg);
+
         }
 
         $user = $this->get($data['user_mail'], 'mail');
         if ($user) {
-            Msg::add('Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail', 'danger');
-            return false;
+            return $this->msgOrErr('Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail', $msg);
         }
         if (empty($data['user_login'])) {
             $data['user_login'] = $data['user_mail'];
@@ -281,8 +288,7 @@ class Users extends Module {
         $data['user_login'] = trim($data['user_login']);
         $user = $this->get($data['user_login'], 'login');
         if ($user) {
-            Msg::add('Введенный вами логин зарегистрирован в нашей системе, войдите или введите другой логин', 'danger');
-            return false;
+            return $this->msgOrErr('Введенный вами логин зарегистрирован в нашей системе, войдите или введите другой логин', $msg);
         }
         if (empty($data['first_name'])) {
             $data['first_name'] = '';
@@ -306,12 +312,10 @@ class Users extends Module {
         if (!empty($invite_code)) {
             $invite = Users\User\Invite::get($invite_code, 'code');
             if (!$invite) {
-                Msg::add('Такой код приглашения не найден', 'danger');
-                return false;
+                return $this->msgOrErr('Такой код приглашения не найден', $msg);
             }
             if ($invite->limit && !($invite->limit - $invite->count)) {
-                Msg::add('Лимит приглашений для данного кода исчерпан', 'danger');
-                return false;
+                return $this->msgOrErr('Лимит приглашений для данного кода исчерпан', $msg);
             }
             $data['parent_id'] = $invite->user_id;
             $inviter = $data['parent_id'];
@@ -323,16 +327,13 @@ class Users extends Module {
         }
         if (!empty($data['user_pass'])) {
             if (empty($data['user_pass'][0])) {
-                Msg::add('Введите пароль', 'danger');
-                return false;
+                return $this->msgOrErr('Введите пароль', $msg);
             }
             if (empty($data['user_pass'][1])) {
-                Msg::add('Повторите ввод пароля', 'danger');
-                return false;
+                return $this->msgOrErr('Повторите ввод пароля', $msg);
             }
             if ($data['user_pass'][0] != $data['user_pass'][1]) {
-                Msg::add('Введенные пароли несовпадают', 'danger');
-                return false;
+                return $this->msgOrErr('Введенные пароли несовпадают', $msg);
             }
             $pass = $data['user_pass'][0];
         } else {
@@ -352,8 +353,7 @@ class Users extends Module {
         }
         $user->save();
         if (!$user->id) {
-            Msg::add('Не удалось зарегистрировать', 'danger');
-            return false;
+            return $this->msgOrErr('Не удалось зарегистрировать', $msg);
         }
         $info = new \Users\User\Info([
             'user_id' => $user->id,
@@ -380,14 +380,18 @@ class Users extends Module {
             $text .= '<br />';
             $text .= 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . $user->id . '/' . $user->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . $user->id . '/' . $user->activation . '</a>';
             Tools::sendMail($from, $to, $subject, $text);
-            Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль и ссылка для активации', 'success');
+            if ($msg) {
+                Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль и ссылка для активации', 'success');
+            }
         } else {
             $from = 'noreply@' . INJI_DOMAIN_NAME;
             $to = $data['user_mail'];
             $subject = 'Регистрация на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
             $text = 'Вы были зарегистрированы на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />для входа используйте ваш почтовый ящик в качестве логина и пароль: ' . $pass;
             Tools::sendMail($from, $to, $subject, $text);
-            Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль', 'success');
+            if ($msg) {
+                Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль', 'success');
+            }
         }
         return $user->id;
     }

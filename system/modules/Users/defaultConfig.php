@@ -17,6 +17,9 @@ return [
                     'registration' => [
                         '_access' => [1]
                     ],
+                    'fastRegistration' => [
+                        '_access' => [1]
+                    ],
                     'passre' => [
                         '_access' => [1]
                     ],
