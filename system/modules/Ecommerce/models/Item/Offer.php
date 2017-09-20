@@ -128,7 +128,6 @@ class Offer extends \Model {
         }
         \App::$cur->db->where(\Ecommerce\Item\Offer\Warehouse::colPrefix() . \Ecommerce\Item\Offer::index(), $this->id);
         \App::$cur->db->cols = 'COALESCE(sum(' . \Ecommerce\Item\Offer\Warehouse::colPrefix() . 'count),0) as `sum` ';
-        \App::$cur->db->group(\Ecommerce\Item\Offer\Warehouse::index());
         $warehouse = \App::$cur->db->select(\Ecommerce\Item\Offer\Warehouse::table())->fetch();
 
         \App::$cur->db->cols = 'COALESCE(sum(' . \Ecommerce\Warehouse\Block::colPrefix() . 'count) ,0) as `sum` ';
