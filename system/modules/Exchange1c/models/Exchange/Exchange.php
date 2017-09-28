@@ -26,6 +26,7 @@ class Exchange extends \Model {
         'type' => ['type' => 'text'],
         'session' => ['type' => 'text'],
         'path' => ['type' => 'text'],
+        'cleared' => ['type' => 'number'],
         'log' => ['type' => 'dataManager', 'relation' => 'logs'],
         'file' => ['type' => 'dataManager', 'relation' => 'files'],
         'date_create' => ['type' => 'dateTime'],

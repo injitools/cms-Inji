@@ -11,43 +11,33 @@
 
 namespace Exchange1c\Mode;
 
-class Init extends \Exchange1c\Mode {
+use Exchange1c\Exchange;
 
-    public function process() {
-        echo "zip=no\n";
+class Init extends \Exchange1c\Mode
+{
+
+    public function process()
+    {
+        echo "zip=yes\n";
         echo 'file_limit=' . \Tools::toBytes(ini_get('post_max_size'));
         $this->end();
 
         //clean files
+        Exchange::get(0, 'cleared');
         if (!empty(\App::$cur->exchange1c->config['maxSaveFilesInterval'])) {
             $query = \App::$cur->db->newQuery();
             $query->operation = 'select';
-            $query->table = \Exchange1c\Exchange\File::table();
-            $query->cols = \Exchange1c\Exchange\File::colPrefix() . 'id';
+            $query->table = \Exchange1c\Exchange::table();
+            $query->cols = \Exchange1c\Exchange::index().','.\Exchange1c\Exchange::colPrefix() . 'path';
             $queryArr = $query->buildQuery();
-            $queryArr['query'] .= ' where `' . \Exchange1c\Exchange\File::colPrefix() . 'deleted` = 0 AND  `' . \Exchange1c\Exchange\File::colPrefix() . 'date_create` < NOW() - INTERVAL ' . \App::$cur->exchange1c->config['maxSaveFilesInterval'];
-            try {
-                $ids = array_keys($query->query($queryArr)->getArray(\Exchange1c\Exchange\File::colPrefix() . 'id'));
-            } catch (\PDOException $exc) {
-                if ($exc->getCode() == '42S02') {
-                    \Exchange1c\Exchange\File::createTable();
-                } elseif ($exc->getCode() == '42S22') {
-                    $cols = \Exchange1c\Exchange\File::cols();
-                    foreach (\Exchange1c\Exchange\File::$cols as $colName => $params) {
-                        if (!isset($cols[\Exchange1c\Exchange\File::colPrefix() . $colName])) {
-                            \Exchange1c\Exchange\File::createCol($colName);
-                        }
-                    }
-                }
-                $ids = array_keys($query->query($queryArr)->getArray(\Exchange1c\Exchange\File::colPrefix() . 'id'));
-            }
-            foreach (array_chunk($ids, 500) as $idGroup) {
-                $dfiles = \Exchange1c\Exchange\File::getList(['where' => ['id', $idGroup, 'IN']]);
-                foreach ($dfiles as $dfile) {
-                    $dfile->deleteFile();
-                    unset($dfile);
-                }
-                unset($dfiles);
+            $queryArr['query'] .= ' where `' . \Exchange1c\Exchange::colPrefix() . 'cleared` = 0 AND  `' . \Exchange1c\Exchange::colPrefix() . 'date_create` < NOW() - INTERVAL ' . \App::$cur->exchange1c->config['maxSaveFilesInterval'];
+
+            $exc = $query->query($queryArr)->getArray();
+            foreach ($exc as $exchangeArr) {
+                \Tools::delDir($exchangeArr[\Exchange1c\Exchange::colPrefix() . 'path']);
+                $query = \App::$cur->db->newQuery();
+                $query->where([\Exchange1c\Exchange::index(), $exchangeArr[\Exchange1c\Exchange::index()]]);
+                $query->update(\Exchange1c\Exchange::table(),[\Exchange1c\Exchange::colPrefix() . 'cleared' => 1]);
             }
         }
     }

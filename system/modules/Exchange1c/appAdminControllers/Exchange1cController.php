@@ -18,7 +18,6 @@ class Exchange1cController extends adminController {
 
         $exchange = new \Exchange1c\Exchange();
         $exchange->type = $reExchange->type;
-        $exchange->save();
         $exchange->path = $reExchange->path;
         $exchange->save();
 
