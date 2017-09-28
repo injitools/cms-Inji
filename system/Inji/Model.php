@@ -466,8 +466,38 @@ class Model {
                 if (isset($class::$cols[$colName]['logging']) && !$class::$cols[$colName]['logging']) {
                     continue;
                 }
-                if (strlen($oldValue) + strlen($this->_params[$fullColName]) < 200) {
-                    $changes_text[] = (!empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName) . ": \"{$oldValue}\" => \"{$this->$colName}\"";
+                $oldValueText = $oldValue;
+                if (isset($class::$cols[$colName]) && $class::$cols[$colName]['type'] === 'select') {
+                    switch ($class::$cols[$colName]['source']) {
+                        case 'array':
+                            $oldValueText = isset($class::$cols[$colName]['sourceArray'][$oldValue]) ? $class::$cols[$colName]['sourceArray'][$oldValue] : $oldValue;
+                            break;
+                        case 'relation':
+                            $relation = $class::getRelation($class::$cols[$colName]['relation']);
+                            $relModel = $relation['model'];
+                            $rel = $relModel::get($oldValue);
+                            if ($rel) {
+                                $oldValueText = $rel->name();
+                            }
+                    }
+                }
+                $newValueText = $this->$colName;
+                if (isset($class::$cols[$colName]) && $class::$cols[$colName]['type'] === 'select') {
+                    switch ($class::$cols[$colName]['source']) {
+                        case 'array':
+                            $newValueText = isset($class::$cols[$colName]['sourceArray'][$this->$colName]) ? $class::$cols[$colName]['sourceArray'][$this->$colName] : $this->$colName;
+                            break;
+                        case 'relation':
+                            $relation = $class::getRelation($class::$cols[$colName]['relation']);
+                            $relModel = $relation['model'];
+                            $rel = $relModel::get($this->$colName);
+                            if ($rel) {
+                                $newValueText = $rel->name();
+                            }
+                    }
+                }
+                if (strlen($oldValueText) + strlen($newValueText) < 200) {
+                    $changes_text[] = (!empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName) . ": \"{$oldValueText}\" => \"{$newValueText}\"";
                 } else {
                     $changes_text[] = !empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName;
                 }
