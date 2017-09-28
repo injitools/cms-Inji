@@ -22,7 +22,7 @@ class Object extends \Object {
 
     public function parse($preset = []) {
         $ids = [];
-        if (!\Tools::isAssoc($this->data)) {
+        if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
             foreach ($this->data as &$data) {
                 $id = $this->parseData($data, $preset);
                 if ($id) {

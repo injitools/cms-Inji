@@ -26,7 +26,7 @@ class ParamsList extends \Migrations\Parser {
                 } else {
                     $parserName = '\Migrations\Parser\Object\\' . ucfirst($param->type);
                 }
-                if (!\Tools::isAssoc($this->data)) {
+                if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
                     foreach ($this->data as $data) {
                         $parser = new $parserName;
                         $parser->data = &$data;

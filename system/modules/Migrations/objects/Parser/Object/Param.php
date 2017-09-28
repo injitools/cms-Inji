@@ -18,7 +18,7 @@ class Param extends \Migrations\Parser {
                         ['parent_id', $this->param->id],
                         ['object_id', $this->object->object->id],
         ]]);
-        if (!\Tools::isAssoc($this->data)) {
+        if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
             foreach ($this->data as &$data) {
                 $this->parseData($data, $params);
             }

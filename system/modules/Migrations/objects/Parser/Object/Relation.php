@@ -36,7 +36,7 @@ class Relation extends \Migrations\Parser {
 
             if ($this->data) {
                 foreach ($this->data as $code => &$item) {
-                    if (!\Tools::isAssoc($this->data)) {
+                    if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
                         foreach ($this->data as &$item) {
                             $objectParser = new \Migrations\Parser\Object();
                             $objectParser->object = $object;
@@ -93,7 +93,7 @@ class Relation extends \Migrations\Parser {
             $objectParser->parentParam = $this;
             $objectParser->data = &$this->data;
             $ids = [];
-            if (!\Tools::isAssoc($this->data)) {
+            if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
                 foreach ($this->data as &$data) {
                     $model = $objectParser->setModel($data);
                     if ($model && $model->id) {
