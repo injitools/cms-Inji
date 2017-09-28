@@ -64,14 +64,14 @@ return function ($step = NULL, $params = []) {
     Inji::$inst->listen('modelItemParamsChanged-Ecommerce\Cart', 'Ecommerce-cartStatusDetector', [
         'module' => 'Ecommerce',
         'method' => 'cartStatusDetector'
-            ], true);
+    ], true);
 
     Inji::$inst->listen('ecommerceCartClosed', 'Ecommerce-cardTrigger', [
         'module' => 'Ecommerce',
         'method' => 'cardTrigger'
-            ], true);
+    ], true);
     Inji::$inst->listen('ecommerceCartClosed', 'Ecommerce-bonusTrigger', [
         'module' => 'Ecommerce',
         'method' => 'bonusTrigger'
-            ], true);
+    ], true);
 };

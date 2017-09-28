@@ -366,7 +366,7 @@ class Cart extends \Model {
     }
 
     public function hasDiscount() {
-        return (bool)$this->card || $this->discounts;
+        return (bool) $this->card || $this->discounts;
     }
 
     public function discountSum() {
@@ -397,7 +397,7 @@ class Cart extends \Model {
     }
 
     public function addItem($offer_price_id, $count = 1, $final_price = 0) {
-        $price = Item\Offer\Price::get((int)$offer_price_id);
+        $price = Item\Offer\Price::get((int) $offer_price_id);
 
         if (!$price) {
             return false;

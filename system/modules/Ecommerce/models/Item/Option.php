@@ -76,7 +76,7 @@ class Option extends \Model {
         'manager' => [
             'name' => 'Свойства товаров',
             'cols' => [
-                'name','item_option_group_id', 'code', 'type', 'item', 'view', 'searchable', 'user_id', 'date_create'
+                'name', 'item_option_group_id', 'code', 'type', 'item', 'view', 'searchable', 'user_id', 'date_create'
             ],
             'sortMode' => true
         ]
@@ -87,7 +87,7 @@ class Option extends \Model {
                 ['name', 'filter_name'],
                 ['code', 'type', 'image_file_id'],
                 ['default_val', 'postfix'],
-                ['view', 'searchable','item_option_group_id'],
+                ['view', 'searchable', 'item_option_group_id'],
                 ['item']
             ]
         ]

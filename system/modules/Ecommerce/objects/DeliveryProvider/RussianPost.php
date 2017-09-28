@@ -49,6 +49,6 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
         ];
         $result = json_decode(file_get_contents($url . http_build_query($data)), true);
         $sum = !empty($result['tariff'][0]['ground']['valnds']) ? $result['tariff'][0]['ground']['valnds'] : (!empty($result['tariff'][0]['avia']['valnds']) ? $result['tariff'][0]['avia']['valnds'] : 0);
-        return new \Money\Sums([$cart->delivery->currency_id => $sum/100]);
+        return new \Money\Sums([$cart->delivery->currency_id => $sum / 100]);
     }
 }

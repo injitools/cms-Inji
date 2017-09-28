@@ -1,12 +1,12 @@
 <div class="ecommerce">
     <div class="content">
-      <?php
+        <?php
         $cart = Ecommerce\Cart::getList([
-                    'where' => [
-                        ['user_id', Users\User::$cur->id],
-                    ],
-                    'order' => ['complete_data', 'desc'],
-                    'limit' => 1
+            'where' => [
+                ['user_id', Users\User::$cur->id],
+            ],
+            'order' => ['complete_data', 'desc'],
+            'limit' => 1
         ]);
         $cart_id = isset(array_values($cart)[0]) ? array_values($cart)[0]->id : '';
         $prefix = isset(App::$cur->ecommerce->config['orderPrefix']) ? $config = App::$cur->ecommerce->config['orderPrefix'] : '';

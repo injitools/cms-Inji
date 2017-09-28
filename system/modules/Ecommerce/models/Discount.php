@@ -43,8 +43,8 @@ class Discount extends \Model {
             'map' => [
                 ['name'],
                 ['type', 'amount'],
-            //['condition']
+                //['condition']
             ]
-    ]];
+        ]];
 
 }

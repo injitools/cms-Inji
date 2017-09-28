@@ -4,7 +4,7 @@
         $category = [];
     }
     $tree = new Ui\Tree();
-    $tree->ul('\Ecommerce\Category', 0, function($categoryItem) use($category) {
+    $tree->ul('\Ecommerce\Category', 0, function ($categoryItem) use ($category) {
         if ($category && $category->id == $categoryItem->id) {
             $class = 'active';
         } else {

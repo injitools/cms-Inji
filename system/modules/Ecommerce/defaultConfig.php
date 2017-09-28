@@ -17,7 +17,7 @@ return [
     'default_limit' => 18,
     'list_all' => false,
     'isset_sort' => false,
-    'filtersInLast'=>false,
-    'defaultNeedDelivery'=>false,
+    'filtersInLast' => false,
+    'defaultNeedDelivery' => false,
 
 ];

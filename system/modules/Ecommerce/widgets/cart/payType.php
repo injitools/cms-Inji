@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <ul class="nav nav-pills nav-stacked">
-          <?php
+            <?php
             $hiddenId = Tools::randomString();
             foreach ($payTypes as $payType) {
                 if ((!empty($_POST['payType']) && $_POST['payType'] == $payType->id) || ($cart->payType && $payType->id == $cart->payType->id)) {
@@ -30,6 +30,6 @@
         } else {
             echo "<h4>Выберите способ оплаты</h4>";
         }
-        ?> 
+        ?>
     </div>
 </div>

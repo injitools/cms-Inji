@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
         <ul class="nav nav-pills nav-stacked">
-          <?php
+            <?php
             $hiddenId = Tools::randomString();
             foreach ($deliverys as $delivery) {
                 if ((!empty($_POST['delivery']) && $_POST['delivery'] == $delivery->id) || ($cart->delivery && $delivery->id == $cart->delivery->id)) {

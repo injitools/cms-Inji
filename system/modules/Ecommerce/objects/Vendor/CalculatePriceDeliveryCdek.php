@@ -83,7 +83,7 @@ class CalculatePriceDeliveryCdek {
      * @param int $id города
      */
     public function setSenderCityId($id) {
-        $id = (int)$id;
+        $id = (int) $id;
         if ($id == 0) {
             throw new \Exception("Неправильно задан город-отправитель.");
         }
@@ -96,7 +96,7 @@ class CalculatePriceDeliveryCdek {
      * @param int $id города
      */
     public function setReceiverCityId($id) {
-        $id = (int)$id;
+        $id = (int) $id;
         if ($id == 0) {
             throw new \Exception("Неправильно задан город-получатель.");
         }
@@ -109,7 +109,7 @@ class CalculatePriceDeliveryCdek {
      * @param int $id тарифа
      */
     public function setTariffId($id) {
-        $id = (int)$id;
+        $id = (int) $id;
         if ($id == 0) {
             throw new \Exception("Неправильно задан тариф.");
         }
@@ -122,7 +122,7 @@ class CalculatePriceDeliveryCdek {
      * @param int $id режим доставки
      */
     public function setModeDeliveryId($id) {
-        $id = (int)$id;
+        $id = (int) $id;
         if (!in_array($id, array(1, 2, 3, 4))) {
             throw new \Exception("Неправильно задан режим доставки.");
         }
@@ -139,7 +139,7 @@ class CalculatePriceDeliveryCdek {
      */
     public function addGoodsItemBySize($weight, $length, $width, $height) {
         //проверка веса
-        $weight = (float)$weight;
+        $weight = (float) $weight;
         if ($weight == 0.00) {
             throw new \Exception("Неправильно задан вес места № " . (count($this->getGoodslist()) + 1) . ".");
         }
@@ -148,7 +148,7 @@ class CalculatePriceDeliveryCdek {
             "ширина" => $width,
             "высота" => $height);
         foreach ($paramsItem as $k => $param) {
-            $param = (int)$param;
+            $param = (int) $param;
             if ($param == 0) {
                 throw new \Exception("Неправильно задан параметр '" . $k . "' места № " . (count($this->getGoodslist()) + 1) . ".");
             }
@@ -169,7 +169,7 @@ class CalculatePriceDeliveryCdek {
         $paramsItem = array("вес" => $weight,
             "объёмный вес" => $volume);
         foreach ($paramsItem as $k => $param) {
-            $param = (float)$param;
+            $param = (float) $param;
             if ($param == 0.00) {
                 throw new \ption("Неправильно задан параметр '" . $k . "' места № " . (count($this->getGoodslist()) + 1) . ".");
             }
@@ -197,7 +197,7 @@ class CalculatePriceDeliveryCdek {
      * @param int $priority default false приоритет
      */
     public function addTariffPriority($id, $priority = 0) {
-        $id = (int)$id;
+        $id = (int) $id;
         if ($id == 0) {
             throw new \Exception("Неправильно задан id тарифа.");
         }

@@ -4,7 +4,7 @@
             <div class="sidebar-block">
                 <div class="head">Категории</div>
                 <div class="items">
-                  <?php $this->widget('Ecommerce\categorys'); ?>
+                    <?php $this->widget('Ecommerce\categorys'); ?>
                 </div>
             </div>
         </div>

@@ -16,9 +16,9 @@ class Ecommerce extends Module {
             $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             if ($favs) {
                 foreach ($favs as $itemId) {
-                    $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', (int)$itemId]]);
+                    $fav = \Ecommerce\Favorite::get([['user_id', Users\User::$cur->id], ['item_id', (int) $itemId]]);
                     if (!$fav) {
-                        $item = \Ecommerce\Item::get((int)$itemId);
+                        $item = \Ecommerce\Item::get((int) $itemId);
                         if ($item) {
                             $fav = new \Ecommerce\Favorite([
                                 'user_id' => Users\User::$cur->id,
@@ -180,7 +180,7 @@ class Ecommerce extends Module {
     public function getCurCart($create = true) {
         $cart = false;
         if (!empty($_SESSION['cart']['cart_id'])) {
-            $cart = Ecommerce\Cart::get((int)$_SESSION['cart']['cart_id']);
+            $cart = Ecommerce\Cart::get((int) $_SESSION['cart']['cart_id']);
         }
         if (!$cart && $create) {
             $cart = new Ecommerce\Cart();

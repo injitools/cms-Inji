@@ -47,7 +47,7 @@ class Card extends \Model {
                 ['image_file_id'],
                 ['level'],
             ]
-    ]];
+        ]];
 
     public static function relations() {
         return [

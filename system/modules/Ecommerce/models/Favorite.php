@@ -18,7 +18,7 @@ class Favorite extends \Model {
     static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'item_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'item'],
-        'date_create'=>['type'=>'dateTime']
+        'date_create' => ['type' => 'dateTime']
     ];
 
     static function relations() {

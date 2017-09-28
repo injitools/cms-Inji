@@ -20,7 +20,7 @@ return [
     },
     'getValueText' => function ($value, $params) {
         $value = \Ecommerce\Delivery\Field\Item::get($value);
-        if($value){
+        if ($value) {
             return $value->value;
         }
         return '';

@@ -53,7 +53,7 @@ class Warehouse extends \Model {
                 ['item_offer_id', 'warehouse_id'],
                 ['count'],
             ]
-    ]];
+        ]];
 
     public static function indexes() {
         return [

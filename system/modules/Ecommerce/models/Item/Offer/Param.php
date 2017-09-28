@@ -96,11 +96,11 @@ class Param extends \Model {
                 ['item_offer_id', 'item_offer_option_id'],
                 ['value']
             ]
-    ]];
+        ]];
 
     /**
      * Return final param value
-     * 
+     *
      * @param string $default
      * @return string
      */

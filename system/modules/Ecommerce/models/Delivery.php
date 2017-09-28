@@ -84,7 +84,7 @@ class Delivery extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name','delivery_provider_id', 'disabled'],
+                ['name', 'delivery_provider_id', 'disabled'],
                 ['price', 'currency_id'],
                 ['max_cart_price', 'icon_file_id'],
                 ['price_text'],

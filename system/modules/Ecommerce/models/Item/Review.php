@@ -24,10 +24,10 @@ class Review extends \Model {
         'rating' => ['type' => 'number'],
         'file_id' => ['type' => 'file'],
         'status' => ['type' => 'select', 'source' => 'array', 'default' => 'new', 'sourceArray' => [
-                'new' => 'Новый',
-                'accept' => 'Принят',
-                'denied' => 'Недопущен'
-            ]
+            'new' => 'Новый',
+            'accept' => 'Принят',
+            'denied' => 'Недопущен'
+        ]
         ],
         'voteup' => ['type' => 'number'],
         'votedown' => ['type' => 'number'],

@@ -75,9 +75,9 @@ class OptionsParser extends \Object {
             'distinct' => false,
             'join' => [],
             'order' => [],
-            'start' => isset($options['start']) ? (int)$options['start'] : 0,
+            'start' => isset($options['start']) ? (int) $options['start'] : 0,
             'key' => isset($options['key']) ? $options['key'] : null,
-            'limit' => !empty($options['count']) ? (int)$options['count'] : 0,
+            'limit' => !empty($options['count']) ? (int) $options['count'] : 0,
         ];
 
         //only not deleted items
@@ -139,8 +139,8 @@ class OptionsParser extends \Object {
         if (!empty(\App::$cur->Ecommerce->config['view_filter']['options'])) {
             foreach (\App::$cur->Ecommerce->config['view_filter']['options'] as $optionId => $optionValue) {
                 $selectOptions['join'][] = [Item\Param::table(), Item::index() . ' = ' . 'option' . $optionId . '.' . Item\Param::colPrefix() . Item::index() . ' AND ' .
-                    'option' . $optionId . '.' . Item\Param::colPrefix() . Item\Option::index() . ' = "' . (int)$optionId . '" AND ' .
-                    'option' . $optionId . '.' . Item\Param::colPrefix() . 'value = "' . (int)$optionValue . '"',
+                    'option' . $optionId . '.' . Item\Param::colPrefix() . Item\Option::index() . ' = "' . (int) $optionId . '" AND ' .
+                    'option' . $optionId . '.' . Item\Param::colPrefix() . 'value = "' . (int) $optionValue . '"',
                     'inner', 'option' . $optionId];
             }
         }
@@ -158,15 +158,15 @@ class OptionsParser extends \Object {
                     }
                     break;
                 case 'badge':
-                    $selectOptions['where'][] = ['item_badge_id', (int)$filter];
+                    $selectOptions['where'][] = ['item_badge_id', (int) $filter];
                     break;
                 case 'price':
                     $colName = Item\Offer\Price::colPrefix() . 'price';
                     if (!empty($filter['min'])) {
-                        $selectOptions['where'][] = [$colName, (float)$filter['min'], '>='];
+                        $selectOptions['where'][] = [$colName, (float) $filter['min'], '>='];
                     }
                     if (!empty($filter['max'])) {
-                        $selectOptions['where'][] = [$colName, (float)$filter['max'], '<='];
+                        $selectOptions['where'][] = [$colName, (float) $filter['max'], '<='];
                     }
                     break;
                 case 'options':
@@ -184,7 +184,7 @@ class OptionsParser extends \Object {
                     }
                     if ($filter) {
                         foreach ($filter as $optionId => $optionValue) {
-                            $optionId = (int)$optionId;
+                            $optionId = (int) $optionId;
                             if (is_array($optionValue)) {
                                 $optionValueArr = [];
                                 foreach ($optionValue as $val) {
@@ -195,7 +195,7 @@ class OptionsParser extends \Object {
                                 $qstr = '= ' . \App::$cur->db->connection->pdo->quote($optionValue);
                             }
                             $selectOptions['join'][] = [$table, $itemIndex . ' = ' . 'option' . $optionId . '.' . $paramPrefix . $itemIndex . ' AND ' .
-                                'option' . $optionId . '.' . $paramPrefix . $optionIndex . ' = "' . (int)$optionId . '" AND ' .
+                                'option' . $optionId . '.' . $paramPrefix . $optionIndex . ' = "' . (int) $optionId . '" AND ' .
                                 'option' . $optionId . '.' . $paramPrefix . 'value ' . $qstr . '',
                                 'inner', 'option' . $optionId];
                         }
@@ -217,14 +217,14 @@ class OptionsParser extends \Object {
                     continue;
                 }
                 $category = Category::get($categoryId);
-                $where[] = ['tree_path', $category->tree_path . (int)$categoryId . '/%', 'LIKE', $first ? 'AND' : 'OR'];
+                $where[] = ['tree_path', $category->tree_path . (int) $categoryId . '/%', 'LIKE', $first ? 'AND' : 'OR'];
                 $first = false;
             }
             $selectOptions['where'][] = $where;
         } else {
             $category = Category::get($options['parent']);
             if ($category) {
-                $selectOptions['where'][] = ['tree_path', $category->tree_path . (int)$options['parent'] . '/%', 'LIKE'];
+                $selectOptions['where'][] = ['tree_path', $category->tree_path . (int) $options['parent'] . '/%', 'LIKE'];
             }
         }
     }

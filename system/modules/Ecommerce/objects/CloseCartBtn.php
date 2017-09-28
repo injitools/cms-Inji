@@ -25,12 +25,12 @@ class CloseCartBtn extends \Ui\DataManager\Action {
         ob_start();
         ?>
         <a onclick="inji.Server.request({
-                        url: '/admin/ecommerce/closeCart/<?= $item->id; ?>',
-                        success: function () {
-                          inji.Ui.dataManagers.reloadAll();
-                        }});
-                      return false;
-           " href ='#' class="btn btn-xs btn-primary">Завершить</a>
+                url: '/admin/ecommerce/closeCart/<?= $item->id; ?>',
+                success: function () {
+                inji.Ui.dataManagers.reloadAll();
+                }});
+                return false;
+                " href='#' class="btn btn-xs btn-primary">Завершить</a>
         <?php
         $btn = ob_get_contents();
         ob_end_clean();

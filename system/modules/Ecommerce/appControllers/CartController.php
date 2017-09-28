@@ -31,14 +31,14 @@ class CartController extends Controller {
                 $ids = [];
                 if (!empty($_POST['cartItems'])) {
                     foreach ($_POST['cartItems'] as $cartItemId => $cartItemCont) {
-                        $cartItem = \Ecommerce\Cart\Item::get((int)$cartItemId);
+                        $cartItem = \Ecommerce\Cart\Item::get((int) $cartItemId);
                         if (!$cartItem) {
                             continue;
                         }
                         if ($cartItem->cart_id != $cart->id) {
                             continue;
                         }
-                        $count = (float)$cartItemCont;
+                        $count = (float) $cartItemCont;
                         if ($count < 0.001) {
                             $count = 1;
                         }
@@ -93,7 +93,7 @@ class CartController extends Controller {
                     }
                 }
                 if (!empty($_POST['discounts']['card_item_id'])) {
-                    $userCard = \Ecommerce\Card\Item::get((int)$_POST['discounts']['card_item_id']);
+                    $userCard = \Ecommerce\Card\Item::get((int) $_POST['discounts']['card_item_id']);
                     if (!$userCard) {
                         $error = true;
                         Msg::add('Такой карты не существует', 'danger');
@@ -164,7 +164,7 @@ class CartController extends Controller {
     }
 
     public function orderDetailAction($id = 0) {
-        $cart = Ecommerce\Cart::get((int)$id);
+        $cart = Ecommerce\Cart::get((int) $id);
         if ($cart->user_id != Users\User::$cur->id) {
             $this->url->redirect('/', 'Это не ваша корзина');
         }
@@ -186,7 +186,7 @@ class CartController extends Controller {
     }
 
     public function continueAction($id = 0) {
-        $cart = \Ecommerce\Cart::get((int)$id);
+        $cart = \Ecommerce\Cart::get((int) $id);
         if ($cart->user_id != Users\User::$cur->id) {
             Tools::redirect('/', 'Это не ваша корзина');
         }
@@ -198,7 +198,7 @@ class CartController extends Controller {
     }
 
     public function deleteAction($id = 0) {
-        $cart = \Ecommerce\Cart::get((int)$id);
+        $cart = \Ecommerce\Cart::get((int) $id);
         if ($cart->user_id != Users\User::$cur->id) {
             Tools::redirect('/', 'Это не ваша корзина');
         }
@@ -213,7 +213,7 @@ class CartController extends Controller {
     }
 
     public function refillAction($id = 0) {
-        $cart = \Ecommerce\Cart::get((int)$id);
+        $cart = \Ecommerce\Cart::get((int) $id);
         if ($cart->user_id != Users\User::$cur->id) {
             Tools::redirect('/', 'Это не ваша корзина');
         }
@@ -255,7 +255,7 @@ class CartController extends Controller {
             $result->content = 'Произошла непредвиденная ошибка при добавлении товара';
             $result->send();
         }
-        $price = \Ecommerce\Item\Offer\Price::get((int)$_GET['itemOfferPriceId']);
+        $price = \Ecommerce\Item\Offer\Price::get((int) $_GET['itemOfferPriceId']);
         if (!$price) {
             $result->success = false;
             $result->content = 'Такой цены не найдено';
@@ -275,7 +275,7 @@ class CartController extends Controller {
         if (empty($_GET['count'])) {
             $count = 1;
         } else {
-            $count = (float)$_GET['count'];
+            $count = (float) $_GET['count'];
         }
 
         $cart = $this->ecommerce->getCurCart();

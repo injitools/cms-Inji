@@ -49,7 +49,7 @@ class Item extends \Model {
                 ['user_id', 'sum'],
                 ['code'],
             ]
-    ]];
+        ]];
 
     public function beforeSave() {
         foreach ($this->card->levels as $level) {

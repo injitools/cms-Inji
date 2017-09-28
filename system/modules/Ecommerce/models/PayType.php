@@ -51,7 +51,7 @@ class PayType extends \Model {
                 ['name', 'icon_file_id'],
                 ['handler', 'info']
             ]
-    ]];
+        ]];
 
     public static function relations() {
         return [

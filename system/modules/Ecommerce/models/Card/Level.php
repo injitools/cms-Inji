@@ -46,7 +46,7 @@ class Level extends \Model {
                 ['name', 'sum'],
                 ['card_id', 'discount_id'],
             ]
-    ]];
+        ]];
 
     public static function relations() {
         return [
