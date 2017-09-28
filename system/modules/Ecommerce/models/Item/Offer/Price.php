@@ -63,7 +63,7 @@ class Price extends \Model {
         'manager' => [
             'map' => [
                 ['price', 'currency_id'],
-                ['item_offer_price_type_id', 'item_offer_id']
+                ['item_offer_price_type_id']
             ]
         ]];
 

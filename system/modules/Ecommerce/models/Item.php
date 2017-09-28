@@ -42,7 +42,8 @@ namespace Ecommerce;
  * @property-read \Ecommerce\Item\Image[] $images
  * @property-read \Users\User $user
  */
-class Item extends \Model {
+class Item extends \Model
+{
 
     public static $categoryModel = 'Ecommerce\Category';
     public static $objectName = 'Товар';
@@ -94,7 +95,8 @@ class Item extends \Model {
         'imgs' => ['type' => 'dataManager', 'relation' => 'images'],
     ];
 
-    public static function simpleItemHandler($request) {
+    public static function simpleItemHandler($request)
+    {
         if ($request) {
             $item = new Item();
             $item->name = $request['name'];
@@ -230,7 +232,8 @@ class Item extends \Model {
         ]
     ];
 
-    public function realType() {
+    public function realType()
+    {
         if ($this->option && $this->option->type) {
             $type = $this->option->type;
 
@@ -246,7 +249,8 @@ class Item extends \Model {
         return 'text';
     }
 
-    public static function indexes() {
+    public static function indexes()
+    {
         return [
             'ecommerce_item_item_category_id' => [
                 'type' => 'INDEX',
@@ -269,7 +273,8 @@ class Item extends \Model {
         ];
     }
 
-    public function beforeSave() {
+    public function beforeSave()
+    {
 
         if ($this->id) {
             $this->search_index = $this->name . ' ';
@@ -279,7 +284,11 @@ class Item extends \Model {
 
             if ($this->options) {
                 $category = $this->category;
-                $categoryOptions = $category->options(['key' => 'item_option_id']);
+                if ($category) {
+                    $categoryOptions = $category->options(['key' => 'item_option_id']);
+                } else {
+                    $categoryOptions = [];
+                }
                 foreach ($this->options as $option) {
                     if ($option->item_option_searchable && $option->value) {
                         if ($option->item_option_type != 'select') {
@@ -315,7 +324,8 @@ class Item extends \Model {
         }
     }
 
-    public static function relations() {
+    public static function relations()
+    {
 
         return [
             'badge' => [
@@ -361,7 +371,8 @@ class Item extends \Model {
     /**
      * @return bool|Item\Offer\Price|null
      */
-    public function getPrice() {
+    public function getPrice()
+    {
         $offers = $this->offers(['key' => false]);
         $curPrice = null;
         if (!$offers) {
@@ -380,7 +391,8 @@ class Item extends \Model {
         return $curPrice;
     }
 
-    public function name() {
+    public function name()
+    {
         if (!empty(\App::$primary->ecommerce->config['item_option_as_name'])) {
             $param = Item\Param::get([['item_id', $this->id], ['item_option_id', \App::$primary->ecommerce->config['item_option_as_name']]]);
             if ($param && $param->value) {
@@ -390,7 +402,8 @@ class Item extends \Model {
         return $this->name;
     }
 
-    public function beforeDelete() {
+    public function beforeDelete()
+    {
         if ($this->id) {
             if ($this->options) {
                 foreach ($this->options as $option) {
@@ -408,11 +421,13 @@ class Item extends \Model {
         }
     }
 
-    public function getHref() {
+    public function getHref()
+    {
         return "/ecommerce/view/{$this->pk()}";
     }
 
-    public function inFav() {
+    public function inFav()
+    {
         if (\Users\User::$cur->id) {
             $fav = \Ecommerce\Favorite::get([['user_id', \Users\User::$cur->id], ['item_id', $this->id]]);
             return (bool)$fav;

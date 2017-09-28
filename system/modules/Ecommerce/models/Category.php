@@ -10,7 +10,33 @@
  */
 
 namespace Ecommerce;
-
+/**
+ * @property int $id
+ * @property int $parent_id
+ * @property string $name
+ * @property string $alias
+ * @property string $viewer
+ * @property string $template
+ * @property string $description
+ * @property int $image_file_id
+ * @property int $icon_file_id
+ * @property bool $options_inherit
+ * @property bool $hidden
+ * @property int $views
+ * @property bool $imported
+ * @property int $weight
+ * @property int $user_id
+ * @property string $tree_path
+ * @property string $date_create
+ *
+ * @property-read \Ecommerce\Item[] $items
+ * @property-read \Ecommerce\Category $parent
+ * @property-read \Ecommerce\Item\Option[] $options
+ * @property-read \Files\File $image
+ * @property-read \Files\File $icon
+ * @property-read \Ecommerce\Category[] $catalogs
+ * @property-read \Users\User $user
+ */
 class Category extends \Model {
 
     public static $objectName = 'Категория магазина';
