@@ -44,7 +44,7 @@ class Form extends \Object {
 
     /**
      * Draw form input
-     * 
+     *
      * @param string $type
      * @param string $name
      * @param string|boolean $label
@@ -72,13 +72,19 @@ class Form extends \Object {
             default:
                 $params = compact('name', 'label', 'options');
                 $params['form'] = $this;
-                \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/' . $type, $params);
+                if (strpos($type, '\\')) {
+                    \App::$cur->view->widget($type, $params);
+                } else {
+                    \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/' . $type, $params);
+                }
+
+
         }
     }
 
     /**
      * Draw form end
-     * 
+     *
      * @param boolean|string $btnText
      * @param array $attributs
      */
