@@ -42,10 +42,10 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
 
     static function calcPrice($cart) {
 
-
+        $config = ConfigItem::getList(['where' => ['delivery_provider_id', $cart->delivery->delivery_provider_id], 'key' => 'name']);
         $sessionId = \Cache::get('PickPointSession', []);
         if (!$sessionId) {
-            $config = ConfigItem::getList(['where' => ['delivery_provider_id', $cart->delivery->delivery_provider_id], 'key' => 'name']);
+
             $result = self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/login', [
                 'Login' => $config['login']->value,
                 'Password' => $config['pass']->value,
@@ -53,25 +53,20 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
             $sessionId = json_decode($result, true)['SessionId'];
             \Cache::set('PickPointSession', [], $sessionId, 12 * 60 * 60);
         }
-        $city = '';
+        $toId = '';
         foreach ($cart->delivery->fields as $field) {
-            if ($field->code === 'index' && !empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
-                $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/postindexpostamatlist', ['PostIndex' => $_POST['deliveryFields'][$field->id]]), true);
+            if ($field->code === 'pickpoint' && !empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
+                //$result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/postindexpostamatlist', ['PostIndex' => $_POST['deliveryFields'][$field->id]]), true);
                 //print_r($result['PostamatList'][0]);
-                if (!empty($result['PostamatList'][0]['CitiName'])) {
-                    $city = $result['PostamatList'][0]['CitiName'];
-                    $toId = $result['PostamatList'][0]['Number'];
-                }
+                $toId = $_POST['deliveryFields'][$field->id];
             }
         }
-        if (!$city) {
+        if (!$toId) {
             return new \Money\Sums([$cart->delivery->currency_id => 0]);
         }
-        if ($city === 'Красноярск') {
-            $senderCity = 'Красноярск';
-        } else {
-            $senderCity = 'Москва';
-        }
+
+        $senderCity = 'Москва';
+
         $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/calctariff', [
             'SessionId' => $sessionId,
             'FromCity' => $senderCity,
@@ -82,8 +77,8 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
             'Width' => 25,
         ]), true);
         $summ = 0;
-        if (!empty($result['Services'][0]['Tariff'])) {
-            $summ = $result['Services'][0]['Tariff'] + $result['Services'][0]['NDS'];
+        foreach ($result['Services'] as $service) {
+            $summ = $service['Tariff'] + $service['NDS'];
         }
 
         return new \Money\Sums([$cart->delivery->currency_id => $summ]);

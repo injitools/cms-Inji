@@ -35,6 +35,10 @@
         document.getElementById('<?=$id;?>').value = result.id;
 // показываем пользователю название точки и адрес доствки
         document.getElementById('address').innerHTML = result['name'] + '<br />' + result['address'];
+        inji.onLoad(function () {
+          inji.Ecommerce.Cart.calcSum();
+        })
+
       }
     </script>
     <?php
