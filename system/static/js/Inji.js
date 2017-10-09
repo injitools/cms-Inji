@@ -8,14 +8,17 @@
  */
 
 function Inji() {
-  this.options = {};
+  this.options = {
+    appRoot: ''
+  };
   this.onLoadCallbacks = [];
   this.loaded = false;
   this.listeners = {};
   this.loadedScripts = {};
 }
+
 Inji.prototype.onLoad = function (callback, start) {
-  if (typeof callback == 'function') {
+  if (typeof callback === 'function') {
     if (this.loaded) {
       callback();
     } else {
@@ -26,7 +29,7 @@ Inji.prototype.onLoad = function (callback, start) {
       }
     }
   }
-}
+};
 Inji.prototype.startCallbacks = function () {
   console.log('inji start onload');
   var callback;
@@ -44,7 +47,7 @@ Inji.prototype.startCallbacks = function () {
   }
   inji.loaded = true;
   console.log('inji start complete');
-}
+};
 Inji.prototype.start = function (options) {
   console.log('Inji start');
   for (var key in options.compresedScripts) {
@@ -69,7 +72,7 @@ Inji.prototype.start = function (options) {
   } else {
     inji.startCallbacks();
   }
-}
+};
 Inji.prototype.loadScripts = function (scripts, key) {
   this.addScript(scripts[key], function () {
     if (typeof (scripts[key].name) != 'undefined') {
@@ -97,7 +100,7 @@ Inji.prototype.loadScripts = function (scripts, key) {
       inji.startCallbacks();
     }
   });
-}
+};
 Inji.prototype.addScript = function (script, callback) {
   var element = document.createElement('script');
   var src = '';
@@ -120,7 +123,7 @@ Inji.prototype.addScript = function (script, callback) {
   document.head.appendChild(element);
 
 
-}
+};
 Inji.prototype.on = function (eventType, callback) {
   if (typeof this.listeners[eventType] == 'undefined') {
     this.listeners[eventType] = [];
@@ -133,7 +136,7 @@ Inji.prototype.event = function (eventType, object) {
       this.listeners[eventType][key](eventType, object);
     }
   }
-}
+};
 Inji.prototype.randomString = function (length) {
   if (!length) {
     length = 20;
@@ -145,7 +148,7 @@ Inji.prototype.randomString = function (length) {
     text += chars.charAt(Math.floor(Math.random() * chars.length));
 
   return text;
-}
+};
 Inji.prototype.numberFormat = function (number, decimals, dec_point, thousands_sep) {
   //// Format a number with grouped thousands
   // 
@@ -181,7 +184,7 @@ Inji.prototype.numberFormat = function (number, decimals, dec_point, thousands_s
 
 
   return km + kw + kd;
-}
+};
 Inji.prototype.get = function (query) {
   var element = document.querySelector(query);
   if (element) {
@@ -195,7 +198,7 @@ Inji.prototype.get = function (query) {
           }
         }
         return null;
-      }
+      };
       this.data = function (name) {
         var data = this.attr('data-' + name);
         try {
@@ -205,9 +208,9 @@ Inji.prototype.get = function (query) {
         }
 
       }
-    }
+    };
   }
-}
+};
 Inji.prototype.parseQueryString = function (string) {
   var result = {};
 
@@ -245,5 +248,5 @@ Inji.prototype.parseQueryString = function (string) {
 
   }
   return result;
-}
+};
 var inji = new Inji();
