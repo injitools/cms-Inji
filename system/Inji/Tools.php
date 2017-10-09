@@ -74,6 +74,9 @@ class Tools extends Model {
     }
 
     public static function delDir($dir) {
+        if (!file_exists($dir)) {
+            return true;
+        }
         $files = array_diff(scandir($dir), array('.', '..'));
         foreach ($files as $file) {
             is_dir("$dir/$file") ? self::delDir("$dir/$file") : unlink("$dir/$file");
@@ -148,9 +151,9 @@ class Tools extends Model {
             $new_width = $max_width;
             $new_height = $max_height;
 //Находим начальные координаты (центрируем новое изображение)
-            $imgX = (int)(($ow / 2) - ($img_width / 2));
+            $imgX = (int) (($ow / 2) - ($img_width / 2));
             if ($pos == 'center') {
-                $imgY = (int)(($oh / 2) - ($img_height / 2));
+                $imgY = (int) (($oh / 2) - ($img_height / 2));
             } else {
                 $imgY = 0;
             }
@@ -292,9 +295,9 @@ class Tools extends Model {
      * @return string
      */
     public static function toRusDate($date) {
-        $yy = (int)substr($date, 0, 4);
-        $mm = (int)substr($date, 5, 2);
-        $dd = (int)substr($date, 8, 2);
+        $yy = (int) substr($date, 0, 4);
+        $mm = (int) substr($date, 5, 2);
+        $dd = (int) substr($date, 8, 2);
 
         $hours = substr($date, 11, 5);
 
