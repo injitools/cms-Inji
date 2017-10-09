@@ -100,12 +100,14 @@ class Cart extends \Model {
             'infos' => [
                 'type' => 'many',
                 'model' => 'Ecommerce\Cart\Info',
-                'col' => 'cart_id'
+                'col' => 'cart_id',
+                'resultKey' => 'useradds_field_id'
             ],
             'deliveryInfos' => [
                 'type' => 'many',
                 'model' => 'Ecommerce\Cart\DeliveryInfo',
-                'col' => 'cart_id'
+                'col' => 'cart_id',
+                'resultKey' => 'delivery_field_id'
             ],
             'extras' => [
                 'type' => 'many',
@@ -337,7 +339,7 @@ class Cart extends \Model {
     }
 
     public function deliverySum() {
-        $sum = new \Money\Sums([]);
+        $sum = new \Money\Sums([0 => 0]);
         if ($this->delivery && $this->needDelivery()) {
             $sums = $this->itemsSum();
             $deliveryPrice = new \Money\Sums([$this->delivery->currency_id => $this->delivery->max_cart_price]);
@@ -394,6 +396,20 @@ class Cart extends \Model {
             $sums[$cartItem->price->currency_id] = isset($sums[$cartItem->price->currency_id]) ? $sums[$cartItem->price->currency_id] + $cartItem->price->price * $cartItem->count : $cartItem->price->price * $cartItem->count;
         }
         return new \Money\Sums($sums);
+    }
+
+    public function checkPrices() {
+        $change = false;
+        foreach ($this->cartItems as $cartItem) {
+            if ($cartItem->price && !$cartItem->price->checkUserAccess()) {
+                $newPrice = $cartItem->price->offer->getPrice();
+                $cartItem->item_offer_price_id = $newPrice->id;
+                $cartItem->save();
+                $cartItem->loadRelation('price');
+                $change = true;
+            }
+        }
+        return $change;
     }
 
     public function addItem($offer_price_id, $count = 1, $final_price = 0) {

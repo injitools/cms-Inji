@@ -10,17 +10,39 @@
  */
 
 namespace Ecommerce\Delivery;
-
+/**
+ * @property string $name
+ * @property string $type
+ * @property string $code
+ * @property string $options
+ * @property string $userfield
+ * @property string $placeholder
+ * @property bool $required
+ * @property bool $save
+ * @property number $weight
+ * @property string $date_create
+ *
+ * @property-read \Ecommerce\Delivery\Field\Item[] $fieldItems
+ * @property-read \Ecommerce\Delivery\DeliveryFieldLink[] $fieldRel
+ *
+ * @method \Ecommerce\Delivery\Field\Item[] fieldItems($options)
+ * @method \Ecommerce\Delivery\DeliveryFieldLink[] fieldRel($options)
+ */
 class Field extends \Model {
 
     public static $objectName = 'Поле доставки';
     public static $cols = [
         //Основные параметры
         'name' => ['type' => 'text'],
-        'type' => ['type' => 'text'],
+        'type' => ['type' => 'select', 'source' => 'array', 'empty' => false, 'sourceArray' => [
+            'text' => 'Текстовое поле',
+            'textarea' => 'Многострочный текст',
+            'select' => 'Выпадающий список',
+        ]],
         'code' => ['type' => 'text'],
         'options' => ['type' => 'textarea'],
         'userfield' => ['type' => 'text'],
+        'placeholder' => ['type' => 'text'],
         'required' => ['type' => 'bool'],
         'save' => ['type' => 'bool'],
         'fieldItem' => ['type' => 'dataManager', 'relation' => 'fieldItems'],

@@ -24,6 +24,7 @@ namespace Ecommerce;
  * @property int $icon_file_id
  * @property string $info
  * @property bool $disabled
+ * @property bool $default
  * @property number $weight
  * @property string $date_create
  * @property \Files\File $icon
@@ -45,6 +46,7 @@ class Delivery extends \Model {
         'icon_file_id' => ['type' => 'image'],
         'info' => ['type' => 'html'],
         'disabled' => ['type' => 'bool'],
+        'default' => ['type' => 'bool'],
         //Системные
         'weight' => ['type' => 'number'],
         'date_create' => ['type' => 'dateTime'],
@@ -64,6 +66,7 @@ class Delivery extends \Model {
         'priceChanger' => 'Градация стоимости',
         'field' => 'Поля',
         'disabled' => 'Отключено',
+        'default' => 'По умолчанию',
     ];
     public static $dataManagers = [
         'manager' => [
@@ -75,6 +78,7 @@ class Delivery extends \Model {
                 'currency_id',
                 'max_cart_price',
                 'disabled',
+                'default',
                 'field',
                 'priceChanger',
             ],
@@ -84,7 +88,8 @@ class Delivery extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name', 'delivery_provider_id', 'disabled'],
+                ['name', 'delivery_provider_id'],
+                ['default', 'disabled'],
                 ['price', 'currency_id'],
                 ['max_cart_price', 'icon_file_id'],
                 ['price_text'],
@@ -92,7 +97,8 @@ class Delivery extends \Model {
                 ['priceChanger'],
                 ['field']
             ]
-        ]];
+        ]
+    ];
 
     public static function relations() {
         return [
@@ -121,4 +127,9 @@ class Delivery extends \Model {
         ];
     }
 
+    function beforeSave() {
+        if ($this->default) {
+            Delivery::update(['default' => 0]);
+        }
+    }
 }

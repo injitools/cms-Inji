@@ -27,7 +27,7 @@ class DeliveryFieldLink extends \Model {
     public static $dataManagers = [
         'manager' => [
             'name' => 'Поля для доставки',
-            'cols' => ['delivery_id', 'delivery_field_id', 'date_create'],
+            'cols' => ['delivery_field_id', 'date_create'],
             'sortMode' => true
         ]
     ];

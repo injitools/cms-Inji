@@ -11,6 +11,18 @@
 
 namespace Ecommerce\Delivery;
 
+/**
+ * @property int $id
+ * @property string $name
+ * @property int $user_id
+ * @property string $date_create
+ *
+ * @property \Ecommerce\Delivery\Value[] $values
+ * @property \Users\User $user
+ *
+ * @method \Ecommerce\Delivery\Value[] values($options)
+ * @method \Users\User user($options)
+ */
 class Save extends \Model {
 
     public static $cols = [

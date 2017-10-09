@@ -9,14 +9,14 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery\Field;
+namespace Ecommerce\UserAdds\Field;
 
 class Item extends \Model {
 
-    public static $objectName = 'Элемент коллекции поля доставки';
+    public static $objectName = 'Элемент коллекции поля формы';
     public static $cols = [
         //Основные параметры
-        'delivery_field_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'field'],
+        'useradds_field_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'field'],
         'value' => ['type' => 'text'],
         'data' => ['type' => 'textarea'],
         //Системные
@@ -48,7 +48,7 @@ class Item extends \Model {
         return [
             'field' => [
                 'model' => 'Ecommerce\Delivery\Field',
-                'col' => 'delivery_field_id'
+                'col' => 'useradds_field_id'
             ]
         ];
     }

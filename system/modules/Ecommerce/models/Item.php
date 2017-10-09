@@ -365,23 +365,11 @@ class Item extends \Model {
     /**
      * @return bool|Item\Offer\Price|null
      */
-    public function getPrice() {
-        $offers = $this->offers(['key' => false]);
-        $curPrice = null;
-        if (!$offers) {
-            return false;
+    public function getPrice($offerId = 0) {
+        if ($offerId) {
+            return $this->offers ? $this->offers[$offerId]->getPrice() : false;
         }
-        foreach ($offers[0]->prices as $price) {
-            if (!$price->type) {
-                $curPrice = $price;
-            } elseif (
-                (!$price->type->roles && !$curPrice) ||
-                ($price->type->roles && !$curPrice && strpos($price->type->roles, "|" . \Users\User::$cur->role_id . "|") !== false)
-            ) {
-                $curPrice = $price;
-            }
-        }
-        return $curPrice;
+        return $this->offers(['key' => false]) ? $this->offers(['key' => false])[0]->getPrice() : false;
     }
 
     public function name() {

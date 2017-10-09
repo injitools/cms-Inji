@@ -8,6 +8,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+
 class Ecommerce extends Module {
 
     public function init() {
@@ -64,43 +65,63 @@ class Ecommerce extends Module {
         }
     }
 
+    /**
+     * @param array $data
+     * @param \Ecommerce\Cart $cart
+     * @return bool|\Ecommerce\UserAdds
+     */
     public function parseFields($data, $cart) {
+        $user = \Users\User::get($cart->user_id);
         $fields = \Ecommerce\UserAdds\Field::getList();
-        $name = '';
-        foreach ($fields as $field) {
-            if ($field->save && !empty($data[$field->id])) {
-                $name .= htmlspecialchars($data[$field->id]) . ' ';
+        if ($user) {
+            $name = '';
+            foreach ($fields as $field) {
+                if ($field->save && !empty($data[$field->id])) {
+                    $name .= htmlspecialchars($data[$field->id]) . ' ';
+                }
             }
-        }
-        $name = trim($name);
+            $name = trim($name);
 
-        $userAdds = Ecommerce\UserAdds::get([['user_id', $cart->user->id], ['name', $name]]);
-        if (!$userAdds) {
-            $userAdds = new Ecommerce\UserAdds();
-            $userAdds->user_id = $cart->user->id;
-            $userAdds->name = $name;
-            $userAdds->save();
+            $userAdds = Ecommerce\UserAdds::get([['user_id', $cart->user->id], ['name', $name]]);
+            if (!$userAdds) {
+                $userAdds = new Ecommerce\UserAdds();
+                $userAdds->user_id = $cart->user->id;
+                $userAdds->name = $name;
+                $userAdds->save();
+            }
             foreach ($fields as $field) {
                 if (!$field->save) {
                     continue;
                 }
-                $userAddsValue = new Ecommerce\UserAdds\Value();
-                $userAddsValue->value = htmlspecialchars($data[$field->id]);
-                $userAddsValue->useradds_field_id = $field->id;
-                $userAddsValue->useradds_id = $userAdds->id;
-                $userAddsValue->save();
+                if (!isset($userAdds->values[$field->id]) && !empty($data[$field->id])) {
+                    $userAddsValue = new Ecommerce\UserAdds\Value();
+                    $userAddsValue->value = htmlspecialchars($data[$field->id]);
+                    $userAddsValue->useradds_field_id = $field->id;
+                    $userAddsValue->useradds_id = $userAdds->id;
+                    $userAddsValue->save();
+                } elseif (!empty($data[$field->id])) {
+                    $userAddsValue = $userAdds->values[$field->id];
+                    $userAddsValue->value = htmlspecialchars($data[$field->id]);
+                    $userAddsValue->save();
+                }
             }
         }
-        $user = \Users\User::get($cart->user_id);
+
         foreach ($fields as $field) {
-            $info = new \Ecommerce\Cart\Info();
-            $info->name = $field->name;
-            $info->value = htmlspecialchars($data[$field->id]);
-            $info->useradds_field_id = $field->id;
-            $info->cart_id = $cart->id;
-            $info->save();
-            $relations = [];
-            if ($field->userfield) {
+            if (!isset($cart->infos[$field->id]) && !empty($data[$field->id])) {
+                $info = new \Ecommerce\Cart\Info();
+                $info->name = $field->name;
+                $info->value = htmlspecialchars($data[$field->id]);
+                $info->useradds_field_id = $field->id;
+                $info->cart_id = $cart->id;
+                $info->save();
+            } elseif (!empty($data[$field->id])) {
+                $info = $cart->infos[$field->id];
+                $info->value = htmlspecialchars($data[$field->id]);
+                $info->save();
+            }
+            if (isset($info) && $user && $field->userfield) {
+                $relations = [];
                 if (strpos($field->userfield, ':')) {
                     $path = explode(':', $field->userfield);
                     if (!$user->{$path[0]}->{$path[1]}) {
@@ -112,51 +133,73 @@ class Ecommerce extends Module {
                         $user->{$field->userfield} = $info->value;
                     }
                 }
+
+                foreach ($relations as $rel) {
+                    $user->$rel->save();
+                }
+                $user->save();
             }
-            foreach ($relations as $rel) {
-                $user->$rel->save();
-            }
-            $user->save();
         }
-        return $userAdds;
+        return isset($userAdds) ? $userAdds : false;
     }
 
+    /**
+     * @param array $data
+     * @param \Ecommerce\Cart $cart
+     * @param \Ecommerce\Delivery\Field[] $fields
+     * @return bool|\Ecommerce\Delivery\Save
+     */
     public function parseDeliveryFields($data, $cart, $fields) {
-        $name = '';
-        foreach ($fields as $field) {
-            if ($field->save && !empty($data[$field->id])) {
-                $name .= htmlspecialchars($data[$field->id]) . ' ';
+        $user = \Users\User::get($cart->user_id);
+        if ($user) {
+            $name = '';
+            foreach ($fields as $field) {
+                if ($field->save && !empty($data[$field->id])) {
+                    $name .= htmlspecialchars($data[$field->id]) . ' ';
+                }
             }
-        }
-        $name = trim($name);
+            $name = trim($name);
 
-        $save = Ecommerce\Delivery\Save::get([['user_id', $cart->user->id], ['name', $name]]);
-        if (!$save) {
-            $save = new Ecommerce\Delivery\Save();
-            $save->user_id = $cart->user->id;
-            $save->name = $name;
-            $save->save();
+            $save = Ecommerce\Delivery\Save::get([['user_id', $cart->user->id], ['name', $name]]);
+            if (!$save) {
+                $save = new Ecommerce\Delivery\Save();
+                $save->user_id = $cart->user->id;
+                $save->name = $name;
+                $save->save();
+            }
             foreach ($fields as $field) {
                 if (!$field->save) {
                     continue;
                 }
-                $saveValue = new Ecommerce\Delivery\Value();
-                $saveValue->value = htmlspecialchars($data[$field->id]);
-                $saveValue->delivery_field_id = $field->id;
-                $saveValue->delivery_save_id = $save->id;
-                $saveValue->save();
+                if (!isset($save->values[$field->id]) && !empty($data[$field->id])) {
+                    $saveValue = new Ecommerce\Delivery\Value();
+                    $saveValue->value = htmlspecialchars($data[$field->id]);
+                    $saveValue->delivery_field_id = $field->id;
+                    $saveValue->delivery_save_id = $save->id;
+                    $saveValue->save();
+                } elseif (!empty($data[$field->id])) {
+                    $saveValue = $save->values[$field->id];
+                    $saveValue->value = htmlspecialchars($data[$field->id]);
+                    $saveValue->save();
+                }
             }
         }
-        $user = \Users\User::get($cart->user_id);
         foreach ($fields as $field) {
-            $info = new \Ecommerce\Cart\DeliveryInfo();
-            $info->name = $field->name;
-            $info->value = htmlspecialchars($data[$field->id]);
-            $info->delivery_field_id = $field->id;
-            $info->cart_id = $cart->id;
-            $info->save();
-            $relations = [];
-            if ($field->userfield) {
+            if (!isset($cart->deliveryInfos[$field->id]) && !empty($data[$field->id])) {
+                $info = new \Ecommerce\Cart\DeliveryInfo();
+                $info->name = $field->name;
+                $info->value = htmlspecialchars($data[$field->id]);
+                $info->delivery_field_id = $field->id;
+                $info->cart_id = $cart->id;
+                $info->save();
+            } elseif (!empty($data[$field->id])) {
+                $info = $cart->deliveryInfos[$field->id];
+                $info->value = htmlspecialchars($data[$field->id]);
+                $info->save();
+            }
+
+            if (isset($info) && $user && $field->userfield) {
+                $relations = [];
                 if (strpos($field->userfield, ':')) {
                     $path = explode(':', $field->userfield);
                     if (!$user->{$path[0]}->{$path[1]}) {
@@ -168,19 +211,26 @@ class Ecommerce extends Module {
                         $user->{$field->userfield} = $info->value;
                     }
                 }
+                foreach ($relations as $rel) {
+                    $user->$rel->save();
+                }
+                $user->save();
             }
-            foreach ($relations as $rel) {
-                $user->$rel->save();
-            }
-            $user->save();
         }
-        return $save;
+        return isset($save) ? $save : false;
     }
 
+    /**
+     * @param bool $create
+     * @return \Ecommerce\Cart
+     */
     public function getCurCart($create = true) {
         $cart = false;
         if (!empty($_SESSION['cart']['cart_id'])) {
             $cart = Ecommerce\Cart::get((int) $_SESSION['cart']['cart_id']);
+            if ($cart->checkPrices()) {
+                $cart->save();
+            }
         }
         if (!$cart && $create) {
             $cart = new Ecommerce\Cart();
@@ -192,6 +242,11 @@ class Ecommerce extends Module {
             }
             $cart->save();
             $_SESSION['cart']['cart_id'] = $cart->id;
+        }
+        $defaultDelivery = \Ecommerce\Delivery::get(1, 'default');
+        if ($defaultDelivery && !$cart->delivery_id) {
+            $cart->delivery_id = $defaultDelivery->id;
+            $cart->save();
         }
         return $cart;
     }

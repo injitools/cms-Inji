@@ -51,7 +51,7 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
                 'Password' => $config['pass']->value,
             ]);
             $sessionId = json_decode($result, true)['SessionId'];
-            \Cache::set('PickPointSession', $sessionId, [], 12 * 60 * 60);
+            \Cache::set('PickPointSession', [], $sessionId, 12 * 60 * 60);
         }
         $city = '';
         foreach ($cart->delivery->fields as $field) {

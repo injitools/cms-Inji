@@ -26,7 +26,11 @@
         <?php
     }
     foreach (Ecommerce\UserAdds\Field::getList(['order' => ['weight', 'asc']]) as $field) {
-        $form->input($field->type, "userAdds[fields][{$field->id}]", $field->name, ['required' => $field->required]);
+        $options = [
+            'required' => $field->required,
+            'placeholder' => $field->placeholder
+        ];
+        $form->input($field->type, "userAdds[fields][{$field->id}]", $field->name, $options);
     }
     ?>
 </fieldset>

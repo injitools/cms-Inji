@@ -10,7 +10,18 @@
  */
 
 namespace Ecommerce;
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property int $user_id
+ * @property string $date_create
+ *
+ * @property \Ecommerce\UserAdds\Value[] $values
+ * @property \Users\User $user
+ *
+ * @method \Ecommerce\UserAdds\Value[] values($options)
+ * @method \Users\User user($options)
+ */
 class UserAdds extends \Model {
 
     public static $labels = [
@@ -32,6 +43,7 @@ class UserAdds extends \Model {
                 'type' => 'many',
                 'model' => 'Ecommerce\UserAdds\Value',
                 'col' => 'useradds_id',
+                'resultKey' => 'useradds_field_id'
             ],
             'user' => [
                 'model' => 'Users\User',

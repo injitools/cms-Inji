@@ -10,7 +10,18 @@
  */
 
 namespace Ecommerce\Card;
-
+/**
+ * @property string $code
+ * @property string $sum
+ * @property int $card_id
+ * @property int $user_id
+ * @property int $card_level_id
+ * @property string $date_create
+ *
+ * @property-read \Ecommerce\Card $card
+ * @property-read \Ecommerce\Card\Level $level
+ * @property-read \Users\User $user
+ */
 class Item extends \Model {
 
     public static $objectName = 'Карта пользователя';

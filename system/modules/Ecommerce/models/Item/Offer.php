@@ -25,7 +25,7 @@ namespace Ecommerce\Item;
  * @method \Ecommerce\Item\Offer\Price[] prices($options)
  * @property-read \Ecommerce\Item\Offer\Bonus[] $bonuses
  * @property-read \Ecommerce\Item\Offer\Param[] $options
- * @property-read \Ecommerce\Item[] $item
+ * @property-read \Ecommerce\Item $item
  */
 class Offer extends \Model {
 
@@ -146,6 +146,19 @@ class Offer extends \Model {
 
         $blocked = \App::$cur->db->select(\Ecommerce\Warehouse\Block::table())->fetch();
         return (float) $warehouse['sum'] - (float) $blocked['sum'];
+    }
+
+    public function getPrice() {
+        $curPrice = null;
+        foreach ($this->prices as $price) {
+            if (
+                (!$curPrice && (!$price->type || !$price->type->roles)) ||
+                ($price->type->roles && !$curPrice && strpos($price->type->roles, "|" . \Users\User::$cur->role_id . "|") !== false)
+            ) {
+                $curPrice = $price;
+            }
+        }
+        return $curPrice;
     }
 
     public function beforeDelete() {

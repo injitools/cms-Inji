@@ -1,5 +1,5 @@
 <?php
-$cart = !empty($_SESSION['cart']['cart_id']) ? Ecommerce\Cart::get((int) $_SESSION['cart']['cart_id']) : false;
+$cart = App::$cur->ecommerce->getCurCart(false);
 $count = $cart ? count($cart->cartItems) : 0;
 $sum = $cart ? $cart->sum : 0;
 ?>

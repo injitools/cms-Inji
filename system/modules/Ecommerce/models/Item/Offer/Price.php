@@ -10,6 +10,9 @@
  */
 
 namespace Ecommerce\Item\Offer;
+
+use Users\User;
+
 /**
  * Class Price
  *
@@ -65,7 +68,20 @@ class Price extends \Model {
                 ['price', 'currency_id'],
                 ['item_offer_price_type_id']
             ]
-        ]];
+        ]
+    ];
+
+    /**
+     * @param bool|\Users\User $user
+     * @return bool
+     */
+    public function checkUserAccess($user = false) {
+        if (!$user) {
+            $user = User::$cur;
+        }
+        return (!$this->type->roles) ||
+            ($this->type->roles && strpos($this->type->roles, "|" . $user->role_id . "|") !== false);
+    }
 
     public static function relations() {
         return [
