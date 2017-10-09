@@ -8,10 +8,17 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-
+/**
+ * @class Server
+ * @memberOf inji
+ */
 function Server() {
 
 }
+
+/**
+ * @memberOf Server
+ */
 Server.prototype.init = function () {
   $.each($('form[csrf]'), function () {
     var form = $(this);
@@ -30,6 +37,9 @@ Server.prototype.init = function () {
 
   })
 };
+/**
+ * @memberOf Server
+ */
 Server.prototype.runCommands = function (commands) {
   for (var key in commands) {
     var command = commands[key];
@@ -48,6 +58,9 @@ Server.prototype.runCommands = function (commands) {
     }
   }
 };
+/**
+ * @memberOf Server
+ */
 Server.prototype.CSRF = function (callback, err, btn) {
   var key = inji.randomString();
   this.request({
@@ -64,6 +77,9 @@ Server.prototype.CSRF = function (callback, err, btn) {
     }
   }, btn);
 };
+/**
+ * @memberOf Server
+ */
 Server.prototype.request = function (options, btn) {
   var ajaxOptions = {
     url: '',
@@ -72,7 +88,7 @@ Server.prototype.request = function (options, btn) {
     data: {},
     async: true,
     contentType: false,
-    cache: false,
+    cache: false
   };
   for (var key in options) {
     ajaxOptions[key] = options[key];
@@ -80,18 +96,18 @@ Server.prototype.request = function (options, btn) {
   if (options.url && options.url.indexOf('http:') && options.url.indexOf('/') !== 0 && options.url.indexOf('https:') !== 0 && options.url.indexOf(inji.options.appRoot) !== 0) {
     ajaxOptions.url = inji.options.appRoot + (options.url.replace(/^\//g, ''));
   }
-  if (typeof btn != 'undefined') {
+  if (btn) {
     if (!$(btn).data('loading-text')) {
       $(btn).data('loading-text', 'подождите');
     }
-    var btn = $(btn).button().button('loading');
+    btn = $(btn).button().button('loading');
   }
   var callback = null;
-  if (typeof options.success != 'undefined') {
+  if (options.success !== undefined) {
     callback = options.success;
   }
   ajaxOptions.success = function (data, textStatus, jqXHR) {
-    if (typeof btn != 'undefined') {
+    if (btn) {
       btn.button('reset');
     }
     if (ajaxOptions.dataType != 'json') {
