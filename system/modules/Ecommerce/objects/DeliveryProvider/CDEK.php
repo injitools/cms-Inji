@@ -12,6 +12,7 @@ namespace Ecommerce\DeliveryProvider;
 
 use Ecommerce\Delivery\Field\Item;
 use Ecommerce\Delivery\Provider\ConfigItem;
+use Ecommerce\UserAdds\Field;
 
 class CDEK extends \Ecommerce\DeliveryProvider {
     static $name = 'СДЭК - курьерская служба';
@@ -26,41 +27,21 @@ class CDEK extends \Ecommerce\DeliveryProvider {
         $cityId = 0;
         $senderCity = 44;
         $tariff = 136;
-        foreach ($cart->delivery->fields as $field) {
-            if ($field->code === 'city' && !empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
-                $item = Item::get([['id', $_POST['deliveryFields'][$field->id]], ['delivery_field_id', $field->id]]);
-                if ($item) {
-                    $cityId = json_decode($item->data, true)['ID'];
-                }
+        $fieldInfo = Field::get('deliveryfield_city', 'code');
+        $field = \Ecommerce\Delivery\Field::get('city', 'code');
+        if (isset($cart->infos[$fieldInfo->id])) {
+            $item = Item::get([['id', $cart->infos[$fieldInfo->id]->value], ['delivery_field_id', $field->id]]);
+            if ($item) {
+                $cityId = json_decode($item->data, true)['ID'];
             }
+        }
+        foreach ($cart->delivery->fields as $field) {
             if ($field->code === 'cdektype' && !empty($_POST['deliveryFields'][$field->id]) && is_numeric($_POST['deliveryFields'][$field->id])) {
                 $item = Item::get([['id', $_POST['deliveryFields'][$field->id]], ['delivery_field_id', $field->id]]);
                 if ($item) {
                     $tariff = $item->data;
                 }
             }
-        }
-        if ($cityId == 278) {
-            $senderCity = 278;
-            foreach ($cart->cartItems as $cartItem) {
-                if ($cartItem->item->offers(['key' => false]) && $cartItem->item->offers(['key' => false])[0]->warehouses) {
-                    $msocow = 0;
-                    $kras = 0;
-                    foreach ($cartItem->item->offers(['key' => false])[0]->warehouses as $warehouse) {
-                        if ($warehouse->warehouse_id != 6) {
-                            $kras += $warehouse->count;
-                        } else {
-                            $msocow += $warehouse->count;
-                        }
-
-                    }
-                    if ($kras < $cartItem->count) {
-                        $senderCity = 44;
-                    }
-                }
-            }
-        } else {
-            $senderCity = 44;
         }
         if ($cityId) {
             $config = ConfigItem::getList(['where' => ['delivery_provider_id', $cart->delivery->delivery_provider_id], 'key' => 'name']);

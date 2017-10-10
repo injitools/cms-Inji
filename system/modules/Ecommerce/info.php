@@ -3,7 +3,8 @@
 return array(
     'name' => 'Онлайн-магазин',
     'migrations' => [
-        'cdekCities' => 'cdekCities'
+        'cdekCities' => 'cdekCities',
+        'cdekPVZ' => 'cdekPVZ',
     ],
     'menu' => [
         'appAdmin' => [

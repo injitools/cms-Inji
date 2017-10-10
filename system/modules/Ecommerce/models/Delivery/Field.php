@@ -11,6 +11,7 @@
 
 namespace Ecommerce\Delivery;
 /**
+ * @property int $id
  * @property string $name
  * @property string $type
  * @property string $code

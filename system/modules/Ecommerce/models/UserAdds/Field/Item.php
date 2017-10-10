@@ -10,7 +10,18 @@
  */
 
 namespace Ecommerce\UserAdds\Field;
-
+/**
+ * @property int $id
+ * @property int $useradds_field_id
+ * @property string $value
+ * @property string $data
+ * @property int $weight
+ * @property string $date_create
+ *
+ * @property \Ecommerce\Delivery\Field $field
+ *
+ * @method \Ecommerce\Delivery\Field field($options)
+ */
 class Item extends \Model {
 
     public static $objectName = 'Элемент коллекции поля формы';
