@@ -20,7 +20,7 @@ return [
             ]);
             $field->save();
         }
-        $handle = fopen(__DIR__ . '/../vendor/cdekPVZ.csv', 'r');
+        $handle = fopen(__DIR__ . '/../vendor/CdekPVZ.csv', 'r');
         $row = 1;
         $cols = [];
         while (($data = fgetcsv($handle, 10000, ";")) !== FALSE) {
