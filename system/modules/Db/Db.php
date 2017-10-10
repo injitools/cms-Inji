@@ -61,10 +61,11 @@ class Db extends Module {
         }
         $pos = 0;
         foreach ($migrations as $migrationVersion => $migration) {
-            if ($startVersion == $migrationVersion) {
-                return array_slice($migration, $pos, null, true);
-            }
             $pos++;
+            if ($startVersion == $migrationVersion) {
+                return array_slice($migrations, $pos, null, true);
+            }
+
         }
         return [];
     }
