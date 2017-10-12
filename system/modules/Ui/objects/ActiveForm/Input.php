@@ -24,10 +24,12 @@ class Input extends \Object {
     public function draw() {
         $inputName = $this->colName();
         $inputLabel = $this->colLabel();
-
         $inputOptions = $this->options;
         $inputOptions['value'] = $this->value();
         $inputOptions['disabled'] = $this->readOnly();
+        if(!empty($this->colParams['required'])){
+            $inputOptions['required'] = true;
+        }
 
         $preset = $this->preset();
         if ($preset !== null) {

@@ -104,7 +104,9 @@ class DataManagerController extends Controller {
 
 
             $cols = $dataManager->getCols();
-            $cols = array_slice($cols, 1);
+            if ($dataManager->getActions(true)) {
+                $cols = array_slice($cols, 1);
+            }
             $endRow = true;
             foreach ($cols as $colName => $options) {
                 if (!$endRow) {

@@ -110,7 +110,7 @@ class Tools extends Model {
                 break;
         }
         $imagecreatefromX = "imagecreatefrom{$img_type}";
-        $src_res = $imagecreatefromX($img_path);
+        $src_res = @$imagecreatefromX($img_path);
         if (!$src_res) {
             return false;
         }

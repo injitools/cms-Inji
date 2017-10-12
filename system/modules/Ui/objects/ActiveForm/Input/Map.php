@@ -18,7 +18,6 @@ class Map extends \Ui\ActiveForm\Input {
         if (isset($request[$this->colName])) {
             $this->activeForm->model->{$colName} = json_encode($request[$this->colName]);
         } else {
-            $this->activeForm->model->{$colName} = 0;
             $this->activeForm->model->{$colName} = '';
         }
     }

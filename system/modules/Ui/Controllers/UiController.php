@@ -42,6 +42,7 @@ class UiController extends Controller {
             if (isset($get['notSave'])) {
                 unset($get['notSave']);
             }
+            $this->view->widget('msgList');
             $form->action = (App::$cur->system ? '/' . App::$cur->name : '') . '/ui/formPopUp/?' . http_build_query($get);
             $form->draw($params, true);
             $return->content = ob_get_contents();

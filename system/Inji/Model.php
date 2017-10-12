@@ -138,6 +138,9 @@ class Model {
      * @return string
      */
     public static function getColValue($object, $valuePath, $convert = false, $manageHref = false) {
+        if(is_array($object)){
+            $object = array_shift($object);
+        }
         if (strpos($valuePath, ':')) {
             $rel = substr($valuePath, 0, strpos($valuePath, ':'));
             $param = substr($valuePath, strpos($valuePath, ':') + 1);
@@ -227,7 +230,8 @@ class Model {
                             $relation = $itemModel::getRelation($relationName);
                             $relModel = $relation['model'];
                         } else {
-                            $relation = static::getRelation($colInfo['colParams']['relation']);
+                            $itemModel = get_class($item);
+                            $relation = $itemModel::getRelation($colInfo['colParams']['relation']);
                             $relModel = $relation['model'];
                         }
                         $relValue = $relModel::get($item->$colName);

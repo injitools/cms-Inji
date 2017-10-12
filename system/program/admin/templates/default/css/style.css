@@ -177,3 +177,7 @@ h1 {
 .categoryTree .active > a.glyphicon {
     font-weight: normal;
 }
+
+.sidebar-brand {
+    overflow: hidden;
+}

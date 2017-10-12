@@ -2,8 +2,6 @@
     <ul class="sidebar-nav">
         <li class="text-center" style="text-indent: 0"><a href="/" style="font-size:16px;">Перейти на сайт</a></li>
         <div class="sidebar-brand">
-
-            <label>Текущий сайт:</label>
             <div class="col-xs-4">
                 <img
                     src="<?= Statics::file(!empty(\App::$primary->config['site']['site_logo']) ? \App::$primary->config['site']['site_logo'] : ''); ?>"

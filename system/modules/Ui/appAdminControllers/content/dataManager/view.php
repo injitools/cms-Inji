@@ -19,7 +19,7 @@ foreach ($cols as $colName) {
     $type = !empty($colInfo['colParams']['type']) ? $colInfo['colParams']['type'] : 'string';
     if ($type != 'dataManager') {
         $table->addRow([
-            !empty($modelName::$labels[$colName]) ? $modelName::$labels[$colName] : $colName,
+            str_replace(' ','&nbsp;',!empty($modelName::$labels[$colName]) ? $modelName::$labels[$colName] : $colName),
             \Model::resloveTypeValue($item, $colName, true)
         ]);
     }

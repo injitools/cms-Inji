@@ -12,7 +12,9 @@
 namespace Users;
 
 class User extends \Model {
-
+    /**
+     * @var \Users\User
+     */
     public static $cur;
     public static $objectName = "Пользователь";
     public static $labels = [
