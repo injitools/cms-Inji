@@ -67,6 +67,7 @@ class Category extends \Model {
         'name' => 'Название',
         'alias' => 'Алиас',
         'parent_id' => 'Родительская категория',
+        'icon_file_id' => 'Иконка',
         'image_file_id' => 'Изображение',
         'description' => 'Описание',
         'options_inherit' => 'Наследовать набор свойств',
@@ -77,7 +78,7 @@ class Category extends \Model {
         'manager' => [
             'map' => [
                 ['name', 'alias'],
-                ['parent_id', 'icon_file_id', 'image_file_id'],
+                ['parent_id', 'image_file_id', 'icon_file_id'],
                 ['viewer', 'template'],
                 ['options_inherit', 'hidden'],
                 ['options'],
@@ -144,6 +145,7 @@ class Category extends \Model {
             'name' => 'Категории товаров',
             'cols' => [
                 'name',
+                'image_file_id',
                 'parent_id',
             ],
             'sortMode' => true
