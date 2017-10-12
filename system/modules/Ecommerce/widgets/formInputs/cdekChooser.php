@@ -25,15 +25,17 @@
             $fieldInfo = \Ecommerce\UserAdds\Field::get('deliveryfield_city', 'code');
             if ($fieldInfo && isset($cart->infos[$fieldInfo->id]) && \Ecommerce\Delivery\Field\Item::get($cart->infos[$fieldInfo->id]->value)) {
                 $city = \Ecommerce\Delivery\Field\Item::get($cart->infos[$fieldInfo->id]->value)->value;
+                $pointsField = \Ecommerce\Delivery\Field::get('cdekPVZ', 'code');
                 $points = \Ecommerce\Delivery\Field\Item::getList(['where' => [
-                    ['delivery_field_id', \Ecommerce\Delivery\Field::get('cdekPVZ', 'code')->id],
+                    ['delivery_field_id', $pointsField->id],
                     [\Ecommerce\Delivery\Field\Item::colPrefix() . 'data->\'$."Город"\'', $city]
                 ]]);
                 ?>
-                <select class="form-control">
+                <select class="form-control" name="<?= $name; ?>">
                     <?php
                     foreach ($points as $point) {
-                        echo "<option>{$point->value}</option>";
+                        $selected = (isset($cart->deliveryInfos[$pointsField->id]) && $cart->deliveryInfos[$pointsField->id]->value == $point->value) ? ' selected="selected"' : '';
+                        echo "<option{$selected}>{$point->value}</option>";
                     }
                     ?>
                 </select>

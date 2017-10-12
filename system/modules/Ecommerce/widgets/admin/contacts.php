@@ -20,7 +20,7 @@ if ($count > 6) {
     <?php
 } else {
     foreach ($item->infos as $info) {
-        echo $info->value . ' ';
+        echo \Model::resloveTypeValue($info, 'value') . ' ';
     }
 }
 ?>

@@ -142,6 +142,7 @@ class Item extends \Model {
             'name' => 'Покупки',
             'cols' => [
                 'item_id',
+                'price:offer:article',
                 'item_offer_price_id',
                 'price:currency' => ['label' => 'Валюта'],
                 'count',

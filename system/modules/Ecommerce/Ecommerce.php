@@ -93,32 +93,38 @@ class Ecommerce extends Module {
                 if (!$field->save) {
                     continue;
                 }
-                if (!isset($userAdds->values[$field->id]) && !empty($data[$field->id])) {
-                    $userAddsValue = new Ecommerce\UserAdds\Value();
-                    $userAddsValue->value = htmlspecialchars($data[$field->id]);
-                    $userAddsValue->useradds_field_id = $field->id;
-                    $userAddsValue->useradds_id = $userAdds->id;
-                    $userAddsValue->save();
-                } elseif (!empty($data[$field->id])) {
-                    $userAddsValue = $userAdds->values[$field->id];
-                    $userAddsValue->value = htmlspecialchars($data[$field->id]);
-                    $userAddsValue->save();
+                if (!empty($data[$field->id])) {
+                    $value = htmlspecialchars($data[$field->id]);
+                    if (!isset($userAdds->values[$field->id])) {
+                        $userAddsValue = new Ecommerce\UserAdds\Value();
+                        $userAddsValue->value = $value;
+                        $userAddsValue->useradds_field_id = $field->id;
+                        $userAddsValue->useradds_id = $userAdds->id;
+                        $userAddsValue->save();
+                    } else {
+                        $userAddsValue = $userAdds->values[$field->id];
+                        $userAddsValue->value = $value;
+                        $userAddsValue->save();
+                    }
                 }
             }
         }
 
         foreach ($fields as $field) {
-            if (!isset($cart->infos[$field->id]) && !empty($data[$field->id])) {
-                $info = new \Ecommerce\Cart\Info();
-                $info->name = $field->name;
-                $info->value = htmlspecialchars($data[$field->id]);
-                $info->useradds_field_id = $field->id;
-                $info->cart_id = $cart->id;
-                $info->save();
-            } elseif (!empty($data[$field->id])) {
-                $info = $cart->infos[$field->id];
-                $info->value = htmlspecialchars($data[$field->id]);
-                $info->save();
+            if (!empty($data[$field->id])) {
+                $value = htmlspecialchars($data[$field->id]);
+                if (!isset($cart->infos[$field->id])) {
+                    $info = new \Ecommerce\Cart\Info();
+                    $info->name = $field->name;
+                    $info->value = $value;
+                    $info->useradds_field_id = $field->id;
+                    $info->cart_id = $cart->id;
+                    $info->save();
+                } else {
+                    $info = $cart->infos[$field->id];
+                    $info->value = $value;
+                    $info->save();
+                }
             }
             if (isset($info) && $user && $field->userfield) {
                 $relations = [];
@@ -171,31 +177,37 @@ class Ecommerce extends Module {
                 if (!$field->save) {
                     continue;
                 }
-                if (!isset($save->values[$field->id]) && !empty($data[$field->id])) {
-                    $saveValue = new Ecommerce\Delivery\Value();
-                    $saveValue->value = htmlspecialchars($data[$field->id]);
-                    $saveValue->delivery_field_id = $field->id;
-                    $saveValue->delivery_save_id = $save->id;
-                    $saveValue->save();
-                } elseif (!empty($data[$field->id])) {
-                    $saveValue = $save->values[$field->id];
-                    $saveValue->value = htmlspecialchars($data[$field->id]);
-                    $saveValue->save();
+                if (!empty($data[$field->id])) {
+                    $value = htmlspecialchars($data[$field->id]);
+                    if (!isset($save->values[$field->id])) {
+                        $saveValue = new Ecommerce\Delivery\Value();
+                        $saveValue->value = $value;
+                        $saveValue->delivery_field_id = $field->id;
+                        $saveValue->delivery_save_id = $save->id;
+                        $saveValue->save();
+                    } else {
+                        $saveValue = $save->values[$field->id];
+                        $saveValue->value = $value;
+                        $saveValue->save();
+                    }
                 }
             }
         }
         foreach ($fields as $field) {
-            if (!isset($cart->deliveryInfos[$field->id]) && !empty($data[$field->id])) {
-                $info = new \Ecommerce\Cart\DeliveryInfo();
-                $info->name = $field->name;
-                $info->value = htmlspecialchars($data[$field->id]);
-                $info->delivery_field_id = $field->id;
-                $info->cart_id = $cart->id;
-                $info->save();
-            } elseif (!empty($data[$field->id])) {
-                $info = $cart->deliveryInfos[$field->id];
-                $info->value = htmlspecialchars($data[$field->id]);
-                $info->save();
+            if (!empty($data[$field->id])) {
+                $value = htmlspecialchars($data[$field->id]);
+                if (!isset($cart->deliveryInfos[$field->id])) {
+                    $info = new \Ecommerce\Cart\DeliveryInfo();
+                    $info->name = $field->name;
+                    $info->value = $value;
+                    $info->delivery_field_id = $field->id;
+                    $info->cart_id = $cart->id;
+                    $info->save();
+                } else {
+                    $info = $cart->deliveryInfos[$field->id];
+                    $info->value = $value;
+                    $info->save();
+                }
             }
 
             if (isset($info) && $user && $field->userfield) {

@@ -22,7 +22,7 @@ class Info extends \Model {
     ];
     public static $cols = [
         'name' => ['type' => 'text'],
-        'value' => ['type' => 'text'],
+        'value' => ['type' => 'dynamicType', 'typeSource' => 'selfMethod', 'selfMethod' => 'realType'],
         'cart_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'cart'],
         'useradds_field_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'field'],
         //Системные параметры
@@ -58,4 +58,24 @@ class Info extends \Model {
         ];
     }
 
+    public function realType() {
+        if ($this->field && $this->field->type) {
+            $type = $this->field->type;
+
+            if ($type == 'select') {
+                return [
+                    'type' => 'select',
+                    'source' => 'relation',
+                    'relation' => 'field:fieldItems',
+                ];
+            } elseif ($type === 'autocomplete') {
+                return [
+                    'type' => 'autocomplete',
+                    'options' => json_decode($this->field->options, true)
+                ];
+            }
+            return $type;
+        }
+        return 'text';
+    }
 }
