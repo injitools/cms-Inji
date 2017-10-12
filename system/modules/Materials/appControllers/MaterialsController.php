@@ -15,22 +15,22 @@ class MaterialsController extends Controller {
         $category = null;
         $material = null;
         $path = trim(implode('/', $args));
-
         if (is_numeric($path)) {
-            $material = Materials\Material::get([['id', (int)$path], ['date_publish', null, 'IS NOT']]);
+            $material = Materials\Material::get([['id', (int) $path], ['date_publish', null, 'IS NOT']]);
         }
         if (!$material && $args) {
             foreach ($args as $key => $alias) {
-                $category = Materials\Category::get([['parent_id', $category ? $category->id : 0], ['alias', $alias]]);
-                if (!$category || $key + 2 == count($args)) {
+                $nextCategory = Materials\Category::get([['parent_id', $category ? $category->id : 0], ['alias', $alias]]);
+                if (!$nextCategory) {
                     break;
                 }
+                $category = $nextCategory;
             }
         }
         if (!$material && $path) {
             if ($category) {
                 $where = [
-                    ['category_id', $category->id],
+                    ['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'],
                     ['alias', $args[count($args) - 1]],
                     ['date_publish', null, 'IS NOT']
                 ];
@@ -42,7 +42,7 @@ class MaterialsController extends Controller {
                 if ($category) {
                     $where = [
                         ['category_id', $category->id],
-                        ['id', (int)$args[count($args) - 1]],
+                        ['id', (int) $args[count($args) - 1]],
                         ['date_publish', null, 'IS NOT']
                     ];
                 } else {
@@ -75,7 +75,7 @@ class MaterialsController extends Controller {
         $path = trim(implode('/', $args));
         $category = null;
         if (is_numeric($path)) {
-            $category = Materials\Category::get((int)$path);
+            $category = Materials\Category::get((int) $path);
         }
         if (!$category) {
             foreach ($args as $alias) {
@@ -110,7 +110,7 @@ class MaterialsController extends Controller {
         $material = false;
         if ($alias) {
             if (is_numeric($alias)) {
-                $material = Materials\Material::get([['id', (int)$alias], ['date_publish', null, 'IS NOT']]);
+                $material = Materials\Material::get([['id', (int) $alias], ['date_publish', null, 'IS NOT']]);
             }
             if (!$material) {
                 $material = Materials\Material::get([['alias', $alias], ['date_publish', null, 'IS NOT']]);
