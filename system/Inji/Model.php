@@ -165,14 +165,26 @@ class Model {
      * @param Model $item
      * @param string $colName
      * @param boolean $manageHref
+     * @param array $params
      * @return string
      */
-    public static function resloveTypeValue($item, $colName, $manageHref = false) {
+    public static function resloveTypeValue($item, $colName, $manageHref = false, $colInfo = []) {
         $modelName = get_class($item);
-        $colInfo = $modelName::getColInfo($colName);
+        if (!$colInfo) {
+            $colInfo = $modelName::getColInfo($colName);
+        }
         $type = !empty($colInfo['colParams']['type']) ? $colInfo['colParams']['type'] : 'string';
         $value = '';
         switch ($type) {
+            case 'autocomplete':
+                $options = $colInfo['colParams']['options'];
+                if (isset($options['snippet']) && is_string($options['snippet'])) {
+                    $snippets = \App::$cur->Ui->getSnippets('autocomplete');
+                    if (isset($snippets[$options['snippet']])) {
+                        $value = $snippets[$options['snippet']]['getValueText']($item->$colName, $options['snippetParams']);
+                    }
+                }
+                break;
             case 'select':
                 switch ($colInfo['colParams']['source']) {
                     case 'model':
@@ -204,9 +216,21 @@ class Model {
                         }
                         break;
                     case 'relation':
-                        $relations = $colInfo['modelName']::relations();
-                        $relValue = $relations[$colInfo['colParams']['relation']]['model']::get($item->$colName);
-                        $relModel = $relations[$colInfo['colParams']['relation']]['model'];
+                        if (strpos($colInfo['colParams']['relation'], ':')) {
+                            $relationPath = explode(':', $colInfo['colParams']['relation']);
+                            $relationName = array_pop($relationPath);
+                            $curItem = $item;
+                            foreach ($relationPath as $path) {
+                                $curItem = $curItem->$path;
+                            }
+                            $itemModel = get_class($curItem);
+                            $relation = $itemModel::getRelation($relationName);
+                            $relModel = $relation['model'];
+                        } else {
+                            $relation = static::getRelation($colInfo['colParams']['relation']);
+                            $relModel = $relation['model'];
+                        }
+                        $relValue = $relModel::get($item->$colName);
                         $relModel = strpos($relModel, '\\') === 0 ? substr($relModel, 1) : $relModel;
                         if ($manageHref) {
                             $value = $relValue ? "<a href='/admin/" . str_replace('\\', '/view/', $relModel) . "/" . $relValue->pk() . "'>" . $relValue->name() . "</a>" : 'Не задано';
@@ -292,83 +316,15 @@ class Model {
                     case 'selfMethod':
                         $type = $item->{$colInfo['colParams']['selfMethod']}();
                         if (is_array($type)) {
-                            if (strpos($type['relation'], ':')) {
-                                $relationPath = explode(':', $type['relation']);
-                                $relationName = array_pop($relationPath);
-                                $curItem = $item;
-                                foreach ($relationPath as $path) {
-                                    $curItem = $curItem->$path;
-                                }
-                                $itemModel = get_class($curItem);
-                                $relation = $itemModel::getRelation($relationName);
-                                $sourceModel = $relation['model'];
-                            } else {
-                                $relation = static::getRelation($type['relation']);
-                                $sourceModel = $relation['model'];
-                            }
-                            $value = $sourceModel::get($item->$colName);
-                            if ($value) {
-                                $value = $value->name();
-                            } else {
-                                $value = $item->$colName;
-                            }
+                            $value = static::resloveTypeValue($item, $colName, $manageHref, ['colParams' => $type]);
                         } else {
-                            switch ($type) {
-                                case 'map':
-                                    if ($item->$colName && json_decode($item->$colName, true)) {
-                                        $addres = json_decode($item->$colName, true);
-                                        $name = $addres['address'] ? $addres['address'] : 'lat:' . $addres['lat'] . ': lng:' . $addres['lng'];
-                                        \App::$cur->libs->loadLib('yandexMap');
-                                        ob_start();
-                                        $uid = Tools::randomString();
-                                        ?>
-                                        <div id='map<?= $uid; ?>_container' style="display:none;">
-                                            <script>/*
-                                                 <div id='map<?= $uid; ?>' style="width: 100%; height: 500px"></div>
-                                                 <script>
-                                                 var myMap<?= $uid; ?>;
-                                                 var myMap<?= $uid; ?>CurPin;
-                                                 inji.onLoad(function () {
-                                                 ymaps.ready(init<?= $uid; ?>);
-                                                 function init<?= $uid; ?>() {
-                                                 var myPlacemark;
-                                                 myMap<?= $uid; ?> = new ymaps.Map("map<?= $uid; ?>", {
-                                                 center: ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"],
-                                                 zoom: 13
-                                                 });
-                                                 myCoords = ["<?= $addres['lat'] ?>", "<?= $addres['lng']; ?>"];
-                                                 myMap<?= $uid; ?>CurPin = new ymaps.Placemark(myCoords,
-                                                 {iconContent: "<?= $addres['address']; ?>"},
-                                                 {preset: 'islands#greenStretchyIcon'}
-                                                 );
-                                                 myMap<?= $uid; ?>.geoObjects.add(myMap<?= $uid; ?>CurPin, 0);
-                                                 }
-                                                 window['init<?= $uid; ?>'] = init<?= $uid; ?>;
-                                                 });
-                                                 */</script>
-                                        </div>
-                                        <?php
-                                        $content = ob_get_contents();
-                                        ob_end_clean();
-                                        $onclick = 'inji.Ui.modals.show("' . addcslashes($addres['address'], '"') . '", $("#map' . $uid . '_container script").html().replace(/^\/\*/g, "").replace(/\*\/$/g, "")+"</script>","mapmodal' . $uid . '","modal-lg");';
-                                        $onclick .= 'return false;';
-                                        $value = "<a href ='#' onclick='{$onclick}' >{$name}</a>";
-                                        $value .= $content;
-                                    } else {
-                                        $value = 'Местоположение не заданно';
-                                    }
-
-                                    break;
-                                default:
-                                    $value = $item->$colName;
-                            }
+                            $value = static::resloveTypeValue($item, $colName, $manageHref, ['colParams' => ['type' => $type]]);
                         }
                         break;
                 }
                 break;
             default:
                 $value = $item->$colName;
-                break;
         }
         return $value;
     }
@@ -997,12 +953,12 @@ class Model {
         static::$needJoin = [];
 
         if (!empty($options['limit'])) {
-            $limit = (int)$options['limit'];
+            $limit = (int) $options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int)$options['start'];
+            $start = (int) $options['start'];
         } else {
             $start = 0;
         }
@@ -1301,12 +1257,12 @@ class Model {
             $query->order($options['order']);
         }
         if (!empty($options['limit'])) {
-            $limit = (int)$options['limit'];
+            $limit = (int) $options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int)$options['start'];
+            $start = (int) $options['start'];
         } else {
             $start = 0;
         }
@@ -2028,13 +1984,13 @@ class Model {
         if (!empty($className::$cols[$shortName])) {
             switch ($className::$cols[$shortName]['type']) {
                 case 'decimal':
-                    $value = (float)$value;
+                    $value = (float) $value;
                     break;
                 case 'number':
-                    $value = (int)$value;
+                    $value = (int) $value;
                     break;
                 case 'bool':
-                    $value = (bool)$value;
+                    $value = (bool) $value;
                     break;
             }
         }
