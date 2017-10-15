@@ -10,6 +10,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+
 //define('mdebug',true);
 class Migrations extends \Module {
 
@@ -39,6 +40,7 @@ class Migrations extends \Module {
         $walker->walk();
         $log->result = 'success';
         $log->save();
+        $this->saveLastAccess();
     }
 
     public function loadParseIds($type) {
@@ -55,6 +57,7 @@ class Migrations extends \Module {
             ksort($this->ids['parseIds'][$type]);
         }
         if (!empty($this->ids['parseIds'][$type][$parseId])) {
+            $this->ids['parseIds'][$type][$parseId]->last_access = Date('Y-m-d H:i:s');
             return $this->ids['parseIds'][$type][$parseId];
         }
     }
@@ -65,6 +68,7 @@ class Migrations extends \Module {
             ksort($this->ids['objectIds'][$type]);
         }
         if (!empty($this->ids['objectIds'][$type][$objectId])) {
+            $this->ids['objectIds'][$type][$objectId]->last_access = Date('Y-m-d H:i:s');
             return $this->ids['objectIds'][$type][$objectId];
         }
     }
@@ -75,6 +79,16 @@ class Migrations extends \Module {
         }
         if (!empty($this->migrationObjects[$objectId])) {
             return $this->migrationObjects[$objectId];
+        }
+    }
+
+    public function saveLastAccess() {
+        foreach ($this->ids as $type => $ids) {
+            foreach ($ids as $id) {
+                if ($id->_changedParams) {
+                    $id->save();
+                }
+            }
         }
     }
 

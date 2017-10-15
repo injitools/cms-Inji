@@ -18,6 +18,7 @@ class Id extends \Model {
         'object_id' => ['type' => 'number'],
         'type' => ['type' => 'text'],
         'parse_id' => ['type' => 'text'],
+        'last_access' => ['type' => 'dateTime'],
     ];
 
 }
