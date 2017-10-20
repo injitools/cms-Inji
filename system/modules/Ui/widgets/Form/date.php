@@ -7,6 +7,7 @@ echo $label !== false ? "<label>{$label}</label>" : '';
 $attributes = [
     'type' => 'text',
     'name' => $name,
+    'readonly' => 'readonly',
     'data-dateui' => $uid,
     'class' => !empty($options['class']) ? $options['class'] : 'form-control',
     'value' => !empty($options['value']) ? addcslashes($options['value'], "'") : (!empty($form->userDataTree[$name]) ? addcslashes($form->userDataTree[$name], "'") : '')

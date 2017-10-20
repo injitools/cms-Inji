@@ -11,9 +11,13 @@
 
 namespace Ui\ActiveForm;
 
+
 class Input extends \Object {
 
     public $form = null;
+    /**
+     * @var \Ui\ActiveForm
+     */
     public $activeForm = null;
     public $activeFormParams = [];
     public $modelName = '';
@@ -27,7 +31,7 @@ class Input extends \Object {
         $inputOptions = $this->options;
         $inputOptions['value'] = $this->value();
         $inputOptions['disabled'] = $this->readOnly();
-        if(!empty($this->colParams['required'])){
+        if (!empty($this->colParams['required']) || (!empty($this->colParams['requiredOnNew']) && !$this->activeForm->model->pk())) {
             $inputOptions['required'] = true;
         }
 
@@ -44,20 +48,35 @@ class Input extends \Object {
     }
 
     public function parseRequest($request) {
-        if ($this->readOnly()) {
-            return false;
-        }
         $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
+        if ($this->readOnly()) {
+            if ($this->activeForm->model->pk()) {
+            } else {
+                $this->activeForm->model->{$colName} = $this->defaultValue();
+            }
+            return true;
+        }
+
         if (isset($request[$this->colName])) {
             $this->activeForm->model->{$colName} = $request[$this->colName];
         } else {
             $this->activeForm->model->{$colName} = 0;
             $this->activeForm->model->{$colName} = '';
         }
+        return true;
     }
 
     public function value() {
-        $value = '';
+        $value = $this->defaultValue();
+        if ($this->activeForm) {
+            $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
+            $value = ($this->activeForm && $this->activeForm->model && isset($this->activeForm->model->{$colName})) ? $this->activeForm->model->{$colName} : $value;
+        }
+        $value = isset($this->colParams['value']) ? $this->colParams['value'] : $value;
+        return $value;
+    }
+
+    public function defaultValue($value = '') {
         if (isset($this->colParams['default'])) {
             if (is_array($this->colParams['default'])) {
                 switch ($this->colParams['default']['type']) {
@@ -77,11 +96,6 @@ class Input extends \Object {
                 $value = $this->colParams['default'];
             }
         }
-        if ($this->activeForm) {
-            $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];
-            $value = ($this->activeForm && $this->activeForm->model && isset($this->activeForm->model->{$colName})) ? $this->activeForm->model->{$colName} : $value;
-        }
-        $value = isset($this->colParams['value']) ? $this->colParams['value'] : $value;
         return $value;
     }
 
@@ -142,8 +156,18 @@ class Input extends \Object {
     }
 
     public function validate(&$request) {
-        if (empty($request[$this->colName]) && !empty($this->colParams['required'])) {
+        if (!empty($this->colParams['required']) && empty($request[$this->colName])) {
             throw new \Exception('Вы не заполнили: ' . $this->colLabel());
+        }
+        if (!empty($this->colParams['requiredOnNew']) && !$this->activeForm->model->pk() && empty($request[$this->colName])) {
+            throw new \Exception('Вы не заполнили: ' . $this->colLabel());
+        }
+        if (!empty($this->colParams['unique']) && is_string($request[$this->colName])) {
+            $modelName = $this->activeForm->modelName;
+            $item = $modelName::get($request[$this->colName], $this->colName);
+            if ($item && $item->id != $this->activeForm->model->id) {
+                throw new \Exception($modelName::objectName() . ' с ' . $this->colLabel() . ' "' . $request[$this->colName] . '" уже существует');
+            }
         }
         if (!empty($this->colParams['validator'])) {
             $modelName = $this->modelName;

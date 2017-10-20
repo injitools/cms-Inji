@@ -3,12 +3,13 @@
  */
 inji.Ecommerce = {
   Cart: new function () {
-    this.addItem = function (itemOfferPriceId, count) {
+    this.addItem = function (itemOfferPriceId, count, btn, texts, toggle) {
       inji.Server.request({
         url: 'ecommerce/cart/add',
         data: {
           itemOfferPriceId: itemOfferPriceId,
           count: count,
+          toggle: toggle
         },
         success: function (data) {
           console.log(data);
@@ -20,7 +21,7 @@ inji.Ecommerce = {
           });
         }
       });
-    }
+    };
     this.calcSum = function () {
       var form = $('.ecommerce .cart-order_page form');
       var formData = new FormData(form[0]);
@@ -35,7 +36,7 @@ inji.Ecommerce = {
           $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
         }
       });
-    }
+    };
     this.delItem = function (cart_item_id) {
       var form = $('.ecommerce .cart-order_page form');
       $('.cart_item_id' + cart_item_id).remove();
@@ -51,7 +52,7 @@ inji.Ecommerce = {
           $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
         }
       });
-    }
+    };
     this.delItemWidget = function (cart_item_id, callback) {
       inji.Server.request({
         url: '/ecommerce/cart/deleteItem?cartItemId=' + cart_item_id,
@@ -77,7 +78,7 @@ inji.Ecommerce = {
       }
     }, btn);
   }
-}
+};
 inji.onLoad(function () {
 
   //plugin bootstrap minus and plus

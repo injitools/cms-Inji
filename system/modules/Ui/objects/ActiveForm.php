@@ -13,6 +13,9 @@ namespace Ui;
 
 class ActiveForm extends \Object {
 
+    /**
+     * @var \Model
+     */
     public $model = null;
     public $modelName = '';
     public $header = "";
@@ -133,6 +136,7 @@ class ActiveForm extends \Object {
                             }
                         }
                         $inputClassName = '\Ui\ActiveForm\Input\\' . $type;
+                        /** @var \Ui\ActiveForm\Input $input */
                         $input = new $inputClassName();
                         $input->activeForm = $this;
                         $input->activeFormParams = $params;
@@ -222,7 +226,7 @@ class ActiveForm extends \Object {
                         break;
                 }
             }
-            $inputClassName = '\Ui\ActiveForm\Input\\' . $type;
+            $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($type);
             $input = new $inputClassName();
             $input->form = $form;
             $input->activeForm = $this;
