@@ -130,6 +130,7 @@ class OptionsParser extends \Object {
                     $selectOptions['order'][] = [$col, $direction];
             }
         }
+        $selectOptions['order'][] = ['offers:prices:type:weight', 'ASC'];
     }
 
     public static function presetFilters(&$selectOptions) {

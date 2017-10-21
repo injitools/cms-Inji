@@ -19,25 +19,32 @@ class Type extends \Model {
         'name' => ['type' => 'text'],
         'curency' => ['type' => 'text'],
         'roles' => ['type' => 'text'],
+        'weight' => ['type' => 'number'],
         //Системные
         'date_create' => ['type' => 'dateTime'],
     ];
     public static $labels = [
         'name' => 'Название',
         'curency' => 'Валюта',
+        'roles' => 'Роли которым доступна',
+        'weight' => 'Вес',
     ];
     public static $dataManagers = [
         'manager' => [
             'cols' => [
                 'name',
-                'curency'
-            ]
+                'curency',
+                'roles',
+                'weight',
+            ],
+            'sortMode' => true
         ]
     ];
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name', 'curency']
+                ['name', 'curency'],
+                ['roles', 'weight'],
             ]
         ]
     ];

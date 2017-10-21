@@ -28,18 +28,31 @@ namespace Ecommerce;
  * @property string $date_last_activ
  * @property string $date_create
  *
- * @property \Users\User $user
- * @property \Ecommerce\Cart\Item[] $cartItems
- * @property \Ecommerce\Cart\Event[] $events
- * @property \Ecommerce\Cart\Status $status
- * @property \Ecommerce\Delivery $delivery
- * @property \Ecommerce\PayType $payType
- * @property \Ecommerce\Cart\Info[] $infos
- * @property \Ecommerce\Cart\DeliveryInfo[] $deliveryInfos
- * @property \Ecommerce\Cart\Extra[] $extras
- * @property \Ecommerce\Card\Item $card
- * @property \Money\Pay[] $pays
- * @property \Ecommerce\Cart\Discount[] $discounts
+ * @property-read \Users\User $user
+ * @property-read \Ecommerce\Cart\Item[] $cartItems
+ * @property-read \Ecommerce\Cart\Event[] $events
+ * @property-read \Ecommerce\Cart\Status $status
+ * @property-read \Ecommerce\Delivery $delivery
+ * @property-read \Ecommerce\PayType $payType
+ * @property-read \Ecommerce\Cart\Info[] $infos
+ * @property-read \Ecommerce\Cart\DeliveryInfo[] $deliveryInfos
+ * @property-read \Ecommerce\Cart\Extra[] $extras
+ * @property-read \Ecommerce\Card\Item $card
+ * @property-read \Money\Pay[] $pays
+ * @property-read \Ecommerce\Cart\Discount[] $discounts
+ *
+ * @method \Users\User user($options)($options)
+ * @method \Ecommerce\Cart\Item[] cartItems($options)
+ * @method \Ecommerce\Cart\Event[] events($options)
+ * @method \Ecommerce\Cart\Status status($options)
+ * @method \Ecommerce\Delivery delivery($options)
+ * @method \Ecommerce\PayType payType($options)
+ * @method \Ecommerce\Cart\Info[] infos($options)
+ * @method \Ecommerce\Cart\DeliveryInfo[] deliveryInfos($options)
+ * @method \Ecommerce\Cart\Extra[] extras($options)
+ * @method \Ecommerce\Card\Item card($options)
+ * @method \Money\Pay[] pays($options)
+ * @method \Ecommerce\Cart\Discount[] discounts($options)
  */
 class Cart extends \Model {
 

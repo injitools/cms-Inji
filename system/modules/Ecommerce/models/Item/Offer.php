@@ -150,7 +150,7 @@ class Offer extends \Model {
 
     public function getPrice() {
         $curPrice = null;
-        foreach ($this->prices as $price) {
+        foreach ($this->prices(['order' => ['type:weight', 'ASC']]) as $price) {
             if (
                 (!$curPrice && (!$price->type || !$price->type->roles)) ||
                 ($price->type->roles && !$curPrice && strpos($price->type->roles, "|" . \Users\User::$cur->role_id . "|") !== false)

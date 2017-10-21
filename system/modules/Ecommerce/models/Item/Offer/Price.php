@@ -26,10 +26,11 @@ use Users\User;
  * @property string $date_create
  *
  * @property-read \Ecommerce\Item\Offer $offer
- * @method \Ecommerce\Item\Offer offer($options)
  * @property-read \Ecommerce\Item\Offer\Price\Type $type
- * @method \Ecommerce\Item\Offer\Price\Type type($options)
  * @property-read \Money\Currency $currency
+ *
+ * @method \Ecommerce\Item\Offer\Price\Type type($options)
+ * @method \Ecommerce\Item\Offer offer($options)
  * @method \Money\Currency currency($options)
  */
 class Price extends \Model {

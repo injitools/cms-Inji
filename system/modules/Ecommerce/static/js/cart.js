@@ -3,16 +3,17 @@
  */
 inji.Ecommerce = {
   Cart: new function () {
-    this.addItem = function (itemOfferPriceId, count, btn, texts, toggle) {
+    this.addItem = function (itemOfferPriceId, count, btn, callback) {
       inji.Server.request({
         url: 'ecommerce/cart/add',
         data: {
           itemOfferPriceId: itemOfferPriceId,
-          count: count,
-          toggle: toggle
+          count: count
         },
         success: function (data) {
-          console.log(data);
+          if (callback) {
+            callback(data, btn);
+          }
           inji.Server.request({
             url: 'ecommerce/cart/getCart',
             success: function (data) {
@@ -20,7 +21,7 @@ inji.Ecommerce = {
             }
           });
         }
-      });
+      }, btn);
     };
     this.calcSum = function () {
       var form = $('.ecommerce .cart-order_page form');
