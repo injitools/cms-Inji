@@ -2,6 +2,7 @@
 
 return [
     'up' => function () {
+        \Ecommerce\Delivery\Field\Item::get(1,'data');
         $field = new \Ecommerce\Delivery\Field(
             [
                 'name' => 'Город',
