@@ -169,7 +169,7 @@ class Query extends \Object {
 
     /**
      * Build where string
-     * 
+     *
      * @param string|array $where
      * @param mixed $value
      * @param string $operation
@@ -257,7 +257,7 @@ class Query extends \Object {
 
     /**
      * Build having string
-     * 
+     *
      * @param string|array $where
      * @param mixed $value
      * @param string $operation
@@ -423,7 +423,7 @@ class Query extends \Object {
 
     /**
      * Execute query
-     * 
+     *
      * @param string|array $query
      * @return \Db\Mysql\Result
      */
@@ -432,7 +432,6 @@ class Query extends \Object {
             $this->params = [];
             $query = $this->buildQuery();
         }
-
         if (is_string($query)) {
             $query = ['query' => $query, 'params' => $this->params];
         }
