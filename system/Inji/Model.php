@@ -138,7 +138,7 @@ class Model {
      * @return string
      */
     public static function getColValue($object, $valuePath, $convert = false, $manageHref = false) {
-        if(is_array($object)){
+        if (is_array($object)) {
             $object = array_shift($object);
         }
         if (strpos($valuePath, ':')) {
@@ -507,19 +507,18 @@ class Model {
             if (isset($relations[substr($col, 0, strpos($col, ':'))])) {
                 $rel = substr($col, 0, strpos($col, ':'));
                 $col = substr($col, strpos($col, ':') + 1);
-
                 $type = empty($relations[$rel]['type']) ? 'to' : $relations[$rel]['type'];
                 switch ($type) {
                     case 'to':
                         $relCol = $relations[$rel]['col'];
                         static::fixPrefix($relCol);
-                        $rootModel::$relJoins[$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol];
+                        $rootModel::$relJoins[$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol, 'left', $relations[$rel]['model'] . '_' . $rel];
                         break;
                     case 'one':
                     case 'many':
                         $relCol = $relations[$rel]['col'];
                         $relations[$rel]['model']::fixPrefix($relCol);
-                        $rootModel::$relJoins[$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol];
+                        $rootModel::$relJoins[$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol, 'left', $relations[$rel]['model'] . '_' . $rel];
                         break;
                 }
                 $relations[$rel]['model']::fixPrefix($col, 'key', $rootModel);
@@ -841,7 +840,7 @@ class Model {
             static::fixPrefix($param, 'first');
         }
         foreach (static::$relJoins as $join) {
-            App::$cur->db->join($join[0], $join[1]);
+            App::$cur->db->join($join);
         }
         static::$relJoins = [];
         foreach (static::$needJoin as $rel) {
@@ -932,12 +931,13 @@ class Model {
             $query->distinct = $options['distinct'];
         }
 
-        foreach (static::$relJoins as $join) {
-            $query->join($join[0], $join[1]);
-        }
-        static::$relJoins = [];
         foreach (static::$needJoin as $rel) {
             $relations = static::relations();
+            foreach ($query->join as $item) {
+                if ($item[0] === $relations[$rel]['model']::table() && $item[3] === '') {
+                    continue 2;
+                }
+            }
             if (isset($relations[$rel])) {
                 $type = empty($relations[$rel]['type']) ? 'to' : $relations[$rel]['type'];
                 switch ($type) {
@@ -956,6 +956,15 @@ class Model {
         }
         static::$needJoin = [];
 
+        foreach (static::$relJoins as $join) {
+            foreach ($query->join as $item) {
+                if ($item[0] === $item[0] && $item[3] === $item[3]) {
+                    continue 2;
+                }
+            }
+            $query->join($join);
+        }
+        static::$relJoins = [];
         if (!empty($options['limit'])) {
             $limit = (int) $options['limit'];
         } else {
@@ -1274,12 +1283,13 @@ class Model {
             $query->limit($start, $limit);
         }
 
-        foreach (static::$relJoins as $join) {
-            $query->join($join[0], $join[1]);
-        }
-        static::$relJoins = [];
         foreach (static::$needJoin as $rel) {
             $relations = static::relations();
+            foreach ($query->join as $item) {
+                if ($item[0] === $relations[$rel]['model']::table() && $item[3] === '') {
+                    continue 2;
+                }
+            }
             if (isset($relations[$rel])) {
                 $type = empty($relations[$rel]['type']) ? 'to' : $relations[$rel]['type'];
                 switch ($type) {
@@ -1297,6 +1307,15 @@ class Model {
             }
         }
         static::$needJoin = [];
+        foreach (static::$relJoins as $join) {
+            foreach ($query->join as $item) {
+                if ($item[0] === $item[0] && $item[3] === $item[3]) {
+                    continue 2;
+                }
+            }
+            $query->join($join);
+        }
+        static::$relJoins = [];
         $cols = 'COUNT(';
 
         if (!empty($options['distinct'])) {

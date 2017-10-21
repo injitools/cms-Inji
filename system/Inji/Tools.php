@@ -96,7 +96,7 @@ class Tools extends Model {
      */
     public static function resizeImage($img_path, $max_width = 1000, $max_height = 1000, $crop = false, $pos = 'center') {
         ini_set("gd.jpeg_ignore_warning", 1);
-        if(!getimagesize($img_path)){
+        if (!getimagesize($img_path)) {
             return false;
         }
         list($img_width, $img_height, $img_type, $img_tag) = getimagesize($img_path);
@@ -446,5 +446,9 @@ class Tools extends Model {
      */
     public static function isAssoc(&$arr) {
         return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
+    public static function defValue(&$link, $defValue = '') {
+        return isset($link) ? $link : $defValue;
     }
 }
