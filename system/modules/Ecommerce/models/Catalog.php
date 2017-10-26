@@ -10,7 +10,13 @@
 
 namespace Ecommerce;
 
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property int $weight
+ * @property int $parent_id
+ * @property int $icon_file_id
+ */
 class Catalog extends \Model {
     static $cols = [
         'name' => ['type' => 'text'],

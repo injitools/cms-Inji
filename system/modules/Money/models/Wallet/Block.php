@@ -20,7 +20,7 @@ class Block extends \Model {
         'data' => ['type' => 'text'],
         'comment' => ['type' => 'text'],
         'expired_type' => ['type' => 'text'],
-        'date_expired' => ['type' => 'dateTime'],
+        'date_expired' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
         'date_create' => ['type' => 'dateTime'],
     ];
     public static $labels = [

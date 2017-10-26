@@ -26,7 +26,7 @@ class Log extends \Model {
         'migration_map_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'map'],
         'result' => ['type' => 'text'],
         'source' => ['type' => 'text'],
-        'date_end' => ['type' => 'dateTime'],
+        'date_end' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
         'date_create' => ['type' => 'dateTime'],
         //Менеджеры
         'event' => ['type' => 'dataManager', 'relation' => 'events']

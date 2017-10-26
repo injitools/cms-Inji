@@ -20,7 +20,7 @@ class Log extends \Model {
         'query' => ['type' => 'text'],
         'status' => ['type' => 'text'],
         'date_create' => ['type' => 'dateTime'],
-        'date_end' => ['type' => 'dateTime', 'null' => true],
+        'date_end' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
     ];
     public static $dataManagers = [
         'manager' => [

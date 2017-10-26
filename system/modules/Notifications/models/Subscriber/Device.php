@@ -17,7 +17,7 @@ class Device extends \Model {
     public static $cols = [
         'key' => ['type' => 'text'],
         'subscriber_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'subscriber'],
-        'date_last_check' => ['type' => 'dateTime'],
+        'date_last_check' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
         'date_create' => ['type' => 'dateTime'],
     ];
 

@@ -30,7 +30,7 @@ class Exchange extends \Model {
         'log' => ['type' => 'dataManager', 'relation' => 'logs'],
         'file' => ['type' => 'dataManager', 'relation' => 'files'],
         'date_create' => ['type' => 'dateTime'],
-        'date_end' => ['type' => 'dateTime', 'null' => true],
+        'date_end' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
     ];
     public static $dataManagers = [
         'manager' => [
