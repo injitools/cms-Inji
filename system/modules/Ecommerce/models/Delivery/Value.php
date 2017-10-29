@@ -41,7 +41,7 @@ class Value extends \Model {
         return [
             'field' => [
                 'model' => 'Ecommerce\Delivery\Field',
-                'col' => 'useradds_field_id'
+                'col' => 'delivery_field_id'
             ],
             'save' => [
                 'model' => 'Ecommerce\Delivery\Save',
