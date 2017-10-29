@@ -23,22 +23,23 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
         $city = '';
         foreach ($cart->delivery->fields as $field) {
-            if ($field->code === 'index' && !empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
-                $city = $_POST['deliveryFields'][$field->id];
+            if ($field->code === 'index') {
+                if (!empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
+                    $city = $_POST['deliveryFields'][$field->id];
+                } elseif (isset($cart->deliveryInfos[$field->id])) {
+                    $city = $cart->deliveryInfos[$field->id]->value;
+                }
             }
         }
         if (!$city) {
             return new \Money\Sums([$cart->delivery->currency_id => 0]);
         }
-        if (strpos($city, '66') === 0) {
-            $senderCity = '660000';
-        } else {
-            $senderCity = '101000';
-        }
+        $senderCity = '101000';
+
         $url = 'http://tariff.russianpost.ru/tariff/v1/calculate?json&';
         $data = [
-            'object' => 3020,
-            'weight' => 2,
+            'object' => 4030,
+            'weight' => '1',
             'date' => date('Ymd'),
             'sumoc' => $cart->itemsSum()->sums[0],
             'from' => $senderCity,
@@ -48,7 +49,8 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
             'isavia' => 0
         ];
         $result = json_decode(file_get_contents($url . http_build_query($data)), true);
+        // var_dump($result);
         $sum = !empty($result['tariff'][0]['ground']['valnds']) ? $result['tariff'][0]['ground']['valnds'] : (!empty($result['tariff'][0]['avia']['valnds']) ? $result['tariff'][0]['avia']['valnds'] : 0);
-        return new \Money\Sums([$cart->delivery->currency_id => $sum / 100]);
+        return new \Money\Sums([$cart->delivery->currency_id => $sum / 100 * 1.1]);
     }
 }
