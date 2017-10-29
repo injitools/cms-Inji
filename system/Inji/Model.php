@@ -1004,6 +1004,7 @@ class Model {
         }
 
         if (!empty($options['array'])) {
+            static::fixPrefix($key);
             return $result->getArray($key);
         }
         $list = $result->getObjects(get_called_class(), $key);
