@@ -544,7 +544,13 @@ class Model {
      */
     public static function parseColRecursion($info) {
         if (is_string($info)) {
-            $info = ['col' => $info, 'rawCol' => $info, 'modelName' => '', 'label' => '', 'joins' => []];
+            $info = ['col' => $info, 'rawCol' => $info, 'modelName' => get_called_class(), 'label' => $info, 'joins' => []];
+        }
+        if ($info['col'] === 'id') {
+            $info['colParams'] = [
+                'type' => 'number',
+            ];
+            return $info;
         }
         if (strpos($info['col'], ':') !== false) {
             $relations = static::relations();
@@ -582,7 +588,6 @@ class Model {
             if (!isset($cols[$info['col']]) && isset($cols[static::colPrefix() . $info['col']])) {
                 $info['col'] = static::colPrefix() . $info['col'];
             }
-            $info['modelName'] = get_called_class();
         }
         if (!empty(static::$labels[$info['rawCol']])) {
             $info['label'] = static::$labels[$info['rawCol']];
@@ -789,7 +794,7 @@ class Model {
     /**
      * return relations list
      *
-     * @return string
+     * @return array
      */
     public static function relations() {
         return [];

@@ -451,4 +451,9 @@ class Tools extends Model {
     public static function defValue(&$link, $defValue = '') {
         return isset($link) ? $link : $defValue;
     }
+
+    public static function rusPrice($price, $zeroEnding = false) {
+        $afterDot = $price == (int) $price ? 0 : 2;
+        return number_format($price, $afterDot, '.', ' ');
+    }
 }
