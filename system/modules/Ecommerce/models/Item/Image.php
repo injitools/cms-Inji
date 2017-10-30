@@ -52,8 +52,7 @@ class Image extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name'],
-                ['item_id', 'file_id'],
+                ['name', 'file_id'],
                 ['description']
             ]
         ]

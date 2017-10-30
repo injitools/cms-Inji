@@ -1,3 +1,8 @@
+<?php
+/**
+ * @var \Ecommerce\Item $item ;
+ */
+?>
 <div class="ecommerce">
     <div class="row">
         <div class="col-md-3 item-sidebar">
@@ -11,7 +16,7 @@
             <div class="detail_item content">
                 <div class="row">
                     <div class="col-sm-5">
-                        <img src="<?= Statics::file($item->image ? $item->image->path : '/static/system/images/no-image.png', '350x800'); ?>"
+                        <img src="<?= Statics::file($item->image ? $item->image->path : false, '350x800'); ?>"
                              class="img-responsive"/>
                     </div>
                     <div class="col-sm-7">
