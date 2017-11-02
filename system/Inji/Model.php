@@ -508,17 +508,18 @@ class Model {
                 $rel = substr($col, 0, strpos($col, ':'));
                 $col = substr($col, strpos($col, ':') + 1);
                 $type = empty($relations[$rel]['type']) ? 'to' : $relations[$rel]['type'];
+                $joinName = $relations[$rel]['model'] . '_' . $rel;
                 switch ($type) {
                     case 'to':
                         $relCol = $relations[$rel]['col'];
                         static::fixPrefix($relCol);
-                        $rootModel::$relJoins[$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol, 'left', $relations[$rel]['model'] . '_' . $rel];
+                        $rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol, 'left',''];
                         break;
                     case 'one':
                     case 'many':
                         $relCol = $relations[$rel]['col'];
                         $relations[$rel]['model']::fixPrefix($relCol);
-                        $rootModel::$relJoins[$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol, 'left', $relations[$rel]['model'] . '_' . $rel];
+                        $rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol, 'left',''];
                         break;
                 }
                 $relations[$rel]['model']::fixPrefix($col, 'key', $rootModel);
@@ -558,16 +559,17 @@ class Model {
                 $rel = substr($info['col'], 0, strpos($info['col'], ':'));
                 $info['col'] = substr($info['col'], strpos($info['col'], ':') + 1);
                 $type = empty($relations[$rel]['type']) ? 'to' : $relations[$rel]['type'];
+                $joinName = $relations[$rel]['model'] . '_' . $rel;
                 switch ($type) {
                     case 'to':
                         $relCol = $relations[$rel]['col'];
                         static::fixPrefix($relCol);
-                        $info['joins'][$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol];
+                        $info['joins'][$joinName] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol];
                         break;
                     case 'one':
                         $relCol = $relations[$rel]['col'];
                         $relations[$rel]['model']::fixPrefix($relCol);
-                        $info['joins'][$relations[$rel]['model'] . '_' . $rel] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol];
+                        $info['joins'][$joinName] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol];
                         break;
                 }
                 $info = $relations[$rel]['model']::parseColRecursion($info);
