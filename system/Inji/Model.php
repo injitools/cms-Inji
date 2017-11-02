@@ -963,7 +963,7 @@ class Model {
 
         foreach (static::$relJoins as $join) {
             foreach ($query->join as $item) {
-                if ($item[0] === $item[0] && $item[3] === $item[3]) {
+                if ($item[0] === $join[0] && $item[3] === $join[3]) {
                     continue 2;
                 }
             }
@@ -1315,7 +1315,7 @@ class Model {
         static::$needJoin = [];
         foreach (static::$relJoins as $join) {
             foreach ($query->join as $item) {
-                if ($item[0] === $item[0] && $item[3] === $item[3]) {
+                if ($item[0] === $join[0] && $item[3] === $join[3]) {
                     continue 2;
                 }
             }
