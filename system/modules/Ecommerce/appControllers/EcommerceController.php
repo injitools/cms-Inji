@@ -231,9 +231,10 @@ class ecommerceController extends Controller {
             $categorysList = array_filter($categorysList);
             $opts = [];
             foreach ($categorysList as $categoryId) {
-
                 $cat = \Ecommerce\Category::get($categoryId);
-                $opts = array_merge($opts, array_keys($cat->options(['key' => 'item_option_id'])));
+                if ($cat) {
+                    $opts = array_merge($opts, array_keys($cat->options(['key' => 'item_option_id'])));
+                }
             }
             $opts = array_unique($opts);
             if ($opts) {
