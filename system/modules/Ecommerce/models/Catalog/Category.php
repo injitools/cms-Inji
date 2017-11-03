@@ -15,7 +15,7 @@ class Category extends \Model {
         'category_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'category'],
     ];
     static $labels = [
-        'catalog_id' => 'Раздел товаров'
+        'category_id' => 'Раздел товаров'
     ];
     static $dataManagers = [
         'manager' => [
