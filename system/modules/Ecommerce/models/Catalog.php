@@ -26,6 +26,14 @@ class Catalog extends \Model {
         'childsMgr' => ['type' => 'dataManager', 'relation' => 'childs'],
         'categoriesMgr' => ['type' => 'dataManager', 'relation' => 'categories'],
     ];
+    static $labels = [
+        'name' => 'Название',
+        'weight' => 'Вес соритровки',
+        'parent_id' => 'Родитель',
+        'icon_file_id' => 'Иконка',
+        'childsMgr' => 'Дочерние каталоги',
+        'categoriesMgr' => 'Категории товаров',
+    ];
     static $dataManagers = [
         'manager' => [
             'filters' => ['name', 'parent_id'],
