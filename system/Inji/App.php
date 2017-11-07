@@ -100,6 +100,10 @@ class App {
         return !empty($this->_objects[$moduleName]);
     }
 
+    public function getDomain($decode = false) {
+        return !empty($this->config['site']['domain']) ? $this->config['site']['domain'] : ($decode ? idn_to_utf8(INJI_DOMAIN_NAME) : INJI_DOMAIN_NAME);
+    }
+
     /**
      * Load module by name or alias
      *
