@@ -385,8 +385,11 @@ class Users extends Module {
         } else {
             $from = 'noreply@' . INJI_DOMAIN_NAME;
             $to = $data['user_mail'];
-            $subject = 'Регистрация на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
-            $text = 'Вы были зарегистрированы на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />для входа используйте ваш почтовый ящик в качестве логина и пароль: ' . $pass;
+            $subject = \I18n\Text::module('Users','Регистрация на сайте ${sitename}',['sitename'=>idn_to_utf8(INJI_DOMAIN_NAME)]);
+            $text = \I18n\Text::module('Users','sucregmsg',[
+                'sitename'=>idn_to_utf8(INJI_DOMAIN_NAME),
+                'pass'=>$pass
+            ]);
             Tools::sendMail($from, $to, $subject, $text);
             if ($msg) {
                 Msg::add(\I18n\Text::module('Users','Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль'), 'success');
