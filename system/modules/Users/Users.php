@@ -17,6 +17,9 @@ class Users extends Module {
             $this->cookiePrefix = \App::$cur->type;
         }
         \Users\User::$cur = new Users\User(array('group_id' => 1, 'role_id' => 1));
+        if (!empty($_GET['invite_code']) && is_string($_GET['invite_code'])) {
+            setcookie('invite_code', $_GET['invite_code'], time() + 360000, "/");
+        }
         if (!App::$cur->db->connect) {
             return false;
         }
@@ -151,7 +154,7 @@ class Users extends Module {
             $title = \I18n\Text::module('Users', 'Новый пароль на сайте ${domain}', ['domain' => $domain]);
             $text = \I18n\Text::module('Users', 'newpassmail', ['domain' => $domain, 'pass' => $pass]);
             Tools::sendMail('noreply@' . $domainRaw, $user->mail, $title, $text);
-            Tools::redirect('/', \I18n\Text::module('Users','Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
+            Tools::redirect('/', \I18n\Text::module('Users', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
         }
     }
 
@@ -332,7 +335,7 @@ class Users extends Module {
         if (empty($data['parent_id']) && !empty($this->config['defaultPartner'])) {
             $data['parent_id'] = $this->config['defaultPartner'];
         }
-        if (!empty($data['user_pass'])) {
+        if (!empty($this->config['passwordManualSetup']) && !empty($data['user_pass'])) {
             if (empty($data['user_pass'][0])) {
                 return $this->msgOrErr('Введите пароль', $msg);
             }

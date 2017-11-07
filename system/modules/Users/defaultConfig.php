@@ -50,5 +50,6 @@ return [
     'needActivation' => false,
     'noActivationNotify' => '',
     'noMailNotify' => '',
-    'passwordManualSetup' => true
+    'passwordManualSetup' => true,
+    'defaultPartner' => 0
 ];
