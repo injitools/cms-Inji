@@ -125,8 +125,12 @@ class Users extends Module {
         $hash = $user->id . '_' . Tools::randomString(50);
         $passre = new Users\Passre(['user_id' => $user->id, 'status' => 1, 'hash' => $hash]);
         $passre->save();
-        Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, $user_mail, 'Восстановление пароля на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME), 'Было запрошено восстановление пароля на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />для продолжения восстановления пароля перейдите по ссылке: <a href = "http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/?passrecont=1&hash=' . $hash . '">' . idn_to_utf8(INJI_DOMAIN_NAME) . '/?passrecont=1&hash=' . $hash . '</a>');
-        Tools::redirect('/',  \I18n\Text::module('Users','На указанный почтовый ящик была выслана инструкция по восстановлению пароля'), 'success');
+        $domainRaw = App::$cur->getDomain();
+        $domain = App::$cur->getDomain(true);
+        $title = \I18n\Text::module('Users', 'Восстановление пароля на сайте ${domain}', ['domain' => $domain]);
+        $text = \I18n\Text::module('Users', 'repassmailtext', ['domain' => $domain, 'hash' => $hash]);
+        Tools::sendMail('noreply@' . $domainRaw, $user_mail, $title, $text);
+        Tools::redirect('/', \I18n\Text::module('Users', 'На указанный почтовый ящик была выслана инструкция по восстановлению пароля'), 'success');
     }
 
     public function passrecont($hash) {
@@ -142,8 +146,12 @@ class Users extends Module {
             $user->pass = $this->hashpass($pass);
             $user->save();
             $this->autorization($user->id, $pass, 'id', true, true);
-            Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, $user->mail, 'Новый пароль на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME), 'Было запрошено восстановление пароля на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />Ваш новый пароль: ' . $pass);
-            Tools::redirect('/', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль', 'success');
+            $domainRaw = App::$cur->getDomain();
+            $domain = App::$cur->getDomain(true);
+            $title = \I18n\Text::module('Users', 'Новый пароль на сайте ${domain}', ['domain' => $domain]);
+            $text = \I18n\Text::module('Users', 'newpassmail', ['domain' => $domain, 'pass' => $pass]);
+            Tools::sendMail('noreply@' . $domainRaw, $user->mail, $title, $text);
+            Tools::redirect('/', \I18n\Text::module('Users','Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
         }
     }
 
@@ -279,7 +287,7 @@ class Users extends Module {
 
         $user = $this->get($data['user_mail'], 'mail');
         if ($user) {
-            return $this->msgOrErr(\I18n\Text::module('Users','Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail'), $msg);
+            return $this->msgOrErr(\I18n\Text::module('Users', 'Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail'), $msg);
         }
         if (empty($data['user_login'])) {
             $data['user_login'] = $data['user_mail'];
@@ -385,14 +393,14 @@ class Users extends Module {
         } else {
             $from = 'noreply@' . INJI_DOMAIN_NAME;
             $to = $data['user_mail'];
-            $subject = \I18n\Text::module('Users','Регистрация на сайте ${sitename}',['sitename'=>idn_to_utf8(INJI_DOMAIN_NAME)]);
-            $text = \I18n\Text::module('Users','sucregmsg',[
-                'sitename'=>idn_to_utf8(INJI_DOMAIN_NAME),
-                'pass'=>$pass
+            $subject = \I18n\Text::module('Users', 'Регистрация на сайте ${sitename}', ['sitename' => idn_to_utf8(INJI_DOMAIN_NAME)]);
+            $text = \I18n\Text::module('Users', 'sucregmsg', [
+                'sitename' => idn_to_utf8(INJI_DOMAIN_NAME),
+                'pass' => $pass
             ]);
             Tools::sendMail($from, $to, $subject, $text);
             if ($msg) {
-                Msg::add(\I18n\Text::module('Users','Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль'), 'success');
+                Msg::add(\I18n\Text::module('Users', 'Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль'), 'success');
             }
         }
         return $user->id;

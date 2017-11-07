@@ -15,5 +15,10 @@ To unlock your account, please use <a href = "?passre=1&user_mail=${user_mail}">
     'Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль' => 'You have been registered. Your password has been sent to your inbox',
     'Регистрация на сайте ${sitename}' => 'Registration on the site ${sitename}',
     'sucregmsg' => 'You were registered on the site ${sitename} <br /> to log in, use your mailbox as your login and password: ${pass}',
-    'На указанный почтовый ящик была выслана инструкция по восстановлению пароля' => 'On the specified mail box the instruction on restoration of the password'
+    'На указанный почтовый ящик была выслана инструкция по восстановлению пароля' => 'On the specified mail box the instruction on restoration of the password',
+    'Восстановление пароля на сайте ${domain}' => 'Password recovery on the site ${domain}',
+    'repassmailtext' => 'You were requested to restore the password on the site ${domain} <br /> to continue password recovery, please go to: <a href="http://${domain}/?passrecont=1&hash=${hash}">${domain}/?passrecont=1&hash=${hash}</a>',
+    'Новый пароль на сайте ${domain}' => 'New password on the site ${domain}',
+    'newpassmail' => 'Password recovery was requested on the site ${domain} <br /> Your new password: ${pass}',
+    'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль' => 'You have successfully reset the password and have been authorized on the site. A new password has been sent to your mailbox'
 ];
