@@ -14,5 +14,6 @@ To unlock your account, please use <a href = "?passre=1&user_mail=${user_mail}">
     'Вы ввели не корректный E-mail' => 'You entered an incorrect E-mail',
     'Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль' => 'You have been registered. Your password has been sent to your inbox',
     'Регистрация на сайте ${sitename}' => 'Registration on the site ${sitename}',
-    'sucregmsg'=>'You were registered on the site ${sitename} <br /> to log in, use your mailbox as your login and password: ${pass}'
+    'sucregmsg' => 'You were registered on the site ${sitename} <br /> to log in, use your mailbox as your login and password: ${pass}',
+    'На указанный почтовый ящик была выслана инструкция по восстановлению пароля' => 'On the specified mail box the instruction on restoration of the password'
 ];

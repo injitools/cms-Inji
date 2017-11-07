@@ -126,7 +126,7 @@ class Users extends Module {
         $passre = new Users\Passre(['user_id' => $user->id, 'status' => 1, 'hash' => $hash]);
         $passre->save();
         Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, $user_mail, 'Восстановление пароля на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME), 'Было запрошено восстановление пароля на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />для продолжения восстановления пароля перейдите по ссылке: <a href = "http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/?passrecont=1&hash=' . $hash . '">' . idn_to_utf8(INJI_DOMAIN_NAME) . '/?passrecont=1&hash=' . $hash . '</a>');
-        Tools::redirect('/', 'На указанный почтовый ящик была выслана инструкция по восстановлению пароля', 'success');
+        Tools::redirect('/',  \I18n\Text::module('Users','На указанный почтовый ящик была выслана инструкция по восстановлению пароля'), 'success');
     }
 
     public function passrecont($hash) {
