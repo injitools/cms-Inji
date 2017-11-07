@@ -273,7 +273,7 @@ class Users extends Module {
         }
         $data['user_mail'] = trim($data['user_mail']);
         if (!filter_var($data['user_mail'], FILTER_VALIDATE_EMAIL)) {
-            return $this->msgOrErr('Вы ввели не корректный E-mail', $msg);
+            return $this->msgOrErr(\I18n\Text::module('Users', 'Вы ввели не корректный E-mail'), $msg);
 
         }
 
@@ -389,7 +389,7 @@ class Users extends Module {
             $text = 'Вы были зарегистрированы на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />для входа используйте ваш почтовый ящик в качестве логина и пароль: ' . $pass;
             Tools::sendMail($from, $to, $subject, $text);
             if ($msg) {
-                Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль', 'success');
+                Msg::add(\I18n\Text::module('Users','Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль'), 'success');
             }
         }
         return $user->id;

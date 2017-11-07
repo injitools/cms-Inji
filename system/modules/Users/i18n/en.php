@@ -10,5 +10,7 @@ return [
 To unlock your account, please use <a href = "?passre=1&user_mail=${user_mail}"> Reset your password </a>',
     'loginfail' => 'You made a mistake when entering the password or login, try again or use <a href = "?passre=1&user_mail=${user_mail}"> password recovery </a>',
     'Данный почтовый ящик не зарегистрирован в системе' => 'This E-mail is not registered in the system',
-    'Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail' => 'The E-mail that you entered is registered in our system, please login or enter another E-mail'
+    'Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail' => 'The E-mail that you entered is registered in our system, please login or enter another E-mail',
+    'Вы ввели не корректный E-mail' => 'You entered an incorrect E-mail',
+    'Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль' => 'You have been registered. Your password has been sent to your inbox'
 ];
