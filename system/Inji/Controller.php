@@ -70,7 +70,7 @@ class Controller {
             INJI_SYSTEM_ERROR('method not found', true);
         }
         if (!$this->checkAccess()) {
-            $msg = !empty($this->module->app->access->config['access']['accessTree'][App::$cur->type]['msg']) ? $this->module->app->access->config['access']['accessTree'][App::$cur->type]['msg'] : 'У вас нет прав доступа';
+            $msg = !empty($this->module->app->access->config['access']['accessTree'][App::$cur->type]['msg']) ? $this->module->app->access->config['access']['accessTree'][App::$cur->type]['msg'] : \I18n\Text::module('Access', 'noaccess');
             Tools::redirect($this->access->getDeniedRedirect(), $msg);
         }
         $this->run = true;
