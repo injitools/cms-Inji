@@ -19,7 +19,7 @@ class UsersController extends Controller {
 
         $sections = $this->module->getSnippets('cabinetSection');
         if (!empty($sections[$activeSection]['name'])) {
-            $this->view->setTitle($sections[$activeSection]['name'] . ' - Личный кабинет');
+            $this->view->setTitle($sections[$activeSection]['name'] . ' - ' . \I18n\Text::module('Users', 'Личный кабинет'));
             $bread[] = ['text' => 'Личный кабинет', 'href' => '/users/cabinet'];
             $bread[] = ['text' => $sections[$activeSection]['name']];
         } else {
@@ -112,8 +112,8 @@ class UsersController extends Controller {
     }
 
     public function activationAction($userId = 0, $hash = '') {
-        $user = \Users\User::get((int)$userId);
-        if (!$user || !$hash || $user->activation !== (string)$hash) {
+        $user = \Users\User::get((int) $userId);
+        if (!$user || !$hash || $user->activation !== (string) $hash) {
             Tools::redirect('/', 'Во время активации произошли ошибки', 'danger');
         }
         $user->activation = '';
@@ -156,7 +156,7 @@ class UsersController extends Controller {
     }
 
     public function resendActivationAction($userId = 0) {
-        $user = \Users\User::get((int)$userId);
+        $user = \Users\User::get((int) $userId);
         if (!$user) {
             Tools::redirect('/', 'Не указан пользователь', 'danger');
         }
@@ -172,7 +172,7 @@ class UsersController extends Controller {
     }
 
     public function getPartnerInfoAction($userId = 0) {
-        $userId = (int)$userId;
+        $userId = (int) $userId;
         $result = new \Server\Result();
         if (!$userId) {
             $result->success = false;

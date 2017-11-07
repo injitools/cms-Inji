@@ -49,5 +49,6 @@ return [
     'invites' => false,
     'needActivation' => false,
     'noActivationNotify' => '',
-    'noMailNotify' => ''
+    'noMailNotify' => '',
+    'passwordManualSetup' => true
 ];

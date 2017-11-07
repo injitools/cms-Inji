@@ -56,7 +56,7 @@ class Users extends Module {
             if (!empty($this->config['logoutUrl'][$this->app->type])) {
                 Tools::redirect($this->config['logoutUrl'][$this->app->type]);
             }
-            Tools::redirect('/', 'Вы вышли из своего профиля', 'success');
+            Tools::redirect('/', \I18n\Text::module('Users', 'Вы вышли из своего профиля'), 'success');
         }
     }
 
@@ -70,17 +70,17 @@ class Users extends Module {
                 setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
                 setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
             }
-            Tools::redirect('/', 'Произошла непредвиденная ошибка при авторизации сессии');
+            Tools::redirect('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
         }
         if ($session->user->id != $userId) {
-            Tools::redirect('/', 'Произошла непредвиденная ошибка при авторизации сессии');
+            Tools::redirect('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
         }
         if ($session && $session->user && $session->user->blocked) {
             if (!headers_sent()) {
                 setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
                 setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
             }
-            Msg::add('Ваш аккаунт заблокирован', 'info');
+            Msg::add(\I18n\Text::module('Users', 'Ваш аккаунт заблокирован'), 'info');
             return;
         }
         if ($session && $session->user && !$session->user->blocked) {
@@ -104,7 +104,7 @@ class Users extends Module {
                 setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
                 setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
             }
-            Msg::add('Ваша сессия устарела или более недействительна, вам необходимо пройти <a href = "/users/login">авторизацию</a> заново', 'info');
+            Msg::add(\I18n\Text::module('Users', 'needrelogin'), 'info');
         }
     }
 
@@ -114,7 +114,7 @@ class Users extends Module {
     public function passre($user_mail) {
         $user = $this->get($user_mail, 'mail');
         if (!$user) {
-            Msg::add('Пользователь ' . $user_mail . ' не найден, проверьте првильность ввода e-mail или зарегистрируйтесь', 'danger');
+            Msg::add(\I18n\Text::module('Users', 'mailnotfound', ['user_mail' => $user_mail]), 'danger');
             return false;
         }
         $passre = Users\Passre::get([['user_id', $user->id], ['status', 1]]);
@@ -157,8 +157,7 @@ class Users extends Module {
             }
             $loginHistoryErrorCount = \Users\User\LoginHistory::getCount(['where' => $where]);
             if ($loginHistoryErrorCount > 5) {
-                Msg::add('Было совершено более 5ти попыток подбора пароля к вашему аккаунту, для вашей безопасности мы были вынуждены заблокировать к нему доступ.<br />
-Для разблокировки аккаунта, воспользуйтесь <a href = "?passre=1&user_mail=' . $user->mail . '">Сбросом пароля</a>', 'danger');
+                Msg::add(\I18n\Text::module('Users', 'logintrylimit', ['user_mail' => $user->mail]), 'danger');
                 return false;
             }
         }
@@ -201,9 +200,9 @@ class Users extends Module {
                     'success' => false
                 ]);
                 $loginHistory->save();
-                Msg::add('Вы ошиблись при наборе пароля или логина, попробуйте ещё раз или воспользуйтесь <a href = "?passre=1&user_mail=' . $user->mail . '">Восстановлением пароля</a>', 'danger');
+                Msg::add(\I18n\Text::module('Users', 'loginfail', ['user_mail' => $user->mail]), 'danger');
             } else {
-                Msg::add('Данный почтовый ящик не зарегистрирован в системе', 'danger');
+                Msg::add(\I18n\Text::module('Users', 'Данный почтовый ящик не зарегистрирован в системе'), 'danger');
             }
         }
 
@@ -280,7 +279,7 @@ class Users extends Module {
 
         $user = $this->get($data['user_mail'], 'mail');
         if ($user) {
-            return $this->msgOrErr('Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail', $msg);
+            return $this->msgOrErr(\I18n\Text::module('Users','Введенный вами E-mail зарегистрирован в нашей системе, войдите или введите другой E-mail'), $msg);
         }
         if (empty($data['user_login'])) {
             $data['user_login'] = $data['user_mail'];
