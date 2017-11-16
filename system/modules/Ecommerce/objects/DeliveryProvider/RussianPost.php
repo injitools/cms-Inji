@@ -56,10 +56,10 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
     static function calcPrice($cart) {
         $result = static::request($cart);
-        if ($result) {
+        if (empty($result['paynds'])) {
             return new \Money\Sums([$cart->delivery->currency_id => 0]);
         }
-        $sum = !empty($result['tariff'][0]['ground']['valnds']) ? $result['tariff'][0]['ground']['valnds'] : (!empty($result['tariff'][0]['avia']['valnds']) ? $result['tariff'][0]['avia']['valnds'] : 0);
+        $sum = $result['paynds'];
         return new \Money\Sums([$cart->delivery->currency_id => $sum / 100 * 1.1]);
     }
 
