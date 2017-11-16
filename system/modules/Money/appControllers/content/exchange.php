@@ -14,7 +14,7 @@
         $form->end('Выбрать');
         foreach ($rates as $rate) {
             $form = new Ui\Form();
-            $form->id = Tools::randomString();
+            $form->id = 'form_'.Tools::randomString();
             $form->method = "GET";
             $form->begin();
             ?>

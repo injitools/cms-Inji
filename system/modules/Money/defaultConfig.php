@@ -15,5 +15,5 @@ return [
             ],
         ]
     ],
-    'defaultMerchant' => 'WalletOne',
+    'defaultMerchant' => 'WalletOne'
 ];
