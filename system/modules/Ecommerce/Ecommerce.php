@@ -256,7 +256,7 @@ class Ecommerce extends Module {
             $_SESSION['cart']['cart_id'] = $cart->id;
         }
         $defaultDelivery = \Ecommerce\Delivery::get(1, 'default');
-        if ($defaultDelivery && !$cart->delivery_id) {
+        if ($cart && $defaultDelivery && !$cart->delivery_id) {
             $cart->delivery_id = $defaultDelivery->id;
             $cart->save();
         }

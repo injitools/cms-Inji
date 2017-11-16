@@ -162,7 +162,7 @@ class CartController extends Controller {
             }
 
         } else {
-            if ($cart->delivery) {
+            if ($cart && $cart->delivery) {
                 if ($cart->delivery->disabledPayTypes) {
                     foreach ($cart->delivery->disabledPayTypes as $dis) {
                         if (isset($payTypes[$dis->paytype_id])) {
