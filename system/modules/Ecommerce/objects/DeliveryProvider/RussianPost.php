@@ -36,16 +36,14 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
         $senderCity = '101000';
 
         $url = 'http://tariff.russianpost.ru/tariff/v1/calculate?json&';
+        //var_dump( $cart->itemsSum()->sums[0]);
         $data = [
             'object' => 4030,
-            'weight' => '1',
+            'weight' => '1000',
             'date' => date('Ymd'),
-            'sumoc' => $cart->itemsSum()->sums[0],
+            //'sumoc' => $cart->itemsSum()->sums[0],
             'from' => $senderCity,
             'to' => $city,
-            'closed' => 1,
-            'service' => 2,
-            'isavia' => 0,
             'delivery' => 1
         ];
         $result = \Cache::get('russianPostCalc', $data, function ($data) {
@@ -56,6 +54,7 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
     static function calcPrice($cart) {
         $result = static::request($cart);
+        //var_dump($result['pay']);
         if (empty($result['pay'])) {
             return new \Money\Sums([$cart->delivery->currency_id => 0]);
         }
