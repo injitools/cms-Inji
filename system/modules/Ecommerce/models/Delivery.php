@@ -52,7 +52,8 @@ class Delivery extends \Model {
         'date_create' => ['type' => 'dateTime'],
         //Менеджеры
         'field' => ['type' => 'dataManager', 'relation' => 'fields'],
-        'priceChanger' => ['type' => 'dataManager', 'relation' => 'prices']
+        'priceChanger' => ['type' => 'dataManager', 'relation' => 'prices'],
+        'disabledPayTypesMgr' => ['type' => 'dataManager', 'relation' => 'disabledPayTypes'],
     ];
     public static $labels = [
         'name' => 'Название',
@@ -67,6 +68,7 @@ class Delivery extends \Model {
         'field' => 'Поля',
         'disabled' => 'Отключено',
         'default' => 'По умолчанию',
+        'disabledPayTypesMgr' => 'Недоступные способы оплаты',
     ];
     public static $dataManagers = [
         'manager' => [
@@ -81,6 +83,7 @@ class Delivery extends \Model {
                 'default',
                 'field',
                 'priceChanger',
+                'disabledPayTypesMgr'
             ],
             'sortMode' => true
         ],
@@ -95,7 +98,8 @@ class Delivery extends \Model {
                 ['price_text'],
                 ['info'],
                 ['priceChanger'],
-                ['field']
+                ['field'],
+                ['disabledPayTypesMgr']
             ]
         ]
     ];
@@ -123,8 +127,20 @@ class Delivery extends \Model {
             'provider' => [
                 'model' => 'Ecommerce\Delivery\Provider',
                 'col' => 'delivery_provider_id'
-            ]
+            ],
+            'disabledPayTypes' => [
+                'type' => 'many',
+                'model' => 'Ecommerce\Delivery\DisablePayType',
+                'col' => 'delivery_id'
+            ],
         ];
+    }
+
+    public function providerHelper() {
+        if ($this->provider) {
+            return 'Ecommerce\DeliveryProvider\\' . $this->provider->object;
+        }
+        return false;
     }
 
     function beforeSave() {

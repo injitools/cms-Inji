@@ -76,7 +76,7 @@ class Ecommerce extends Module {
         if ($user) {
             $name = '';
             foreach ($fields as $field) {
-                if ($field->save && !empty($data[$field->id])) {
+                if ($field->save && isset($data[$field->id])) {
                     $name .= htmlspecialchars($data[$field->id]) . ' ';
                 }
             }
@@ -93,7 +93,7 @@ class Ecommerce extends Module {
                 if (!$field->save) {
                     continue;
                 }
-                if (!empty($data[$field->id])) {
+                if (isset($data[$field->id])) {
                     $value = htmlspecialchars($data[$field->id]);
                     if (!isset($userAdds->values[$field->id])) {
                         $userAddsValue = new Ecommerce\UserAdds\Value();
@@ -111,7 +111,7 @@ class Ecommerce extends Module {
         }
 
         foreach ($fields as $field) {
-            if (!empty($data[$field->id])) {
+            if (isset($data[$field->id])) {
                 $value = htmlspecialchars($data[$field->id]);
                 if (!isset($cart->infos[$field->id])) {
                     $info = new \Ecommerce\Cart\Info();
@@ -160,7 +160,7 @@ class Ecommerce extends Module {
         if ($user) {
             $name = '';
             foreach ($fields as $field) {
-                if ($field->save && !empty($data[$field->id])) {
+                if ($field->save && isset($data[$field->id])) {
                     $name .= htmlspecialchars($data[$field->id]) . ' ';
                 }
             }
@@ -177,7 +177,7 @@ class Ecommerce extends Module {
                 if (!$field->save) {
                     continue;
                 }
-                if (!empty($data[$field->id])) {
+                if (isset($data[$field->id])) {
                     $value = htmlspecialchars($data[$field->id]);
                     if (!isset($save->values[$field->id])) {
                         $saveValue = new Ecommerce\Delivery\Value();
@@ -194,7 +194,7 @@ class Ecommerce extends Module {
             }
         }
         foreach ($fields as $field) {
-            if (!empty($data[$field->id])) {
+            if (isset($data[$field->id])) {
                 $value = htmlspecialchars($data[$field->id]);
                 if (!isset($cart->deliveryInfos[$field->id])) {
                     $info = new \Ecommerce\Cart\DeliveryInfo();

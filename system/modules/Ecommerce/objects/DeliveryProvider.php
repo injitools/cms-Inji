@@ -17,4 +17,11 @@ class DeliveryProvider {
     static function calcPrice($cart) {
         return new \Money\Sums([]);
     }
+
+    static function deliveryTime($cart) {
+        return [
+            'min' => 0,
+            'max' => 0
+        ];
+    }
 }

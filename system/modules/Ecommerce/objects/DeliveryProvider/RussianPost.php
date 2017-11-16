@@ -19,8 +19,7 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
      * @return \Money\Sums
      *
      */
-    static function calcPrice($cart) {
-
+    static function request($cart) {
         $city = '';
         foreach ($cart->delivery->fields as $field) {
             if ($field->code === 'index') {
@@ -32,7 +31,7 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
             }
         }
         if (!$city) {
-            return new \Money\Sums([$cart->delivery->currency_id => 0]);
+            return [];
         }
         $senderCity = '101000';
 
@@ -46,11 +45,26 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
             'to' => $city,
             'closed' => 1,
             'service' => 2,
-            'isavia' => 0
+            'isavia' => 0,
+            'delivery' => 1
         ];
-        $result = json_decode(file_get_contents($url . http_build_query($data)), true);
-        // var_dump($result);
+        $result = \Cache::get('russianPostCalc', $data, function ($data) {
+            return file_get_contents('http://tariff.russianpost.ru/tariff/v1/calculate?json&' . http_build_query($data));
+        });
+        return json_decode($result, true);
+    }
+
+    static function calcPrice($cart) {
+        $result = static::request($cart);
+        if ($result) {
+            return new \Money\Sums([$cart->delivery->currency_id => 0]);
+        }
         $sum = !empty($result['tariff'][0]['ground']['valnds']) ? $result['tariff'][0]['ground']['valnds'] : (!empty($result['tariff'][0]['avia']['valnds']) ? $result['tariff'][0]['avia']['valnds'] : 0);
         return new \Money\Sums([$cart->delivery->currency_id => $sum / 100 * 1.1]);
+    }
+
+    static function deliveryTime($cart) {
+        $result = static::request($cart);
+        return $result['delivery'];
     }
 }

@@ -87,7 +87,7 @@ class Item extends \Model {
         'search_index' => ['type' => 'text', 'logging' => false],
         'date_create' => ['type' => 'dateTime'],
         'widget' => ['type' => 'text'],
-        'view' => ['type' => 'text'],
+        'view' => ['type' => 'text', 'logging' => false],
         //Менеджеры
         'options' => ['type' => 'dataManager', 'relation' => 'options'],
         'offers' => ['type' => 'dataManager', 'relation' => 'offers'],

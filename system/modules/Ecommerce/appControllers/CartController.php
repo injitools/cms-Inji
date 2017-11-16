@@ -74,7 +74,14 @@ class CartController extends Controller {
             } elseif ($deliverys && !empty($_POST['delivery']) && !empty($deliverys[$_POST['delivery']])) {
                 $cart->delivery_id = $_POST['delivery'];
             }
-            if ($cart->delivery_id) {
+            if ($cart->delivery) {
+                if ($cart->delivery->disabledPayTypes) {
+                    foreach ($cart->delivery->disabledPayTypes as $dis) {
+                        if (isset($payTypes[$dis->paytype_id])) {
+                            unset($payTypes[$dis->paytype_id]);
+                        }
+                    }
+                }
                 foreach ($deliverys[$cart->delivery_id]->fields as $field) {
                     if (empty($_POST['deliveryFields'][$field->id]) && $field->required) {
                         $error = 1;
@@ -82,8 +89,9 @@ class CartController extends Controller {
                     }
                 }
             }
+
             $payType = false;
-            if ($payTypes && (empty($_POST['payType']) || empty($payTypes[$_POST['payType']]))) {
+            if ($payTypes && (empty($_POST['payType']) || empty($payTypes[$_POST['payType']]) || ($cart->paytype_id && !isset($payTypes[$cart->paytype_id])))) {
                 $error = 1;
                 Msg::add('Выберите способ оплаты', 'danger');
             } elseif ($payTypes && !empty($payTypes[$_POST['payType']])) {
@@ -153,6 +161,16 @@ class CartController extends Controller {
                 call_user_func_array(['Tools', 'redirect'], $redirect);
             }
 
+        } else {
+            if ($cart->delivery) {
+                if ($cart->delivery->disabledPayTypes) {
+                    foreach ($cart->delivery->disabledPayTypes as $dis) {
+                        if (isset($payTypes[$dis->paytype_id])) {
+                            unset($payTypes[$dis->paytype_id]);
+                        }
+                    }
+                }
+            }
         }
         $this->view->setTitle('Корзина');
         $bread = [];

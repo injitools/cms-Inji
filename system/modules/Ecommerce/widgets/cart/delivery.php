@@ -2,7 +2,7 @@
     <div class="col-md-4">
         <ul class="nav nav-pills nav-stacked">
             <?php
-            $hiddenId = Tools::randomString();
+            $hiddenId = 'paytype_'.Tools::randomString();
             foreach ($deliverys as $delivery) {
                 if ((!empty($_POST['delivery']) && $_POST['delivery'] == $delivery->id) || ($cart->delivery && $delivery->id == $cart->delivery->id)) {
                     $checked = 'checked';

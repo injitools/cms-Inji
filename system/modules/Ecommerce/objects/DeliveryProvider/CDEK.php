@@ -53,7 +53,7 @@ class CDEK extends \Ecommerce\DeliveryProvider {
             $calc->setTariffId($tariff);
             $calc->addGoodsItemBySize(3, 25, 25, 24);
             if ($calc->calculate()) {
-                return new \Money\Sums([$cart->delivery->currency_id => $calc->getResult()['result']['price']]);
+                return new \Money\Sums([$cart->delivery->currency_id => $calc->getResult()['result']['price']* 1.1]);
             } else {
                 //var_dump($tariff,$calc->getError());
             }

@@ -19,11 +19,13 @@ class PayType extends \Model {
         'info' => 'Дополнительная информация',
         'handler' => 'Обработчик',
         'icon_file_id' => 'Иконка',
+        'default' => 'По умолчанию',
     ];
     public static $cols = [
         //Основные параметеры
         'name' => ['type' => 'text'],
         'info' => ['type' => 'textarea'],
+        'default' => ['type' => 'bool'],
         'handler' => [
             'type' => 'select',
             'source' => 'method',
@@ -49,7 +51,8 @@ class PayType extends \Model {
         'manager' => [
             'map' => [
                 ['name', 'icon_file_id'],
-                ['handler', 'info']
+                ['handler', 'default'],
+                ['info']
             ]
         ]];
 
@@ -62,4 +65,9 @@ class PayType extends \Model {
         ];
     }
 
+    function beforeSave() {
+        if ($this->default) {
+            PayType::update(['default' => 0]);
+        }
+    }
 }
