@@ -9,6 +9,7 @@ inji.Ui = new function () {
     inji.Ui.modals = new Modals();
     inji.Ui.forms = new Forms();
     inji.Ui.editors = new Editors();
+    inji.Ui.autocomplete = new Autocomplete();
   });
 
   this.bindMenu = function (container) {
@@ -45,7 +46,84 @@ inji.Ui = new function () {
   }
 };
 
+function Autocomplete() {
+  this.autocompletes = [];
+  this.bind = function (element, options, params) {
+    var autocomplete = new this.fn(element, options, params);
+    element.element.__inji_autocomplete = autocomplete;
+    this.autocompletes.push(autocomplete);
+  };
+  this.fn = function (element, snippet, snippetParams) {
+    this.element = element;
+    this.snippet = snippet;
+    this.snippetParams = snippetParams;
+    this.reqestProcess = null;
+    this.inputContainer = element.element.parentNode;
+    this.selectedDiv = this.inputContainer.querySelector('.form-search-cur');
+    this.resultsDiv = this.inputContainer.querySelector('.form-search-results');
+    this.changer = this.inputContainer.querySelector('.custominput-clear');
+    this.hidden = this.inputContainer.querySelector('[type="hidden"]');
 
+    var self = this;
+    this.element.element.onkeyup = function () {
+      self.loadResult(this.value);
+    };
+
+    this.clear = function () {
+      this.setValue('', '')
+    };
+    this.setValue = function (value, text) {
+      this.hidden.value = value;
+      if (this.hidden.fireEvent !== undefined)
+        this.hidden.fireEvent("onchange");
+      else {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        this.hidden.dispatchEvent(evt);
+      }
+      this.inputContainer.querySelector('[type="text"]').value = text;
+      this.selectedDiv.innerHTML = 'Выбрано: ' + text;
+      this.resultsDiv.style.display = 'none';
+      this.changer.style.display = value ? 'block' : 'none';
+    };
+    this.loadResult = function (search) {
+      if (this.reqestProcess) {
+        this.reqestProcess.abort()
+      }
+      this.resultsDiv.innerHTML = '<div class = "text-center"><img src = "' + inji.options.appRoot + 'static/moduleAsset/Ui/images/ajax-loader.gif" /></div>';
+      this.resultsDiv.style.display = 'block';
+      this.reqestProcess = inji.Server.request({
+        url: 'ui/autocomplete',
+        data: {
+          snippet: this.snippet,
+          snippetParams: this.snippetParams,
+          search: search
+        },
+        success: function (results) {
+          self.resultsDiv.innerHTML = '';
+          for (var key in results) {
+            var result = results[key];
+            var resultElement = document.createElement("div");
+            resultElement.setAttribute('objectid', key);
+            resultElement.appendChild(document.createTextNode(result));
+            resultElement.onclick = function () {
+              var value = 0;
+              for (var key2 in this.attributes) {
+                if (this.attributes[key2].name === 'objectid') {
+                  value = this.attributes[key2].value;
+                }
+              }
+              self.setValue(value, this.innerText);
+            };
+            self.resultsDiv.appendChild(resultElement);
+          }
+          self.resultsDiv.style.display = 'block';
+        }
+      });
+    };
+
+  };
+}
 
 /**
  * Editors
@@ -163,6 +241,7 @@ Modals.prototype.show = function (title, body, code, size) {
   modal.modal('show');
   return modal;
 };
+
 /**
  * Forms object
  *
@@ -172,6 +251,7 @@ function Forms() {
   this.dataManagers = 0;
   this.formCallbacks = {};
 }
+
 Forms.prototype.popUp = function (item, params, callback) {
   var code = item;
 
@@ -296,6 +376,7 @@ inji.Ui.activeForms = new function () {
     activeForm.load();
   }
 };
+
 function ActiveForm() {
   this.modelName;
   this.formName;

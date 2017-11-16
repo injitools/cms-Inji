@@ -493,7 +493,7 @@ class DataManager extends \Object {
                     $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '/', get_class($originalItem));
                     return "<a href ='/admin/{$item->genViewLink()}?redirectUrl={$redirectUrl}'>{$item->$colName}</a>";
                 } elseif ($modelName::$cols[$colName]['type'] == 'html' || $modelName::$cols[$colName]['type']=='textarea') {
-                    $uid = \Tools::randomString();
+                    $uid = 'text_'.\Tools::randomString();
                     $script = "<script>inji.onLoad(function(){
             var el{$uid}=$('#{$uid}');
             var height{$uid} = el{$uid}.height();

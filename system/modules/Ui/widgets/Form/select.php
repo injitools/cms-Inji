@@ -9,7 +9,7 @@ foreach ($options['values'] as $key => $value) {
     $primaryValue = isset($options['value']) ? $options['value'] : null;
     $primaryValue = is_array($primaryValue) && isset($primaryValue['primary']) ? $primaryValue['primary'] : $primaryValue;
     if (is_numeric($key) && !is_array($primaryValue) && $primaryValue !== '') {
-        $primaryValue = (int)$primaryValue;
+        $primaryValue = (int) $primaryValue;
     }
     if (
         (!is_array($primaryValue) && ($key === $primaryValue || (isset($form->userDataTree[$name]) && $form->userDataTree[$name] === $key))) ||
@@ -17,13 +17,22 @@ foreach ($options['values'] as $key => $value) {
     ) {
         $selected = ' selected="selected"';
     }
-    if (is_array($value)) {
+    if (is_array($value) && isset($value['input'])) {
         $aditionalInputs[] = $value['input'];
         if ($selected) {
             $showedInput = count($aditionalInputs) - 1;
             $aditionValue = !empty($options['aditionalValue']) ? $options['aditionalValue'] : '';
         }
         $optionsHtml .= "<option data-aditionalInput='" . (count($aditionalInputs) - 1) . "' value ='{$key}'{$selected}>{$value['text']}</option>";
+    } elseif (is_array($value)) {
+        $disabled = '';
+        if ($value['key'] == $primaryValue) {
+            $selected = ' selected="selected"';
+        }
+        if (!empty($value['disabled'])) {
+            $disabled = ' disabled="disabled"';
+        }
+        $optionsHtml .= "<option value ='{$value['key']}'{$selected}{$disabled}>{$value['text']}</option>";
     } else {
         $optionsHtml .= "<option value ='{$key}'{$selected}>{$value}</option>";
     }
