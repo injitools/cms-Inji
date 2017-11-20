@@ -30,15 +30,27 @@
                     ['delivery_field_id', $pointsField->id],
                     [\Ecommerce\Delivery\Field\Item::colPrefix() . 'data->\'$."Город"\'', $city]
                 ]]);
+                $id = 'custom' . Tools::randomString();
                 ?>
-                <select class="form-control" name="<?= $name; ?>">
-                    <?php
-                    foreach ($points as $point) {
-                        $selected = (isset($cart->deliveryInfos[$pointsField->id]) && $cart->deliveryInfos[$pointsField->id]->value == $point->value) ? ' selected="selected"' : '';
-                        echo "<option{$selected}>{$point->value}</option>";
-                    }
-                    ?>
-                </select>
+                <div style="position: relative;z-index: 40;" class="custominput-clear"
+                     onclick="$(this).next()[0].__inji_customSelect__.toggle();event.stopPropagation();">
+                    <span class="btn btn-primary btn-xs" style="position: absolute;right: 7px;top: 7px;">изменить</span>
+                </div>
+                <div id='<?= $id; ?>' class="injiCustomSelect">
+                    <select class="form-control" name="<?= $name; ?>">
+                        <?php
+                        foreach ($points as $point) {
+                            $selected = (isset($cart->deliveryInfos[$pointsField->id]) && $cart->deliveryInfos[$pointsField->id]->value == $point->value) ? ' selected="selected"' : '';
+                            echo "<option{$selected}>{$point->value}</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <script>
+                  inji.onLoad(function () {
+                    inji.Ui.customSelect.bind($('#<?=$id;?>'));
+                  })
+                </script>
                 <?php
             } else {
                 echo '<b>Заполните поле: Город</b>';
