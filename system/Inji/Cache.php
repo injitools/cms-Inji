@@ -12,22 +12,22 @@ class Cache {
 
     /**
      * Connection to a set of memcache servers
-     * 
-     * @var Memcache 
+     *
+     * @var Memcache
      */
     public static $server = null;
 
     /**
      * Truing to connect flag
-     * 
-     * @var boolean 
+     *
+     * @var boolean
      */
     public static $connectTrying = false;
 
     /**
      * Connected flag
-     * 
-     * @var boolean 
+     *
+     * @var boolean
      */
     public static $connected = false;
 
@@ -44,15 +44,15 @@ class Cache {
 
     /**
      * Get chached value
-     * 
+     *
      * If value not present, call callback
-     * 
+     *
      * @param string $name
      * @param array $params
      * @param callable $callback
      * @return boolean
      */
-    public static function get($name, $params = [], $callback = null) {
+    public static function get($name, $params = [], $callback = null, $lifeTime = 3600) {
         if (!self::$connected) {
             self::connect();
         }
@@ -68,7 +68,7 @@ class Cache {
         } else {
             if (is_callable($callback, true)) {
                 $val = $callback($params);
-                self::set($name, $params, $val);
+                self::set($name, $params, $val, $lifeTime);
                 return $val;
             }
         }
@@ -77,7 +77,7 @@ class Cache {
 
     /**
      * Set value to cache
-     * 
+     *
      * @param string $name
      * @param array $params
      * @param mixed $val
@@ -96,9 +96,9 @@ class Cache {
 
     /**
      * Move file to cache folder and return path
-     * 
+     *
      * Also resize image when given resize params
-     * 
+     *
      * @param string $file
      * @param array $options
      * @return string
@@ -126,7 +126,7 @@ class Cache {
 
     /**
      * Get cache dir for app
-     * 
+     *
      * @param App $app
      * @return string
      */
