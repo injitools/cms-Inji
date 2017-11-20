@@ -11,7 +11,6 @@
 namespace Ecommerce\DeliveryProvider;
 
 use Ecommerce\Delivery\Field\Item;
-use Ecommerce\Delivery\Provider\ConfigItem;
 use Ecommerce\UserAdds\Field;
 
 class CDEK extends \Ecommerce\DeliveryProvider {
@@ -19,11 +18,8 @@ class CDEK extends \Ecommerce\DeliveryProvider {
 
     /**
      * @param \Ecommerce\Cart $cart
-     * @return \Money\Sums
      */
-    static function calcPrice($cart) {
-        $calc = new \Ecommerce\Vendor\CalculatePriceDeliveryCdek();
-        $fields = [];
+    static function request($cart) {
         $cityId = 0;
         $senderCity = 44;
         $tariff = 136;
@@ -35,30 +31,73 @@ class CDEK extends \Ecommerce\DeliveryProvider {
                 $cityId = json_decode($item->data, true)['ID'];
             }
         }
-        foreach ($cart->delivery->fields as $field) {
-            if ($field->code === 'cdektype' && !empty($_POST['deliveryFields'][$field->id]) && is_numeric($_POST['deliveryFields'][$field->id])) {
-                $item = Item::get([['id', $_POST['deliveryFields'][$field->id]], ['delivery_field_id', $field->id]]);
-                if ($item) {
-                    $tariff = $item->data;
-                }
+        $field = \Ecommerce\Delivery\Field::get('cdektype', 'code');
+        if (isset($cart->deliveryInfos[$field->id])) {
+            $item = Item::get([['id', $cart->deliveryInfos[$field->id]->value], ['delivery_field_id', $field->id]]);
+            if ($item) {
+                $tariff = $item->data;
             }
         }
         if ($cityId) {
-            $config = ConfigItem::getList(['where' => ['delivery_provider_id', $cart->delivery->delivery_provider_id], 'key' => 'name']);
-            $calc->setAuth($config['authLogin']->value, $config['authPassword']->value);
-            $calc->setDateExecute(date('Y-m-d H:i:s'));
-            $calc->setSenderCityId($senderCity);
-            //устанавливаем город-получатель
-            $calc->setReceiverCityId($cityId);
-            $calc->setTariffId($tariff);
-            $calc->addGoodsItemBySize(3, 25, 25, 24);
-            if ($calc->calculate()) {
-                return new \Money\Sums([$cart->delivery->currency_id => $calc->getResult()['result']['price']* 1.1]);
-            } else {
-                //var_dump($tariff,$calc->getError());
-            }
+            $config = self::config();
+            return \Cache::get('pickPointCalc', [
+                'login' => $config['authLogin'],
+                'pass' => $config['authPassword'],
+                'senderCity' => $senderCity,
+                'cityId' => $cityId,
+                'tariff' => $tariff,
+            ], function ($data) {
+                $calc = new \Ecommerce\Vendor\CalculatePriceDeliveryCdek();
+                $calc->setAuth($data['login'], $data['pass']);
+                $calc->setDateExecute(date('Y-m-d H:i:s'));
+                $calc->setSenderCityId($data['senderCity']);
+                //устанавливаем город-получатель
+                $calc->setReceiverCityId($data['cityId']);
+                $calc->setTariffId($data['tariff']);
+                $calc->addGoodsItemBySize(3, 25, 25, 24);
+                if ($calc->calculate()) {
+                    return $calc->getResult();
+                } else {
+                    //var_dump($tariff,$calc->getError());
+                    return false;
+                }
+            });
+        }
+        return false;
+    }
 
+    static function calcPrice($cart) {
+        $result = self::request($cart);
+        if (!empty($result['result']['price'])) {
+            return new \Money\Sums([$cart->delivery->currency_id => round($result['result']['price'] * 1.1, 2)]);
         }
         return new \Money\Sums([$cart->delivery->currency_id => 0]);
+    }
+
+    static function deliveryTime($cart) {
+        $result = self::request($cart);
+        if (isset($result['result']['deliveryPeriodMin'])) {
+            return [
+                'min' => $result['result']['deliveryPeriodMin'],
+                'max' => $result['result']['deliveryPeriodMax'],
+            ];
+        }
+        return [
+            'min' => 0,
+            'max' => 0,
+        ];
+    }
+
+    static function availablePayTypeGroups($cart) {
+        $field = \Ecommerce\Delivery\Field::get('cdektype', 'code');
+        if (isset($cart->deliveryInfos[$field->id])) {
+            $item = Item::get([['id', $cart->deliveryInfos[$field->id]->value], ['delivery_field_id', $field->id]]);
+            if ($item) {
+                if ($item->data == 137) {
+                    return ['*'];
+                }
+            }
+        }
+        return ['online'];
     }
 }

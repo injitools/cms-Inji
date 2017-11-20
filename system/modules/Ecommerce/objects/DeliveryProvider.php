@@ -24,4 +24,18 @@ class DeliveryProvider {
             'max' => 0
         ];
     }
+
+    static function config() {
+
+        $provider = \Ecommerce\Delivery\Provider::get((new \ReflectionClass(get_called_class()))->getShortName(), 'object');
+        $config = [];
+        foreach ($provider->configs as $item) {
+            $config[$item->name] = $item->value;
+        }
+        return $config;
+    }
+
+    static function availablePayTypeGroups($cart) {
+        return ['*'];
+    }
 }

@@ -18,7 +18,6 @@ class CartController extends Controller {
 
     public function indexAction() {
         $deliverys = \Ecommerce\Delivery::getList(['where' => ['disabled', 0], 'order' => ['weight', 'ASC']]);
-        $payTypes = \Ecommerce\PayType::getList(['order' => ['weight', 'ASC']]);
         $cart = $this->ecommerce->getCurCart(false);
         if ($cart && !empty($_POST)) {
             $error = false;
@@ -68,6 +67,7 @@ class CartController extends Controller {
                     }
                 }
             }
+            $this->module->parseFields($_POST['userAdds']['fields'], $cart);
             if ($deliverys && !$cart->delivery_id && (empty($_POST['delivery']) || empty($deliverys[$_POST['delivery']]))) {
                 $error = 1;
                 Msg::add('Выберите способ доставки', 'danger');
@@ -75,21 +75,16 @@ class CartController extends Controller {
                 $cart->delivery_id = $_POST['delivery'];
             }
             if ($cart->delivery) {
-                if ($cart->delivery->disabledPayTypes) {
-                    foreach ($cart->delivery->disabledPayTypes as $dis) {
-                        if (isset($payTypes[$dis->paytype_id])) {
-                            unset($payTypes[$dis->paytype_id]);
-                        }
-                    }
-                }
                 foreach ($deliverys[$cart->delivery_id]->fields as $field) {
                     if (empty($_POST['deliveryFields'][$field->id]) && $field->required) {
                         $error = 1;
                         Msg::add('Вы не указали: ' . $field->name, 'danger');
                     }
                 }
+                $this->module->parseDeliveryFields($_POST['deliveryFields'], $cart, $cart->delivery->fields);
             }
 
+            $payTypes = $cart->availablePayTypes();
             $payType = false;
             if ($payTypes && (empty($_POST['payType']) || empty($payTypes[$_POST['payType']]) || ($cart->paytype_id && !isset($payTypes[$cart->paytype_id])))) {
                 $error = 1;
@@ -116,10 +111,7 @@ class CartController extends Controller {
                     $cart->card_item_id = $userCard->id;
                 }
             }
-            $this->module->parseFields($_POST['userAdds']['fields'], $cart);
-            if ($deliverys && !empty($deliverys[$cart->delivery_id]) && !empty($_POST['deliveryFields'])) {
-                $this->module->parseDeliveryFields($_POST['deliveryFields'], $cart, $deliverys[$cart->delivery_id]->fields);
-            }
+
             $cart->save();
             if (!$error && !empty($_POST['action']) && $_POST['action'] = 'order') {
                 $cart->user_id = $user->user_id;
@@ -162,15 +154,7 @@ class CartController extends Controller {
             }
 
         } else {
-            if ($cart && $cart->delivery) {
-                if ($cart->delivery->disabledPayTypes) {
-                    foreach ($cart->delivery->disabledPayTypes as $dis) {
-                        if (isset($payTypes[$dis->paytype_id])) {
-                            unset($payTypes[$dis->paytype_id]);
-                        }
-                    }
-                }
-            }
+            $payTypes = $cart->availablePayTypes();
         }
         $this->view->setTitle('Корзина');
         $bread = [];

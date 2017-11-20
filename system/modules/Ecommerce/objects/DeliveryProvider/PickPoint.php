@@ -10,7 +10,6 @@
 
 namespace Ecommerce\DeliveryProvider;
 
-use Ecommerce\Delivery\Provider\ConfigItem;
 
 class PickPoint extends \Ecommerce\DeliveryProvider {
     static $name = 'PickPoint - курьерская служба';
@@ -40,22 +39,60 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
         else return FALSE;
     }
 
-    /**
-     * @param \Ecommerce\Cart $cart
-     * @return \Money\Sums
-     */
-    static function calcPrice($cart) {
-
-        $config = ConfigItem::getList(['where' => ['delivery_provider_id', $cart->delivery->delivery_provider_id], 'key' => 'name']);
-        $sessionId = \Cache::get('PickPointSession', []);
-        if (!$sessionId) {
-            $result = self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/login', [
-                'Login' => $config['login']->value,
-                'Password' => $config['pass']->value,
-            ]);
-            $sessionId = json_decode($result, true)['SessionId'];
-            \Cache::set('PickPointSession', [], $sessionId, 12 * 60 * 60);
+    static function deliveryTime($cart) {
+        $result = self::request($cart);
+        if (!empty($result['Zones'][0])) {
+            return [
+                'min' => $result['Zones'][0]['DeliveryMin'],
+                'max' => $result['Zones'][0]['DeliveryMax']
+            ];
         }
+        return ['min' => 0, 'max' => 0];
+    }
+
+    /* $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/CreateShipment', [
+     * 'SessionId' => $sessionId,
+     * 'Sendings' => [[
+     * 'IKN' => $config['ikn']->value,
+     * 'Invoice' => [
+     * 'Description' => 'test',
+     * 'PostamatNumber' => $toId,
+     * 'MobilePhone' => '+79999999999',
+     * 'PostageType' => '10003',
+     * 'GettingType' => '101',
+     * 'PayType' => 1,
+     * 'Sum' => '1000'
+     * ]
+     * ]],
+     * ]), true);
+     * var_dump($result);
+     * $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/calctariff', [
+     * 'SessionId' => $sessionId,
+     * 'FromCity' => $senderCity,
+     * 'IKN' => $config['ikn']->value,
+     * 'PTNumber' => $toId,
+     * 'Length' => 25,
+     * 'Depth' => 25,
+     * 'Width' => 25,
+     * 'Weight' => 0.5,
+     * ]), true);
+     *
+     * $summ = 0;
+     * var_dump($result['Services']);
+     * foreach ($result['Services'] as $service) {
+     * $summ = $service['Tariff'] + $service['NDS'];
+     * }
+     * //$result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/cancelInvoice', ['SessionId' => $sessionId, 'InvoiceNumber' => '15938160323']), true);
+     */
+    static function request($cart) {
+        $config = self::config();
+        $sessionId = \Cache::get('PickPointSession', [
+            'Login' => $config['login'],
+            'Password' => $config['pass'],
+        ], function ($data) {
+            $result = self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/login', $data);
+            return json_decode($result, true)['SessionId'];
+        }, 12 * 60 * 60);
         $toId = '';
         foreach ($cart->delivery->fields as $field) {
             if ($field->code === 'pickpoint') {
@@ -67,68 +104,50 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
                 break;
             }
         }
+
         if (!$toId) {
-            return new \Money\Sums([$cart->delivery->currency_id => 0]);
+            $fieldInfo = \Ecommerce\UserAdds\Field::get('deliveryfield_city', 'code');
+            $field = \Ecommerce\Delivery\Field::get('city', 'code');
+            if (isset($cart->infos[$fieldInfo->id])) {
+                $item = \Ecommerce\Delivery\Field\Item::get([['id', $cart->infos[$fieldInfo->id]->value], ['delivery_field_id', $field->id]]);
+                if ($item) {
+                    $data = json_decode($item->data, true);
+                    if (!empty($data['PostCodeList'])) {
+                        $post = explode(',', $data['PostCodeList'])[0];
+                        $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/postindexpostamatlist', ['PostIndex' => $post]), true);
+                        if (!empty($result['PostamatList'][0]['CitiName'])) {
+                            $toId = $result['PostamatList'][0]['Number'];
+                        }
+                    }
+
+                }
+            }
+        }
+        if (!$toId) {
+            return false;
         }
 
         $senderCity = 'Москва';
 
-        /** $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/CreateShipment', [
-         * 'SessionId' => $sessionId,
-         * 'Sendings' => [[
-         * 'IKN' => $config['ikn']->value,
-         * 'Invoice' => [
-         * 'Description' => 'test',
-         * 'PostamatNumber' => $toId,
-         * 'MobilePhone' => '+79999999999',
-         * 'PostageType' => '10003',
-         * 'GettingType' => '101',
-         * 'PayType' => 1,
-         * 'Sum' => '1000'
-         * ]
-         * ]],
-         * ]), true);
-         * var_dump($result);
-         * $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/calctariff', [
-         * 'SessionId' => $sessionId,
-         * 'FromCity' => $senderCity,
-         * 'IKN' => $config['ikn']->value,
-         * 'PTNumber' => $toId,
-         * 'Length' => 25,
-         * 'Depth' => 25,
-         * 'Width' => 25,
-         * 'Weight' => 0.5,
-         * ]), true);
-         *
-         * $summ = 0;
-         * var_dump($result['Services']);
-         * foreach ($result['Services'] as $service) {
-         * $summ = $service['Tariff'] + $service['NDS'];
-         * }
-         * //$result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/cancelInvoice', ['SessionId' => $sessionId, 'InvoiceNumber' => '15938160323']), true);
-         */
-        /*
-         * 'Error' => string '' (length=0)
-  'ErrorCode' => int 0
-  'Zones' =>
-    array (size=1)
-      0 =>
-        array (size=7)
-          'DeliveryMax' => int 3
-          'DeliveryMin' => int 2
-          'FromCity' => string 'Москва' (length=12)
-          'Koeff' => float 1.25
-          'ToCity' => string 'Пушкин' (length=12)
-          'ToPT' => string '4702-023' (length=8)
-          'Zone' => string '0' (length=1)
-         */
-        $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/getzone', [
+        return \Cache::get('pickPointCalc', [
             'SessionId' => $sessionId,
-            'IKN' => $config['ikn']->value,
+            'IKN' => $config['ikn'],
             'FromCity' => $senderCity,
             'ToPT' => $toId,
-        ]), true);
-        //var_dump($config['ikn']->value, $result);
+        ], function ($data) {
+            return json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/getzone', $data), true);
+        });
+    }
+
+    /**
+     * @param \Ecommerce\Cart $cart
+     * @return \Money\Sums
+     */
+    static function calcPrice($cart) {
+        $result = self::request($cart);
+        if (!$result) {
+            return new \Money\Sums([$cart->delivery->currency_id => 0]);
+        }
         $zones = [
             0 => 270,
             1 => 292,
@@ -141,7 +160,11 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
             8 => 527,
         ];
         return new \Money\Sums([
-            $cart->delivery->currency_id => $zones[$result['Zones'][0]['Zone']] * $result['Zones'][0]['Koeff'] * 1.1
+            $cart->delivery->currency_id => round($zones[$result['Zones'][0]['Zone']] * $result['Zones'][0]['Koeff'] * 1.1, 2)
         ]);
+    }
+
+    static function availablePayTypeGroups($cart) {
+        return ['online'];
     }
 }

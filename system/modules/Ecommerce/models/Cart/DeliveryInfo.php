@@ -9,7 +9,18 @@
  */
 
 namespace Ecommerce\Cart;
-
+/**
+ * Class DeliveryInfo
+ * @property int $id
+ * @property string $name
+ * @property int $cart_id
+ * @property int $delivery_field_id
+ * @property string $value
+ *
+ * @property \Ecommerce\Delivery\Field $field
+ * @property \Ecommerce\Cart $cart
+ *
+ */
 class DeliveryInfo extends \Model {
 
     public static $objectName = 'Информация о доставке';

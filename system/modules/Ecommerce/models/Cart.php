@@ -452,4 +452,18 @@ class Cart extends \Model {
         }
     }
 
+    public function availablePayTypes() {
+        if (!$this->delivery) {
+            return \Ecommerce\PayType::getList(['order' => ['weight', 'ASC']]);
+        }
+        $providerHelper = $this->delivery->providerHelper();
+        if (!$providerHelper) {
+            return \Ecommerce\PayType::getList(['order' => ['weight', 'ASC']]);
+        }
+        $payTypeGroups = $providerHelper::availablePayTypeGroups($this);
+        if (!$payTypeGroups || $payTypeGroups[0] === '*') {
+            return \Ecommerce\PayType::getList(['order' => ['weight', 'ASC']]);
+        }
+        return \Ecommerce\PayType::getList(['where' => ['group', $payTypeGroups, 'IN'], 'order' => ['weight', 'ASC']]);
+    }
 }

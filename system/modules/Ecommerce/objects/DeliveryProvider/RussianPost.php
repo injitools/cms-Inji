@@ -11,14 +11,11 @@
 namespace Ecommerce\DeliveryProvider;
 
 
+use Ecommerce\UserAdds\Field;
+
 class RussianPost extends \Ecommerce\DeliveryProvider {
     static $name = 'PickPoint - курьерская служба';
 
-    /**
-     * @param \Ecommerce\Cart $cart
-     * @return \Money\Sums
-     *
-     */
     static function request($cart) {
         $city = '';
         foreach ($cart->delivery->fields as $field) {
@@ -31,12 +28,24 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
             }
         }
         if (!$city) {
-            return [];
+            $fieldInfo = Field::get('deliveryfield_city', 'code');
+            $field = \Ecommerce\Delivery\Field::get('city', 'code');
+            if (isset($cart->infos[$fieldInfo->id])) {
+                $item = \Ecommerce\Delivery\Field\Item::get([['id', $cart->infos[$fieldInfo->id]->value], ['delivery_field_id', $field->id]]);
+                if ($item) {
+                    $data = json_decode($item->data, true);
+                    if (!empty($data['PostCodeList'])) {
+                        $city = explode(',', $data['PostCodeList'])[0];
+                    }
+
+                }
+            }
+            if (!$city) {
+                return [];
+            }
         }
         $senderCity = '101000';
 
-        $url = 'http://tariff.russianpost.ru/tariff/v1/calculate?json&';
-        //var_dump( $cart->itemsSum()->sums[0]);
         $data = [
             'object' => 4030,
             'weight' => '1000',
@@ -44,7 +53,7 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
             //'sumoc' => $cart->itemsSum()->sums[0],
             'from' => $senderCity,
             'to' => $city,
-            'delivery' => 1
+            'delivery' => 1,
         ];
         $result = \Cache::get('russianPostCalc', $data, function ($data) {
             return file_get_contents('http://tariff.russianpost.ru/tariff/v1/calculate?json&' . http_build_query($data));
@@ -54,16 +63,21 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
     static function calcPrice($cart) {
         $result = static::request($cart);
-        //var_dump($result['pay']);
         if (empty($result['pay'])) {
             return new \Money\Sums([$cart->delivery->currency_id => 0]);
         }
         $sum = $result['pay'];
-        return new \Money\Sums([$cart->delivery->currency_id => $sum / 100 * 1.1]);
+        return new \Money\Sums([$cart->delivery->currency_id => round($sum / 100 * 1.1, 2)]);
     }
 
     static function deliveryTime($cart) {
         $result = static::request($cart);
-        return $result['delivery'];
+        if (!empty($result['delivery'])) {
+            return $result['delivery'];
+        }
+        return ['min' => 0, 'max' => 0];
+    }
+    static function availablePayTypeGroups($cart) {
+        return ['online'];
     }
 }

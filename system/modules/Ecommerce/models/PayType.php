@@ -24,6 +24,7 @@ class PayType extends \Model {
     public static $cols = [
         //Основные параметеры
         'name' => ['type' => 'text'],
+        'group' => ['type' => 'text'],
         'info' => ['type' => 'textarea'],
         'default' => ['type' => 'bool'],
         'handler' => [

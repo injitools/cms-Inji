@@ -52,8 +52,7 @@ class Delivery extends \Model {
         'date_create' => ['type' => 'dateTime'],
         //Менеджеры
         'field' => ['type' => 'dataManager', 'relation' => 'fields'],
-        'priceChanger' => ['type' => 'dataManager', 'relation' => 'prices'],
-        'disabledPayTypesMgr' => ['type' => 'dataManager', 'relation' => 'disabledPayTypes'],
+        'priceChanger' => ['type' => 'dataManager', 'relation' => 'prices']
     ];
     public static $labels = [
         'name' => 'Название',
@@ -67,8 +66,7 @@ class Delivery extends \Model {
         'priceChanger' => 'Градация стоимости',
         'field' => 'Поля',
         'disabled' => 'Отключено',
-        'default' => 'По умолчанию',
-        'disabledPayTypesMgr' => 'Недоступные способы оплаты',
+        'default' => 'По умолчанию'
     ];
     public static $dataManagers = [
         'manager' => [
@@ -82,8 +80,7 @@ class Delivery extends \Model {
                 'disabled',
                 'default',
                 'field',
-                'priceChanger',
-                'disabledPayTypesMgr'
+                'priceChanger'
             ],
             'sortMode' => true
         ],
@@ -98,8 +95,7 @@ class Delivery extends \Model {
                 ['price_text'],
                 ['info'],
                 ['priceChanger'],
-                ['field'],
-                ['disabledPayTypesMgr']
+                ['field']
             ]
         ]
     ];
@@ -127,12 +123,7 @@ class Delivery extends \Model {
             'provider' => [
                 'model' => 'Ecommerce\Delivery\Provider',
                 'col' => 'delivery_provider_id'
-            ],
-            'disabledPayTypes' => [
-                'type' => 'many',
-                'model' => 'Ecommerce\Delivery\DisablePayType',
-                'col' => 'delivery_id'
-            ],
+            ]
         ];
     }
 
