@@ -10,8 +10,9 @@ inji.Ui = new function () {
     inji.Ui.forms = new Forms();
     inji.Ui.editors = new Editors();
     inji.Ui.autocomplete = new Autocomplete();
-  });
 
+  });
+  this.customSelect = new CustomSelect();
   this.bindMenu = function (container) {
     container.find('.nav-left-ml').toggle();
     container.find('label.nav-toggle span').click(function () {
@@ -45,6 +46,78 @@ inji.Ui = new function () {
     });
   }
 };
+
+function CustomSelect() {
+  this.bind = function (jqueryEl) {
+    var self = this;
+    jqueryEl.each(function () {
+      new self.fn($(this));
+    });
+  };
+  this.fn = function (jqueryEl) {
+    jqueryEl[0].__inji_customSelect__ = this;
+    var self = this;
+    this.select = jqueryEl.find('select');
+    var htmlOptions = this.select.html();
+    htmlOptions = htmlOptions.replace(/option/g, 'div');
+    console.log(htmlOptions);
+    this.custom = $('<div class="customSelect">\
+                                        <div class="main-box">\
+                                            <div class="current-item"></div>\
+                                            <div class="chevron"><div><i class="glyphicon glyphicon-chevron-down"></i></div><div style="display:none;"><i class="glyphicon glyphicon-chevron-up"></i></div></div>\
+                                        </div>\
+                                        <div class="item-list">\
+                                        ' + htmlOptions + '\
+                                        </div>\
+                                    </div>');
+
+    this.custom.find('.item-list>*').addClass('list-item');
+    this.custom.find('.main-box').click(function (e) {
+      var element = $(this).next()[0];
+      $('.customSelect .item-list').each(function () {
+        if (element != this && $(this).css('display') == 'block') {
+          $(this).slideUp();
+          $(this).closest('.customSelect').find('.chevron>*').slideToggle();
+        }
+      });
+      self.toggle();
+    });
+    jqueryEl.prepend(this.custom);
+    var text = this.select.find("option:selected").html();
+    this.custom.find('.current-item').html(text);
+    this.select.change(function () {
+      var text = self.select.find("option:selected").html();
+      self.custom.find('.current-item').html(text);
+    });
+    this.custom.find('.list-item').click(function () {
+      self.select.find('option:selected')[0].selected = false;
+      self.select.find('option').get($(this).index()).selected = true;
+      self.select.change();
+      self.toggle();
+    });
+    if (this.select.find(':selected').val() != 0) {
+      $(this.custom.find('.list-item')[$(this).find(':selected').val()]).click();
+      $(this).change();
+    }
+    this.toggle = function () {
+      console.log('toggle');
+      self.custom.find('.item-list').slideToggle();
+      self.custom.find('.chevron>*').slideToggle();
+    };
+
+  };
+  $('body').off('click.closeCustomSelect');
+  $('body').on('click.closeCustomSelect', function (e) {
+    if ($(e.target).closest('.customSelect').length == 0) {
+      $('.customSelect .item-list').each(function () {
+        if ($(this).css('display') == 'block') {
+          $(this).slideUp();
+          $(this).closest('.customSelect').find('.chevron>*').slideToggle();
+        }
+      });
+    }
+  });
+}
 
 function Autocomplete() {
   this.autocompletes = [];

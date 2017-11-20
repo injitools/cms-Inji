@@ -80,3 +80,66 @@ span.nav-toggle-icon{
   padding: 4px;
   border:1px solid #ccc;
 }
+
+
+.injiCustomSelect select{
+  display: none;
+}
+.injiCustomSelect .customSelect {
+  display: block;
+  vertical-align: middle;
+  position: relative;
+}
+.injiCustomSelect .customSelect .main-box{
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+
+  display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+  -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.injiCustomSelect .customSelect .main-box .current-item{
+
+}
+.injiCustomSelect .customSelect .main-box .chevron{
+  position: absolute;
+  right:15px;
+  top:50%;
+  margin-top:-7px;
+  height:14px;
+  width: 14px;
+  overflow: hidden;
+}
+.injiCustomSelect .customSelect .main-box .chevron i{
+  display: block;
+}
+.injiCustomSelect .customSelect .item-list{
+  display: none;
+  max-height: 450px;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  left:0;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+.injiCustomSelect .customSelect .list-item {
+  padding:5px;
+  cursor:pointer;
+  transition: color 0.1s ease;
+}

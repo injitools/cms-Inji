@@ -14,7 +14,7 @@ if ($value && isset($options['snippet']) && is_string($options['snippet'])) {
 ?>
 <div style="position: relative;<?= !$value ? 'display:none' : ''; ?>" class="custominput-clear"
      onclick="$(this).next()[0].__inji_autocomplete.clear();$(this).next()[0].focus();">
-    <span class="btn btn-primary btn-xs" style="position: absolute;right: 7px;top: 7px;">Изменить <?= $label; ?></span>
+    <span class="btn btn-primary btn-xs" style="position: absolute;right: 7px;top: 7px;">Сменить <?= $label; ?></span>
 </div>
 <input <?= !empty($options['required']) ? 'required' : ''; ?>
         id='<?= $id; ?>'
