@@ -22,7 +22,7 @@ class CDEK extends \Ecommerce\DeliveryProvider {
     static function request($cart) {
         $cityId = 0;
         $senderCity = 44;
-        $tariff = 136;
+        $tariff = 138;
         $fieldInfo = Field::get('deliveryfield_city', 'code');
         $field = \Ecommerce\Delivery\Field::get('city', 'code');
         if (isset($cart->infos[$fieldInfo->id])) {
@@ -93,7 +93,7 @@ class CDEK extends \Ecommerce\DeliveryProvider {
         if (isset($cart->deliveryInfos[$field->id])) {
             $item = Item::get([['id', $cart->deliveryInfos[$field->id]->value], ['delivery_field_id', $field->id]]);
             if ($item) {
-                if ($item->data == 137) {
+                if ($item->data == 139) {
                     return ['*'];
                 }
             }
