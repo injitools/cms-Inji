@@ -26,7 +26,6 @@ class DeliveryProvider {
     }
 
     static function config() {
-
         $provider = \Ecommerce\Delivery\Provider::get((new \ReflectionClass(get_called_class()))->getShortName(), 'object');
         $config = [];
         foreach ($provider->configs as $item) {
@@ -37,5 +36,25 @@ class DeliveryProvider {
 
     static function availablePayTypeGroups($cart) {
         return ['*'];
+    }
+
+    /**
+     * @param \Ecommerce\Cart $cart
+     * @return bool|\Ecommerce\Delivery\Field\Item
+     */
+    static function getCity($cart) {
+        $fieldInfo = \Ecommerce\UserAdds\Field::get('deliveryfield_city', 'code');
+        $field = \Ecommerce\Delivery\Field::get('city', 'code');
+        $cityItem = null;
+        if (isset($cart->infos[$fieldInfo->id])) {
+            $itemId = $cart->infos[$fieldInfo->id]->value;
+        }
+        if (isset($cart->deliveryInfos[$field->id])) {
+            $itemId = $cart->deliveryInfos[$field->id]->value;
+        }
+        if (!empty($itemId)) {
+            return \Ecommerce\Delivery\Field\Item::get([['id', $itemId], ['delivery_field_id', $field->id]]);
+        }
+        return false;
     }
 }

@@ -21,6 +21,7 @@ namespace Ecommerce\Delivery;
  * @property bool $required
  * @property bool $save
  * @property number $weight
+ * @property number $help_text
  * @property string $date_create
  *
  * @property-read \Ecommerce\Delivery\Field\Item[] $fieldItems
@@ -41,6 +42,7 @@ class Field extends \Model {
             'select' => 'Выпадающий список',
         ]],
         'code' => ['type' => 'text'],
+        'help_text' => ['type' => 'text'],
         'options' => ['type' => 'textarea'],
         'userfield' => ['type' => 'text'],
         'placeholder' => ['type' => 'text'],

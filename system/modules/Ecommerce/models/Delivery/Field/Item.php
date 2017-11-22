@@ -10,7 +10,16 @@
  */
 
 namespace Ecommerce\Delivery\Field;
-
+/**
+ * Class Item
+ * @property int $id
+ * @property int $delivery_field_id
+ * @property string $value
+ * @property string $data
+ * @property int $weight
+ * @property string $date_create
+ * @property \Ecommerce\Delivery\Field $field
+ */
 class Item extends \Model {
 
     public static $objectName = 'Элемент коллекции поля доставки';

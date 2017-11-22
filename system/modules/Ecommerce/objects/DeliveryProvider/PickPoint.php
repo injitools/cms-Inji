@@ -92,34 +92,24 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
         ], function ($data) {
             $result = self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/login', $data);
             return json_decode($result, true)['SessionId'];
-        }, 12 * 60 * 60);
+        }, 4 * 60 * 60);
         $toId = '';
-        foreach ($cart->delivery->fields as $field) {
-            if ($field->code === 'pickpoint') {
-                if (!empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
-                    $toId = $_POST['deliveryFields'][$field->id];
-                } elseif (isset($cart->deliveryInfos[$field->id])) {
-                    $toId = $cart->deliveryInfos[$field->id]->value;
-                }
-                break;
+        foreach ($cart->deliveryInfos as $deliveryInfo) {
+            if ($deliveryInfo->field->code == 'pickpoint') {
+                $toId = $deliveryInfo->value;
             }
         }
 
         if (!$toId) {
-            $fieldInfo = \Ecommerce\UserAdds\Field::get('deliveryfield_city', 'code');
-            $field = \Ecommerce\Delivery\Field::get('city', 'code');
-            if (isset($cart->infos[$fieldInfo->id])) {
-                $item = \Ecommerce\Delivery\Field\Item::get([['id', $cart->infos[$fieldInfo->id]->value], ['delivery_field_id', $field->id]]);
-                if ($item) {
-                    $data = json_decode($item->data, true);
-                    if (!empty($data['PostCodeList'])) {
-                        $post = explode(',', $data['PostCodeList'])[0];
-                        $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/postindexpostamatlist', ['PostIndex' => $post]), true);
-                        if (!empty($result['PostamatList'][0]['CitiName'])) {
-                            $toId = $result['PostamatList'][0]['Number'];
-                        }
+            $cityItem = static::getCity($cart);
+            if ($cityItem) {
+                $data = json_decode($cityItem->data, true);
+                if (!empty($data['PostCodeList'])) {
+                    $post = explode(',', $data['PostCodeList'])[0];
+                    $result = json_decode(self::curl_get_file_contents('https://e-solution.pickpoint.ru/api/postindexpostamatlist', ['PostIndex' => $post]), true);
+                    if (!empty($result['PostamatList'][0]['CitiName'])) {
+                        $toId = $result['PostamatList'][0]['Number'];
                     }
-
                 }
             }
         }
@@ -145,8 +135,9 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
      */
     static function calcPrice($cart) {
         $result = self::request($cart);
-        if (!$result) {
-            return new \Money\Sums([$cart->delivery->currency_id => 0]);
+        $curId = $cart->delivery ? $cart->delivery->currency_id : 0;
+        if (!$result || !empty($result['Error'])) {
+            return new \Money\Sums([$curId => 0]);
         }
         $zones = [
             0 => 270,
@@ -160,7 +151,7 @@ class PickPoint extends \Ecommerce\DeliveryProvider {
             8 => 527,
         ];
         return new \Money\Sums([
-            $cart->delivery->currency_id => round($zones[$result['Zones'][0]['Zone']] * $result['Zones'][0]['Koeff'] * 1.1, 2)
+            $curId => round($zones[$result['Zones'][0]['Zone']] * $result['Zones'][0]['Koeff'] * 1.1, 2)
         ]);
     }
 

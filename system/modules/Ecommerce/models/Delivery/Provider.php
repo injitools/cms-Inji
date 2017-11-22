@@ -10,7 +10,14 @@
 
 namespace Ecommerce\Delivery;
 
-
+/**
+ * Class Provider
+ * @property int $id
+ * @property string $name
+ * @property string $object
+ * @property bool $active
+ * @property \Ecommerce\Delivery\Provider\ConfigItem[] $configs
+ */
 class Provider extends \Model {
     static $objectName = 'Провайдер доставки';
     static $cols = [

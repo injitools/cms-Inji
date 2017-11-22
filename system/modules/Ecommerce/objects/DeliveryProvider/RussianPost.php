@@ -18,31 +18,22 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
     static function request($cart) {
         $city = '';
-        foreach ($cart->delivery->fields as $field) {
-            if ($field->code === 'index') {
-                if (!empty($_POST['deliveryFields'][$field->id]) && is_string($_POST['deliveryFields'][$field->id])) {
-                    $city = $_POST['deliveryFields'][$field->id];
-                } elseif (isset($cart->deliveryInfos[$field->id])) {
-                    $city = $cart->deliveryInfos[$field->id]->value;
+        foreach ($cart->deliveryInfos as $deliveryInfo) {
+            if ($deliveryInfo->field->code == 'index') {
+                $city = $deliveryInfo->value;
+            }
+        }
+        if (!$city) {
+            $cityItem = static::getCity($cart);
+            if ($cityItem) {
+                $data = json_decode($cityItem->data, true);
+                if (!empty($data['PostCodeList'])) {
+                    $city = explode(',', $data['PostCodeList'])[0];
                 }
             }
         }
         if (!$city) {
-            $fieldInfo = Field::get('deliveryfield_city', 'code');
-            $field = \Ecommerce\Delivery\Field::get('city', 'code');
-            if (isset($cart->infos[$fieldInfo->id])) {
-                $item = \Ecommerce\Delivery\Field\Item::get([['id', $cart->infos[$fieldInfo->id]->value], ['delivery_field_id', $field->id]]);
-                if ($item) {
-                    $data = json_decode($item->data, true);
-                    if (!empty($data['PostCodeList'])) {
-                        $city = explode(',', $data['PostCodeList'])[0];
-                    }
-
-                }
-            }
-            if (!$city) {
-                return [];
-            }
+            return [];
         }
         $senderCity = '101000';
 
@@ -63,11 +54,12 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
     static function calcPrice($cart) {
         $result = static::request($cart);
+        $curId = $cart->delivery ? $cart->delivery->currency_id : 0;
         if (empty($result['paynds'])) {
-            return new \Money\Sums([$cart->delivery->currency_id => 0]);
+            return new \Money\Sums([$curId => 0]);
         }
         $sum = $result['paynds'];
-        return new \Money\Sums([$cart->delivery->currency_id => round($sum / 100 * 1.1, 2)]);
+        return new \Money\Sums([$curId => round($sum / 100 * 1.1, 2)]);
     }
 
     static function deliveryTime($cart) {
@@ -77,6 +69,7 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
         }
         return ['min' => 0, 'max' => 0];
     }
+
     static function availablePayTypeGroups($cart) {
         return ['online'];
     }

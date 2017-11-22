@@ -9,7 +9,14 @@
  */
 
 namespace Ecommerce\Delivery\Provider;
-
+/**
+ * Class ConfigItem
+ * @property int $id
+ * @property string $name
+ * @property string $value
+ * @property int $delivery_provider_id
+ * @property \Ecommerce\Delivery\Provider $deliveryProvider
+ */
 class ConfigItem extends \Model {
 
     static $cols = [
