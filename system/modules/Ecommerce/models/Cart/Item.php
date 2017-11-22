@@ -182,4 +182,10 @@ class Item extends \Model {
         ];
     }
 
+    public function name() {
+        if ($this->name && $this->name != $this->item->name()) {
+            return $this->item->name() . " ({$this->name})";
+        }
+        return $this->item->name();
+    }
 }

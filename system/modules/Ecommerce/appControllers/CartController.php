@@ -130,7 +130,34 @@ class CartController extends Controller {
                 }
                 $cart = \Ecommerce\Cart::get($cart->id);
                 if (!empty(\App::$cur->ecommerce->config['notify_mail'])) {
-                    $text = 'Перейдите в админ панель чтобы просмотреть новый заказ <a href = "http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/admin/ecommerce/Cart">Админ панель</a>';
+                    $text = '<p><b><a href = "http://' . App::$cur->getDomain() . '/admin/Ecommerce/view/Cart/' . ($cart->id) . '">Открыть заказ в админ панеле</a></b></p>';
+                    $text .= '<h3>Товары</h3>';
+                    $text .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
+                    foreach ($cart->cartItems as $cartItem) {
+                        $text .= "<tr><td><a href='" . App::$cur->getDomain() . "{$cartItem->item->getHref()}'>{$cartItem->name()}</a></td><td>{$cartItem->count}</td><td>{$cartItem->final_price}</td><td>" . ($cartItem->final_price * $cartItem->count) . "</td></tr>";
+                    }
+                    $text .= '</table>';
+                    if ($cart->infos) {
+                        $text .= '<h3>Контакты</h3>';
+                        $text .= '<table cellspacing="2" border="1" cellpadding="5">';
+                        foreach ($cart->infos as $info) {
+                            $text .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
+                        }
+                        $text .= '</table>';
+                    }
+                    if ($cart->delivery) {
+                        $text .= '<h3>Информация о доставке</h3>';
+                        $text .= "<p><b>{$cart->delivery->name}</b></p>";
+                        $text .= '<table cellspacing="2" border="1" cellpadding="5">';
+                        foreach ($cart->deliveryInfos as $info) {
+                            $text .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
+                        }
+                        $text .= '</table>';
+                    }
+                    if ($cart->payType) {
+                        $text .= '<h3>Способ оплаты</h3>';
+                        $text .= "<p><b>{$cart->payType->name}</b></p>";
+                    }
                     $title = 'Новый заказ в интернет магазине на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
                     \Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, \App::$cur->ecommerce->config['notify_mail'], $title, $text);
                 }
