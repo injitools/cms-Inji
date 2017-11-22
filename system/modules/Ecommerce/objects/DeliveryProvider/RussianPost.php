@@ -48,7 +48,7 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
         ];
         $result = \Cache::get('russianPostCalc', $data, function ($data) {
             return file_get_contents('http://tariff.russianpost.ru/tariff/v1/calculate?json&' . http_build_query($data));
-        });
+        }, 4 * 60 * 60);
         return json_decode($result, true);
     }
 
@@ -64,8 +64,21 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
     static function deliveryTime($cart) {
         $result = static::request($cart);
+
         if (!empty($result['delivery'])) {
             return $result['delivery'];
+        }
+        if (!empty($result['from']) && !empty($result['to'])) {
+            $url = "http://postcalc.ru/web.php?Extended=1&Output=json&From={$result['from']}&Weight=3000&Valuation=0&Step=0&Date=22.11.2017&IBase=p&ProcessingFee=0&PackingFee=0&Round=0.01&VAT=1&To={$result['to']}";
+            $result = \Cache::get('russianPostTimeCalc', $url, function ($data) {
+                return file_get_contents($data);
+            }, 4 * 60 * 60);
+            $result = json_decode($result, true);
+            if (!empty($result['ПростаяБандероль']['СрокДоставки'])) {
+                return ['min' => $result['ПростаяБандероль']['СрокДоставки']];
+            }
+
+
         }
         return ['min' => 0, 'max' => 0];
     }

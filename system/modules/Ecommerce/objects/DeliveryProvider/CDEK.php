@@ -61,7 +61,7 @@ class CDEK extends \Ecommerce\DeliveryProvider {
                 //var_dump($tariff,$calc->getError());
                 return false;
             }
-        });
+        },4 * 60 * 60);
 
 
     }
