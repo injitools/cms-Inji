@@ -10,7 +10,18 @@
  */
 
 namespace Exchange1c;
-
+/**
+ * Class Exchange
+ * @property int $id
+ * @property string $type
+ * @property string $session
+ * @property string $path
+ * @property int $cleared
+ * @property string $date_create
+ * @property string $date_end
+ * @property \Exchange1c\Exchange\Log[] $logs
+ * @property \Exchange1c\Exchange\File[] $files
+ */
 class Exchange extends \Model {
 
     public static $labels = [

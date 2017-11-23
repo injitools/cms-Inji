@@ -27,7 +27,7 @@ class Walker {
         //walk know pathes
         foreach ($this->map->paths(['where' => ['path', $this->curPath]]) as $path) {
             if (defined('mdebug')) {
-                echo $path->item ;
+                echo '<br />' . $path->item;
             }
             if (isset($this->data[$path->item])) {
                 if ($path->type == 'container') {
@@ -48,7 +48,7 @@ class Walker {
             }
             $walked[$path->item] = true;
             if (defined('mdebug')) {
-                echo " -> end $path->item<br />";
+                echo " -> end $path->item";
             }
         }
         //check unparsed paths
@@ -86,7 +86,6 @@ class Walker {
             echo " -> object $object_id";
         }
         $ids = $objectParser->parse();
-
         if ($objectParser->object->clear && json_decode($objectParser->object->clear, true)) {
 
             $where = json_decode($objectParser->object->clear, true);

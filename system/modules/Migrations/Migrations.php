@@ -83,10 +83,12 @@ class Migrations extends \Module {
     }
 
     public function saveLastAccess() {
-        foreach ($this->ids as $type => $ids) {
-            foreach ($ids as $id) {
-                if ($id->_changedParams) {
-                    $id->save();
+        foreach ($this->ids as $group => $types) {
+            foreach ($types as $type => $ids) {
+                foreach ($ids as $key => $id) {
+                    if ($id->_changedParams) {
+                        $id->save();
+                    }
                 }
             }
         }

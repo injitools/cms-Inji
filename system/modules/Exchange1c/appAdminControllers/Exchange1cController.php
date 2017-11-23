@@ -14,6 +14,7 @@ class Exchange1cController extends adminController {
         ini_set('memory_limit', '2000M');
         ignore_user_abort(true);
         set_time_limit(0);
+        Model::$logging = false;
         $reExchange = Exchange1c\Exchange::get((int)$_GET['item_pk']);
 
         $exchange = new \Exchange1c\Exchange();
@@ -55,6 +56,7 @@ class Exchange1cController extends adminController {
             $mode->process();
         }
         echo '<hr /><a href="/admin/exchange1c/Exchange">Назад</a>';
+        Model::$logging = true;
     }
 
 }

@@ -16,7 +16,7 @@
           inji.onLoad(function () {
             $('[name="userAddsId"]').change(function () {
               var values = userAddsValues[$(this).val()];
-              for (key in values) {
+              for (var key in values) {
                 var value = values[key];
                 $('[name="userAdds[fields][' + value.useradds_value_useradds_field_id + ']"]').val(value.useradds_value_value);
               }

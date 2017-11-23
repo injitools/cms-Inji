@@ -54,7 +54,7 @@ class Category extends \Model {
         'options_inherit' => ['type' => 'bool'],
         'hidden' => ['type' => 'bool'],
         //Системные
-        'views' => ['type' => 'number'],
+        'views' => ['type' => 'number', 'logging' => false],
         'imported' => ['type' => 'bool'],
         'weight' => ['type' => 'number'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],

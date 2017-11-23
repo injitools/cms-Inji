@@ -10,7 +10,17 @@
  */
 
 namespace Exchange1c\Exchange;
-
+/**
+ * Class File
+ * @property int $id
+ * @property string $name
+ * @property int $exchange_id
+ * @property int $size
+ * @property string $status
+ * @property bool $deleted
+ * @property int $date_create
+ * @property \Exchange1c\Exchange $exchange
+ */
 class File extends \Model {
 
     public static $logging = false;

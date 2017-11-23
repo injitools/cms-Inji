@@ -14,6 +14,7 @@ class Exchange1cController extends Controller {
         ini_set('memory_limit', '2000M');
         ignore_user_abort(true);
         set_time_limit(0);
+        Model::$logging = false;
         if (empty($_SESSION['auth'])) {
             if (empty($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
                 header('WWW-Authenticate: Basic realm="exchange1c"');
@@ -55,6 +56,7 @@ class Exchange1cController extends Controller {
         $mode->exchange = $exchange;
         $mode->log = $log;
         $mode->process();
+        Model::$logging = true;
     }
 
 }
