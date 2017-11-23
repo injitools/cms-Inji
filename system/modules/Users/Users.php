@@ -282,6 +282,9 @@ class Users extends Module {
         if (empty($data['user_mail'])) {
             return $this->msgOrErr('Вы не ввели E-mail', $msg);
         }
+        if (!empty($this->config['csrf']) && !App::$cur->server->checkCsrfForm($data)) {
+            return $this->msgOrErr('Ошибка безопасности, повторите запрос еще раз', $msg);
+        }
         $data['user_mail'] = trim($data['user_mail']);
         if (!filter_var($data['user_mail'], FILTER_VALIDATE_EMAIL)) {
             return $this->msgOrErr(\I18n\Text::module('Users', 'Вы ввели не корректный E-mail'), $msg);
