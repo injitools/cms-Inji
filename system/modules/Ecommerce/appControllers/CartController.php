@@ -180,7 +180,7 @@ class CartController extends Controller {
                 call_user_func_array(['Tools', 'redirect'], $redirect);
             }
 
-        } else {
+        } elseif($cart) {
             $payTypes = $cart->availablePayTypes();
         }
         $this->view->setTitle('Корзина');
