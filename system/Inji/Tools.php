@@ -185,6 +185,62 @@ class Tools extends Model {
         return $img_type;
     }
 
+    public static function imgToResource($path) {
+        ini_set("gd.jpeg_ignore_warning", 1);
+        if (!getimagesize($path)) {
+            return false;
+        }
+        list($img_width, $img_height, $imgType, $img_tag) = getimagesize($path);
+        switch ($imgType) {
+            case 1:
+                $imgType = 'gif';
+                break;
+            case 3:
+                $imgType = 'png';
+                break;
+            case 2:
+            default:
+                $imgType = 'jpeg';
+                break;
+        }
+
+        $imagecreatefromX = "imagecreatefrom{$imgType}";
+        $src_res = @$imagecreatefromX($path);
+        return [
+            'res' => $src_res,
+            'type' => $imgType
+        ];
+    }
+
+    public static function addWatermark($imagePath, $watermarkPath) {
+
+        $image = self::imgToResource($imagePath);
+        $watermark = self::imgToResource($watermarkPath);
+        if(!$image || !$watermark || !$image['res'] || !$watermark['res']){
+            return false;
+        }
+
+        $marge_right = 10;
+        $marge_bottom = 10;
+        $sx = imagesx($watermark['res']);
+        $sy = imagesy($watermark['res']);
+
+        imagecopy($image['res'], $watermark['res'], imagesx($image['res']) - $sx - $marge_right, imagesy($image['res']) - $sy - $marge_bottom, 0, 0, imagesx($watermark['res']), imagesy($watermark['res']));
+
+        if ($image['type'] == 'jpeg') {
+            imageinterlace($image['res'], 1); // чересстрочное формирование изображение
+            imagejpeg($image['res'], $imagePath, 85);
+        } else {
+            $imageX = "image{$image['res']}";
+            $imageX($image['res'], $imagePath);
+        }
+
+        imagedestroy($watermark['res']);
+        imagedestroy($image['res']);
+
+        return true;
+    }
+
     /**
      * Send mail
      *
