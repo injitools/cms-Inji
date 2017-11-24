@@ -13,20 +13,17 @@ namespace Exchange1c\Mode;
 
 use Exchange1c\Exchange;
 
-class Init extends \Exchange1c\Mode
-{
+class Init extends \Exchange1c\Mode {
 
-    public function process()
-    {
-        if($this->log->type=='catalog'){
+    public function process() {
+        if ($this->log->type == 'catalog') {
             echo "zip=yes\n";
-            echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize'));
-        } elseif($this->log->type=='sale'){
+            echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize')) . "\n";
+        } elseif ($this->log->type == 'sale') {
             echo "zip=no\n";
         }
-        if(!empty($_GET["version"]))
-        {
-            echo $this->log->exchange->session."\n";
+        if (!empty($_GET["version"])) {
+            echo $this->log->exchange->session . "\n";
             echo "version=2.03";
         }
         $this->end();
@@ -37,7 +34,7 @@ class Init extends \Exchange1c\Mode
             $query = \App::$cur->db->newQuery();
             $query->operation = 'select';
             $query->table = \Exchange1c\Exchange::table();
-            $query->cols = \Exchange1c\Exchange::index().','.\Exchange1c\Exchange::colPrefix() . 'path';
+            $query->cols = \Exchange1c\Exchange::index() . ',' . \Exchange1c\Exchange::colPrefix() . 'path';
             $queryArr = $query->buildQuery();
             $queryArr['query'] .= ' where `' . \Exchange1c\Exchange::colPrefix() . 'cleared` = 0 AND  `' . \Exchange1c\Exchange::colPrefix() . 'date_create` < NOW() - INTERVAL ' . \App::$cur->exchange1c->config['maxSaveFilesInterval'];
 
@@ -46,7 +43,7 @@ class Init extends \Exchange1c\Mode
                 \Tools::delDir($exchangeArr[\Exchange1c\Exchange::colPrefix() . 'path']);
                 $query = \App::$cur->db->newQuery();
                 $query->where([\Exchange1c\Exchange::index(), $exchangeArr[\Exchange1c\Exchange::index()]]);
-                $query->update(\Exchange1c\Exchange::table(),[\Exchange1c\Exchange::colPrefix() . 'cleared' => 1]);
+                $query->update(\Exchange1c\Exchange::table(), [\Exchange1c\Exchange::colPrefix() . 'cleared' => 1]);
             }
         }
     }
