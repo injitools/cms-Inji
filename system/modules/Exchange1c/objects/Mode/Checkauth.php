@@ -15,7 +15,9 @@ class Checkauth extends \Exchange1c\Mode {
 
     public function process() {
         $_SESSION['auth'] = true;
-        \App::$cur->exchange1c->response('success', session_name() . "\n" . session_id(), false);
+        echo "success\n";
+        echo session_name() . "\n";
+        echo session_id() . "\n";
         $this->end();
     }
 

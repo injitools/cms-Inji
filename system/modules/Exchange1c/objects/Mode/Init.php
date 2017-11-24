@@ -18,13 +18,13 @@ class Init extends \Exchange1c\Mode {
     public function process() {
         if ($this->log->type == 'catalog') {
             echo "zip=yes\n";
-            echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize')) . "\n";
         } elseif ($this->log->type == 'sale') {
             echo "zip=no\n";
         }
+        echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize')) . "\n";
         if (!empty($_GET["version"])) {
-            echo $this->log->exchange->session . "\n";
-            echo "version=2.03";
+            echo "sessid=" . $this->log->exchange->session . "\n";
+            echo "version=2.08";
         }
         $this->end();
 

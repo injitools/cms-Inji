@@ -12,7 +12,6 @@
 namespace Exchange1c\Mode;
 
 
-
 class Query extends \Exchange1c\Mode {
 
     public function process() {
@@ -39,9 +38,15 @@ class Query extends \Exchange1c\Mode {
         $root->setAttribute("ВерсияСхемы", "2.03");
         $root->setAttribute("ДатаФормирования", date('Y-m-d'));
         $root = $xml->appendChild($root);
-
+        if (!empty($_GET["version"])) {
+            $root = $root->appendChild($xml->createElement('Контейнер'));
+        }
         $carts = \Ecommerce\Cart::getList(['where' => ['cart_status_id', empty(\App::$cur->Exchange1c->config['uploadStatusId']) ? '3' : \App::$cur->Exchange1c->config['uploadStatusId'], 'IN']]);
         foreach ($carts as $cart) {
+            if (!empty($_SESSION['uploadedCarts'][$cart->id])) {
+                continue;
+            }
+            $_SESSION['uploadedCarts'][$cart->id] = true;
             $doc = $xml->createElement('Документ');
             $statusDateTime = new \DateTime($cart->complete_data);
             $items = $cart->cartItems;
