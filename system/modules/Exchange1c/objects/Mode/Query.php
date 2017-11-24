@@ -11,6 +11,8 @@
 
 namespace Exchange1c\Mode;
 
+
+
 class Query extends \Exchange1c\Mode {
 
     public function process() {
@@ -21,13 +23,14 @@ class Query extends \Exchange1c\Mode {
             return $node;
         }
 
-        header("Content-Type: text/xml");
+        header("Content-Type: text/xml; charset=windows-1251");
         header("Expires: Thu, 19 Feb 1998 13:24:18 GMT");
         header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
         header("Cache-Control: no-cache, must-revalidate");
         header("Cache-Control: post-check=0,pre-check=0");
         header("Cache-Control: max-age=0");
         header("Pragma: no-cache");
+        header("Content-Encoding: none");
         $xml = new \DOMDocument('1.0', 'windows-1251');
 
         $xml->formatOutput = true;
@@ -51,7 +54,7 @@ class Query extends \Exchange1c\Mode {
             foreach ($items as $cartitem) {
                 $goods = $goodss->appendChild($xml->createElement('Товар'));
                 if ($cartitem->price && $cartitem->price->offer && $cartitem->price->offer->item_id) {
-                    $id1c = \App::$cur->migrations->findParse($cartitem->price->offer->item_id, 'Ecommerce\Item');
+                    $id1c = \Migrations\Id::get([['object_id', $cartitem->price->offer->item_id], ['type', 'Ecommerce\Item']]);
                     if ($id1c) {
                         addToXml($xml, $goods, 'Ид', $id1c->parse_id);
                     }
