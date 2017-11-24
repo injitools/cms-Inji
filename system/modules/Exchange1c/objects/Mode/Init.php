@@ -19,6 +19,7 @@ class Init extends \Exchange1c\Mode
     public function process()
     {
         echo "zip=yes\n";
+        echo "moduleVersion=2.03\n";
         echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize'));
         $this->end();
 
