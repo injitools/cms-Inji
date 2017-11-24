@@ -13,12 +13,12 @@ namespace Exchange1c\Mode;
 
 use Exchange1c\Exchange;
 
-class Init extends \Exchange1c\Mode
+class Info extends \Exchange1c\Mode
 {
 
     public function process()
     {
-        echo "2.03";
+        echo "version=2.03";
         $this->end();
     }
 
