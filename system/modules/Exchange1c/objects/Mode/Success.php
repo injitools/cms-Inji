@@ -14,6 +14,7 @@ namespace Exchange1c\Mode;
 class Success extends \Exchange1c\Mode {
 
     public function process() {
+        echo "success";
         $this->end();
     }
 

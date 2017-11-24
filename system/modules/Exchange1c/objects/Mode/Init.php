@@ -18,9 +18,17 @@ class Init extends \Exchange1c\Mode
 
     public function process()
     {
-        echo "zip=yes\n";
-        echo "moduleVersion=2.03\n";
-        echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize'));
+        if($this->log->type=='catalog'){
+            echo "zip=yes\n";
+            echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize'));
+        } elseif($this->log->type=='sale'){
+            echo "zip=no\n";
+        }
+        if(!empty($_GET["version"]))
+        {
+            echo $this->log->exchange->session."\n";
+            echo "version=2.03";
+        }
         $this->end();
 
         //clean files

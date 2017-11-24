@@ -18,7 +18,7 @@ class Info extends \Exchange1c\Mode
 
     public function process()
     {
-        echo "moduleVersion=2.03";
+        echo "version=2.03";
         $this->end();
     }
 

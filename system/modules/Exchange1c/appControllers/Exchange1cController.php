@@ -40,7 +40,7 @@ class Exchange1cController extends Controller {
 
         $log = new \Exchange1c\Exchange\Log();
         $log->exchange_id = $exchange->id;
-        $log->type = 'mode';
+        $log->type = $_GET['type'];
         $log->info = $_GET['mode'];
         $log->status = 'process';
         $log->query = json_encode($_GET);

@@ -19,6 +19,7 @@ class Log extends \Model {
         'info' => ['type' => 'text'],
         'query' => ['type' => 'text'],
         'status' => ['type' => 'text'],
+        'exchange_id' => ['type' => 'select', 'source' => 'relation', 'realtion' => 'exchange'],
         'date_create' => ['type' => 'dateTime'],
         'date_end' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
     ];
@@ -37,5 +38,14 @@ class Log extends \Model {
             ]
         ]
     ];
+
+    public static function relations() {
+        return [
+            'exchange' => [
+                'col' => 'exchange_id',
+                'model' => 'Exchange1c\Exchange'
+            ]
+        ];
+    }
 
 }
