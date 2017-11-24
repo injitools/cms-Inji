@@ -231,7 +231,7 @@ class Tools extends Model {
             imageinterlace($image['res'], 1); // чересстрочное формирование изображение
             imagejpeg($image['res'], $imagePath, 85);
         } else {
-            $imageX = "image{$image['res']}";
+            $imageX = "image{$image['type']}";
             $imageX($image['res'], $imagePath);
         }
 
