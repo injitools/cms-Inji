@@ -50,10 +50,11 @@ class Query extends \Exchange1c\Mode {
             $sum = 0;
             foreach ($items as $cartitem) {
                 $goods = $goodss->appendChild($xml->createElement('Товар'));
-
-                $id1c = \App::$cur->migrations->findParse($cartitem->price->offer->item_id, 'Ecommerce\Item');
-                if ($id1c) {
-                    addToXml($xml, $goods, 'Ид', $id1c->parse_id);
+                if ($cartitem->price && $cartitem->price->offer && $cartitem->price->offer->item_id) {
+                    $id1c = \App::$cur->migrations->findParse($cartitem->price->offer->item_id, 'Ecommerce\Item');
+                    if ($id1c) {
+                        addToXml($xml, $goods, 'Ид', $id1c->parse_id);
+                    }
                 }
                 addToXml($xml, $goods, 'Наименование', $cartitem->item->name);
                 $one = addToXml($xml, $goods, 'БазоваяЕдиница', 'шт');
@@ -184,8 +185,8 @@ class Query extends \Exchange1c\Mode {
                                 break;
                             case 'field':
                                 $value = \Ecommerce\Cart\Info::get([
-                                            ['useradds_field_id', $part['field']],
-                                            ['cart_id', $cart->id]
+                                    ['useradds_field_id', $part['field']],
+                                    ['cart_id', $cart->id]
                                 ]);
                                 $string .= $value->value;
                                 break;
