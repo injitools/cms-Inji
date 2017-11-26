@@ -109,15 +109,15 @@ class ecommerceController extends Controller {
     }
 
     public function autoCompleteAction() {
-        $return = Cache::get('itemsAutocomplete', [], function () {
+        $return = Cache::get('itemsAutocomplete', [''], function () {
             $items = $this->ecommerce->getItems(['array' => true]);
             $return = [];
             foreach ($items as $item) {
                 $return[] = ['name' => $item['item_name'], 'search' => $item['item_search_index']];
             }
-            return json_encode($return);
+            return  gzcompress(json_encode($return));
         }, 4 * 60 * 60);
-        echo $return;
+        echo  gzuncompress($return);
     }
 
     public function indexAction() {
