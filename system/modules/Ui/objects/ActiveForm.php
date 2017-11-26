@@ -135,7 +135,7 @@ class ActiveForm extends \Object {
                                     break;
                             }
                         }
-                        $inputClassName = '\Ui\ActiveForm\Input\\' . $type;
+                        $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($type);
                         /** @var \Ui\ActiveForm\Input $input */
                         $input = new $inputClassName();
                         $input->activeForm = $this;
