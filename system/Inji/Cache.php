@@ -67,7 +67,15 @@ class Cache {
             return $val;
         } else {
             if (is_callable($callback, true)) {
+                while (!\Inji::$inst->blockParallel()) {
+                    sleep(1);
+                    $val = @self::$server->get($name . serialize($params));
+                    if ($val !== false) {
+                        return $val;
+                    }
+                }
                 $val = $callback($params);
+                \Inji::$inst->unBlockParallel();
                 self::set($name, $params, $val, $lifeTime);
                 return $val;
             }
