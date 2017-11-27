@@ -1772,6 +1772,7 @@ class Model {
                     $join = [$relation['relModel']::table(), $relation['relModel']::colPrefix() . $this->index() . ' = ' . $this->pk() . ' and ' . $relation['relModel']::colPrefix() . $relation['model']::index() . ' = ' . $relation['model']::index(), 'INNER'];
                     $getType = 'getList';
                     $options = [
+                        'cols' => (isset($params['cols'])) ? $params['cols'] : ((isset($relation['cols'])) ? $relation['cols'] : null),
                         'join' => [$join],
                         'where' => (isset($params['where'])) ? $params['where'] : ((isset($relation['where'])) ? $relation['where'] : null),
                         'array' => (!empty($params['array'])) ? true : false,
@@ -1787,6 +1788,7 @@ class Model {
                     }
                     $getType = 'getList';
                     $options = [
+                        'cols' => (isset($params['cols'])) ? $params['cols'] : ((isset($relation['cols'])) ? $relation['cols'] : null),
                         'join' => (isset($relation['join'])) ? $relation['join'] : null,
                         'key' => (isset($params['key'])) ? $params['key'] : ((isset($relation['resultKey'])) ? $relation['resultKey'] : null),
                         'array' => (!empty($params['array'])) ? true : false,
