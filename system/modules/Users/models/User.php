@@ -10,7 +10,27 @@
  */
 
 namespace Users;
-
+/**
+ * @property int $id
+ * @property string $login
+ * @property string $mail
+ * @property string $pass
+ * @property int $parent_id
+ * @property int $group_id
+ * @property int $role_id
+ * @property string $admin_text
+ * @property string $activation
+ * @property bool $blocked
+ * @property string $date_last_active
+ * @property string $date_create
+ * @property \Users\Group $group
+ * @property \Users\Role $role
+ * @property \Users\User\Info $info
+ * @property \Users\User\Inventory $inventory
+ * @property \Users\User\Social[] $socials
+ * @property \Users\User $parent
+ * @property \Users\User[] $users
+ */
 class User extends \Model {
     /**
      * @var \Users\User
