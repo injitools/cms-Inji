@@ -61,7 +61,7 @@ class CDEK extends \Ecommerce\DeliveryProvider {
                 //var_dump($tariff,$calc->getError());
                 return false;
             }
-        },4 * 60 * 60);
+        }, 4 * 60 * 60);
 
 
     }
@@ -92,8 +92,8 @@ class CDEK extends \Ecommerce\DeliveryProvider {
     static function availablePayTypeGroups($cart) {
         $tariff = static::getTariff($cart);
         if ($tariff == 139) {
-            return ['*'];
+            return ['online', 'courier'];
         }
-        return ['online'];
+        return ['online','inPickPoint'];
     }
 }

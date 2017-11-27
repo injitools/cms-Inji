@@ -129,38 +129,48 @@ class CartController extends Controller {
                     $cartItem->save();
                 }
                 $cart = \Ecommerce\Cart::get($cart->id);
-                if (!empty(\App::$cur->ecommerce->config['notify_mail'])) {
-                    $text = '<p><b><a href = "http://' . App::$cur->getDomain() . '/admin/Ecommerce/view/Cart/' . ($cart->id) . '">Открыть заказ в админ панеле</a></b></p>';
-                    $text .= '<h3>Товары</h3>';
-                    $text .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
-                    foreach ($cart->cartItems as $cartItem) {
-                        $text .= "<tr><td><a href='" . App::$cur->getDomain() . "{$cartItem->item->getHref()}'>{$cartItem->name()}</a></td><td>{$cartItem->count}</td><td>{$cartItem->final_price}</td><td>" . ($cartItem->final_price * $cartItem->count) . "</td></tr>";
-                    }
-                    $text .= '</table>';
-                    if ($cart->infos) {
-                        $text .= '<h3>Контакты</h3>';
-                        $text .= '<table cellspacing="2" border="1" cellpadding="5">';
-                        foreach ($cart->infos as $info) {
-                            $text .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
-                        }
-                        $text .= '</table>';
-                    }
-                    if ($cart->delivery) {
-                        $text .= '<h3>Информация о доставке</h3>';
-                        $text .= "<p><b>{$cart->delivery->name}</b></p>";
-                        $text .= '<table cellspacing="2" border="1" cellpadding="5">';
-                        foreach ($cart->deliveryInfos as $info) {
-                            $text .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
-                        }
-                        $text .= '</table>';
-                    }
-                    if ($cart->payType) {
-                        $text .= '<h3>Способ оплаты</h3>';
-                        $text .= "<p><b>{$cart->payType->name}</b></p>";
-                    }
-                    $title = 'Новый заказ в интернет магазине на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
-                    \Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, \App::$cur->ecommerce->config['notify_mail'], $title, $text);
+
+
+                $orderInfo = '<h3>Товары</h3>';
+                $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
+                foreach ($cart->cartItems as $cartItem) {
+                    $orderInfo .= "<tr><td><a href='" . App::$cur->getDomain() . "{$cartItem->item->getHref()}'>{$cartItem->name()}</a></td><td>{$cartItem->count}</td><td>{$cartItem->final_price}</td><td>" . ($cartItem->final_price * $cartItem->count) . "</td></tr>";
                 }
+                $orderInfo .= '</table>';
+                if ($cart->infos) {
+                    $orderInfo .= '<h3>Контакты</h3>';
+                    $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
+                    foreach ($cart->infos as $info) {
+                        $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
+                    }
+                    $orderInfo .= '</table>';
+                }
+                if ($cart->delivery) {
+                    $orderInfo .= '<h3>Информация о доставке</h3>';
+                    $orderInfo .= "<p><b>{$cart->delivery->name}</b></p>";
+                    $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
+                    foreach ($cart->deliveryInfos as $info) {
+                        $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
+                    }
+                    $orderInfo .= '</table>';
+                }
+                if ($cart->payType) {
+                    $orderInfo .= '<h3>Способ оплаты</h3>';
+                    $orderInfo .= "<p><b>{$cart->payType->name}</b></p>";
+                }
+                $domain = App::$cur->getDomain(true);
+                $domainRaw = App::$cur->getDomain();
+                $title = 'Новый заказ в интернет магазине на сайте ' . $domain;
+
+                if ($user && !empty($user->mail)) {
+                    $text = '<p><b><a href = "http://' . App::$cur->getDomain() . '/ecommerce/cart/orderDetail/' . ($cart->id) . '">Посмотреть на сайте</a></b></p>' . $orderInfo;
+                    \Tools::sendMail('noreply@' . $domainRaw, $cart->user->mail, $title, $text);
+                }
+                if (!empty(\App::$cur->ecommerce->config['notify_mail'])) {
+                    $text = '<p><b><a href = "http://' . App::$cur->getDomain() . '/admin/Ecommerce/view/Cart/' . ($cart->id) . '">Открыть заказ в админ панеле</a></b></p>' . $orderInfo;
+                    \Tools::sendMail('noreply@' . $domainRaw, \App::$cur->ecommerce->config['notify_mail'], $title, $text);
+                }
+
                 if ($this->notifications) {
                     $notification = new Notifications\Notification();
                     $notification->name = 'Новый заказ в интернет магазине на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
@@ -180,7 +190,7 @@ class CartController extends Controller {
                 call_user_func_array(['Tools', 'redirect'], $redirect);
             }
 
-        } elseif($cart) {
+        } elseif ($cart) {
             $payTypes = $cart->availablePayTypes();
         }
         $this->view->setTitle('Корзина');

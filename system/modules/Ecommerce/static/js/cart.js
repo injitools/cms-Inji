@@ -35,6 +35,11 @@ inji.Ecommerce = {
         processData: false,
         success: function (data) {
           $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
+          if($(data).find('.alert').length>0){
+            $.each($(data).find('.alert'),function () {
+              //$('.ecommerce .cart-order_page').prepend(this.outerHTML)
+            })
+          }
         }
       });
     };
@@ -51,6 +56,11 @@ inji.Ecommerce = {
         processData: false,
         success: function (data) {
           $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
+          if($(data).find('.alert').length>0){
+            $.each($(data).find('.alert'),function () {
+              //$('.ecommerce .cart-order_page').prepend(this.outerHTML)
+            })
+          }
         }
       });
     };

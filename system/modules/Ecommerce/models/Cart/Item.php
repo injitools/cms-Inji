@@ -112,7 +112,7 @@ class Item extends \Model {
         'item_offer_price_id' => 'Цена в каталоге',
         'count' => 'Количество',
         'cart_id' => 'Корзина',
-        'final_price' => 'Итоговая цена за единицу',
+        'final_price' => 'Цена во время заказа',
     ];
     public static $cols = [
         //Основные параметры
@@ -144,9 +144,16 @@ class Item extends \Model {
                 'item_id',
                 'price:offer:article',
                 'item_offer_price_id',
+                'final_price',
                 'price:currency' => ['label' => 'Валюта'],
                 'count',
             ],
+            'summary' => [
+                [
+                    'expression' => 'cart_item_final_price*cart_item_count',
+                    'name' => 'Сумма покупок'
+                ]
+            ]
         ],
     ];
     public static $forms = [
