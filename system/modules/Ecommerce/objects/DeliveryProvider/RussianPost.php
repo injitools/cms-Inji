@@ -39,7 +39,7 @@ class RussianPost extends \Ecommerce\DeliveryProvider {
 
         $data = [
             'object' => 4030,
-            'weight' => '3000',
+            'weight' => '1000',
             'date' => date('Ymd'),
             //'sumoc' => $cart->itemsSum()->sums[0],
             'from' => $senderCity,
