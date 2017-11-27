@@ -59,10 +59,13 @@ $table->draw();
 ?>
 <div class="dataManager-bottomFloat-container">
     <div class="dataManager-bottomFloat">
+        <div class="summary"></div>
+        <div class="clearfix"></div>
         <div class="pagesContainer pull-right"></div>
         <div class="pull-left">
             Скачать: <a onclick="inji.Ui.dataManagers.get(this).load({download: true}); return false;" href="#">csv</a>
         </div>
+
         <div class="clearfix"></div>
     </div>
 </div>

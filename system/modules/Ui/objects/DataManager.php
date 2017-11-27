@@ -196,7 +196,7 @@ class DataManager extends \Object {
         ob_end_clean();
 
         $cols = [];
-        if($actions) {
+        if ($actions) {
             $cols[] = ['label' => $dropdown];
         }
         $cols['id'] = ['label' => '№', 'sortable' => true];
@@ -244,10 +244,10 @@ class DataManager extends \Object {
         $queryParams = [];
         if (empty($params['all'])) {
             if (!empty($params['limit'])) {
-                $this->limit = (int)$params['limit'];
+                $this->limit = (int) $params['limit'];
             }
             if (!empty($params['page'])) {
-                $this->page = (int)$params['page'];
+                $this->page = (int) $params['page'];
             }
             $queryParams['limit'] = $this->limit;
             $queryParams['start'] = $this->page * $this->limit - $this->limit;
@@ -405,6 +405,150 @@ class DataManager extends \Object {
         return $rows;
     }
 
+    public function getSummary($params = [], $model = null) {
+        $modelName = $this->modelName;
+        if (!class_exists($modelName)) {
+            return [];
+        }
+        if (empty($this->managerOptions['summary'])) {
+            return [];
+        }
+        if (!$this->checkAccess()) {
+            $this->drawError('you not have access to "' . $this->modelName . '" manager with name: "' . $this->managerName . '"');
+            return [];
+        }
+        $modelName = $this->modelName;
+        $queryParams = [];
+        if (!empty($params['categoryPath']) && $modelName::$categoryModel) {
+            $queryParams['where'][] = ['tree_path', $params['categoryPath'] . '%', 'LIKE'];
+        }
+        if (!empty($params['appType'])) {
+            $queryParams['appType'] = $params['appType'];
+        }
+        if ($this->joins) {
+            $queryParams['joins'] = $this->joins;
+        }
+        if (!empty($this->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'])) {
+            foreach ($this->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'] as $colName => $colOptions) {
+                if (!empty($colOptions['userCol'])) {
+                    $queryParams['where'][] = [$colName, \Model::getColValue(\Users\User::$cur, $colOptions['userCol'])];
+                } elseif (isset($colOptions['value'])) {
+                    if (is_array($colOptions['value'])) {
+                        foreach ($colOptions['value'] as $key => $value) {
+                            if ($key === 'userCol') {
+                                $colOptions['value'][$key] = \Model::getColValue(\Users\User::$cur, $value);
+                            }
+                        }
+                    }
+                    $queryParams['where'][] = [$colName, $colOptions['value'], is_array($colOptions['value']) ? 'IN' : '='];
+                }
+            }
+        }
+        if (!empty($this->managerOptions['filters'])) {
+            foreach ($this->managerOptions['filters'] as $col) {
+                $colInfo = $modelName::getColInfo($col);
+                switch ($colInfo['colParams']['type']) {
+                    case 'select':
+                        if (empty($params['filters'][$col]['value'])) {
+                            continue;
+                        }
+                        if (is_array($params['filters'][$col]['value'])) {
+                            foreach ($params['filters'][$col]['value'] as $key => $value) {
+                                if ($value === '') {
+                                    unset($params['filters'][$col]['value'][$key]);
+                                }
+                            }
+                        }
+                        if (!$params['filters'][$col]['value']) {
+                            continue;
+                        }
+                        $queryParams['where'][] = [$col, $params['filters'][$col]['value'], is_array($params['filters'][$col]['value']) ? 'IN' : '='];
+                        break;
+                    case 'bool':
+                        if (!isset($params['filters'][$col]['value']) || $params['filters'][$col]['value'] === '') {
+                            continue;
+                        }
+                        $queryParams['where'][] = [$col, $params['filters'][$col]['value']];
+                        break;
+                    case 'dateTime':
+                    case 'date':
+                        if (empty($params['filters'][$col]['min']) && empty($params['filters'][$col]['max'])) {
+                            continue;
+                        }
+                        if (!empty($params['filters'][$col]['min'])) {
+                            $queryParams['where'][] = [$col, $params['filters'][$col]['min'], '>='];
+                        }
+                        if (!empty($params['filters'][$col]['max'])) {
+                            if ($colInfo['colParams']['type'] == 'dateTime' && !strpos($params['filters'][$col]['max'], ' ')) {
+
+                                $date = $params['filters'][$col]['max'] . ' 23:59:59';
+                            } else {
+                                $date = $params['filters'][$col]['max'];
+                            }
+                            $queryParams['where'][] = [$col, $date, '<='];
+                        }
+                        break;
+                    case 'number':
+                        if (empty($params['filters'][$col]['min']) && empty($params['filters'][$col]['max'])) {
+                            continue;
+                        }
+                        if (!empty($params['filters'][$col]['min'])) {
+                            $queryParams['where'][] = [$col, $params['filters'][$col]['min'], '>='];
+                        }
+                        if (!empty($params['filters'][$col]['max'])) {
+                            $queryParams['where'][] = [$col, $params['filters'][$col]['max'], '<='];
+                        }
+                        break;
+                    case 'email':
+                    case 'text':
+                    case 'textarea':
+                    case 'html':
+                        if (empty($params['filters'][$col]['value'])) {
+                            continue;
+                        }
+                        switch ($params['filters'][$col]['compareType']) {
+                            case 'contains':
+                                $queryParams['where'][] = [$col, '%' . $params['filters'][$col]['value'] . '%', 'LIKE'];
+                                break;
+                            case 'equals':
+                                $queryParams['where'][] = [$col, $params['filters'][$col]['value']];
+                                break;
+                            case 'starts_with':
+                                $queryParams['where'][] = [$col, $params['filters'][$col]['value'] . '%', 'LIKE'];
+                                break;
+                            case 'ends_with':
+                                $queryParams['where'][] = [$col, '%' . $params['filters'][$col]['value'], 'LIKE'];
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+        if (!empty($params['mode']) && $params['mode'] == 'sort') {
+            $queryParams['order'] = ['weight', 'asc'];
+        } elseif (!empty($params['sortered']) && !empty($this->managerOptions['sortable'])) {
+            foreach ($params['sortered'] as $colName => $sortType) {
+                if ($colName && in_array($colName, $this->managerOptions['sortable'])) {
+                    $sortType = in_array($sortType, ['desc', 'asc']) ? $sortType : 'desc';
+                    $queryParams['order'][] = [$colName, $sortType];
+                }
+            }
+        }
+        $summarys = [];
+        foreach ($this->managerOptions['summary'] as $summary) {
+            $queryParams['cols'] = 'COALESCE(SUM(' . $summary['expression'] . '),0) as summary';
+            $queryParams['array'] = true;
+            $queryParams['key'] = false;
+            if ($model && !empty($params['relation'])) {
+                $items = $model->$params['relation']($queryParams);
+            } else {
+                $items = $modelName::getList($queryParams);
+            }
+            $summarys[] = ['name' => $summary['name'], 'summary' => $items[0]['summary']];
+        }
+        return $summarys;
+    }
+
     public static function drawCol($item, $colName, $params = [], $dataManager = null, $originalCol = '', $originalItem = null) {
         $modelName = get_class($item);
         if (!class_exists($modelName)) {
@@ -492,8 +636,8 @@ class DataManager extends \Object {
                 } elseif (\App::$cur->name == 'admin' && $colName == 'name') {
                     $redirectUrl = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/' . str_replace('\\', '/', get_class($originalItem));
                     return "<a href ='/admin/{$item->genViewLink()}?redirectUrl={$redirectUrl}'>{$item->$colName}</a>";
-                } elseif ($modelName::$cols[$colName]['type'] == 'html' || $modelName::$cols[$colName]['type']=='textarea') {
-                    $uid = 'text_'.\Tools::randomString();
+                } elseif ($modelName::$cols[$colName]['type'] == 'html' || $modelName::$cols[$colName]['type'] == 'textarea') {
+                    $uid = 'text_' . \Tools::randomString();
                     $script = "<script>inji.onLoad(function(){
             var el{$uid}=$('#{$uid}');
             var height{$uid} = el{$uid}.height();
@@ -557,10 +701,10 @@ class DataManager extends \Object {
             return [];
         }
         if (!empty($params['limit'])) {
-            $this->limit = (int)$params['limit'];
+            $this->limit = (int) $params['limit'];
         }
         if (!empty($params['page'])) {
-            $this->page = (int)$params['page'];
+            $this->page = (int) $params['page'];
         }
         $queryParams = [
             'count' => true

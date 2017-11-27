@@ -1,6 +1,6 @@
 /**
  * Data Manager objects
- * 
+ *
  * @author Alexey Krupskiy <admin@inji.ru>
  * @link http://inji.ru/
  * @copyright 2015 Alexey Krupskiy
@@ -50,7 +50,6 @@ inji.Ui.dataManagers = {
     }
   }
 }
-
 
 
 function DataManager(element) {
@@ -170,8 +169,7 @@ DataManager.prototype.newCategory = function () {
   inji.Ui.forms.popUp(this.categoryModel, options);
 }
 DataManager.prototype.delRow = function (key) {
-  if (confirm('Вы уверены, что хотите удалить элемент?'))
-  {
+  if (confirm('Вы уверены, что хотите удалить элемент?')) {
     inji.Server.request({
       url: 'ui/dataManager/delRow',
       data: {params: this.params, modelName: this.modelName, key: key, managerName: this.managerName},
@@ -182,8 +180,7 @@ DataManager.prototype.delRow = function (key) {
   }
 }
 DataManager.prototype.delCategory = function (key) {
-  if (confirm('Вы уверены, что хотите удалить элемент?'))
-  {
+  if (confirm('Вы уверены, что хотите удалить элемент?')) {
     inji.Server.request({
       url: 'ui/dataManager/delCategory',
       data: {params: this.params, modelName: this.modelName, key: key, managerName: this.managerName},
@@ -287,7 +284,15 @@ DataManager.prototype.load = function (options) {
       }
     }
   }
-  var data = {params: params, modelName: this.modelName, managerName: this.managerName, filters: filters, sortered: this.sortered, mode: this.mode, all: this.all};
+  var data = {
+    params: params,
+    modelName: this.modelName,
+    managerName: this.managerName,
+    filters: filters,
+    sortered: this.sortered,
+    mode: this.mode,
+    all: this.all
+  };
   if (options && options.download) {
     data.download = true;
     var url = this.ajaxUrl;
@@ -313,6 +318,14 @@ DataManager.prototype.load = function (options) {
     success: function (data) {
       dataManager.element.find('.datamanagertable tbody').html(data.rows);
       dataManager.element.find('.pagesContainer').html(data.pages);
+      if (data.summary.length > 0) {
+        var summaryText = '<h5>Итого:</h5><ul>';
+        for (var k in data.summary) {
+          summaryText += '<li>' + data.summary[k].name + ': <b>' + data.summary[k].summary + '</b></li>';
+        }
+        summaryText += '</ul>'
+        dataManager.element.find('.summary').html(summaryText);
+      }
 
       if (dataManager.options.options && dataManager.options.options.formOnPage) {
         $('.' + dataManager.modelName.replace(/\\/g, '_') + '_' + dataManager.managerName + '_create_btn').each(function () {
@@ -342,7 +355,15 @@ DataManager.prototype.load = function (options) {
               var key = $($(ids[i++]).find('td').get(1)).text();
               inji.Server.request({
                 url: 'ui/dataManager/updateRow',
-                data: {params: instance.params, modelName: instance.modelName, key: key, col: 'weight', col_value: i, managerName: instance.managerName, silence: true},
+                data: {
+                  params: instance.params,
+                  modelName: instance.modelName,
+                  key: key,
+                  col: 'weight',
+                  col_value: i,
+                  managerName: instance.managerName,
+                  silence: true
+                },
               });
             }
           }
@@ -375,7 +396,15 @@ DataManager.prototype.load = function (options) {
                 if (key && model) {
                   inji.Server.request({
                     url: 'ui/dataManager/updateRow',
-                    data: {params: instance.params, modelName: model, key: key, col: 'weight', col_value: i, managerName: instance.managerName, silence: true},
+                    data: {
+                      params: instance.params,
+                      modelName: model,
+                      key: key,
+                      col: 'weight',
+                      col_value: i,
+                      managerName: instance.managerName,
+                      silence: true
+                    },
                   });
                 }
                 i++;
@@ -457,7 +486,14 @@ DataManager.prototype.groupAction = function (actionName) {
         }
         inji.Server.request({
           url: 'ui/dataManager/groupAction',
-          data: {params: instance.params, modelName: instance.modelName, ids: ids, managerName: instance.managerName, action: actionName, adInfo: adInfo},
+          data: {
+            params: instance.params,
+            modelName: instance.modelName,
+            ids: ids,
+            managerName: instance.managerName,
+            action: actionName,
+            adInfo: adInfo
+          },
           success: function () {
             inji.Ui.dataManagers.reloadAll();
           }
@@ -467,7 +503,13 @@ DataManager.prototype.groupAction = function (actionName) {
     } else {
       inji.Server.request({
         url: 'ui/dataManager/groupAction',
-        data: {params: this.params, modelName: this.modelName, ids: ids, managerName: this.managerName, action: actionName},
+        data: {
+          params: this.params,
+          modelName: this.modelName,
+          ids: ids,
+          managerName: this.managerName,
+          action: actionName
+        },
         success: function () {
           inji.Ui.dataManagers.reloadAll();
         }

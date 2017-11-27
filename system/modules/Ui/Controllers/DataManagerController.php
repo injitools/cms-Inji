@@ -144,10 +144,10 @@ class DataManagerController extends Controller {
         }
 
         $result->content['rows'] = ob_get_contents();
+        $result->content['summary'] =  $dataManager->getSummary($request['params'], $request['model']);
         ob_clean();
 
         $result->content['pages'] = '';
-
         if (isset($pages) && $pages) {
             if ($pages) {
                 $pages->draw();
