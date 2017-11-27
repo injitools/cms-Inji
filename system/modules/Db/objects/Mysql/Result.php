@@ -21,7 +21,11 @@ class Result extends \Object {
         }
         $array = [];
         while ($row = $this->pdoResult->fetch(\PDO::FETCH_ASSOC)) {
-            $array[$row[$keyCol]] = $row;
+            if (isset($row[$keyCol])) {
+                $array[$row[$keyCol]] = $row;
+            } else {
+                $array[] = $row;
+            }
         }
         return $array;
     }
