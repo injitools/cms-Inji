@@ -38,10 +38,11 @@ class Query extends \Exchange1c\Mode {
         $root->setAttribute("ВерсияСхемы", "2.03");
         $root->setAttribute("ДатаФормирования", date('Y-m-d'));
         $root = $xml->appendChild($root);
+        $carts = \Ecommerce\Cart::getList(['where' => ['cart_status_id', empty(\App::$cur->Exchange1c->config['uploadStatusId']) ? '3' : \App::$cur->Exchange1c->config['uploadStatusId'], 'IN']]);
         if (!empty($_GET["version"])) {
             $root = $root->appendChild($xml->createElement('Контейнер'));
         }
-        $carts = \Ecommerce\Cart::getList(['where' => ['cart_status_id', empty(\App::$cur->Exchange1c->config['uploadStatusId']) ? '3' : \App::$cur->Exchange1c->config['uploadStatusId'], 'IN']]);
+
         foreach ($carts as $cart) {
             if (!empty($_SESSION['uploadedCarts'][$cart->id])) {
                 continue;
@@ -218,6 +219,9 @@ class Query extends \Exchange1c\Mode {
             addToXml($xml, $req, 'Значение', $statusDateTime->format('Y-m-d H:i:s'));
 
             $root->appendChild($doc);
+        }
+        if (!empty($_GET["version"]) && $root->childNodes->length == 0) {
+            $root->parentNode->removeChild($root);
         }
 
         echo $xml->saveXML();
