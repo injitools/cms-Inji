@@ -21,6 +21,14 @@ class FilesController extends adminController {
                 $file->delete();
             }
         }
+        if (!empty($_POST['untrackedfiles'])) {
+            foreach ($_POST['untrackedfiles'] as $file) {
+                if (strpos($file, '..') !== false || strpos($file, '/static/mediafiles') !== 0) {
+                    continue;
+                }
+                unlink(\App::$primary->path . $file);
+            }
+        }
         $usedImages = [];
         $installedModules = \Module::getInstalled(App::$primary);
         foreach ($installedModules as $module) {
@@ -38,7 +46,24 @@ class FilesController extends adminController {
                 }
             }
         }
+        $allImages = \Files\File::getList(['key' => 'path', 'array' => true, 'cols' => 'file_path']);
+        $result = [];
+        Tools::getDirContents(\App::$primary->path . '/static/mediafiles', $result, '/static/mediafiles');
         echo '<form method="post"><table>';
+        foreach ($result as $file) {
+            if (!isset($allImages[$file])) {
+                echo '<tr>';
+                echo "<td><input type='checkbox' name='untrackedfiles[]' value='{$file}' checked /></td>";
+                echo "<td></td>";
+                echo "<td></td>";
+                echo "<td>untracked file</td>";
+                echo "<td></td>";
+                echo "<td><a href='{$file}' target='_blank'>{$file}</a></td>";
+                echo '</tr>';
+            }
+
+        }
+
         $missingImages = \Files\File::getList(['where' => ['id', array_keys($usedImages), 'NOT IN'], 'key' => 'path', 'array' => true]);
         $texts = '';
         foreach (\Materials\Material::getList(['array' => true]) as $material) {
@@ -59,11 +84,12 @@ class FilesController extends adminController {
         }
         foreach ($missingImages as $path => $file) {
             echo '<tr>';
-            echo "<td><input type='checkbox' name='files[]' value='{$file['file_id']}' checked /></td>";
+            echo "<td><input type='checkbox' name='files[]' value='{$file['file_id']}' " . ($file['file_upload_code'] == 'MigrationUpload' ? 'checked' : '') . " /></td>";
             echo "<td>{$file['file_id']}</td>";
             echo "<td>{$file['file_code']}</td>";
             echo "<td>{$file['file_upload_code']}</td>";
             echo "<td>{$file['file_name']}</td>";
+            echo "<td><a href='{$path}' target='_blank'>{$path}</a></td>";
             echo '</tr>';
         }
         echo '</table><button>Удалить</button></form>';
