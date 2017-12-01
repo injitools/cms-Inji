@@ -347,7 +347,40 @@ class Module {
         };
         $files = [];
         foreach ($modulePaths as $path) {
-            $scanFn($path . '/objects', 'Ecommerce', $files);
+            $scanFn($path . '/objects', $moduleName, $files);
+        }
+        return $files;
+    }
+
+    /**
+     * Return module models
+     *
+     * @return array
+     */
+    public static function getModels($moduleName, $filterNamespace = '') {
+        $modulePaths = Module::getModulePaths($moduleName);
+        $modulePaths = array_reverse($modulePaths);
+        $scanFn = function ($path, $namespace, &$files = []) use (&$scanFn, $filterNamespace) {
+            if (file_exists($path)) {
+                foreach (scandir($path) as $item) {
+                    if (in_array($item, ['..', '.'])) {
+                        continue;
+                    }
+                    $filename = pathinfo($item)['filename'];
+                    if (is_dir($path . '/' . $item)) {
+                        $scanFn($path . '/' . $item, $namespace . '\\' . $filename, $files);
+                    } else {
+                        if (!$filterNamespace || strpos($namespace, $filterNamespace) === 0) {
+                            $files[$path . '/' . $item] = $namespace . '\\' . $filename;
+                        }
+                    }
+                }
+            }
+            return $files;
+        };
+        $files = [];
+        foreach ($modulePaths as $path) {
+            $scanFn($path . '/models', $moduleName, $files);
         }
         return $files;
     }
