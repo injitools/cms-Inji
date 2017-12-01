@@ -216,7 +216,7 @@ class Tools extends Model {
 
         $image = self::imgToResource($imagePath);
         $watermark = self::imgToResource($watermarkPath);
-        if(!$image || !$watermark || !$image['res'] || !$watermark['res']){
+        if (!$image || !$watermark || !$image['res'] || !$watermark['res']) {
             return false;
         }
 
@@ -450,6 +450,20 @@ class Tools extends Model {
                 copy($from . '/' . $file, $to . '/' . $file);
             }
         }
+    }
+
+    public static function getDirContents($dir, &$results = array(), $curPath = '') {
+        $files = scandir($dir);
+        foreach ($files as $key => $value) {
+            $path = realpath($dir . '/' . $value);
+            if (!is_dir($path)) {
+                $results[$path] = $curPath . '/' . $value;
+            } else if ($value != "." && $value != "..") {
+                self::getDirContents($path, $results, $curPath . '/' . $value);
+            }
+        }
+
+        return $results;
     }
 
     /**
