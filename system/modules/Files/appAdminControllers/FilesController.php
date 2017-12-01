@@ -16,7 +16,6 @@ class FilesController extends adminController {
 
     public function clearMissingAction() {
         if (!empty($_POST['files'])) {
-            var_dump($_POST['files']);
             $files = \Files\File::getList(['where' => ['id', $_POST['files'], 'IN']]);
             foreach ($files as $file) {
                 $file->delete();
@@ -48,10 +47,7 @@ class FilesController extends adminController {
         }
         if (!empty($installedModules['TextBlocks'])) {
             foreach (\TextBlocks\Block::getList(['array' => true]) as $block) {
-                var_dump($block);
-                exit();
-                $texts .= $material['material_preview'];
-                $texts .= $material['material_text'];
+                $texts .= $block['block_text'];
             }
         }
         $deleted = 0;
