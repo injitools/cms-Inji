@@ -442,8 +442,9 @@ class Query extends \Object {
         foreach ($query['params'] as $param) {
             $prepare->bindValue($pos++, $param, is_null($param) ? \PDO::PARAM_NULL : \PDO::PARAM_STR);
         }
+        $key = \App::$cur->log->start('query: '.$query['query']);
         $prepare->execute();
-
+        \App::$cur->log->end($key);
         $this->curInstance->lastQuery = $query;
         $result = new Result();
         $result->pdoResult = $prepare;
