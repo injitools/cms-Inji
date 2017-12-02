@@ -94,6 +94,7 @@ class ComposerCmd {
 
     /**
      * @param string $command
+     * @param bool $needOutput
      * @param string $path
      */
     public static function command($command, $needOutput = true, $path = null) {
@@ -118,9 +119,10 @@ class ComposerCmd {
         chdir($dir);
         gc_collect_cycles();
         Inji::$inst->unBlockParallel();
+        include getenv('COMPOSER_HOME') . '/vendor/autoload.php';
     }
 
-    public static function requirePackage($packageName, $version = '', $path = '') {
+    public static function requirePackage($packageName, $version = '', $path = '', $needOutput = false) {
         if (!$path) {
             $path = getenv('COMPOSER_HOME');
         }
@@ -129,13 +131,12 @@ class ComposerCmd {
         }
         if (!empty($lockFile['packages'])) {
             foreach ($lockFile['packages'] as $package) {
-                if ($package['name'] == $packageName) {
+                if (strcasecmp($package['name'], $packageName) === 0) {
                     return true;
                 }
             }
         }
-
-        self::command('require ' . $packageName . ($version ? ':' . $version : ''), false, $path);
+        self::command('require ' . $packageName . ($version ? ':' . $version : ''), $needOutput, $path);
         return true;
     }
 }
