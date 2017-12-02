@@ -14,7 +14,8 @@ return [
         'Apps',
         'Menu',
         'Events',
-        'I18n'
+        'I18n',
+        'Daemon',
     ],
     'moduleRouter' => [
         'static' => 'StaticLoader'
