@@ -15,6 +15,7 @@ class Log {
     public $run = true;
     public $startTime = 0;
     public $template_parsed = false;
+    public $forceView = false;
 
     public function __construct() {
         if (!empty($_SERVER['REQUEST_TIME_FLOAT'])) {
@@ -66,16 +67,16 @@ class Log {
     public function view() {
         echo '<div onclick="var image = document.getElementById(\'Inji_debug_window\');
     image.style.display = (image.style.display == \'none\') ? \'block\' : \'none\';" style = "background:#fff;position:fixed;bottom:0;right:0;opacity:0.3;z-index:1000001;cursor:pointer;">debug</div>';
-        echo '<div id = "Inji_debug_window" style = "background:#fff;position:absolute;top:0;left:0;display:none;z-index:1000000;"><table class="table table-striped table-bordered"><tr><th>Name</th><th>Time</th></tr>';
+        echo '<div id = "Inji_debug_window" style = "background:#fff;position:fixed;top:0;left:0;display:none;z-index:1000000;width: 100%;height: 100%;overflow: auto;"><table border="1" class="table table-striped table-bordered"><tr><th>Name</th><th>Time</th></tr>';
         foreach ($this->log as $log) {
             if (!empty($log['status'])) {
                 echo "<tr class = '{$log['status']}'><td>{$log['name']}</td><td>{$log['status']}</td></tr>";
             } else {
                 if (empty($log['end'])) {
-                                    $log['end'] = microtime(true);
+                    $log['end'] = microtime(true);
                 }
                 if (empty($log['start'])) {
-                                    $log['start'] = microtime(true);
+                    $log['start'] = microtime(true);
                 }
                 echo "<tr><td>{$log['name']}</td><td" . (round(($log['end'] - $log['start']), 5) > 0.1 ? ' class ="danger"' : '') . ">" . round(($log['end'] - $log['start']), 5) . "</td></tr>";
             }
@@ -84,19 +85,23 @@ class Log {
         echo '<tr><th>Memory</th><th>' . $this->convertSize(memory_get_peak_usage()) . ' of ' . ini_get('memory_limit') . '</th></tr></table></div>';
     }
 
+    public function forceView($bool) {
+        App::$cur->log->forceView = $bool;
+    }
+
     public function convertSize($size) {
 
         if ($size < 1024) {
-                    return $size . "B";
+            return $size . "B";
         } elseif ($size < 1048576) {
-                    return round($size / 1024, 2) . "KB";
+            return round($size / 1024, 2) . "KB";
         } else {
-                    return round($size / 1048576, 2) . "MB";
+            return round($size / 1048576, 2) . "MB";
         }
     }
 
     public function __destruct() {
-        if ($this->run && $_SERVER['REMOTE_ADDR'] == '127.0.0.1' && $this->template_parsed) {
+        if ($this->forceView || ($this->run && $_SERVER['REMOTE_ADDR'] == '127.0.0.1' && $this->template_parsed)) {
             $this->view();
         }
     }

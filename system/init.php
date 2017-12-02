@@ -10,14 +10,11 @@
  */
 session_start();
 
-
-
 spl_autoload_register(function ($class_name) {
     if (file_exists(INJI_SYSTEM_DIR . '/Inji/' . $class_name . '.php')) {
         include_once INJI_SYSTEM_DIR . '/Inji/' . $class_name . '.php';
     }
 });
-
 //load core
 Inji::$inst = new Inji();
 Inji::$config = Config::system();
@@ -44,7 +41,7 @@ if (!function_exists('idn_to_utf8')) {
 BowerCmd::check();
 
 if (file_exists('vendor/autoload.php')) {
-    include_once 'vendor/autoload.php';
+    include 'vendor/autoload.php';
 }
 
 $domain = idn_to_utf8($_SERVER['SERVER_NAME']);
@@ -73,7 +70,6 @@ foreach ($apps as $app) {
     }
 }
 App::$cur = new App($finalApp);
-
 $params = Tools::uriParse($_SERVER['REQUEST_URI']);
 
 App::$cur->type = 'app';
@@ -102,6 +98,8 @@ if (!empty($params[0]) && file_exists(INJI_SYSTEM_DIR . '/program/' . $params[0]
         return $event['eventObject'];
     });
 }
+App::$cur->log = new \Log();
+App::$cur->log->run = defined('LOG_ENABLED');
 Inji::$inst->listen('Config-change-app-' . App::$cur->name, 'curAppConfig', function ($event) {
     App::$cur->config = $event['eventObject'];
     return $event['eventObject'];
