@@ -10,6 +10,8 @@
  */
 class Model {
 
+    public static $loaded = [];
+
     /**
      * Object storage type
      *
@@ -352,7 +354,7 @@ class Model {
         if (!is_array($array)) {
             if (!isset($cols[static::colPrefix() . $array]) && isset(static::$cols[$array])) {
                 static::createCol($array);
-                $cols = static::cols(true);
+                $cols = static::cols();
             }
             if (!isset($cols[$array]) && isset($cols[static::colPrefix() . $array])) {
                 $array = static::colPrefix() . $array;
@@ -384,7 +386,7 @@ class Model {
                 if (isset($array[0]) && is_string($array[0])) {
                     if (!isset($cols[static::colPrefix() . $array[0]]) && isset(static::$cols[$array[0]])) {
                         static::createCol($array[0]);
-                        $cols = static::cols(true);
+                        $cols = static::cols();
                     }
                     if (!isset($cols[$array[0]]) && isset($cols[static::colPrefix() . $array[0]])) {
                         $array[0] = static::colPrefix() . $array[0];
@@ -513,13 +515,13 @@ class Model {
                     case 'to':
                         $relCol = $relations[$rel]['col'];
                         static::fixPrefix($relCol);
-                        $rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol, 'left',''];
+                        $rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol, 'left', ''];
                         break;
                     case 'one':
                     case 'many':
                         $relCol = $relations[$rel]['col'];
                         $relations[$rel]['model']::fixPrefix($relCol);
-                        $rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol, 'left',''];
+                        $rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol, 'left', ''];
                         break;
                 }
                 $relations[$rel]['model']::fixPrefix($col, 'key', $rootModel);
@@ -607,14 +609,14 @@ class Model {
         if (static::$storage['type'] == 'moduleConfig') {
             return [];
         }
-        if (empty(Model::$cols[static::table()]) || $refresh) {
-            Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
+        if (empty(\Model::$cols[static::table()]) || $refresh) {
+            \Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
         }
-        if (!Model::$cols[static::table()]) {
+        if (!isset(\Model::$cols[static::table()])) {
             static::createTable();
-            Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
+            \Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
         }
-        return Model::$cols[static::table()];
+        return \Model::$cols[static::table()];
     }
 
     /**
@@ -697,7 +699,7 @@ class Model {
      * @return boolean|integer
      */
     public static function createCol($colName) {
-        $cols = static::cols(true);
+        $cols = static::cols();
         if (!empty($cols[static::colPrefix() . $colName])) {
             return true;
         }
@@ -705,7 +707,9 @@ class Model {
         if ($params === false) {
             return false;
         }
-        return App::$cur->db->addCol(static::table(), static::colPrefix() . $colName, $params);
+        $result = App::$cur->db->addCol(static::table(), static::colPrefix() . $colName, $params);
+        static::cols(true);
+        return $result;
     }
 
     public static function createTable() {
@@ -778,7 +782,6 @@ class Model {
      * @return string
      */
     public static function index() {
-
         return static::colPrefix() . 'id';
     }
 
@@ -1470,26 +1473,25 @@ class Model {
         $class = get_class($this);
         $itemModel = $class::$treeCategory;
         $oldPath = $this->tree_path;
-        $this->tree_path = $this->getCatalogTree($this);
+        $newPath = $this->getCatalogTree($this);
         $itemsTable = \App::$cur->db->table_prefix . $itemModel::table();
         $itemTreeCol = $itemModel::colPrefix() . 'tree_path';
-
         $categoryTreeCol = $this->colPrefix() . 'tree_path';
         $categoryTable = \App::$cur->db->table_prefix . $this->table();
         if ($oldPath) {
             \App::$cur->db->query('UPDATE
                 ' . $categoryTable . ' 
                     SET 
-                        ' . $categoryTreeCol . ' = REPLACE(' . $categoryTreeCol . ', "' . $oldPath . $this->id . '/' . '", "' . $this->tree_path . $this->id . '/' . '") 
+                        ' . $categoryTreeCol . ' = REPLACE(' . $categoryTreeCol . ', "' . $oldPath . $this->id . '/' . '", "' . $newPath . $this->id . '/' . '") 
                     WHERE ' . $categoryTreeCol . ' LIKE "' . $oldPath . $this->id . '/' . '%"');
 
             \App::$cur->db->query('UPDATE
                 ' . $itemsTable . '
                     SET 
-                        ' . $itemTreeCol . ' = REPLACE(' . $itemTreeCol . ', "' . $oldPath . $this->id . '/' . '", "' . $this->tree_path . $this->id . '/' . '") 
+                        ' . $itemTreeCol . ' = REPLACE(' . $itemTreeCol . ', "' . $oldPath . $this->id . '/' . '", "' . $newPath . $this->id . '/' . '") 
                     WHERE ' . $itemTreeCol . ' LIKE "' . $oldPath . $this->id . '/' . '%"');
         }
-        $itemModel::update([$itemTreeCol => $this->tree_path . $this->id . '/'], [$itemModel::colPrefix() . $this->index(), $this->id]);
+        $itemModel::update([$itemTreeCol => $newPath . $this->id . '/'], [$itemModel::colPrefix() . $this->index(), $this->id]);
     }
 
     /**
@@ -1523,6 +1525,7 @@ class Model {
         } else {
             $this->tree_path = '/';
         }
+        $class::update(['tree_path' => $this->tree_path], [$this->index(), $this->id]);
     }
 
     /**
@@ -1537,12 +1540,6 @@ class Model {
             return static::saveModuleStorage($options);
         }
         $class = get_class($this);
-        if ($class::$categoryModel) {
-            $this->changeItemTree();
-        }
-        if ($class::$treeCategory) {
-            $this->changeCategoryTree();
-        }
         if (!empty($this->_changedParams) && $this->pk()) {
             Inji::$inst->event('modelItemParamsChanged-' . get_called_class(), $this);
         }
@@ -1573,12 +1570,10 @@ class Model {
                 App::$cur->db->where($this->index(), $this->_params[$this->index()]);
                 App::$cur->db->update($this->table(), $values);
             } else {
-
                 $this->_params[$this->index()] = App::$cur->db->insert($this->table(), $values);
             }
         } else {
             $new = true;
-            //print_r($this->_params);
             $this->_params[$this->index()] = App::$cur->db->insert($this->table(), $values);
         }
         $this->logChanges($new);
@@ -1595,8 +1590,20 @@ class Model {
         if ($new) {
             Inji::$inst->event('modelCreatedItem-' . get_called_class(), $this);
         }
+        if ($class::$categoryModel || $class::$treeCategory) {
+            $id = $this->pk();
+            \App::$primary->daemon->task(function () use ($class, $id) {
+                $item = $class::get($id);
+                if ($class::$categoryModel) {
+                    $item->changeItemTree();
+                }
+                if ($class::$treeCategory) {
+                    $item->changeCategoryTree();
+                }
+            });
+        }
         $this->afterSave();
-        return $this->{$this->index()};
+        return $this->pk();
     }
 
     /**
@@ -1900,6 +1907,8 @@ class Model {
             return new Value($this, $fixedName);
         } elseif (isset($this->_params[$name])) {
             return new Value($this, $name);
+        } elseif (!empty($params[0]) && isset($this->loadedRelations[$name][json_encode($params[0])])) {
+            return $this->loadedRelations[$name][json_encode($params[0])];
         }
         return call_user_func_array([$this, 'loadRelation'], array_merge([$name], $params));
     }
