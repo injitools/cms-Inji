@@ -81,7 +81,7 @@ class Item extends \Model {
         //Системные
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'weight' => ['type' => 'number'],
-        'sales' => ['type' => 'number'],
+        'sales' => ['type' => 'number', 'logging' => false],
         'imported' => ['type' => 'text'],
         'tree_path' => ['type' => 'text'],
         'search_index' => ['type' => 'text', 'logging' => false],
@@ -269,45 +269,46 @@ class Item extends \Model {
         ];
     }
 
-    public function beforeSave() {
-
-        if ($this->id) {
-            $this->search_index = $this->name . ' ';
-            if ($this->category) {
-                $this->search_index .= $this->category->name . ' ';
+    public function afterSave() {
+        $itemId = $this->id;
+        \App::$primary->daemon->task(function () use ($itemId) {
+            $item = \Ecommerce\Item::get($itemId);
+            $item->search_index = $item->name . ' ';
+            if ($item->category) {
+                $item->search_index .= $item->category->name . ' ';
             }
 
-            if ($this->options) {
-                $category = $this->category;
+            if ($item->options) {
+                $category = $item->category;
                 if ($category) {
                     $categoryOptions = $category->options(['key' => 'item_option_id']);
                 } else {
                     $categoryOptions = [];
                 }
-                foreach ($this->options as $option) {
+                foreach ($item->options as $option) {
                     if ($option->item_option_searchable && $option->value) {
                         if ($option->item_option_type != 'select') {
-                            $this->search_index .= $option->value . ' ';
+                            $item->search_index .= $option->value . ' ';
                         } elseif (!empty($option->option->items[$option->value])) {
                             $option->option->items(['where' => ['id', $option->value]])[$option->value]->value . ' ';
                         }
                     }
                     if ($option->item_option_view && !isset($categoryOptions[$option->item_option_id])) {
-                        $this->category->addRelation('options', $option->item_option_id);
-                        $categoryOptions = $this->category->options(['key' => 'item_option_id']);
+                        $item->category->addRelation('options', $option->item_option_id);
+                        $categoryOptions = $item->category->options(['key' => 'item_option_id']);
                     } elseif (!$option->item_option_view && isset($categoryOptions[$option->item_option_id])) {
                         $categoryOptions[$option->item_option_id]->delete();
                         unset($categoryOptions[$option->item_option_id]);
                     }
                 }
             }
-            if ($this->offers) {
-                foreach ($this->offers as $offer) {
+            if ($item->offers) {
+                foreach ($item->offers as $offer) {
                     if ($offer->options) {
                         foreach ($offer->options as $option) {
                             if ($option->item_offer_option_searchable && $option->value) {
                                 if ($option->item_offer_option_type != 'select') {
-                                    $this->search_index .= $option->value . ' ';
+                                    $item->search_index .= $option->value . ' ';
                                 } elseif (!empty($option->option->items[$option->value])) {
                                     $option->option->items[$option->value]->value . ' ';
                                 }
@@ -316,7 +317,8 @@ class Item extends \Model {
                     }
                 }
             }
-        }
+        });
+
     }
 
     public static function relations() {
@@ -382,22 +384,26 @@ class Item extends \Model {
         return $this->name;
     }
 
-    public function beforeDelete() {
-        if ($this->id) {
-            if ($this->options) {
-                foreach ($this->options as $option) {
-                    $option->delete();
-                }
-            }
-            if ($this->offers) {
-                foreach ($this->offers as $offer) {
-                    $offer->delete();
-                }
-            }
-            if ($this->image) {
-                $this->image->delete();
-            }
+    public function afterDelete() {
+        if (!$this->id) {
+            return;
         }
+        $itemId = $this->id;
+        \App::$primary->daemon->task(function () use ($itemId) {
+            $item = \Ecommerce\Item::get($itemId);
+            foreach ($item->options as $option) {
+                $option->delete();
+            }
+            foreach ($item->offers as $offer) {
+                $offer->delete();
+            }
+            foreach ($item->images as $image) {
+                $image->delete();
+            }
+            if ($item->image) {
+                $item->image->delete();
+            }
+        });
     }
 
     public function getHref() {

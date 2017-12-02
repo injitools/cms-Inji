@@ -195,7 +195,7 @@ class Cart extends \Model {
         'exported' => ['type' => 'bool'],
         'complete_data' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
         'date_status' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
-        'date_last_activ' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
+        'date_last_activ' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null, 'logging' => false],
         'date_create' => ['type' => 'dateTime'],
         //Виджеты
         'sums' => [

@@ -64,19 +64,23 @@ class Param extends \Model {
     }
 
     public function realType() {
-        if ($this->option) {
+        $type = 'text';
+        if (isset($this->item_option_type)) {
+            $type = $this->item_option_type ? $this->item_option_type : 'text';
+        } elseif ($this->item_option_id && isset(\Ecommerce\Item\Option::$loaded[$this->item_option_id])) {
+            $type = \Ecommerce\Item\Option::$loaded[$this->item_option_id]->type ? \Ecommerce\Item\Option::$loaded[$this->item_option_id]->type : 'text';
+        } elseif ($this->item_option_id && $this->option) {
+            \Ecommerce\Item\Option::$loaded[$this->item_option_id] = $this->option;
             $type = $this->option->type;
-
-            if ($type == 'select') {
-                return [
-                    'type' => 'select',
-                    'source' => 'relation',
-                    'relation' => 'option:items',
-                ];
-            }
-            return $type;
         }
-        return 'text';
+        if ($type == 'select') {
+            return [
+                'type' => 'select',
+                'source' => 'relation',
+                'relation' => 'option:items',
+            ];
+        }
+        return $type;
     }
 
     public static $dataManagers = [
