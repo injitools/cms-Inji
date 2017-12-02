@@ -29,10 +29,25 @@ class Daemon extends Module {
         $workDir = $this->workDir();
         $lock = fopen($workDir . '/daemon.lock', 'w+');
         if (flock($lock, LOCK_EX | LOCK_NB)) {
-            while ($taskFile = $this->getNextTask()) {
+            ignore_user_abort(true);
+            set_time_limit(0);
+            while (true) {
+                $taskFile = $this->getNextTask();
+                if (!$taskFile) {
+                    for ($i = 0; $i < 60; $i++) {
+                        sleep(1);
+                        $taskFile = $this->getNextTask();
+                        if ($taskFile) {
+                            break;
+                        }
+                    }
+                    if (!$taskFile) {
+                        break;
+                    }
+                }
                 $task = $this->unserialize(file_get_contents($taskFile));
-                $task();
                 unlink($taskFile);
+                $task();
             }
         }
     }
@@ -53,10 +68,17 @@ class Daemon extends Module {
     }
 
     function task($callback) {
+        $keyLog = \App::$cur->log->start('add task');
         $workDir = $this->workDir();
         $taskFile = $workDir . '/tasks/' . microtime(true) . '.task';
-        file_put_contents($taskFile, $this->serialize($callback));
+        $keyLog2 = \App::$cur->log->start('serialize task');
+        $serialize = $this->serialize($callback);
+        \App::$cur->log->end($keyLog2);
+        $keyLog3 = \App::$cur->log->start('put task to file');
+        file_put_contents($taskFile, $serialize);
+        \App::$cur->log->end($keyLog3);
         $this->needCheck = true;
+        \App::$cur->log->end($keyLog);
         return $taskFile;
     }
 
@@ -82,7 +104,7 @@ class Daemon extends Module {
             return $this->serializer;
         }
         \ComposerCmd::requirePackage('jeremeamia/superclosure');
-        return $this->serializer = new \SuperClosure\Serializer();
+        return $this->serializer = new \SuperClosure\Serializer(new SuperClosure\Analyzer\TokenAnalyzer());
     }
 
     function __destruct() {
