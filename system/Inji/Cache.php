@@ -52,7 +52,7 @@ class Cache {
      * @param callable $callback
      * @return boolean
      */
-    public static function get($name, $params = [], $callback = null, $lifeTime = 3600) {
+    public static function get($name, $params = [], $callback = null, $lifeTime = 3600, $prefix = false) {
         if (!self::$connected) {
             self::connect();
         }
@@ -62,21 +62,25 @@ class Cache {
             }
             return false;
         }
-        $val = @self::$server->get($name . serialize($params));
+        if ($prefix === false) {
+            $prefix = App::$primary->name;
+        }
+
+        $val = @self::$server->get($prefix . '_' . $name . serialize($params));
         if ($val !== false) {
             return $val;
         } else {
             if (is_callable($callback, true)) {
                 while (!\Inji::$inst->blockParallel()) {
                     sleep(1);
-                    $val = @self::$server->get($name . serialize($params));
+                    $val = @self::$server->get($prefix . '_' . $name . serialize($params));
                     if ($val !== false) {
                         return $val;
                     }
                 }
                 $val = $callback($params);
                 \Inji::$inst->unBlockParallel();
-                self::set($name, $params, $val, $lifeTime);
+                self::set($name, $params, $val, $lifeTime, $prefix);
                 return $val;
             }
         }
@@ -92,14 +96,17 @@ class Cache {
      * @param int $lifeTime
      * @return boolean
      */
-    public static function set($name, $params = [], $val = '', $lifeTime = 3600) {
+    public static function set($name, $params = [], $val = '', $lifeTime = 3600, $prefix = false) {
         if (!self::$connected) {
             self::connect();
         }
-        if (self::$connected) {
-            return @self::$server->set($name . serialize($params), $val, false, $lifeTime);
+        if (!self::$connected) {
+            return false;
         }
-        return false;
+        if ($prefix === false) {
+            $prefix = App::$primary->name;
+        }
+        return @self::$server->set($prefix . '_' . $name . serialize($params), $val, false, $lifeTime);
     }
 
     /**
