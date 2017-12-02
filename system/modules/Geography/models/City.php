@@ -10,9 +10,20 @@
  */
 
 namespace Geography;
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $alias
+ * @property bool $default
+ * @property int $country_id
+ * @property string $date_create
+ * @property \Geography\City\Data[] $datas
+ * @property \Geography\Country $country
+ */
 class City extends \Model {
-
+    /**
+     * @var City
+     */
     public static $cur = null;
     public static $objectName = 'Город';
     public static $labels = [
