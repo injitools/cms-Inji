@@ -17,6 +17,9 @@ class Parser {
     public $param;
     public $model;
     public $object;
+    /**
+     * @var \Migrations\Walker
+     */
     public $walker;
 
     public function parse() {

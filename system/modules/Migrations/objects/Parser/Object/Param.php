@@ -14,10 +14,7 @@ namespace Migrations\Parser\Object;
 class Param extends \Migrations\Parser {
 
     public function parse() {
-        $params = \Migrations\Migration\Object\Param::getList(['where' => [
-                        ['parent_id', $this->param->id],
-                        ['object_id', $this->object->object->id],
-        ]]);
+        $params = $this->param->childs;
         if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
             foreach ($this->data as &$data) {
                 $this->parseData($data, $params);
@@ -27,6 +24,10 @@ class Param extends \Migrations\Parser {
         }
     }
 
+    /**
+     * @param array $data
+     * @param \Migrations\Migration\Object\Param[] $params
+     */
     private function parseData(&$data, $params) {
         $objectParamValue = [
             'col' => '',
@@ -38,14 +39,14 @@ class Param extends \Migrations\Parser {
             if ($this->model && $param->type) {
                 switch ($param->type) {
                     case 'paramName':
-                        $col = \Migrations\Migration\Object\Param\Value::get([['original', (string) $objectParam], ['param_id', $param->id]]);
-                        if (!$col) {
+                        $param->values(['key' => 'original']);
+                        if (!isset($param->values(['key' => 'original'])[(string) $objectParam])) {
                             $valueObject = new \Migrations\Migration\Object\Param\Value();
                             $valueObject->param_id = $param->id;
                             $valueObject->original = (string) $objectParam;
                             $valueObject->save();
                         } else {
-                            $objectParamValue['col'] = $col->replace;
+                            $objectParamValue['col'] = $param->values(['key' => 'original'])[(string) $objectParam]->replace;
                         }
                         break;
                     case 'paramValue':

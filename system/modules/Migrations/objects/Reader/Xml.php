@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Reader xml
  *
@@ -10,7 +9,6 @@
  */
 
 namespace Migrations\Reader;
-
 class Xml extends \Migrations\Reader {
 
     public function loadData($source = '') {
@@ -35,7 +33,13 @@ class Xml extends \Migrations\Reader {
     }
 
     public function getArray() {
-        return json_decode(json_encode($this->data), true);
+        $key = \App::$cur->log->start('encode xml');
+        $string = json_encode($this->data);
+        \App::$cur->log->end($key);
+        $key = \App::$cur->log->start('decode xml');
+        $array = json_decode($string, true);
+        \App::$cur->log->end($key);
+        return $array;
     }
 
     public function __toString() {

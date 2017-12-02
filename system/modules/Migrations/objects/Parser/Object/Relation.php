@@ -18,10 +18,7 @@ class Relation extends \Migrations\Parser {
         $options = $this->param->options ? json_decode($this->param->options, true) : [];
         $modelName = $this->object->object->model;
         $relation = $modelName::getRelation($this->param->value);
-        $object = \Migrations\Migration\Object::get([
-                    ['model', $relation['model']],
-                    ['migration_id', $this->object->object->migration_id]
-        ]);
+        $object = \App::$cur->migrations->getMigrationObject($this->walker->migration, $relation['model'], 'model');
         if (!$object) {
             $object = new \Migrations\Migration\Object([
                 'model' => $relation['model'],
@@ -45,10 +42,11 @@ class Relation extends \Migrations\Parser {
                             $objectParser->walker = $this->object->walker;
                             $objectParser->parentParam = $this;
                             $objectParser->data = &$item;
-
-
                             if (!$this->model->pk()) {
                                 $this->model->save();
+                            }
+                            if (defined('mdebug')) {
+                                echo " -> object " . $object->id;
                             }
                             $ids = array_merge($ids, $objectParser->parse([$relation['col'] => $this->model->pk()]));
                         }
@@ -62,6 +60,9 @@ class Relation extends \Migrations\Parser {
                         $objectParser->data = &$item;
                         if (!$this->model->pk()) {
                             $this->model->save();
+                        }
+                        if (defined('mdebug')) {
+                            echo " -> object " . $object->id;
                         }
                         $ids = array_merge($ids, $objectParser->parse([$relation['col'] => $this->model->pk()]));
                     }
@@ -95,12 +96,18 @@ class Relation extends \Migrations\Parser {
             $ids = [];
             if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
                 foreach ($this->data as &$data) {
+                    if (defined('mdebug')) {
+                        echo " -> object " . $object->id;
+                    }
                     $model = $objectParser->setModel($data);
                     if ($model && $model->id) {
                         $ids[] = $model->id;
                     }
                 }
             } else {
+                if (defined('mdebug')) {
+                    echo " -> object " . $object->id;
+                }
                 $model = $objectParser->setModel($this->data);
                 if ($model && $model->id) {
                     $ids[] = $model->id;

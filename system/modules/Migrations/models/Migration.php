@@ -10,7 +10,18 @@
  */
 
 namespace Migrations;
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $alias
+ * @property string $secret
+ * @property string $date_create
+ * @property \Migrations\Migration\Map[] $maps
+ * @property \Migrations\Migration\Object[] $objects
+ *
+ * @method  \Migrations\Migration\Map[] maps($params)
+ * @method \Migrations\Migration\Object[] objects($params)
+ */
 class Migration extends \Model {
 
     public static $objectName = 'Миграция данных';

@@ -14,11 +14,10 @@ namespace Migrations\Parser\Object;
 class ObjectLink extends \Migrations\Parser {
 
     public function parse() {
-        $object = \App::$cur->migrations->getMigrationObject($this->param->value);
+        $object = \App::$cur->migrations->getMigrationObject($this->walker->migration, $this->param->value);
         $objectId = \App::$cur->migrations->findObject((string) $this->data, $object->model);
         $modelName = $object->model;
-        $model = $modelName::get($objectId->object_id);
-        $this->model->{$model->index()} = $model->pk();
+        $this->model->{$modelName::index()} = $objectId->object_id;
     }
 
 }

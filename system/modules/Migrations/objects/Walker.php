@@ -12,7 +12,9 @@
 namespace Migrations;
 
 class Walker {
-
+    /**
+     * @var \Migrations\Migration
+     */
     public $migration = null;
     public $map = null;
     public $data = null;
@@ -58,10 +60,7 @@ class Walker {
                 continue;
             }
             //search object for parse
-            $object = Migration\Object::get([
-                ['code', $key],
-                ['migration_id', $this->migration->id]
-            ]);
+            $object = \App::$cur->migrations->getMigrationObject($this->migration, $key, 'code');
             if ($object) {
 //parse as object
                 $this->startObjectParse($object, $data);
@@ -79,7 +78,7 @@ class Walker {
 
     private function startObjectParse($object_id, &$data) {
         $objectParser = new Parser\Object();
-        $objectParser->object = is_object($object_id) ? $object_id : \App::$cur->migrations->getMigrationObject($object_id);
+        $objectParser->object = is_object($object_id) ? $object_id : \App::$cur->migrations->getMigrationObject($this->migration, $object_id);
         $objectParser->data = $data;
         $objectParser->walker = $this;
         if (defined('mdebug')) {
@@ -87,7 +86,6 @@ class Walker {
         }
         $ids = $objectParser->parse();
         if ($objectParser->object->clear && json_decode($objectParser->object->clear, true)) {
-
             $where = json_decode($objectParser->object->clear, true);
             if (!$where) {
                 $where = [];

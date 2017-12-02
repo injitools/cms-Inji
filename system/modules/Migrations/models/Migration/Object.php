@@ -23,6 +23,7 @@ class Object extends \Model {
         'code' => ['type' => 'text'],
         'model' => ['type' => 'text'],
         'clear' => ['type' => 'text'],
+        'delete_empty' => ['type' => 'text'],
         'migration_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'migration'],
         'date_create' => ['type' => 'dateTime'],
     ];

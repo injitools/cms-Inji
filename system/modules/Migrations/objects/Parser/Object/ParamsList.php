@@ -15,10 +15,7 @@ class ParamsList extends \Migrations\Parser {
 
     public function parse() {
         $walked = [];
-        $params = \Migrations\Migration\Object\Param::getList(['where' => [
-                        ['parent_id', $this->param->id],
-                        ['object_id', $this->object->object->id],
-        ]]);
+        $params = $this->param->childs;
         foreach ($params as $param) {
             if ($this->model) {
                 if ($param->type == 'custom') {

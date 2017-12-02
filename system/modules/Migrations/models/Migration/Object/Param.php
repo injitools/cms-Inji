@@ -10,7 +10,25 @@
  */
 
 namespace Migrations\Migration\Object;
-
+/**
+ * @property int $id
+ * @property string $code
+ * @property string $type
+ * @property string $value
+ * @property string $options
+ * @property int $object_id
+ * @property int $parent_id
+ * @property string $date_create
+ *
+ * @property \Migrations\Migration\Object $object
+ * @property \Migrations\Migration\Object\Param $parent
+ * @property \Migrations\Migration\Object\Param\Value[] $values
+ * @property \Migrations\Migration\Object\Param[] $childs
+ * @method \Migrations\Migration\Object object($params)
+ * @method \Migrations\Migration\Object\Param parent($params)
+ * @method \Migrations\Migration\Object\Param\Value[] values($params)
+ * @method \Migrations\Migration\Object\Param[] childs($params)
+ */
 class Param extends \Model {
 
     public static $objectName = 'Параметр объекта миграции';

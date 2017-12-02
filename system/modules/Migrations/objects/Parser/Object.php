@@ -17,6 +17,9 @@ class Object extends \Object {
     public $parentObject;
     public $parentModel;
     public $parentParam;
+    /**
+     * @var \Migrations\Walker
+     */
     public $walker;
     public $data;
 
@@ -44,22 +47,24 @@ class Object extends \Object {
             foreach ($preset as $col => $value) {
                 $model->{$col} = $value;
             }
-
+            if (defined('mdebug')) {
+                echo " -> objectStart ({$this->object->id}) ";
+            }
             $walked = [];
             foreach ($this->object->params as $param) {
-                if(defined('mdebug')){
+                if (defined('mdebug')) {
                     echo " -> param ($param->id,$param->type,$param->value) ";
                 }
                 if ($model && $param->type && $param->type != 'item_key') {
                     if ($param->type == 'object') {
-                        $object = \App::$cur->migrations->getMigrationObject($param->value);
+                        $object = \App::$cur->migrations->getMigrationObject($this->walker->migration, $param->value);
                         $parser = new \Migrations\Parser\Object;
                         $parser->data = &$data[$param->code];
                         $parser->object = $object;
                         $parser->parentObject = $this;
                         $parser->parentModel = $model;
                         $parser->walker = $this->walker;
-                        if(defined('mdebug')){
+                        if (defined('mdebug')) {
                             echo " -> objectParse ";
                         }
                         $parser->parse();
@@ -73,12 +78,16 @@ class Object extends \Object {
                         $parser->data = &$data[$param->code];
                         $parser->param = $param;
                         $parser->model = $model;
+                        $parser->walker = $this->walker;
                         $parser->object = $this;
-                        if(defined('mdebug')){
+                        if (defined('mdebug')) {
                             echo " -> parser ($parserName) ";
                         }
                         $parser->parse();
                     }
+                }
+                if (defined('mdebug')) {
+                    echo " -> paramEnd ($param->id,$param->type,$param->value) ";
                 }
                 $walked[$param->code] = true;
             }
@@ -97,6 +106,17 @@ class Object extends \Object {
                 $this->object = $className::get($this->object->id);
             }
             if ($model) {
+                if ($this->object->delete_empty && @json_decode($this->object->delete_empty, true)) {
+                    $deleteIf = json_decode($this->object->delete_empty, true);
+                    foreach ($deleteIf['params'] as $paramId) {
+                        if ($model->{$this->object->params[$paramId]->value} === '') {
+                            if ($model->pk()) {
+                                $model->delete();
+                            }
+                            return 0;
+                        }
+                    }
+                }
                 if (!$model->pk() || !empty($model->_changedParams)) {
                     $model->save();
                 }
@@ -143,20 +163,13 @@ class Object extends \Object {
                 }
                 switch ($param->type) {
                     case 'objectLink':
-                        $object = \App::$cur->migrations->getMigrationObject($param->value);
+                        $object = \App::$cur->migrations->getMigrationObject($this->walker->migration, $param->value);
                         $objectId = \App::$cur->migrations->findObject((string) $data[$code], $object->model);
                         if (!$objectId) {
                             return;
                         }
                         $modelName = $object->model;
-                        $model = $modelName::get($objectId->object_id);
-                        if (!$model) {
-                            $objectId->delete();
-                            unset(\App::$cur->migrations->ids['objectIds'][$modelName][$objectId->object_id]);
-                            unset(\App::$cur->migrations->ids['parseIds'][$modelName][$objectId->parse_id]);
-                            return;
-                        }
-                        $where[] = [$model->index(), $model->pk()];
+                        $where[] = [$modelName::index(), $objectId->object_id];
                         break;
                     case 'relation':
                         $modelName = $this->object->model;
@@ -165,9 +178,7 @@ class Object extends \Object {
                         if (!$objectId) {
                             return;
                         }
-                        $modelName = $relation['model'];
-                        $model = $modelName::get($objectId->object_id);
-                        $where[] = [$relation['col'], $model->pk()];
+                        $where[] = [$relation['col'], $objectId->object_id];
                         break;
                 }
             }
@@ -175,7 +186,18 @@ class Object extends \Object {
                 if ($this->parentParam) {
                     $modelName = $this->parentObject->object->model;
                     $relation = $modelName::getRelation($this->parentParam->param->value);
-                    if (!empty($relation['type']) && $relation['type'] == 'many') {
+                    if (!empty($relation['type']) && $relation['type'] == 'many' && count($where) == 1) {
+                        $relationName = $this->parentParam->param->value;
+                        if (!empty($this->parentModel->$relationName(['key' => $where[0][0]])[$where[0][1]])) {
+                            return $this->parentModel->$relationName(['key' => $where[0][0]])[$where[0][1]];
+                        } else {
+                            $model = new $this->object->model;
+                            foreach ($where as $item) {
+                                $model->{$item[0]} = $item[1];
+                            }
+                            return $model;
+                        }
+                    } elseif (!empty($relation['type']) && $relation['type'] == 'many') {
                         $where[] = [$relation['col'], $this->parentModel->pk()];
                     }
                 } elseif ($this->parentObject) {
