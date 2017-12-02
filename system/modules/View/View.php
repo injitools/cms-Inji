@@ -281,6 +281,9 @@ class View extends \Module {
                 echo "\n        <link href='{$href}' rel='stylesheet' type='text/css' />";
             }
         }
+        if (!$urls) {
+            return;
+        }
         $timeMd5 = md5($timeStr);
         $cacheDir = Cache::getDir('static');
         if (!file_exists($cacheDir . 'all' . $timeMd5 . '.css')) {
@@ -296,7 +299,51 @@ class View extends \Module {
             }
             file_put_contents($cacheDir . 'all' . $timeMd5 . '.css', $cssAll);
         }
-        echo "\n        <link href='/{$cacheDir}all{$timeMd5}.css' rel='stylesheet' type='text/css' />";
+        $id = 'css' . Tools::randomString();
+        echo "\n        <link id='{$id}' href='/{$cacheDir}all{$timeMd5}.css' rel='stylesheet' type='text/css' />";
+        if (!empty($this->template->config['staticUpdater'])) {
+            $hash = json_encode(array_keys($urls));
+            if (!empty($this->template->config['staticUpdaterSalt'])) {
+                $hash .= $this->template->config['staticUpdaterSalt'];
+            }
+            $hash = md5($hash);
+            ?>
+            <script>
+              var hash = '<?=$hash;?>';
+              var files = '<?=http_build_query(['files' => array_keys($urls)]);?>';
+              var timeHash = '<?=$timeMd5?>';
+              var id = '<?=$id;?>';
+
+              setInterval(function () {
+                // 1. Создаём новый объект XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+
+                // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
+                xhr.open('GET', '/view/checkStaticUpdates/' + hash + '/' + timeHash + '?' + files, false);
+
+                // 3. Отсылаем запрос
+                xhr.send();
+
+                // 4. Если код ответа сервера не 200, то это ошибка
+                if (xhr.status != 200) {
+                  // обработать ошибку
+                  //alert(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
+                } else {
+                  console.log(xhr.responseText, xhr.responseText.length);
+                  if (xhr.responseText.length > 0) {
+                    var result = JSON.parse(xhr.responseText);
+                    document.getElementById(id).href = result.path;
+                    timeHash = result.timeHash;
+                  }
+                  // вывести результат
+                  //alert(xhr.responseText); // responseText -- текст ответа.
+                }
+                console.log(hash, files, timeHash);
+              }, 2000);
+            </script>
+            <?php
+        }
+
     }
 
     public function getCss() {
