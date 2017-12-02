@@ -10,7 +10,7 @@ class Daemon extends Module {
         $workDir = $this->workDir();
         $lock = fopen($workDir . '/daemon.lock', 'w+');
         if (flock($lock, LOCK_EX | LOCK_NB)) {
-            echo 'started';
+            //echo 'started';
             flock($lock, LOCK_UN);
             fclose($lock);
             $fp = fsockopen($_SERVER['SERVER_NAME'],
