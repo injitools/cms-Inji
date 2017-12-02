@@ -11,7 +11,7 @@
 class Exchange1cController extends adminController {
 
     public function reExchangeAction() {
-        ini_set('memory_limit', '2000M');
+        ini_set('memory_limit', '4000M');
         ignore_user_abort(true);
         set_time_limit(0);
         Model::$logging = false;
