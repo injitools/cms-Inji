@@ -115,9 +115,9 @@ class ecommerceController extends Controller {
             foreach ($items as $item) {
                 $return[] = ['name' => $item['item_name'], 'search' => $item['item_search_index']];
             }
-            return  gzcompress(json_encode($return));
+            return gzcompress(json_encode($return));
         }, 4 * 60 * 60);
-        echo  gzuncompress($return);
+        echo gzuncompress($return);
     }
 
     public function indexAction() {
@@ -309,12 +309,19 @@ class ecommerceController extends Controller {
         $catalog = $item->category;
         $bread = [];
         $bread[] = ['text' => 'Каталог', 'href' => '/ecommerce'];
-
-        $catalogIds = array_values(array_filter(explode('/', $item->tree_path)));
-        foreach ($catalogIds as $id) {
-            $cat = Ecommerce\Category::get($id);
-            if ($cat) {
+        if (!empty($this->module->config['catalogReplace'])) {
+            $cat = \Ecommerce\Catalog::get(['where' => ['categories:category_id', $item->category_id]]);
+            while ($cat) {
                 $bread[] = ['text' => $cat->name, 'href' => '/ecommerce/itemList/' . $cat->id];
+                $cat = $cat->parent;
+            }
+        } else {
+            $catalogIds = array_values(array_filter(explode('/', $item->tree_path)));
+            foreach ($catalogIds as $id) {
+                $cat = Ecommerce\Category::get($id);
+                if ($cat) {
+                    $bread[] = ['text' => $cat->name, 'href' => '/ecommerce/itemList/' . $cat->id];
+                }
             }
         }
         $bread[] = ['text' => $item->name()];

@@ -10,7 +10,12 @@
  */
 
 namespace Ecommerce;
-
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $type
+ * @property string $date_create
+ */
 class Warehouse extends \Model {
 
     public static $objectName = 'Склад';

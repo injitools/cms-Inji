@@ -16,6 +16,10 @@ namespace Ecommerce;
  * @property int $weight
  * @property int $parent_id
  * @property int $icon_file_id
+ * @property \Ecommerce\Catalog $parent
+ * @property \Ecommerce\Catalog[] $childs
+ * @property \Ecommerce\Catalog\Category[] $categories
+ * @property \Files\File $icon
  */
 class Catalog extends \Model {
     static $cols = [
