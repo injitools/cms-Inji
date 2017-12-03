@@ -62,7 +62,7 @@ class ViewController extends Controller {
                 }
                 file_put_contents($cacheDir . 'all' . $timeMd5 . '.css', $cssAll);
             }
-            echo json_encode(['path' => $cacheDir . 'all' . $timeMd5 . '.css', 'timeHash' => $timeMd5]);
+            echo json_encode(['path' => '/' . $cacheDir . 'all' . $timeMd5 . '.css', 'timeHash' => $timeMd5]);
         }
 
     }

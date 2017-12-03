@@ -63,7 +63,9 @@ class Walker {
             $object = \App::$cur->migrations->getMigrationObject($this->migration, $key, 'code');
             if ($object) {
 //parse as object
+                $keyLog = \App::$cur->log->start('start object parse');
                 $this->startObjectParse($object, $data);
+                \App::$cur->log->end($keyLog);
             } else {
 //create new map path for configure unknown path
                 $this->mapPath = new Migration\Map\Path();

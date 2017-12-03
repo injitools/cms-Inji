@@ -65,7 +65,6 @@ class BowerCmd {
         while (!Inji::$inst->blockParallel()) {
             sleep(2);
         }
-        ini_set('memory_limit', '2000M');
         ComposerCmd::requirePackage("injitools/bowerphp", "dev-master", '.');
         include_once 'vendor/injitools/bowerphp/src/bootstrap.php';
         if ($needOutput) {
@@ -100,6 +99,7 @@ class BowerCmd {
             return true;
         }
         set_time_limit(0);
+        ini_set('memory_limit', '4000M');
         self::command('install ' . $packageName . ($version ? '#' . $version : '') . ' --save', false, $path);
         return true;
     }

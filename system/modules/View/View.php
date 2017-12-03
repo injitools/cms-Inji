@@ -57,6 +57,7 @@ class View extends \Module {
 
     public function page($params = []) {
         $this->paramsParse($params);
+        App::$cur->log->template_parsed = true;
         if (file_exists($this->template->pagePath)) {
             $source = file_get_contents($this->template->pagePath);
             if (strpos($source, 'BODYEND') === false) {

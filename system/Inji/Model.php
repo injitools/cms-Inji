@@ -1594,10 +1594,10 @@ class Model {
             $id = $this->pk();
             \App::$primary->daemon->task(function () use ($class, $id) {
                 $item = $class::get($id);
-                if ($class::$categoryModel) {
+                if ($item && $class::$categoryModel) {
                     $item->changeItemTree();
                 }
-                if ($class::$treeCategory) {
+                if ($item && $class::$treeCategory) {
                     $item->changeCategoryTree();
                 }
             });

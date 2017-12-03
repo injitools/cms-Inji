@@ -36,7 +36,7 @@ class ComposerCmd {
         while (!Inji::$inst->blockParallel()) {
             sleep(2);
         }
-        ini_set('memory_limit', '1000M');
+        ini_set('memory_limit', '4000M');
         if (file_exists($path . '/composer/bin/composer')) {
             return true;
         }
@@ -101,7 +101,7 @@ class ComposerCmd {
         while (!Inji::$inst->blockParallel()) {
             sleep(2);
         }
-        ini_set('memory_limit', '1000M');
+        ini_set('memory_limit', '4000M');
         include_once getenv('COMPOSER_HOME') . '/composer/vendor/autoload.php';
         if ($needOutput) {
             $output = new Symfony\Component\Console\Output\StreamOutput(fopen('php://output', 'w'));

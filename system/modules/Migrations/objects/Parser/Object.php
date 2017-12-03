@@ -42,7 +42,9 @@ class Object extends \Object {
     }
 
     private function parseData($data, $preset) {
+        $keyLog = \App::$cur->log->start('start object model set');
         $model = $this->setModel($data);
+        \App::$cur->log->end($keyLog);
         if ($model) {
             foreach ($preset as $col => $value) {
                 $model->{$col} = $value;
@@ -110,7 +112,7 @@ class Object extends \Object {
                     $deleteIf = json_decode($this->object->delete_empty, true);
                     foreach ($deleteIf['params'] as $paramId) {
                         if ($model->{$this->object->params[$paramId]->value} === '') {
-                            if ($model->pk()) {
+                            if($model->pk()){
                                 $model->delete();
                             }
                             return 0;

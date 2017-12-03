@@ -91,7 +91,7 @@ class DataManagerController extends Controller {
         $dataManager = new Ui\DataManager($request['modelName'], $request['managerName']);
         if ($request['download']) {
 
-            ini_set('memory_limit', '2000M');
+            ini_set('memory_limit', '4000M');
             set_time_limit(0);
 
             $request['params']['all'] = true;
