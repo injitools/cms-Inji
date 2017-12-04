@@ -21,9 +21,10 @@ class Select extends \Ui\ActiveForm\Input {
         $inputOptions = [
             'value' => $this->value(),
             'disabled' => $this->readOnly(),
-            'values' => \Ui\ActiveForm::getOptionsList($this->colParams, $this->activeFormParams, !empty($this->modelName)?$this->modelName:$this->activeForm->modelName, $inputName)
+            'values' => \Ui\ActiveForm::getOptionsList($this->colParams, $this->activeFormParams, !empty($this->modelName) ? $this->modelName : $this->activeForm->modelName, $inputName)
         ];
         $modelName = '';
+
         switch ($inputParams['source']) {
             case 'model':
                 $modelName = $inputParams['model'];
@@ -31,8 +32,19 @@ class Select extends \Ui\ActiveForm\Input {
             case 'relation':
                 if ($this->activeForm->modelName) {
                     $itemModelName = $this->activeForm->modelName;
-                    $relation = $itemModelName::getRelation($inputParams['relation']);
-                    if ($relation['model'] && class_exists($relation['model'])) {
+                    if (strpos($inputParams['relation'], ':')) {
+                        $relPaths = explode(':', $inputParams['relation']);
+                        foreach ($relPaths as $path) {
+                            $relation = $itemModelName::getRelation($path);
+                            if (!$relation) {
+                                break;
+                            }
+                            $itemModelName = $relation['model'];
+                        }
+                    } else {
+                        $relation = $itemModelName::getRelation($inputParams['relation']);
+                    }
+                    if ($relation && $relation['model'] && class_exists($relation['model'])) {
                         $modelName = $relation['model'];
                     }
                 }
@@ -41,12 +53,12 @@ class Select extends \Ui\ActiveForm\Input {
             $inputOptions['createBtn'] = [
                 'text' => 'Создать',
                 'onclick' => 'inji.Ui.forms.popUp(\'' . addslashes($modelName) . '\',{},function(elem){'
-                . 'return function(data,modal){inji.Ui.forms.submitAjax($(elem).closest(\'form\')[0], {notSave: true});}}(this));return false;'
+                    . 'return function(data,modal){inji.Ui.forms.submitAjax($(elem).closest(\'form\')[0], {notSave: true});}}(this));return false;'
             ];
         }
         if (!empty($inputOptions['values'][$this->activeForm->model->{$this->colName}]) &&
-                is_array($inputOptions['values'][$this->activeForm->model->{$this->colName}]) &&
-                !empty($inputOptions['values'][$this->activeForm->model->{$this->colName}]['input'])) {
+            is_array($inputOptions['values'][$this->activeForm->model->{$this->colName}]) &&
+            !empty($inputOptions['values'][$this->activeForm->model->{$this->colName}]['input'])) {
             $aditionalCol = $inputOptions['values'][$this->activeForm->model->{$this->colName}]['input']['name'];
             $inputOptions['aditionalValue'] = $this->activeForm->model->$aditionalCol;
         }

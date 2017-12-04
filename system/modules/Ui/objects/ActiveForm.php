@@ -132,6 +132,10 @@ class ActiveForm extends \Object {
                             switch ($param['typeSource']) {
                                 case 'selfMethod':
                                     $type = $this->model->{$param['selfMethod']}();
+                                    if (is_array($type)) {
+                                        $param = $type;
+                                        $type = $type['type'];
+                                    }
                                     break;
                             }
                         }
@@ -223,6 +227,10 @@ class ActiveForm extends \Object {
                 switch ($options['typeSource']) {
                     case 'selfMethod':
                         $type = $this->model->{$options['selfMethod']}();
+                        if (is_array($type)) {
+                            $options = $type;
+                            $type = $type['type'];
+                        }
                         break;
                 }
             }
