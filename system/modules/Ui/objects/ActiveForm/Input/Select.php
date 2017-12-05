@@ -32,12 +32,23 @@ class Select extends \Ui\ActiveForm\Input {
             case 'relation':
                 if ($this->activeForm->modelName) {
                     $itemModelName = $this->activeForm->modelName;
+
                     if (strpos($inputParams['relation'], ':')) {
                         $relPaths = explode(':', $inputParams['relation']);
-                        foreach ($relPaths as $path) {
+                        $model = $this->activeForm->model;
+                        foreach ($relPaths as $key => $path) {
                             $relation = $itemModelName::getRelation($path);
                             if (!$relation) {
                                 break;
+                            }
+                            if ($key + 1 == count($relPaths)) {
+                                if ($model) {
+                                    $inputOptions['values'] = $model->{$path}(['forSelect' => true]);
+                                }
+                            } else {
+                                if ($model) {
+                                    $model = $model->{$path};
+                                }
                             }
                             $itemModelName = $relation['model'];
                         }
