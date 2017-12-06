@@ -14,6 +14,8 @@ namespace Ecommerce;
  * @property int $id
  * @property string $name
  * @property string $type
+ * @property string $addresses
+ * @property string $contacts
  * @property string $date_create
  */
 class Warehouse extends \Model {
@@ -26,6 +28,8 @@ class Warehouse extends \Model {
         //Основные параметры
         'name' => ['type' => 'text'],
         'type' => ['type' => 'text'],
+        'addresses' => ['type' => 'textarea'],
+        'contacts' => ['type' => 'textarea'],
         //Системные
         'date_create' => ['type' => 'dateTime'],
     ];
@@ -35,6 +39,8 @@ class Warehouse extends \Model {
             'cols' => [
                 'name',
                 'type',
+                'addresses',
+                'contacts',
             ],
         ],
     ];
@@ -42,6 +48,8 @@ class Warehouse extends \Model {
         'manager' => [
             'map' => [
                 ['name', 'type'],
+                ['addresses'],
+                ['contacts'],
             ]
         ]];
 

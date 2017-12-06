@@ -312,6 +312,46 @@ class Cart extends \Model {
         ],
     ];
 
+    public function buildOrderInfo() {
+        $orderInfo = '<h3>Товары</h3>';
+        $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Артикул</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
+        foreach ($this->cartItems as $cartItem) {
+            $orderInfo .= "<tr>";
+            $orderInfo .= "<td><a href='" . \App::$cur->getDomain() . "{$cartItem->item->getHref()}'>{$cartItem->name()}</a></td>";
+            $orderInfo .= "<td>{$cartItem->price->offer->article}</td>";
+            $orderInfo .= "<td>{$cartItem->count}</td>";
+            $orderInfo .= "<td>{$cartItem->final_price}</td>";
+            $orderInfo .= "<td>" . ($cartItem->final_price * $cartItem->count) . "</td>";
+            $orderInfo .= "</tr>";
+        }
+        $orderInfo .= '</table>';
+        if ($this->infos) {
+            $orderInfo .= '<h3>Контакты</h3>';
+            $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
+            $orderInfo .= "<tr><td>E-mail</td><td><b>{$this->user->mail}</b></td></tr>";
+            foreach ($this->infos as $info) {
+                $value = \Model::resloveTypeValue($info, 'value');
+                $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$value}</b></td></tr>";
+            }
+            $orderInfo .= '</table>';
+        }
+        if ($this->delivery) {
+            $orderInfo .= '<h3>Информация о доставке</h3>';
+            $orderInfo .= "<p><b>{$this->delivery->name}</b></p>";
+            $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
+            foreach ($this->deliveryInfos as $info) {
+                $value = \Model::resloveTypeValue($info, 'value');
+                $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$value}</b></td></tr>";
+            }
+            $orderInfo .= '</table>';
+        }
+        if ($this->payType) {
+            $orderInfo .= '<h3>Способ оплаты</h3>';
+            $orderInfo .= "<p><b>{$this->payType->name}</b></p>";
+        }
+        return $orderInfo;
+    }
+
     public function checkStage() {
         $sum = $this->itemsSum();
         $stages = Cart\Stage::getList(['order' => ['sum', 'asc']]);

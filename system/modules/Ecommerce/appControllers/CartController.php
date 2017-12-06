@@ -130,40 +130,7 @@ class CartController extends Controller {
                 }
                 $cart = \Ecommerce\Cart::get($cart->id);
 
-                $orderInfo = '<h3>Товары</h3>';
-                $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Артикул</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
-                foreach ($cart->cartItems as $cartItem) {
-                    $orderInfo .= "<tr>";
-                    $orderInfo .= "<td><a href='" . App::$cur->getDomain() . "{$cartItem->item->getHref()}'>{$cartItem->name()}</a></td>";
-                    $orderInfo .= "<td>{$cartItem->price->offer->article}</td>";
-                    $orderInfo .= "<td>{$cartItem->count}</td>";
-                    $orderInfo .= "<td>{$cartItem->final_price}</td>";
-                    $orderInfo .= "<td>" . ($cartItem->final_price * $cartItem->count) . "</td>";
-                    $orderInfo .= "</tr>";
-                }
-                $orderInfo .= '</table>';
-                if ($cart->infos) {
-                    $orderInfo .= '<h3>Контакты</h3>';
-                    $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
-                    $orderInfo .= "<tr><td>E-mail</td><td><b>{$cart->user->mail}</b></td></tr>";
-                    foreach ($cart->infos as $info) {
-                        $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
-                    }
-                    $orderInfo .= '</table>';
-                }
-                if ($cart->delivery) {
-                    $orderInfo .= '<h3>Информация о доставке</h3>';
-                    $orderInfo .= "<p><b>{$cart->delivery->name}</b></p>";
-                    $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
-                    foreach ($cart->deliveryInfos as $info) {
-                        $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
-                    }
-                    $orderInfo .= '</table>';
-                }
-                if ($cart->payType) {
-                    $orderInfo .= '<h3>Способ оплаты</h3>';
-                    $orderInfo .= "<p><b>{$cart->payType->name}</b></p>";
-                }
+                $orderInfo = $cart->buildOrderInfo();
                 $domain = App::$cur->getDomain(true);
                 $domainRaw = App::$cur->getDomain();
                 $title = 'Новый заказ в интернет магазине на сайте ' . $domain;
