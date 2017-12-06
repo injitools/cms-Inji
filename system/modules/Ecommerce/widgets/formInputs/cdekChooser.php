@@ -3,7 +3,7 @@
     $cart = \App::$cur->ecommerce->getCurCart(false);
     $field = \Ecommerce\Delivery\Field::get('cdektype', 'code');
 
-    if ($cart && $field && isset($cart->deliveryInfos[$field->id])) {
+    if ($cart && $field && isset($cart->deliveryInfos[$field->id]) && isset($field->fieldItems[$cart->deliveryInfos[$field->id]->value])) {
         if ($field->fieldItems[$cart->deliveryInfos[$field->id]->value]->value === 'До двери') {
             if (empty($options['value'])) {
                 $fieldInfo = \Ecommerce\UserAdds\Field::get('deliveryfield_city', 'code');
@@ -56,7 +56,9 @@
                 echo '<b>Заполните поле: Город</b>';
             }
         }
-
+    }
+    else {
+        echo '<b>Заполните поле: '.$field->name.'</b>';
     }
     ?>
 </div>
