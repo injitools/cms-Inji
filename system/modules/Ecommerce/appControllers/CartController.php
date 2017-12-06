@@ -130,16 +130,22 @@ class CartController extends Controller {
                 }
                 $cart = \Ecommerce\Cart::get($cart->id);
 
-
                 $orderInfo = '<h3>Товары</h3>';
-                $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
+                $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Артикул</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
                 foreach ($cart->cartItems as $cartItem) {
-                    $orderInfo .= "<tr><td><a href='" . App::$cur->getDomain() . "{$cartItem->item->getHref()}'>{$cartItem->name()}</a></td><td>{$cartItem->count}</td><td>{$cartItem->final_price}</td><td>" . ($cartItem->final_price * $cartItem->count) . "</td></tr>";
+                    $orderInfo .= "<tr>";
+                    $orderInfo .= "<td><a href='" . App::$cur->getDomain() . "{$cartItem->item->getHref()}'>{$cartItem->name()}</a></td>";
+                    $orderInfo .= "<td>{$cartItem->price->offer->article}</td>";
+                    $orderInfo .= "<td>{$cartItem->count}</td>";
+                    $orderInfo .= "<td>{$cartItem->final_price}</td>";
+                    $orderInfo .= "<td>" . ($cartItem->final_price * $cartItem->count) . "</td>";
+                    $orderInfo .= "</tr>";
                 }
                 $orderInfo .= '</table>';
                 if ($cart->infos) {
                     $orderInfo .= '<h3>Контакты</h3>';
                     $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
+                    $orderInfo .= "<tr><td>E-mail</td><td><b>{$cart->user->mail}</b></td></tr>";
                     foreach ($cart->infos as $info) {
                         $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$info->value}</b></td></tr>";
                     }
