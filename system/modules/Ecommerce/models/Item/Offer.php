@@ -54,7 +54,8 @@ class Offer extends \Model {
         'manager' => [
             'cols' => [
                 'name', 'article', 'warehouse', 'price', 'option'
-            ]
+            ],
+            'sortMode' => true
         ]
     ];
     public static $forms = [
