@@ -92,6 +92,7 @@ class Exchange1cController extends adminController {
                 Msg::add("Удалено {$countIds} объектов миграции");
             }
         }
+        $this->view->setTitle('Объекты миграции не обновляемые при обмене');
         $this->view->page();
     }
 
