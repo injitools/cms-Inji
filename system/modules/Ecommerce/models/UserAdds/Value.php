@@ -12,7 +12,7 @@
 namespace Ecommerce\UserAdds;
 
 class Value extends \Model {
-
+    public static $logging = false;
     public static $labels = [
         'useradds_field_id' => 'Поле',
         'value' => 'Значение'

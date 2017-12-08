@@ -12,7 +12,7 @@
 namespace Users\User;
 
 class Info extends \Model {
-
+    public static $logging = 'changes';
     public static $objectName = "Расширенная информация";
     public static $cols = [
         'first_name' => ['type' => 'text'],

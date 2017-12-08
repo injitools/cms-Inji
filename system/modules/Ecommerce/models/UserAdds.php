@@ -23,7 +23,7 @@ namespace Ecommerce;
  * @method \Users\User user($options)
  */
 class UserAdds extends \Model {
-
+    public static $logging = false;
     public static $labels = [
         'value' => 'Информация'
     ];

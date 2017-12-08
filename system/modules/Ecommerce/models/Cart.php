@@ -56,6 +56,7 @@ namespace Ecommerce;
  */
 class Cart extends \Model {
 
+    public static $logging = false;
     public static $objectName = 'Корзины';
 
     public static function indexes() {

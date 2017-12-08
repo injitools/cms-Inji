@@ -12,7 +12,7 @@
 namespace Users;
 
 class Activity extends \Model {
-
+    public static $logging = false;
     public static $objectName = 'Activity';
     public static $labels = [
         'text' => 'Текст',

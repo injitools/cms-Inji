@@ -15,10 +15,12 @@ class Exchange1cController extends adminController {
         ini_set('error_reporting', E_ALL);
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
-        ini_set('memory_limit', '4000M');
+        ini_set('memory_limit', '-1');
         ignore_user_abort(true);
         set_time_limit(0);
         Model::$logging = false;
+        App::$cur->log->run = true;
+        App::$cur->log->forceView = true;
         $reExchange = Exchange1c\Exchange::get((int)$_GET['item_pk']);
 
         $exchange = new \Exchange1c\Exchange();
@@ -57,7 +59,9 @@ class Exchange1cController extends adminController {
             $mode = new $modeClass;
             $mode->exchange = $exchange;
             $mode->log = $log;
+            $key = \App::$cur->log->start('start migration');
             $mode->process();
+            \App::$cur->log->end($key);
         }
         echo '<hr /><a href="/admin/exchange1c/Exchange">Назад</a>';
         Model::$logging = true;

@@ -53,12 +53,12 @@ class User extends \Model {
     public static $cols = [
         'login' => ['type' => 'text'],
         'mail' => ['type' => 'email'],
-        'pass' => ['type' => 'password'],
+        'pass' => ['type' => 'password', 'logging' => 'noValue'],
         'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent'],
         'group_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'group'],
         'role_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'role'],
         'admin_text' => ['type' => 'html'],
-        'activation' => ['type' => 'text'],
+        'activation' => ['type' => 'text', 'logging' => false],
         'blocked' => ['type' => 'bool'],
         'date_last_active' => ['type' => 'dateTime', 'logging' => false, 'null' => true, 'emptyValue' => null],
         'date_create' => ['type' => 'dateTime']

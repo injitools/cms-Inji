@@ -23,7 +23,7 @@ namespace Ecommerce\Item\Offer;
  * @property-read \Ecommerce\Item\Offer $offer
  */
 class Warehouse extends \Model {
-
+    public static $logging = 'changes';
     public static $objectName = 'Товар на складе';
     public static $labels = [
         'count' => 'Количество',

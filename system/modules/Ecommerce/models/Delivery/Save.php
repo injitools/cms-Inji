@@ -24,7 +24,7 @@ namespace Ecommerce\Delivery;
  * @method \Users\User user($options)
  */
 class Save extends \Model {
-
+    public static $logging = false;
     public static $cols = [
         'name' => ['type' => 'text'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user']

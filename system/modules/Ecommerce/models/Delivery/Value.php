@@ -11,7 +11,7 @@
 namespace Ecommerce\Delivery;
 
 class Value extends \Model {
-
+    public static $logging = false;
     public static $cols = [
         //Основные параметры
         'delivery_save_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'save'],

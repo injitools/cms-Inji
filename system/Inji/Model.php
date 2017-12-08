@@ -410,7 +410,7 @@ class Model {
             return false;
         }
         $class = get_class($this);
-        if (!Model::$logging || !$class::$logging) {
+        if (!Model::$logging || !$class::$logging || (is_string($class::$logging) && $class::$logging != ($new ? 'new' : 'changes'))) {
             return false;
         }
         $user_id = class_exists('Users\User') ? \Users\User::$cur->id : 0;
@@ -425,40 +425,42 @@ class Model {
             $changes_text = [];
             foreach ($this->_changedParams as $fullColName => $oldValue) {
                 $colName = substr($fullColName, strlen($class::colPrefix()));
-                if (isset($class::$cols[$colName]['logging']) && !$class::$cols[$colName]['logging']) {
+                if (isset($class::$cols[$colName]['logging']) && $class::$cols[$colName]['logging'] === false) {
                     continue;
                 }
-                $oldValueText = $oldValue;
-                if (isset($class::$cols[$colName]) && $class::$cols[$colName]['type'] === 'select') {
-                    switch ($class::$cols[$colName]['source']) {
-                        case 'array':
-                            $oldValueText = isset($class::$cols[$colName]['sourceArray'][$oldValue]) ? $class::$cols[$colName]['sourceArray'][$oldValue] : $oldValue;
-                            break;
-                        case 'relation':
-                            $relation = $class::getRelation($class::$cols[$colName]['relation']);
-                            $relModel = $relation['model'];
-                            $rel = $relModel::get($oldValue);
-                            if ($rel) {
-                                $oldValueText = $rel->name();
-                            }
+                if ($class::$cols[$colName]['logging'] !== 'noValue') {
+                    $oldValueText = $oldValue;
+                    if (isset($class::$cols[$colName]) && $class::$cols[$colName]['type'] === 'select') {
+                        switch ($class::$cols[$colName]['source']) {
+                            case 'array':
+                                $oldValueText = isset($class::$cols[$colName]['sourceArray'][$oldValue]) ? $class::$cols[$colName]['sourceArray'][$oldValue] : $oldValue;
+                                break;
+                            case 'relation':
+                                $relation = $class::getRelation($class::$cols[$colName]['relation']);
+                                $relModel = $relation['model'];
+                                $rel = $relModel::get($oldValue);
+                                if ($rel) {
+                                    $oldValueText = $rel->name();
+                                }
+                        }
+                    }
+                    $newValueText = $this->$colName;
+                    if (isset($class::$cols[$colName]) && $class::$cols[$colName]['type'] === 'select') {
+                        switch ($class::$cols[$colName]['source']) {
+                            case 'array':
+                                $newValueText = isset($class::$cols[$colName]['sourceArray'][$this->$colName]) ? $class::$cols[$colName]['sourceArray'][$this->$colName] : $this->$colName;
+                                break;
+                            case 'relation':
+                                $relation = $class::getRelation($class::$cols[$colName]['relation']);
+                                $relModel = $relation['model'];
+                                $rel = $relModel::get($this->$colName);
+                                if ($rel) {
+                                    $newValueText = $rel->name();
+                                }
+                        }
                     }
                 }
-                $newValueText = $this->$colName;
-                if (isset($class::$cols[$colName]) && $class::$cols[$colName]['type'] === 'select') {
-                    switch ($class::$cols[$colName]['source']) {
-                        case 'array':
-                            $newValueText = isset($class::$cols[$colName]['sourceArray'][$this->$colName]) ? $class::$cols[$colName]['sourceArray'][$this->$colName] : $this->$colName;
-                            break;
-                        case 'relation':
-                            $relation = $class::getRelation($class::$cols[$colName]['relation']);
-                            $relModel = $relation['model'];
-                            $rel = $relModel::get($this->$colName);
-                            if ($rel) {
-                                $newValueText = $rel->name();
-                            }
-                    }
-                }
-                if (strlen($oldValueText) + strlen($newValueText) < 200) {
+                if ($class::$cols[$colName]['logging'] !== 'noValue' && strlen($oldValueText) + strlen($newValueText) < 200) {
                     $changes_text[] = (!empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName) . ": \"{$oldValueText}\" => \"{$newValueText}\"";
                 } else {
                     $changes_text[] = !empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName;
@@ -547,7 +549,7 @@ class Model {
      */
     public static function parseColRecursion($info) {
         if (is_string($info)) {
-            $info = ['col' => $info, 'rawCol' => $info, 'modelName' => get_called_class(), 'label' => $info, 'joins' => []];
+            $info = ['col' => $info, 'rawCol' => $info, 'rawModel' => get_called_class(), 'modelName' => get_called_class(), 'label' => $info, 'joins' => []];
         }
         if ($info['col'] === 'id') {
             $info['colParams'] = [
@@ -560,6 +562,7 @@ class Model {
             if (isset($relations[substr($info['col'], 0, strpos($info['col'], ':'))])) {
                 $rel = substr($info['col'], 0, strpos($info['col'], ':'));
                 $info['col'] = substr($info['col'], strpos($info['col'], ':') + 1);
+                //$info['modelName'] = $relations[$rel]['model'];
                 $type = empty($relations[$rel]['type']) ? 'to' : $relations[$rel]['type'];
                 $joinName = $relations[$rel]['model'] . '_' . $rel;
                 switch ($type) {

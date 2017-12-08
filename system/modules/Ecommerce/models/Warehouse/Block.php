@@ -12,7 +12,7 @@
 namespace Ecommerce\Warehouse;
 
 class Block extends \Model {
-
+    public static $logging = false;
     public static $cols = [
         //Основные параметры
         'cart_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'cart'],
