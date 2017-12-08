@@ -200,7 +200,12 @@ class ecommerceController extends Controller {
         //bread
         $bread = [];
         if (!$category || !$category->name) {
-            $bread[] = array('text' => 'Каталог');
+            if (!empty($_GET['filters']['best'])) {
+                $bread[] = array('text' => 'Каталог', 'href' => '/ecommerce');
+                $bread[] = array('text' => 'Рекомендумые товары');
+            } else {
+                $bread[] = array('text' => 'Каталог');
+            }
             $this->view->setTitle('Каталог');
         } else {
             $bread[] = array('text' => 'Каталог', 'href' => '/ecommerce');
