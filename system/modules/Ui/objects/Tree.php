@@ -70,7 +70,7 @@ class Tree extends \Object {
         <ul class="treeview" data-col='tree_path'>
             <?php
             if (is_string($objectRoot)) {
-                $items = $objectRoot::getList(['where' => ['parent_id', 0]]);
+                $items = $objectRoot::getList(['where' => ['parent_id', 0], 'order' => $order]);
             } else {
                 $class = get_class($objectRoot);
                 $items = $class::getList(['where' => ['parent_id', $objectRoot->pk()], 'order' => $order]);
