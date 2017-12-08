@@ -39,7 +39,7 @@ class Geography extends Module {
         if (!$city) {
             $city = Geography\City::get(1, 'default');
         }
-        if (!empty($this->config['aliasRedirect']) && $city && $city->alias && !$alias && Module::$cur->moduleName !== 'Exchange1c') {
+        if (!empty($this->config['aliasRedirect']) && $city && $city->alias && !$city->default && !$alias && Module::$cur->moduleName !== 'Exchange1c') {
             Tools::redirect('//' . $city->alias . '.' . $domain . $_SERVER['REQUEST_URI']);
         }
         Geography\City::$cur = $city;
