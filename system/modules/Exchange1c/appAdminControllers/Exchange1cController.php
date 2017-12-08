@@ -21,7 +21,7 @@ class Exchange1cController extends adminController {
         Model::$logging = false;
         App::$cur->log->run = true;
         App::$cur->log->forceView = true;
-        $reExchange = Exchange1c\Exchange::get((int)$_GET['item_pk']);
+        $reExchange = Exchange1c\Exchange::get((int) $_GET['item_pk']);
 
         $exchange = new \Exchange1c\Exchange();
         $exchange->type = $reExchange->type;
@@ -65,6 +65,34 @@ class Exchange1cController extends adminController {
         }
         echo '<hr /><a href="/admin/exchange1c/Exchange">Назад</a>';
         Model::$logging = true;
+    }
+
+    public function findOldAction() {
+        if (!empty($_POST['ids'])) {
+            $countIds = 0;
+            $countModels = 0;
+            foreach ($_POST['ids'] as $id) {
+                $id = \Migrations\Id::get($id);
+                if (!$id) {
+                    continue;
+                }
+                $modelName = $id->type;
+                $model = $modelName::get($id->object_id);
+                if ($model) {
+                    $countModels++;
+                    $model->delete();
+                }
+                $countIds++;
+                $id->delete();
+            }
+            if ($countModels) {
+                Msg::add("Удалено {$countModels} объектов с сайта");
+            }
+            if ($countIds) {
+                Msg::add("Удалено {$countIds} объектов миграции");
+            }
+        }
+        $this->view->page();
     }
 
 }
