@@ -271,12 +271,17 @@ class Ecommerce extends Module {
      */
     public function getItemsParams($params = [], $saveFilterOptions = []) {
         $filtersOptions = !empty($params['filters']['options']) ? $params['filters']['options'] : [];
+        $filters = $params['filters'];
         $params['filters'] = [];
         foreach ($filtersOptions as $optionId => $filter) {
             if (in_array($optionId, $saveFilterOptions)) {
                 $params['filters']['options'][$optionId] = $filter;
             }
         }
+        if (!empty($filters['best'])) {
+            $params['filters']['best'] = $filters['best'];
+        }
+
         $selectOptions = Ecommerce\OptionsParser::parse($params);
         $selectOptions['array'] = true;
         $items = Ecommerce\Item::getList($selectOptions);
@@ -285,11 +290,13 @@ class Ecommerce extends Module {
         }
         $cols = array_keys(App::$cur->db->getTableCols(\Ecommerce\Item\Option::table()));
         $cols[] = \Ecommerce\Item\Param::colPrefix() . \Ecommerce\Item::index();
-        $selectOptions = ['where' => ['view', 1],
+        $selectOptions = [
+            'where' => ['view', 1],
             'join' => [
                 [Ecommerce\Item\Param::table(), \Ecommerce\Item\Option::index() . ' = ' . Ecommerce\Item\Param::colPrefix() . \Ecommerce\Item\Option::index() . ' and ' . Ecommerce\Item\Param::colPrefix() . Ecommerce\Item::index() . ' IN (' . implode(',', array_keys($items)) . ')', 'inner'],
             ],
-            'distinct' => true,
+            'distinct' => \Ecommerce\Item\Option::index(),
+            'group' => \Ecommerce\Item\Option::index(),
             'cols' => implode(',', $cols)
         ];
         $options = Ecommerce\Item\Option::getList($selectOptions);
@@ -315,8 +322,7 @@ class Ecommerce extends Module {
      * @return int
      */
     public function getItemsCount($params = []) {
-        $selectOptions = Ecommerce\OptionsParser::parse($params);
-        $selectOptions['distinct'] = \Ecommerce\Item::index();
+        $selectOptions = Ecommerce\OptionsParser::parse($params, true);
         $counts = Ecommerce\Item::getCount($selectOptions);
         if (is_array($counts)) {
             $sum = 0;

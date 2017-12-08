@@ -1,8 +1,18 @@
 <div class="filters">
     <form>
         <?php
-        $min = App::$cur->ecommerce->getItems(['sort' => ['price' => 'asc'], 'count' => 1, 'key' => false]);
-        $max = App::$cur->ecommerce->getItems(['sort' => ['price' => 'desc'], 'count' => 1, 'key' => false]);
+        $params = [
+            'filters' => [],
+            'sort' => ['price' => 'asc'],
+            'count' => 1,
+            'key' => false
+        ];
+        if (!empty($_GET['filters']['best'])) {
+            $params['filters']['best'] = 1;
+        }
+        $min = App::$cur->ecommerce->getItems($params);
+        $params['sort']['price'] = 'desc';
+        $max = App::$cur->ecommerce->getItems($params);
         if ($min && $min[0]->getPrice() && $max && $max[0]->getPrice()) {
             $min = $min[0]->getPrice()->price;
             $max = $max[0]->getPrice()->price;
@@ -10,12 +20,16 @@
             <label>Фильтр по цене</label>
             <div class="form-group">
                 <div class="row">
-                    <div class="col-sm-6">от <input type="text" name='filters[price][min]'
-                                                    value="<?= isset($_GET['filters']['price']['min']) ? $_GET['filters']['price']['min'] : $min; ?>"
-                                                    class="form-control"/></div>
-                    <div class="col-sm-6">до <input type="text" name='filters[price][max]'
-                                                    value="<?= isset($_GET['filters']['price']['max']) ? $_GET['filters']['price']['max'] : $max; ?>"
-                                                    class="form-control"/></div>
+                    <div class="col-sm-6">
+                        от <input type="text" name='filters[price][min]'
+                                  value="<?= isset($_GET['filters']['price']['min']) ? $_GET['filters']['price']['min'] : $min; ?>"
+                                  class="form-control"/>
+                    </div>
+                    <div class="col-sm-6">
+                        до <input type="text" name='filters[price][max]'
+                                  value="<?= isset($_GET['filters']['price']['max']) ? $_GET['filters']['price']['max'] : $max; ?>"
+                                  class="form-control"/>
+                    </div>
                 </div>
             </div>
             <?php

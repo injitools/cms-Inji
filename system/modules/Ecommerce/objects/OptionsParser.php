@@ -13,7 +13,7 @@ namespace Ecommerce;
 
 class OptionsParser extends \Object {
 
-    public static function parse($options = []) {
+    public static function parse($options = [], $forCount = false) {
         $selectOptions = self::getDefault($options);
 
         //parse order options
@@ -60,8 +60,11 @@ class OptionsParser extends \Object {
         self::search($options, $selectOptions);
 
         self::warehouse($selectOptions);
-
-        $selectOptions['group'] = Item::index();
+        if ($forCount) {
+            $selectOptions['distinct'] = \Ecommerce\Item::index();
+        } else {
+            $selectOptions['group'] = Item::index();
+        }
         if (isset($options['array'])) {
             $selectOptions['array'] = $options['array'];
         }
