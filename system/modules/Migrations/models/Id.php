@@ -10,7 +10,14 @@
  */
 
 namespace Migrations;
-
+/**
+ * @property int $id
+ * @property int $object_id
+ * @property string $type
+ * @property string $parse_id
+ * @property string $last_access
+ * @property string $date_create
+ */
 class Id extends \Model {
 
     public static $logging = false;

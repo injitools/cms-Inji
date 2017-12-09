@@ -26,7 +26,6 @@ class Migrations extends \Module {
         $log->save();
 
         $reader = new Migrations\Reader\Xml();
-        App::$cur->log->forceView(true);
         $logKey = App::$cur->log->start('load xml');
         if (!$reader->loadData($filePath)) {
             $event = new Migrations\Log\Event();
