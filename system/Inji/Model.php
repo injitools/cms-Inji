@@ -209,9 +209,11 @@ class Model {
                         return $item->$colName ? 'Да' : 'Нет';
                     case 'method':
                         if (!empty($colInfo['colParams']['params'])) {
-                            $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
+                            $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']],
+                                array_merge($colInfo['colParams']['params'], ['item' => $item, 'colName' => $colName, 'manageHref' => $manageHref, 'colInfo' => $colInfo])
+                            );
                         } else {
-                            $values = \App::$cur->{$colInfo['colParams']['module']}->$colInfo['colParams']['method']();
+                            $values = \App::$cur->{$colInfo['colParams']['module']}->$colInfo['colParams']['method']($item, $colName, $manageHref, $colInfo);
                         }
                         $value = !empty($values[$item->$colName]) ? $values[$item->$colName] : 'Не задано';
                         break;
@@ -428,7 +430,7 @@ class Model {
                 if (isset($class::$cols[$colName]['logging']) && $class::$cols[$colName]['logging'] === false) {
                     continue;
                 }
-                if ($class::$cols[$colName]['logging'] !== 'noValue') {
+                if (!isset($class::$cols[$colName]['logging']) || $class::$cols[$colName]['logging'] !== 'noValue') {
                     $oldValueText = $oldValue;
                     if (isset($class::$cols[$colName]) && $class::$cols[$colName]['type'] === 'select') {
                         switch ($class::$cols[$colName]['source']) {
@@ -460,7 +462,7 @@ class Model {
                         }
                     }
                 }
-                if ($class::$cols[$colName]['logging'] !== 'noValue' && strlen($oldValueText) + strlen($newValueText) < 200) {
+                if ((!isset($class::$cols[$colName]['logging']) || $class::$cols[$colName]['logging'] !== 'noValue') && strlen($oldValueText) + strlen($newValueText) < 200) {
                     $changes_text[] = (!empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName) . ": \"{$oldValueText}\" => \"{$newValueText}\"";
                 } else {
                     $changes_text[] = !empty($class::$labels[$colName]) ? $class::$labels[$colName] : $colName;
