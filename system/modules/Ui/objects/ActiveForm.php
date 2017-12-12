@@ -248,7 +248,7 @@ class ActiveForm extends \Object {
         return true;
     }
 
-    public static function getOptionsList($inputParams, $params = [], $modelName = '', $aditionalInputNamePrefix = 'aditional', $options = []) {
+    public static function getOptionsList($inputParams, $params = [], $modelName = '', $aditionalInputNamePrefix = 'aditional', $options = [],$model=false) {
         $values = [];
         switch ($inputParams['source']) {
             case 'model':
@@ -259,9 +259,9 @@ class ActiveForm extends \Object {
                 break;
             case 'method':
                 if (!empty($inputParams['params'])) {
-                    $values = call_user_func_array([\App::$cur->$inputParams['module'], $inputParams['method']], $inputParams['params']);
+                    $values = call_user_func_array([\App::$cur->$inputParams['module'], $inputParams['method']], $inputParams['params']+[$model]);
                 } else {
-                    $values = \App::$cur->$inputParams['module']->$inputParams['method']();
+                    $values = \App::$cur->$inputParams['module']->$inputParams['method']($model);
                 }
                 break;
             case 'relation':

@@ -43,7 +43,7 @@ class ActiveFormController extends Controller {
         } catch (Exception $exc) {
             $result->success = false;
             $result->content = $exc->getMessage();
-            $result->send();
+            return $result->send();
         }
         $options = [
             'where' => [
@@ -71,7 +71,7 @@ class ActiveFormController extends Controller {
             $result->content = [];
             $result->send();
         }
-        $list = $activeForm->getOptionsList($inputs[$inputName], ['noEmptyValue' => true], $modelName, 'aditional', $options);
+        $list = $activeForm->getOptionsList($inputs[$inputName], ['noEmptyValue' => true], $modelName, 'aditional', $options,$model);
         $result->content = $list;
         $result->send();
     }
