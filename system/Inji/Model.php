@@ -210,10 +210,10 @@ class Model {
                     case 'method':
                         if (!empty($colInfo['colParams']['params'])) {
                             $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']],
-                                array_merge($colInfo['colParams']['params'], ['item' => $item, 'colName' => $colName, 'manageHref' => $manageHref, 'colInfo' => $colInfo])
+                                $colInfo['colParams']['params'] + [$item]
                             );
                         } else {
-                            $values = \App::$cur->{$colInfo['colParams']['module']}->$colInfo['colParams']['method']($item, $colName, $manageHref, $colInfo);
+                            $values = \App::$cur->{$colInfo['colParams']['module']}->$colInfo['colParams']['method']($item);
                         }
                         $value = !empty($values[$item->$colName]) ? $values[$item->$colName] : 'Не задано';
                         break;
