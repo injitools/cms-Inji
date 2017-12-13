@@ -23,6 +23,10 @@ class Warehouse extends \Model {
     public static $objectName = 'Склад';
     public static $labels = [
         'name' => 'Название',
+        'time' => 'Время работы',
+        'type' => 'Тип',
+        'addresses' => 'Адрес',
+        'contacts' => 'Контакты',
     ];
     public static $cols = [
         //Основные параметры
@@ -30,6 +34,7 @@ class Warehouse extends \Model {
         'type' => ['type' => 'text'],
         'addresses' => ['type' => 'textarea'],
         'contacts' => ['type' => 'textarea'],
+        'time' => ['type' => 'text'],
         //Системные
         'date_create' => ['type' => 'dateTime'],
     ];
@@ -47,7 +52,7 @@ class Warehouse extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name', 'type'],
+                ['name', 'time'],
                 ['addresses'],
                 ['contacts'],
             ]
