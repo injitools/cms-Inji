@@ -31,7 +31,7 @@ class Warehouse extends \Model {
     public static $cols = [
         //Основные параметры
         'name' => ['type' => 'text'],
-        'type' => ['type' => 'text'],
+        'type' => ['type' => 'select', 'source' => 'array', 'sourceArray' => ['sale' => 'Продажи', 'local' => 'Внутренний']],
         'addresses' => ['type' => 'textarea'],
         'contacts' => ['type' => 'textarea'],
         'time' => ['type' => 'text'],
@@ -52,7 +52,8 @@ class Warehouse extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name', 'time'],
+                ['name'],
+                ['type', 'time'],
                 ['addresses'],
                 ['contacts'],
             ]
