@@ -51,8 +51,8 @@ class User extends \Model {
         'date_create' => 'Дата регистрации',
     ];
     public static $cols = [
-        'login' => ['type' => 'text'],
-        'mail' => ['type' => 'email'],
+        'login' => ['type' => 'text', 'unique' => true],
+        'mail' => ['type' => 'email', 'unique' => true],
         'pass' => ['type' => 'password', 'logging' => 'noValue'],
         'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent'],
         'group_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'group'],

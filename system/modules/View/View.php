@@ -310,12 +310,11 @@ class View extends \Module {
             $hash = md5($hash);
             ?>
             <script>
-              var hash = '<?=$hash;?>';
-              var files = '<?=http_build_query(['files' => array_keys($urls)]);?>';
-              var timeHash = '<?=$timeMd5?>';
-              var id = '<?=$id;?>';
-
               setInterval(function () {
+                var hash = '<?=$hash;?>';
+                var files = '<?=http_build_query(['files' => array_keys($urls)]);?>';
+                var timeHash = '<?=$timeMd5?>';
+                var id = '<?=$id;?>';
                 // 1. Создаём новый объект XMLHttpRequest
                 var xhr = new XMLHttpRequest();
 
