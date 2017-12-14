@@ -1147,10 +1147,14 @@ class Model {
             }
             if (!empty($options['order'])) {
                 usort($items, function ($a, $b) use ($options) {
-                    if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && $options['order'][1] == 'asc') {
+                    if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'asc') {
                         return 1;
-                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && $options['order'][1] == 'asc') {
+                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} &&  strtolower($options['order'][1]) == 'asc') {
                         return -1;
+                    } elseif ($a->{$options['order'][0]} > $b->{$options['order'][0]} &&  strtolower($options['order'][1]) == 'desc') {
+                        return -1;
+                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} &&  strtolower($options['order'][1]) == 'desc') {
+                        return 1;
                     } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id > $b->id) {
                         return 1;
                     } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id < $b->id) {
