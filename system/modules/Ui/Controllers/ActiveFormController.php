@@ -47,7 +47,8 @@ class ActiveFormController extends Controller {
         }
         $options = [
             'where' => [
-            ]
+            ],
+            'limit' => 20
         ];
 
         $searchArr = [];
@@ -71,7 +72,7 @@ class ActiveFormController extends Controller {
             $result->content = [];
             $result->send();
         }
-        $list = $activeForm->getOptionsList($inputs[$inputName], ['noEmptyValue' => true], $modelName, 'aditional', $options,$model);
+        $list = $activeForm->getOptionsList($inputs[$inputName], ['noEmptyValue' => true], $modelName, 'aditional', $options, $model);
         $result->content = $list;
         $result->send();
     }

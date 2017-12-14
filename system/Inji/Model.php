@@ -527,6 +527,16 @@ class Model {
                         $relations[$rel]['model']::fixPrefix($relCol);
                         $rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol, 'left', ''];
                         break;
+                    case 'relModel':
+                        $relation = $relations[$rel];
+                        $fixedCol = $relation['model']::index();
+                        $relation['relModel']::fixPrefix($fixedCol);
+                        $joinName = $relations[$rel]['relModel'] . '_' . $rel;
+                        $rootModel::$relJoins[$joinName] = [$relation['relModel']::table(), $relation['relModel']::colPrefix() . static::index() . ' = ' . static::index(), 'INNER'];
+                        $joinName = $relations[$rel]['model'] . '_' . $rel;
+                        $rootModel::$relJoins[$joinName] = [$relation['model']::table(), $relation['relModel']::colPrefix() . $relation['model']::index() . ' = ' . $relation['model']::index(), 'INNER'];
+                        //$rootModel::$relJoins[$joinName] = [$relations[$rel]['model']::table(), static::index() . ' = ' . $relCol, 'left', ''];
+                        break;
                 }
                 $relations[$rel]['model']::fixPrefix($col, 'key', $rootModel);
             }
@@ -1149,11 +1159,11 @@ class Model {
                 usort($items, function ($a, $b) use ($options) {
                     if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'asc') {
                         return 1;
-                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} &&  strtolower($options['order'][1]) == 'asc') {
+                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'asc') {
                         return -1;
-                    } elseif ($a->{$options['order'][0]} > $b->{$options['order'][0]} &&  strtolower($options['order'][1]) == 'desc') {
+                    } elseif ($a->{$options['order'][0]} > $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'desc') {
                         return -1;
-                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} &&  strtolower($options['order'][1]) == 'desc') {
+                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'desc') {
                         return 1;
                     } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id > $b->id) {
                         return 1;

@@ -329,7 +329,6 @@ class View extends \Module {
                   // обработать ошибку
                   //alert(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
                 } else {
-                  console.log(xhr.responseText, xhr.responseText.length);
                   if (xhr.responseText.length > 0) {
                     var result = JSON.parse(xhr.responseText);
                     document.getElementById(id).href = result.path;
@@ -338,7 +337,6 @@ class View extends \Module {
                   // вывести результат
                   //alert(xhr.responseText); // responseText -- текст ответа.
                 }
-                console.log(hash, files, timeHash);
               }, 2000);
             </script>
             <?php

@@ -23,8 +23,13 @@ inji.Ecommerce = {
         }
       }, btn);
     };
-    this.calcSum = function () {
-      var form = $('.ecommerce .cart-order_page form');
+    this.calcSum = function (form) {
+      if (form === undefined) {
+        form = $('.ecommerce .cart-order_page form');
+      }
+      else {
+        form = $(form)
+      }
       var formData = new FormData(form[0]);
       $('.ecommerce .cart-order_page').prepend($('<div style = "position:absolute;width:' + $('.ecommerce .cart-order_page').width() + 'px;height:' + $('.ecommerce .cart-order_page').height() + 'px;background-color: rgba(255, 255, 255, 0.4);z-index:1000000"></div>'));
       inji.Server.request({
@@ -35,8 +40,8 @@ inji.Ecommerce = {
         processData: false,
         success: function (data) {
           $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
-          if($(data).find('.alert').length>0){
-            $.each($(data).find('.alert'),function () {
+          if ($(data).find('.alert').length > 0) {
+            $.each($(data).find('.alert'), function () {
               //$('.ecommerce .cart-order_page').prepend(this.outerHTML)
             })
           }
@@ -56,8 +61,8 @@ inji.Ecommerce = {
         processData: false,
         success: function (data) {
           $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
-          if($(data).find('.alert').length>0){
-            $.each($(data).find('.alert'),function () {
+          if ($(data).find('.alert').length > 0) {
+            $.each($(data).find('.alert'), function () {
               //$('.ecommerce .cart-order_page').prepend(this.outerHTML)
             })
           }
