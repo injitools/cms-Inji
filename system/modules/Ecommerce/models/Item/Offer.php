@@ -151,7 +151,14 @@ class Offer extends \Model {
 
     public function getPrice() {
         $curPrice = null;
-        foreach ($this->prices(['order' => ['type:weight', 'ASC']]) as $price) {
+        $where = [];
+        if (empty(\App::$cur->Ecommerce->config['show_zero_price'])) {
+            $where[] = ['price', 0, '>'];
+        }
+        if (!empty(\App::$cur->Ecommerce->config['available_price_types'])) {
+            $where[] = ['item_offer_price_type_id', \App::$cur->Ecommerce->config['available_price_types'], 'IN'];
+        }
+        foreach ($this->prices(['where' => $where, 'order' => ['type:weight', 'ASC']]) as $price) {
             if (
                 (!$curPrice && (!$price->type || !$price->type->roles)) ||
                 ($price->type->roles && !$curPrice && strpos($price->type->roles, "|" . \Users\User::$cur->role_id . "|") !== false)
