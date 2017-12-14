@@ -36,6 +36,9 @@ class Geography extends Module {
                 }
             }
         }
+        if (!empty($_COOKIE['curcity'])) {
+            $city = \Geography\City::get((int) $_COOKIE['curcity']);
+        }
         if (!$city) {
             $city = Geography\City::get(1, 'default');
         }
