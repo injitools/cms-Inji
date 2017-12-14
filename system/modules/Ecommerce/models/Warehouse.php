@@ -56,7 +56,7 @@ class Warehouse extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name', 'city'],
+                ['name', 'city_id'],
                 ['type', 'time'],
                 ['addresses'],
                 ['contacts'],
@@ -67,7 +67,7 @@ class Warehouse extends \Model {
     public static function relations() {
         return [
             'city' => [
-                'model' => 'Geography/City',
+                'model' => 'Geography\City',
                 'col' => 'city_id'
             ]
         ];
