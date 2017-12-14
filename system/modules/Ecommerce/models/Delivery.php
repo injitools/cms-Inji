@@ -51,6 +51,7 @@ class Delivery extends \Model {
         'weight' => ['type' => 'number'],
         'date_create' => ['type' => 'dateTime'],
         //Менеджеры
+        'citiesMgr' => ['type' => 'dataManager', 'relation' => 'cities'],
         'field' => ['type' => 'dataManager', 'relation' => 'fields'],
         'priceChanger' => ['type' => 'dataManager', 'relation' => 'prices']
     ];
@@ -80,7 +81,8 @@ class Delivery extends \Model {
                 'disabled',
                 'default',
                 'field',
-                'priceChanger'
+                'priceChanger',
+                'citiesMgr'
             ],
             'sortMode' => true
         ],
@@ -95,7 +97,8 @@ class Delivery extends \Model {
                 ['price_text'],
                 ['info'],
                 ['priceChanger'],
-                ['field']
+                ['field'],
+                ['citiesMgr']
             ]
         ]
     ];
@@ -114,6 +117,11 @@ class Delivery extends \Model {
                 'type' => 'relModel',
                 'model' => 'Ecommerce\Delivery\Field',
                 'relModel' => 'Ecommerce\Delivery\DeliveryFieldLink'
+            ],
+            'cities' => [
+                'type' => 'relModel',
+                'model' => 'Geography\City',
+                'relModel' => 'Ecommerce\Delivery\CityLink'
             ],
             'prices' => [
                 'type' => 'many',

@@ -16,6 +16,7 @@ namespace Ecommerce;
  * @property string $type
  * @property string $addresses
  * @property string $contacts
+ * @property int $city_id
  * @property string $date_create
  */
 class Warehouse extends \Model {
@@ -26,12 +27,14 @@ class Warehouse extends \Model {
         'time' => 'Время работы',
         'type' => 'Тип',
         'addresses' => 'Адрес',
+        'city_id' => 'Город',
         'contacts' => 'Контакты',
     ];
     public static $cols = [
         //Основные параметры
         'name' => ['type' => 'text'],
         'type' => ['type' => 'select', 'source' => 'array', 'sourceArray' => ['sale' => 'Продажи', 'local' => 'Внутренний']],
+        'city_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'city'],
         'addresses' => ['type' => 'textarea'],
         'contacts' => ['type' => 'textarea'],
         'time' => ['type' => 'text'],
@@ -43,6 +46,7 @@ class Warehouse extends \Model {
             'name' => 'Склады',
             'cols' => [
                 'name',
+                'city_id',
                 'type',
                 'addresses',
                 'contacts',
@@ -52,7 +56,7 @@ class Warehouse extends \Model {
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name'],
+                ['name', 'city'],
                 ['type', 'time'],
                 ['addresses'],
                 ['contacts'],

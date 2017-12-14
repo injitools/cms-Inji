@@ -6,6 +6,9 @@ return array(
         'cdekCities' => 'cdekCities',
         'cdekPVZ' => 'cdekPVZ',
     ],
+    'requires' => [
+        'Money', 'Geography'
+    ],
     'menu' => [
         'appAdmin' => [
             [

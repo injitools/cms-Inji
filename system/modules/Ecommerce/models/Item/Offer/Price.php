@@ -84,6 +84,18 @@ class Price extends \Model {
             ($this->type->roles && strpos($this->type->roles, "|" . $user->role_id . "|") !== false);
     }
 
+    public function name() {
+        $name = $this->offer->name();
+        if ($this->type) {
+            $name .= ' - ' . $this->type->name();
+        }
+        $name .= ': ' . $this->price;
+        if ($this->currency) {
+            $name .= '  ' . $this->currency->name();
+        }
+        return $name;
+    }
+
     public static function relations() {
         return [
             'offer' => [
