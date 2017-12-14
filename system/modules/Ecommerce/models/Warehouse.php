@@ -61,6 +61,16 @@ class Warehouse extends \Model {
                 ['addresses'],
                 ['contacts'],
             ]
-        ]];
+        ]
+    ];
+
+    public static function relations() {
+        return [
+            'city' => [
+                'model' => 'Geography/City',
+                'col' => 'city_id'
+            ]
+        ];
+    }
 
 }
