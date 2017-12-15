@@ -46,7 +46,9 @@ class Daemon extends Module {
                 }
                 $task = $this->unserialize(file_get_contents($taskFile));
                 unlink($taskFile);
-                $task();
+                if ($task) {
+                    $task();
+                }
             }
         }
     }
@@ -91,7 +93,11 @@ class Daemon extends Module {
     }
 
     function unserialize($item) {
-        return $this->serializer()->unserialize($item);
+        try {
+            return $this->serializer()->unserialize($item);
+        } catch (\SuperClosure\Exception\ClosureUnserializationException $e) {
+            return false;
+        }
     }
 
     function serialize($item) {
