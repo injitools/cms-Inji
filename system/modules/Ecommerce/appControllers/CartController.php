@@ -271,12 +271,21 @@ class CartController extends Controller {
             $result->content = 'Произошла непредвиденная ошибка при добавлении товара';
             $result->send();
         }
+
         $price = \Ecommerce\Item\Offer\Price::get((int) $_GET['itemOfferPriceId']);
         if (!$price) {
             $result->success = false;
             $result->content = 'Такой цены не найдено';
             $result->send();
         }
+
+        $offer = $price->offer;
+        if (!$offer) {
+            $result->success = false;
+            $result->content = 'Такого предложения не существует';
+            $result->send();
+        }
+
         $item = $price->offer->item;
 
         if (!$item) {
@@ -286,13 +295,19 @@ class CartController extends Controller {
         }
 
         $cart = $this->ecommerce->getCurCart();
-        if (!empty($this->ecommerce->config['cartAddToggle']) && isset($cart->cartItems(['key' => 'item_id'])[$item->id]) && $cart->cartItems(['key' => 'item_id'])[$item->id]->item_offer_price_id == $price->id) {
-            $cart->cartItems(['key' => 'item_id'])[$item->id]->delete();
+        /**
+         * @var \Ecommerce\Cart\Item[] $cartItems
+         */
+        $cartItems =[];
+        foreach ($cart->cartItems as $cartItem){
+            $cartItems[$cartItem->price->item_offer_id] = $cartItem;
+        }
+        if (!empty($this->ecommerce->config['cartAddToggle']) && isset($cartItems[$offer->id])) {
+            $cartItems[$offer->id]->delete();
             $cart = $this->ecommerce->getCurCart();
             $cart->date_last_activ = date('Y-m-d H:i:s');
-            $cart->calc();
             $item->sales--;
-            $item->save();
+            $cart->calc(true);
             $result->successMsg = '<a href="/ecommerce/view/' . $item->id . '">' . $item->name() . ($price->offer->name() && $price->offer->name() != $item->name() ? ' (' . $price->offer->name() . ')' : '') . '</a> удален <a href="/ecommerce/cart">из корзины покупок</a>!';
             $result->content = ['result' => 'toggleDelete'];
             return $result->send();
@@ -309,24 +324,23 @@ class CartController extends Controller {
             $result->content = 'На складе недостаточно товара! Доступно: ' . $price->offer->warehouseCount();
             $result->send();
         }
-        if (!$price->checkUserAccess()) {
-            $price = $price->offer->getPrice();
-        }
-        if (!isset($cart->cartItems(['key' => 'item_id'])[$item->id]) || $cart->cartItems(['key' => 'item_id'])[$item->id]->item_offer_price_id == $price->id) {
+        $price = $price->offer->getPrice($cart);
+        if (!isset($cartItems[$offer->id])) {
             $cart->addItem($price->id, $count);
             $result->content = ['result' => 'addNew'];
         } else {
-            $cart->cartItems(['key' => 'item_id'])[$item->id]->count += $count;
-            $cart->cartItems(['key' => 'item_id'])[$item->id]->save();
+            $cartItems[$offer->id]->count += $count;
+            $cartItems[$offer->id]->item_offer_price_id = $price->id;
+            $cartItems[$offer->id]->save();
             $result->content = ['result' => 'addCount'];
         }
         $cart->date_last_activ = date('Y-m-d H:i:s');
-        $cart->calc();
+        $cart->calc(true);
 
         $item->sales++;
         $item->save();
 
-        $result->successMsg = '<a href="/ecommerce/view/' . $item->id . '">' . $item->name() . ($price->offer->name() && $price->offer->name() != $item->name() ? ' (' . $price->offer->name() . ')' : '') . '</a> добавлен <a href="/ecommerce/cart">в корзину покупок</a>!';
+        $result->successMsg = '<a href="/ecommerce/view/' . $item->id . '">' . $price->name() . '</a> добавлен <a href="/ecommerce/cart">в корзину покупок</a>!';
         $result->send();
     }
 

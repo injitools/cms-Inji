@@ -36,6 +36,35 @@ class Ecommerce extends Module {
         }
     }
 
+    public function availablePricesTypes() {
+        $types = [];
+        $where = [];
+        if (!empty(\App::$cur->Ecommerce->config['available_price_types'])) {
+            foreach (\App::$cur->Ecommerce->config['available_price_types'] as $typeId) {
+                $types[$typeId] = $typeId;
+            }
+            $where[] = ['id', array_keys($types), 'IN'];
+        } else {
+            return true;
+        }
+
+        $dbTypes = \Ecommerce\Item\Offer\Price\Type::getList(['where' => $where, 'order' => ['weight', 'ASC']]);
+        foreach ($dbTypes as $type) {
+            if ($type->roles && strpos($type->roles, "|" . \Users\User::$cur->role_id . "|") === false) {
+                unset($types[$type->id]);
+            }
+        }
+
+        if (\Users\User::$cur->id) {
+            foreach (Ecommerce\Card\Item::getList(['where' => ['user_id', \Users\User::$cur->id]]) as $cardItem) {
+                foreach ($cardItem->card->prices as $priceType) {
+                    $types[$priceType->id] = $priceType->id;
+                }
+            }
+        }
+        return $types;
+    }
+
     public function getPayTypeHandlers($forSelect = false) {
         if (!$forSelect) {
             return $this->getSnippets('payTypeHandler');
@@ -240,9 +269,6 @@ class Ecommerce extends Module {
         $cart = false;
         if (!empty($_SESSION['cart']['cart_id'])) {
             $cart = Ecommerce\Cart::get((int) $_SESSION['cart']['cart_id']);
-            if ($cart->checkPrices()) {
-                $cart->save();
-            }
         }
         if (!$cart && $create) {
             $cart = new Ecommerce\Cart();

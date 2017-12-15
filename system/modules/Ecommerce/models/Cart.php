@@ -313,6 +313,26 @@ class Cart extends \Model {
         ],
     ];
 
+    /**
+     * @return true|array
+     */
+    public function availablePricesTypes() {
+        $types = \App::$cur->ecommerce->availablePricesTypes();
+        if ($types === true) {
+            return true;
+        }
+        foreach (Card::getList() as $card) {
+            foreach ($this->cartItems as $cartItem) {
+                if ($cartItem->item_offer_price_id == $card->item_offer_price_id) {
+                    foreach ($card->prices as $priceType) {
+                        $types[$priceType->id] = $priceType->id;
+                    }
+                }
+            }
+        }
+        return $types;
+    }
+
     public function buildOrderInfo() {
         $orderInfo = '<h3>Товары</h3>';
         $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5"><tr><th>Товар</th><th>Артикул</th><th>Кол-во</th><th>Цена</th><th>Сумма</th></tr>';
@@ -452,20 +472,6 @@ class Cart extends \Model {
         return new \Money\Sums($sums);
     }
 
-    public function checkPrices() {
-        $change = false;
-        foreach ($this->cartItems as $cartItem) {
-            if ($cartItem->price && !$cartItem->price->checkUserAccess()) {
-                $newPrice = $cartItem->price->offer->getPrice();
-                $cartItem->item_offer_price_id = $newPrice->id;
-                $cartItem->save();
-                $cartItem->loadRelation('price');
-                $change = true;
-            }
-        }
-        return $change;
-    }
-
     public function addItem($offer_price_id, $count = 1, $final_price = 0) {
         $price = Item\Offer\Price::get((int) $offer_price_id);
 
@@ -484,6 +490,45 @@ class Cart extends \Model {
         $cartItem->item_offer_price_id = $price->id;
         $cartItem->final_price = $final_price ? $final_price : $price->price;
         $cartItem->save();
+        $card = Card::get($price->item_offer_id, 'item_offer_id');
+        if ($card && $card->prices) {
+            $this->loadRelation('cartItems');
+            foreach ($this->cartItems as $cartItem) {
+                $price = $cartItem->price->offer->getPrice($this);
+                $cartItem->item_offer_price_id = $price->id;
+                $cartItem->final_price = $price->price;
+                $cartItem->save();
+            }
+            $this->loadRelation('cartItems');
+        }
+        return true;
+    }
+
+    public function removeItem($offer_price_id, $count = 1, $final_price = 0) {
+        $price = Item\Offer\Price::get((int) $offer_price_id);
+
+        if (!$price) {
+            return false;
+        }
+
+        if ($count <= 0) {
+            $count = 1;
+        }
+
+        $cartItem = new Cart\Item();
+        $cartItem->cart_id = $this->id;
+        $cartItem->item_id = $price->offer->item->id;
+        $cartItem->count = $count;
+        $cartItem->item_offer_price_id = $price->id;
+        $cartItem->final_price = $final_price ? $final_price : $price->price;
+        $cartItem->save();
+        $card = Card::get($price->item_offer_id, 'item_offer_id');
+        if ($card && $card->prices) {
+            foreach ($this->cartItems as $cartItem) {
+                $cartItem->item_offer_price_id = $cartItem->price->offer->getPrice($this);
+                $cartItem->save();
+            }
+        }
         return true;
     }
 

@@ -18,18 +18,20 @@ class Card extends \Model {
         //Основные параметры
         'name' => ['type' => 'text'],
         'price' => ['type' => 'text'],
-        'item_offer_price_id' => ['type' => 'number'],
+        'item_offer_id' => ['type' => 'number'],
         'image_file_id' => ['type' => 'image'],
         //Системные параметры
         'date_create' => ['type' => 'dateTime'],
         //Менеджеры
         'level' => ['type' => 'dataManager', 'relation' => 'levels'],
+        'pricesMgr' => ['type' => 'dataManager', 'relation' => 'prices'],
     ];
     public static $labels = [
         'name' => 'Название',
         'price' => 'Стоимость',
         'level' => 'Уровни',
         'image_file_id' => 'Изображение',
+        'prices' => 'Типы цен',
     ];
     public static $dataManagers = [
         'manager' => [
@@ -37,7 +39,8 @@ class Card extends \Model {
             'cols' => [
                 'name',
                 'price',
-                'level'
+                'level',
+                'pricesMgr',
             ],
         ],
     ];
@@ -47,18 +50,19 @@ class Card extends \Model {
                 'cardSearch' => [
                     'type' => 'search',
                     'source' => 'relation',
-                    'relation' => 'price',
-                    'label' => 'Карта',
+                    'relation' => 'offer',
+                    'label' => 'Товарное предложение карты в магазине',
                     'cols' => [
-                        'offer:item:search_index'
+                        'item:search_index'
                     ],
-                    'col' => 'item_offer_price_id',
+                    'col' => 'item_offer_id',
                 ],
             ],
             'map' => [
                 ['name', 'price'],
-                ['cardSearch','image_file_id'],
+                ['cardSearch', 'image_file_id'],
                 ['level'],
+                ['pricesMgr'],
             ]
         ]];
 
@@ -69,13 +73,18 @@ class Card extends \Model {
                 'model' => 'Ecommerce\Card\Level',
                 'col' => 'card_id'
             ],
+            'prices' => [
+                'type' => 'relModel',
+                'model' => 'Ecommerce\Item\Offer\Price\Type',
+                'relModel' => 'Ecommerce\Card\PriceTypeLink'
+            ],
             'image' => [
                 'model' => 'Files\File',
                 'col' => 'image_file_id'
             ],
-            'price' => [
-                'model' => 'Ecommerce\Item\Offer\Price',
-                'col' => 'item_offer_price_id'
+            'offer' => [
+                'model' => 'Ecommerce\Item\Offer',
+                'col' => 'item_offer_id'
             ]
         ];
     }

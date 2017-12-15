@@ -48,26 +48,9 @@ inji.Ecommerce = {
         }
       });
     };
-    this.delItem = function (cart_item_id) {
-      var form = $('.ecommerce .cart-order_page form');
+    this.delItem = function (cart_item_id, form) {
       $('.cart_item_id' + cart_item_id).remove();
-      var formData = new FormData(form[0]);
-      $('.ecommerce .cart-order_page').prepend($('<div style = "position:absolute;width:' + $('.ecommerce .cart-order_page').width() + 'px;height:' + $('.ecommerce .cart-order_page').height() + 'px;background-color: rgba(255, 255, 255, 0.4);z-index:1000000"></div>'));
-      inji.Server.request({
-        url: form.attr('action'),
-        type: 'POST',
-        data: formData,
-        dataType: 'html',
-        processData: false,
-        success: function (data) {
-          $('.ecommerce .cart-order_page').html($(data).find('.ecommerce .cart-order_page').html());
-          if ($(data).find('.alert').length > 0) {
-            $.each($(data).find('.alert'), function () {
-              //$('.ecommerce .cart-order_page').prepend(this.outerHTML)
-            })
-          }
-        }
-      });
+      this.calcSum(form);
     };
     this.delItemWidget = function (cart_item_id, callback) {
       inji.Server.request({

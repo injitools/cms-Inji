@@ -72,18 +72,6 @@ class Price extends \Model {
         ]
     ];
 
-    /**
-     * @param bool|\Users\User $user
-     * @return bool
-     */
-    public function checkUserAccess($user = false) {
-        if (!$user) {
-            $user = User::$cur;
-        }
-        return (!$this->type->roles) ||
-            ($this->type->roles && strpos($this->type->roles, "|" . $user->role_id . "|") !== false);
-    }
-
     public function name() {
         $name = $this->offer->name();
         if ($this->type) {

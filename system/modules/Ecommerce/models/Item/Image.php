@@ -10,7 +10,14 @@
  */
 
 namespace Ecommerce\Item;
-
+/**
+ * @property int $id
+ * @property int $file_id
+ * @property int $item_id
+ * @property string $name
+ * @property string $description
+ * @property string $date_create
+ */
 class Image extends \Model {
 
     public static $objectName = 'Фото товара';

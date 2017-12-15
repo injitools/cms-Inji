@@ -10,6 +10,7 @@
  */
 
 namespace Ecommerce\Item;
+
 /**
  * Class Offer
  *
@@ -149,24 +150,29 @@ class Offer extends \Model {
         return (float) $warehouse['sum'] - (float) $blocked['sum'];
     }
 
-    public function getPrice() {
-        $curPrice = null;
+    /**
+     * @param bool|\Ecommerce\Cart $cart
+     * @return Offer\Price|null
+     */
+    public function getPrice($cart = false) {
         $where = [];
         if (empty(\App::$cur->Ecommerce->config['show_zero_price'])) {
             $where[] = ['price', 0, '>'];
         }
-        if (!empty(\App::$cur->Ecommerce->config['available_price_types'])) {
-            $where[] = ['item_offer_price_type_id', \App::$cur->Ecommerce->config['available_price_types'], 'IN'];
+        if ($cart) {
+            $types = $cart->availablePricesTypes();
+        } else {
+            $types = \App::$primary->Ecommerce->availablePricesTypes();
         }
-        foreach ($this->prices(['where' => $where, 'order' => ['type:weight', 'ASC']]) as $price) {
-            if (
-                (!$curPrice && (!$price->type || !$price->type->roles)) ||
-                ($price->type->roles && !$curPrice && strpos($price->type->roles, "|" . \Users\User::$cur->role_id . "|") !== false)
-            ) {
-                $curPrice = $price;
-            }
+        if ($types !== true) {
+            $where[] = ['item_offer_price_type_id', array_values($types), 'IN'];
         }
-        return $curPrice;
+
+        $prices = $this->prices(['where' => $where, 'order' => ['type:weight', 'ASC'], 'limit' => 1, 'key' => false]);
+        if ($prices) {
+            return $prices[0];
+        }
+        return null;
     }
 
     public function beforeDelete() {

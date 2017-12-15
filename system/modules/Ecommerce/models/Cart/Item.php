@@ -88,6 +88,16 @@ class Item extends \Model {
         $event->save();
         \Ecommerce\Warehouse\Block::deleteList([['cart_id', $this->cart->id], ['item_offer_id', $this->price->item_offer_id]]);
         $this->cart->checkStage();
+        $card = \Ecommerce\Card::get($this->price->item_offer_id, 'item_offer_id');
+        if ($card && $card->prices) {
+            foreach ($this->cart->cartItems as $cartItem) {
+                $price = $cartItem->price->offer->getPrice($this->cart);
+                $cartItem->item_offer_price_id = $price->id;
+                $cartItem->final_price = $price->price;
+                $cartItem->save();
+            }
+            $this->cart->loadRelation('cartItems');
+        }
     }
 
     public function discount() {

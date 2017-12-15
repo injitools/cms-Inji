@@ -365,13 +365,15 @@ class Item extends \Model {
     }
 
     /**
+     * @param int $offerId
+     * @param bool|\Ecommerce\Cart $cart
      * @return bool|Item\Offer\Price|null
      */
-    public function getPrice($offerId = 0) {
+    public function getPrice($offerId = 0, $cart = false) {
         if ($offerId) {
-            return $this->offers ? $this->offers[$offerId]->getPrice() : false;
+            return $this->offers ? $this->offers[$offerId]->getPrice($cart) : false;
         }
-        return $this->offers(['key' => false]) ? $this->offers(['key' => false])[0]->getPrice() : false;
+        return $this->offers(['key' => false]) ? $this->offers(['key' => false])[0]->getPrice($cart) : false;
     }
 
     public function name() {
