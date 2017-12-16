@@ -19,7 +19,6 @@ class Session extends \Model {
         'ip' => ['type' => 'text'],
         'agent' => ['type' => 'text'],
         'user_id' => ['type' => 'select', 'source' => 'realtion', 'relation' => 'user'],
-        'date_create' => ['type' => 'dateTime']
     ];
 
     public static function relations() {

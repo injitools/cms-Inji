@@ -17,7 +17,6 @@ class Passre extends \Model {
         'hash' => ['type' => 'textarea'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'status' => ['type' => 'number'],
-        'date_create' => ['type' => 'dateTime']
     ];
 
     public static function relations() {
