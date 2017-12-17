@@ -26,7 +26,7 @@ class Daemon extends Module {
     function start($retry = false) {
         $workDir = $this->workDir();
         $lock = fopen($workDir . '/daemon.lock', 'w+');
-        ignore_user_abort(true);
+
         if (flock($lock, LOCK_EX | LOCK_NB)) {
             set_time_limit(0);
             while (true) {
@@ -46,7 +46,6 @@ class Daemon extends Module {
                 $task = $this->unserialize(file_get_contents($taskFile));
                 unlink($taskFile);
                 if ($task) {
-                    var_dump(1);
                     $task();
                 }
             }

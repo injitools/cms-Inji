@@ -2,6 +2,7 @@
 
 class DaemonController extends Controller {
     function startAction() {
+        ignore_user_abort(true);
         $this->module->start(true);
     }
 
