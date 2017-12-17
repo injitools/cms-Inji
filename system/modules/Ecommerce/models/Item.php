@@ -273,6 +273,9 @@ class Item extends \Model {
         $itemId = $this->id;
         \App::$primary->daemon->task(function () use ($itemId) {
             $item = \Ecommerce\Item::get($itemId);
+            if (!$item) {
+                return;
+            }
             $item->search_index = $item->name . ' ';
             if ($item->category) {
                 $item->search_index .= $item->category->name . ' ';

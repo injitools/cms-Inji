@@ -23,10 +23,15 @@ namespace Ecommerce\Item;
  *
  * @property-read \Ecommerce\Item\Offer\Warehouse[] $warehouses
  * @property-read \Ecommerce\Item\Offer\Price[] $prices
- * @method \Ecommerce\Item\Offer\Price[] prices($options)
  * @property-read \Ecommerce\Item\Offer\Bonus[] $bonuses
  * @property-read \Ecommerce\Item\Offer\Param[] $options
  * @property-read \Ecommerce\Item $item
+ *
+ * @method \Ecommerce\Item\Offer\Warehouse[] warehouses($options)
+ * @method \Ecommerce\Item\Offer\Price[] prices($options)
+ * @method \Ecommerce\Item\Offer\Bonus[] bonuses($options)
+ * @method \Ecommerce\Item\Offer\Param[] options($options)
+ * @method \Ecommerce\Item item($options)
  */
 class Offer extends \Model {
 
