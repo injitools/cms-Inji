@@ -4,7 +4,7 @@ class Daemon extends Module {
     private $tasksDirResource;
     private $serializer;
     private $workDir;
-    public $needCheck = false;
+    public $checked = false;
 
     function check() {
         $workDir = $this->workDir();
@@ -15,7 +15,6 @@ class Daemon extends Module {
             $fp = fsockopen($_SERVER['SERVER_NAME'],
                 80,
                 $errno, $errstr, 30);
-
             $out = "GET /daemon/start HTTP/1.1\r\n";
             $out .= "Host: " . $_SERVER['SERVER_NAME'] . "\r\n";
             $out .= "Connection: Close\r\n\r\n";
@@ -24,11 +23,11 @@ class Daemon extends Module {
         }
     }
 
-    function start() {
+    function start($retry = false) {
         $workDir = $this->workDir();
         $lock = fopen($workDir . '/daemon.lock', 'w+');
+        ignore_user_abort(true);
         if (flock($lock, LOCK_EX | LOCK_NB)) {
-            ignore_user_abort(true);
             set_time_limit(0);
             while (true) {
                 $taskFile = $this->getNextTask();
@@ -47,8 +46,14 @@ class Daemon extends Module {
                 $task = $this->unserialize(file_get_contents($taskFile));
                 unlink($taskFile);
                 if ($task) {
+                    var_dump(1);
                     $task();
                 }
+            }
+        } else {
+            if ($retry) {
+                sleep(1);
+                $this->start(false);
             }
         }
     }
@@ -78,7 +83,10 @@ class Daemon extends Module {
         $keyLog3 = \App::$cur->log->start('put task to file');
         file_put_contents($taskFile, $serialize);
         \App::$cur->log->end($keyLog3);
-        $this->needCheck = true;
+        if (!$this->checked) {
+            $this->checked = true;
+            $this->check();
+        }
         \App::$cur->log->end($keyLog);
         return $taskFile;
     }
@@ -110,12 +118,6 @@ class Daemon extends Module {
         }
         \ComposerCmd::requirePackage('jeremeamia/superclosure');
         return $this->serializer = new \SuperClosure\Serializer(new SuperClosure\Analyzer\TokenAnalyzer());
-    }
-
-    function __destruct() {
-        if ($this->needCheck) {
-            $this->check();
-        }
     }
 
 }

@@ -2,7 +2,7 @@
 
 class DaemonController extends Controller {
     function startAction() {
-        $this->module->start();
+        $this->module->start(true);
     }
 
     function checkAction() {
