@@ -12,21 +12,35 @@ class Daemon extends Module {
         if (flock($lock, LOCK_EX | LOCK_NB)) {
             flock($lock, LOCK_UN);
             fclose($lock);
-            $fp = fsockopen($_SERVER['SERVER_NAME'],
-                80,
-                $errno, $errstr, 30);
-            $out = "GET /daemon/start HTTP/1.1\r\n";
-            $out .= "Host: " . $_SERVER['SERVER_NAME'] . "\r\n";
-            $out .= "Connection: Close\r\n\r\n";
-            fwrite($fp, $out);
-            fclose($fp);
+            if (function_exists('pcntl_fork') && $pid = pcntl_fork() !== -1) {
+                if ($pid) {
+                    return $pid;
+                } else {
+                    $this->start(true);
+                }
+            } elseif (function_exists('curl_init')) {
+                $ch = curl_init('http://' . $_SERVER['SERVER_NAME'] . '/daemon/start');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 1);
+                curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+                $content = curl_exec($ch);
+                curl_close($ch);
+            } else {
+                $fp = fsockopen($_SERVER['SERVER_NAME'],
+                    80,
+                    $errno, $errstr, 30);
+                $out = "GET /daemon/start HTTP/1.1\r\n";
+                $out .= "Host: " . $_SERVER['SERVER_NAME'] . "\r\n";
+                $out .= "Connection: Close\r\n\r\n";
+                fwrite($fp, $out);
+                fclose($fp);
+            }
         }
     }
 
     function start($retry = false) {
         $workDir = $this->workDir();
         $lock = fopen($workDir . '/daemon.lock', 'w+');
-
         if (flock($lock, LOCK_EX | LOCK_NB)) {
             set_time_limit(0);
             while (true) {
