@@ -21,7 +21,7 @@ class Daemon extends Module {
             } elseif (function_exists('curl_init')) {
                 $ch = curl_init('http://' . $_SERVER['SERVER_NAME'] . '/daemon/start');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 1);
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100);
                 curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
                 $content = curl_exec($ch);
                 curl_close($ch);
@@ -46,7 +46,7 @@ class Daemon extends Module {
             while (true) {
                 $taskFile = $this->getNextTask();
                 if (!$taskFile) {
-                    for ($i = 0; $i < 60; $i++) {
+                    for ($i = 0; $i < 358; $i++) {
                         sleep(1);
                         $taskFile = $this->getNextTask();
                         if ($taskFile) {
