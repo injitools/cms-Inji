@@ -43,6 +43,7 @@ class Daemon extends Module {
         $lock = fopen($workDir . '/daemon.lock', 'w+');
         if (flock($lock, LOCK_EX | LOCK_NB)) {
             set_time_limit(0);
+            ini_set('memory_limit', '-1');
             while (true) {
                 $taskFile = $this->getNextTask();
                 if (!$taskFile) {
