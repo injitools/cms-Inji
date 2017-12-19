@@ -18,14 +18,7 @@ class Daemon extends Module {
                 } else {
                     $this->start(true);
                 }
-            } elseif (function_exists('curl_init')) {
-                $ch = curl_init('http://' . $_SERVER['SERVER_NAME'] . '/daemon/start');
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100);
-                curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
-                $content = curl_exec($ch);
-                curl_close($ch);
-            } else {
+            } elseif (function_exists('fsockopen')) {
                 $fp = fsockopen($_SERVER['SERVER_NAME'],
                     80,
                     $errno, $errstr, 30);
@@ -34,6 +27,13 @@ class Daemon extends Module {
                 $out .= "Connection: Close\r\n\r\n";
                 fwrite($fp, $out);
                 fclose($fp);
+            } elseif (function_exists('curl_init')) {
+                $ch = curl_init('http://' . $_SERVER['SERVER_NAME'] . '/daemon/start');
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100);
+                curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+                $content = curl_exec($ch);
+                curl_close($ch);
             }
         }
     }

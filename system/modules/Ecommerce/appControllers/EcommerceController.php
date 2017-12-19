@@ -310,6 +310,9 @@ class ecommerceController extends Controller {
         if (!$item) {
             Tools::redirect('/ecommerce/', 'Такой товар не найден');
         }
+        if(!$item->isVisible()){
+            Tools::redirect('/ecommerce/', 'Этот товар сейчас недоступен');
+        }
         $active = $item->category_id;
         $catalog = $item->category;
         $bread = [];

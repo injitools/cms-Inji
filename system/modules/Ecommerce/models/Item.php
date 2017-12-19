@@ -82,6 +82,7 @@ class Item extends \Model {
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'weight' => ['type' => 'number'],
         'sales' => ['type' => 'number', 'logging' => false],
+        'visible' => ['type' => 'number', 'logging' => false],
         'imported' => ['type' => 'text'],
         'tree_path' => ['type' => 'text'],
         'search_index' => ['type' => 'text', 'logging' => false],
@@ -168,7 +169,7 @@ class Item extends \Model {
                 'date_create' => 'desc'
             ],
             'filters' => [
-                'name', 'best', 'deleted', 'date_create'
+                'id', 'name', 'best', 'deleted', 'date_create'
             ],
             'sortMode' => true
         ]
@@ -269,8 +270,78 @@ class Item extends \Model {
         ];
     }
 
+    public function isVisible() {
+        if ($this->deleted) {
+            return false;
+        }
+        if (empty(\App::$cur->Ecommerce->config['view_empty_image']) && !$this->image_file_id) {
+            return false;
+        }
+        if (empty(\App::$cur->Ecommerce->config['view_empty_warehouse'])) {
+            $warehouseIds = \Ecommerce\OptionsParser::getWarehouses();
+            $selectOptions = ['where' => [['item_offer_item_id', $this->id]]];
+            $selectOptions['where'][] = [
+                '(
+          (SELECT COALESCE(sum(`' . Item\Offer\Warehouse::colPrefix() . 'count`),0) 
+            FROM ' . \App::$cur->db->table_prefix . Item\Offer\Warehouse::table() . ' iciw 
+            WHERE iciw.' . Item\Offer\Warehouse::colPrefix() . Item\Offer::index() . ' = ' . Item\Offer::index() . '
+                ' . ($warehouseIds ? ' AND iciw.' . Item\Offer\Warehouse::colPrefix() . Warehouse::index() . ' IN(' . implode(',', $warehouseIds) . ')' : '') . '
+            )
+          -
+          (SELECT COALESCE(sum(' . Warehouse\Block::colPrefix() . 'count) ,0)
+            FROM ' . \App::$cur->db->table_prefix . Warehouse\Block::table() . ' iewb
+            inner JOIN ' . \App::$cur->db->table_prefix . Cart::table() . ' icc ON icc.' . Cart::index() . ' = iewb.' . Warehouse\Block::colPrefix() . Cart::index() . ' AND (
+                (`' . Cart::colPrefix() . 'warehouse_block` = 1 and `' . Cart::colPrefix() . 'cart_status_id` in(2,3,6)) ||
+                (`' . Cart::colPrefix() . Cart\Status::index() . '` in(0,1) and `' . Cart::colPrefix() . 'date_last_activ` >=subdate(now(),INTERVAL 30 MINUTE))
+            )
+            WHERE iewb.' . Warehouse\Block::colPrefix() . Item\Offer::index() . ' = ' . Item\Offer::index() . ')
+          )',
+                0,
+                '>'
+            ];
+            if (!Item\Offer::getList($selectOptions)) {
+                return false;
+            }
+        }
+        $isset = empty(\App::$cur->Ecommerce->config['available_price_types']);
+        $nozero = !empty(\App::$cur->Ecommerce->config['show_without_price']);
+        if (!$isset || !$nozero) {
+            $this->loadRelation('offers');
+            foreach ($this->offers as $offer) {
+                foreach ($offer->prices as $price) {
+                    if (in_array($price->item_offer_price_type_id, \App::$cur->Ecommerce->config['available_price_types'])) {
+                        $isset = true;
+                    }
+                    if ($price->price > 0) {
+                        $nozero = true;
+                    }
+                    if ($isset && $nozero) {
+                        break 2;
+                    }
+                }
+            }
+            if (!$isset || !$nozero) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function beforeSave() {
+        $this->visible = $this->isVisible();
+    }
+
     public function afterSave() {
         $itemId = $this->id;
+        if ($this->category_id && isset($this->_changedParams['item_visible'])) {
+            $categoryId = $this->category_id;
+            \App::$primary->daemon->task(function () use ($categoryId) {
+                $category = \Ecommerce\Category::get($categoryId);
+                if ($category) {
+                    $category->calcItemsCount();
+                }
+            });
+        }
         \App::$primary->daemon->task(function () use ($itemId) {
             $item = \Ecommerce\Item::get($itemId);
             if (!$item) {
@@ -280,29 +351,26 @@ class Item extends \Model {
             if ($item->category) {
                 $item->search_index .= $item->category->name . ' ';
             }
-
-            if ($item->options) {
-                $category = $item->category;
-                if ($category) {
-                    $categoryOptions = $category->options(['key' => 'item_option_id']);
-                } else {
-                    $categoryOptions = [];
+            $category = $item->category;
+            if ($category) {
+                $categoryOptions = $category->options(['key' => 'item_option_id']);
+            } else {
+                $categoryOptions = [];
+            }
+            foreach ($item->options as $option) {
+                if ($option->item_option_searchable && $option->value) {
+                    if ($option->item_option_type != 'select') {
+                        $item->search_index .= $option->value . ' ';
+                    } elseif (!empty($option->option->items[$option->value])) {
+                        $item->search_index .= $option->option->items(['where' => ['id', $option->value]])[$option->value]->value . ' ';
+                    }
                 }
-                foreach ($item->options as $option) {
-                    if ($option->item_option_searchable && $option->value) {
-                        if ($option->item_option_type != 'select') {
-                            $item->search_index .= $option->value . ' ';
-                        } elseif (!empty($option->option->items[$option->value])) {
-                            $option->option->items(['where' => ['id', $option->value]])[$option->value]->value . ' ';
-                        }
-                    }
-                    if ($option->item_option_view && !isset($categoryOptions[$option->item_option_id])) {
-                        $item->category->addRelation('options', $option->item_option_id);
-                        $categoryOptions = $item->category->options(['key' => 'item_option_id']);
-                    } elseif (!$option->item_option_view && isset($categoryOptions[$option->item_option_id])) {
-                        $categoryOptions[$option->item_option_id]->delete();
-                        unset($categoryOptions[$option->item_option_id]);
-                    }
+                if ($option->item_option_view && !isset($categoryOptions[$option->item_option_id])) {
+                    $item->category->addRelation('options', $option->item_option_id);
+                    $categoryOptions = $item->category->options(['key' => 'item_option_id']);
+                } elseif (!$option->item_option_view && isset($categoryOptions[$option->item_option_id])) {
+                    $categoryOptions[$option->item_option_id]->delete();
+                    unset($categoryOptions[$option->item_option_id]);
                 }
             }
             if ($item->offers) {
@@ -313,7 +381,7 @@ class Item extends \Model {
                                 if ($option->item_offer_option_type != 'select') {
                                     $item->search_index .= $option->value . ' ';
                                 } elseif (!empty($option->option->items[$option->value])) {
-                                    $option->option->items[$option->value]->value . ' ';
+                                    $item->search_index .= $option->option->items[$option->value]->value . ' ';
                                 }
                             }
                         }
@@ -386,7 +454,7 @@ class Item extends \Model {
                 return $param->value;
             }
         }
-        return $this->name;
+        return $this->title ? $this->title : $this->name;
     }
 
     public function afterDelete() {

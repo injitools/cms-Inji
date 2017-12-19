@@ -28,6 +28,13 @@ class Category extends \Model {
         ]
     ];
 
+    public function afterSave() {
+        $this->catalog->calcItemsCount();
+    }
+    public function afterDelete() {
+        $this->catalog->calcItemsCount();
+    }
+
     static function relations() {
         return [
             'catalog' => [

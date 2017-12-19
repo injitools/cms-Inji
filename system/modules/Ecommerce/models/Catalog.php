@@ -16,6 +16,7 @@ namespace Ecommerce;
  * @property int $weight
  * @property int $parent_id
  * @property int $icon_file_id
+ * @property int $items_count
  * @property \Ecommerce\Catalog $parent
  * @property \Ecommerce\Catalog[] $childs
  * @property \Ecommerce\Catalog\Category[] $categories
@@ -27,6 +28,7 @@ class Catalog extends \Model {
         'weight' => ['type' => 'number'],
         'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent', 'extraValues' => ['0' => 'Нет родителя']],
         'icon_file_id' => ['type' => 'image'],
+        'items_count' => ['type' => 'number'],
         'childsMgr' => ['type' => 'dataManager', 'relation' => 'childs'],
         'categoriesMgr' => ['type' => 'dataManager', 'relation' => 'categories'],
     ];
@@ -55,6 +57,20 @@ class Catalog extends \Model {
             ]
         ]
     ];
+
+    public function calcItemsCount($save = true) {
+        $count = 0;
+        foreach ($this->categories as $category) {
+            $count += $category->category->items_count;
+        }
+        $this->items_count = $count;
+        if ($save) {
+            $this->save();
+            if ($this->parent) {
+                $this->parent->calcItemsCount();
+            }
+        }
+    }
 
     static function relations() {
         return [

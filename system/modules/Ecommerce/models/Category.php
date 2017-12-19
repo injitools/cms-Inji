@@ -26,6 +26,7 @@ namespace Ecommerce;
  * @property bool $imported
  * @property int $weight
  * @property int $user_id
+ * @property int $items_count
  * @property string $tree_path
  * @property string $date_create
  *
@@ -57,6 +58,7 @@ class Category extends \Model {
         'views' => ['type' => 'number', 'logging' => false],
         'imported' => ['type' => 'bool'],
         'weight' => ['type' => 'number'],
+        'items_count' => ['type' => 'number'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'tree_path' => ['type' => 'text'],
         'date_create' => ['type' => 'dateTime'],
@@ -194,5 +196,20 @@ class Category extends \Model {
         } else {
             return (!empty(\App::$cur->ecommerce->config['defaultCategoryView']) ? \App::$cur->ecommerce->config['defaultCategoryView'] : 'itemList');
         }
+    }
+
+    public function calcItemsCount($save = true) {
+        $count = \App::$cur->Ecommerce->getItemsCount(['parent' => $this->id]);
+        $this->items_count = $count;
+        if ($save) {
+            $this->save();
+            if ($this->parent) {
+                $this->parent->calcItemsCount();
+            }
+            foreach (\Ecommerce\Catalog::getList(['categories:category_id', $this->id]) as $category) {
+                $category->calcItemsCount();
+            }
+        }
+        return $count;
     }
 }

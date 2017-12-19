@@ -1582,7 +1582,12 @@ class Model {
         if (empty($values) && empty($options['empty'])) {
             return false;
         }
-
+        if (static::$categoryModel) {
+            $this->changeItemTree();
+        }
+        if (static::$treeCategory) {
+            $this->changeCategoryTree();
+        }
         if ($this->pk()) {
             $new = false;
             if ($this->get($this->_params[$this->index()])) {
@@ -1597,6 +1602,7 @@ class Model {
         }
         $this->logChanges($new);
         App::$cur->db->where($this->index(), $this->_params[$this->index()]);
+
         try {
             $result = App::$cur->db->select($this->table());
         } catch (PDOException $exc) {
@@ -1608,18 +1614,6 @@ class Model {
         $this->_params = $result->fetch();
         if ($new) {
             Inji::$inst->event('modelCreatedItem-' . get_called_class(), $this);
-        }
-        if ($class::$categoryModel || $class::$treeCategory) {
-            $id = $this->pk();
-            \App::$primary->daemon->task(function () use ($class, $id) {
-                $item = $class::get($id);
-                if ($item && $class::$categoryModel) {
-                    $item->changeItemTree();
-                }
-                if ($item && $class::$treeCategory) {
-                    $item->changeCategoryTree();
-                }
-            });
         }
         $this->afterSave();
         return $this->pk();
