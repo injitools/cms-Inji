@@ -220,7 +220,7 @@ class EcommerceController extends adminController {
                 unset($item);
             }
             echo 'Происходит процесс индексации: проиндексировано ' . $i * $count;
-            Tools::redirect('/admin/ecommerce/reSearchIndex/' . $i);
+            echo '<script>setTimeout(function(){window.location="/admin/ecommerce/reSearchIndex/'.$i.'"},1000)</script>';
         }
     }
 
