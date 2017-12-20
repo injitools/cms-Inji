@@ -198,16 +198,16 @@ class Category extends \Model {
         }
     }
 
-    public function calcItemsCount($save = true) {
+    public function calcItemsCount($save = true, $parent = true) {
         $count = \App::$cur->Ecommerce->getItemsCount(['parent' => $this->id]);
         $this->items_count = $count;
         if ($save) {
             $this->save();
-            if ($this->parent) {
+            if ($parent && $this->parent) {
                 $this->parent->calcItemsCount();
             }
-            foreach (\Ecommerce\Catalog::getList(['categories:category_id', $this->id]) as $category) {
-                $category->calcItemsCount();
+            foreach (\Ecommerce\Catalog::getList(['where' => ['categories:category_id', $this->id]]) as $category) {
+                $category->calcItemsCount($save);
             }
         }
         return $count;

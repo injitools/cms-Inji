@@ -26,6 +26,7 @@
         ?>
         <h3>Обслужвание</h3>
         <a href="/admin/ecommerce/reSearchIndex" class="btn btn-primary">Обновить поисковые индексы</a>
+        <a href="/admin/ecommerce/reCalcCategories" class="btn btn-primary">Обновить счетчики товаров в категориях</a>
         <h3>Уведомления в браузере</h3>
         <a id="push-notifications-button" href="#" class="btn btn-primary">Получать уведомления</a>
         <script>

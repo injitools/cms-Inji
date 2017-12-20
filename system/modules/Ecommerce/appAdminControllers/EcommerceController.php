@@ -196,18 +196,28 @@ class EcommerceController extends adminController {
         $this->view->page(['data' => compact('managers', 'options')]);
     }
 
-    public function reBlockIndexAction() {
+    public function reCalcCategoriesAction() {
         set_time_limit(0);
-        $carts = Cart::getList();
-        foreach ($carts as $cart) {
-            $cart->save();
+        Model::$logging = false;
+        ini_set('memory_limit', '-1');
+        $categories = \Ecommerce\Category::getList();
+        foreach ($categories as $category) {
+            if (!$category->catalogs) {
+                $time = microtime(true);
+                echo $category->id . " start->";
+                flush();
+                $category->calcItemsCount(true, false);
+                echo round(microtime(true) - $time, 2) . "<br />";
+                flush();
+            }
         }
-        Tools::redirect('/admin/ecommerce/configure', 'Данные о блокировках обновлены');
+        Tools::redirect('/admin/ecommerce/configure', 'Данные о кол-ве обновлены');
     }
 
     public function reSearchIndexAction($i = 0) {
         set_time_limit(0);
         Model::$logging = false;
+        ini_set('memory_limit', '-1');
         $count = 100;
         $items = Ecommerce\Item::getList(['start' => $i * $count, 'limit' => $count]);
         if (!$items) {
@@ -220,7 +230,7 @@ class EcommerceController extends adminController {
                 unset($item);
             }
             echo 'Происходит процесс индексации: проиндексировано ' . $i * $count;
-            echo '<script>setTimeout(function(){window.location="/admin/ecommerce/reSearchIndex/'.$i.'"},100)</script>';
+            echo '<script>setTimeout(function(){window.location="/admin/ecommerce/reSearchIndex/' . $i . '"},100)</script>';
         }
     }
 
