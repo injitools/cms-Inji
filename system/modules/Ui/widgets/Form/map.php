@@ -5,6 +5,13 @@ $uid = Tools::randomString();
 if (!empty($options['value'])) {
     $options['value'] = json_decode($options['value'], true);
 }
+if (!empty($form->userDataTree[$name . '[lat]']) && !empty($form->userDataTree[$name . '[lng]'])) {
+    $options['value'] = [
+        'lat' => $form->userDataTree[$name . '[lat]'],
+        'lng' => $form->userDataTree[$name . '[lng]'],
+        'address' => $form->userDataTree[$name . '[address]'],
+    ];
+}
 ?>
     <div id='map<?= $uid; ?>' class="formMap" style="width: 100%; height: 400px"></div>
     <script>
