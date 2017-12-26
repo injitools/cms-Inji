@@ -1511,6 +1511,7 @@ class Model {
                     WHERE ' . $itemTreeCol . ' LIKE "' . $oldPath . $this->id . '/' . '%"');
         }
         $itemModel::update([$itemTreeCol => $newPath . $this->id . '/'], [$itemModel::colPrefix() . $this->index(), $this->id]);
+        $this->tree_path = $newPath;
     }
 
     /**
@@ -1544,7 +1545,6 @@ class Model {
         } else {
             $this->tree_path = '/';
         }
-        $class::update(['tree_path' => $this->tree_path], [$this->index(), $this->id]);
     }
 
     /**
