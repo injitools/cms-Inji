@@ -309,7 +309,7 @@ class Item extends \Model {
             $this->loadRelation('offers');
             foreach ($this->offers as $offer) {
                 foreach ($offer->prices as $price) {
-                    if (in_array($price->item_offer_price_type_id, \App::$cur->Ecommerce->config['available_price_types'])) {
+                    if (empty(\App::$cur->Ecommerce->config['available_price_types']) || in_array($price->item_offer_price_type_id, \App::$cur->Ecommerce->config['available_price_types'])) {
                         $isset = true;
                     }
                     if ($price->price > 0) {
