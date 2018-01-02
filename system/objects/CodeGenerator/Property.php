@@ -11,7 +11,7 @@
 
 namespace CodeGenerator;
 
-class Property extends \Object {
+class Property extends \InjiObject {
 
     public $security = 'public';
     public $static = false;

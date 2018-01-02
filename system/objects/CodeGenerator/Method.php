@@ -11,7 +11,7 @@
 
 namespace CodeGenerator;
 
-class Method extends \Object {
+class Method extends \InjiObject {
 
     public $security = 'public';
     public $static = false;

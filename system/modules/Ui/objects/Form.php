@@ -11,7 +11,7 @@
 
 namespace Ui;
 
-class Form extends \Object {
+class Form extends \InjiObject {
 
     public $id = null;
     public $method = 'POST';

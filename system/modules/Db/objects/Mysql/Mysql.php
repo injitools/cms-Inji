@@ -11,7 +11,7 @@
 
 namespace Db;
 
-class Mysql extends \Object {
+class Mysql extends \InjiObject {
 
     public $config = []; // настройки подключения выбраной базы
     public $connect = false; // ярлык соединения с MySQL

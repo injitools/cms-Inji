@@ -11,7 +11,7 @@
 
 namespace Server;
 
-class Result extends \Object {
+class Result extends \InjiObject {
 
     public $content = null;
     public $success = true;

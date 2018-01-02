@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class PaperTheme extends \Object {
+class PaperTheme extends \InjiObject {
 
     public static $name = 'PaperTheme';
     public static $bowerPacks = [

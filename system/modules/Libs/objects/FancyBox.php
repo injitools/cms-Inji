@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class FancyBox extends \Object {
+class FancyBox extends \InjiObject {
 
     public static $name = 'Fancy Box';
     public static $bowerPacks = [

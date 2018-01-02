@@ -12,7 +12,7 @@
 namespace Ui\ActiveForm;
 
 
-class Input extends \Object {
+class Input extends \InjiObject {
 
     public $form = null;
     /**

@@ -10,7 +10,7 @@
 
 namespace Ui;
 
-class Tree extends \Object {
+class Tree extends \InjiObject {
 
     /**
      * Function for generate item body html

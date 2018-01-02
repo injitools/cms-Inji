@@ -7,7 +7,7 @@
  */
 
 namespace I18n;
-class Text extends \Object {
+class Text extends \InjiObject {
     public static $strings = [];
 
     public static function module($module, $code, $params = [], $default = false, $lang = false) {

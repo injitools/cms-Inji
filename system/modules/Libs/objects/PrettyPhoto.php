@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class PrettyPhoto extends \Object {
+class PrettyPhoto extends \InjiObject {
 
     public static $name = 'PrettyPhoto';
     public static $bowerPacks = [

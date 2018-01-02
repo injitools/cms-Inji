@@ -13,7 +13,7 @@
 
 namespace View;
 
-class Template extends \Object {
+class Template extends \InjiObject {
 
     /**
      * App for template

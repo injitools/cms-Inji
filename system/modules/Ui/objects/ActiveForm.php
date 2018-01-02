@@ -11,7 +11,7 @@
 
 namespace Ui;
 
-class ActiveForm extends \Object {
+class ActiveForm extends \InjiObject {
 
     /**
      * @var \Model

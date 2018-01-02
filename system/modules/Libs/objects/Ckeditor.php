@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class Ckeditor extends \Object {
+class Ckeditor extends \InjiObject {
 
     public static $name = 'CKEditor';
     public static $bowerPacks = [

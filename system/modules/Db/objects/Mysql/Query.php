@@ -11,7 +11,7 @@
 
 namespace Db\Mysql;
 
-class Query extends \Object {
+class Query extends \InjiObject {
 
     public $curInstance = null;
     public $where = [];

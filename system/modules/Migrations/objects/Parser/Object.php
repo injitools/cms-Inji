@@ -11,7 +11,7 @@
 
 namespace Migrations\Parser;
 
-class Object extends \Object {
+class Object extends \InjiObject {
 
     public $object;
     public $parentObject;

@@ -11,7 +11,7 @@
 
 namespace Exchange1c\Parser;
 
-class Orders extends \Object {
+class Orders extends \InjiObject {
 
     public $xml = null;
 

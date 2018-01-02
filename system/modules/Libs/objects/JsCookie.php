@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class JsCookie extends \Object {
+class JsCookie extends \InjiObject {
 
     public static $name = 'JavaScript Cookie';
     public static $bowerPacks = [

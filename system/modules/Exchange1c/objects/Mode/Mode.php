@@ -11,7 +11,7 @@
 
 namespace Exchange1c;
 
-class Mode extends \Object {
+class Mode extends \InjiObject {
 
     /**
      * @var \Exchange1c\Exchange

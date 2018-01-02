@@ -11,7 +11,7 @@
 
 namespace Ui;
 
-class Pages extends \Object {
+class Pages extends \InjiObject {
 
     public $data = [];
     public $options = [];

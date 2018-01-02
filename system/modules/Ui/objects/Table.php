@@ -11,7 +11,7 @@
 
 namespace Ui;
 
-class Table extends \Object {
+class Table extends \InjiObject {
 
     public $cols = [];
     public $rows = [];

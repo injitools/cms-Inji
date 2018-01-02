@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class FontAwesome extends \Object {
+class FontAwesome extends \InjiObject {
 
     public static $name = 'Font Awesome';
     public static $bowerPacks = [

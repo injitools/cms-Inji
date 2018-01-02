@@ -10,7 +10,7 @@
 
 namespace Ui;
 
-class DataManager extends \Object {
+class DataManager extends \InjiObject {
 
     public $modelName = '';
     public $managerOptions = [];

@@ -11,7 +11,7 @@
 
 namespace Migrations;
 
-class Reader extends \Object {
+class Reader extends \InjiObject {
 
     public $data = null;
     public $source = '';

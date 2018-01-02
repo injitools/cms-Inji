@@ -11,7 +11,7 @@
 
 namespace Money;
 
-class Sums extends \Object {
+class Sums extends \InjiObject {
 
     public $sums = [];
 

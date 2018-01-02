@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class JqueryUi extends \Object {
+class JqueryUi extends \InjiObject {
 
     public static $name = 'jQuery Ui';
     public static $bowerPacks = [

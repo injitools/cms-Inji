@@ -11,7 +11,7 @@
 
 namespace Ui;
 
-class FastEdit extends \Object {
+class FastEdit extends \InjiObject {
 
     public static function block($object, $col, $value = null, $parse = false) {
 

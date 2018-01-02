@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class TypeaheadBootstrap3 extends \Object {
+class TypeaheadBootstrap3 extends \InjiObject {
 
     public static $name = 'Typeahead Bootstrap 3';
     public static $bowerPacks = [
