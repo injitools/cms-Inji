@@ -209,11 +209,11 @@ class Model {
                         return $item->$colName ? 'Да' : 'Нет';
                     case 'method':
                         if (!empty($colInfo['colParams']['params'])) {
-                            $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']],
+                            $values = call_user_func_array([App::$cur->{$colInfo['colParams']['module']}, $colInfo['colParams']['method']],
                                 $colInfo['colParams']['params'] + [$item]
                             );
                         } else {
-                            $values = \App::$cur->{$colInfo['colParams']['module']}->$colInfo['colParams']['method']($item);
+                            $values = \App::$cur->{$colInfo['colParams']['module']}->{$colInfo['colParams']['method']}($item);
                         }
                         $value = !empty($values[$item->$colName]) ? $values[$item->$colName] : 'Не задано';
                         break;
@@ -991,12 +991,12 @@ class Model {
         }
         static::$relJoins = [];
         if (!empty($options['limit'])) {
-            $limit = (int) $options['limit'];
+            $limit = (int)$options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int) $options['start'];
+            $start = (int)$options['start'];
         } else {
             $start = 0;
         }
@@ -1300,12 +1300,12 @@ class Model {
             $query->order($options['order']);
         }
         if (!empty($options['limit'])) {
-            $limit = (int) $options['limit'];
+            $limit = (int)$options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int) $options['start'];
+            $start = (int)$options['start'];
         } else {
             $start = 0;
         }
@@ -1832,11 +1832,11 @@ class Model {
                     $options = [$relation['col'], $this->pk()];
                     break;
                 default:
-                    if ($this->$relation['col'] === null) {
+                    if ($this->{$relation['col']} === null) {
                         return null;
                     }
                     $getType = 'get';
-                    $options = $this->$relation['col'];
+                    $options = $this->{$relation['col']};
                     $getParams['appType'] = $this->appType;
             }
             if (!empty($params['count'])) {
@@ -2039,13 +2039,13 @@ class Model {
         if (!empty($className::$cols[$shortName])) {
             switch ($className::$cols[$shortName]['type']) {
                 case 'decimal':
-                    $value = (float) $value;
+                    $value = (float)$value;
                     break;
                 case 'number':
-                    $value = (int) $value;
+                    $value = (int)$value;
                     break;
                 case 'bool':
-                    $value = (bool) $value;
+                    $value = (bool)$value;
                     break;
             }
         }

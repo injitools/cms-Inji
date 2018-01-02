@@ -625,7 +625,6 @@ class View extends \Module {
 
             $paths['templatePath_widgetDir'] = $this->templatesPath . '/' . $this->template->name . '/widgets/' . $widgetName[0] . '/' . $widgetName[1] . '/' . $widgetName[1] . '.php';
             $paths['templatePath'] = $this->templatesPath . '/' . $this->template->name . '/widgets/' . $widgetName[0] . '/' . $widgetName[1] . '.php';
-            App::$cur->$widgetName[0];
             $modulePaths = Module::getModulePaths(ucfirst($widgetName[0]));
             foreach ($modulePaths as $pathName => $path) {
                 $paths[$pathName . '_widgetDir'] = $path . '/widgets/' . $widgetName[1] . '/' . $widgetName[1] . '.php';

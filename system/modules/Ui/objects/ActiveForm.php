@@ -259,9 +259,9 @@ class ActiveForm extends \InjiObject {
                 break;
             case 'method':
                 if (!empty($inputParams['params'])) {
-                    $values = call_user_func_array([\App::$cur->$inputParams['module'], $inputParams['method']], $inputParams['params']+[$model]);
+                    $values = call_user_func_array([\App::$cur->{$inputParams['module']}, $inputParams['method']], $inputParams['params']+[$model]);
                 } else {
-                    $values = \App::$cur->$inputParams['module']->$inputParams['method']($model);
+                    $values = \App::$cur->{$inputParams['module']}->{$inputParams['method']}($model);
                 }
                 break;
             case 'relation':
@@ -303,7 +303,7 @@ class ActiveForm extends \InjiObject {
                                     break;
                             }
                         } else {
-                            $values[$key] = $item->$inputParams['showCol'];
+                            $values[$key] = $item->{$inputParams['showCol']};
                         }
                     } else {
                         $values[$key] = $item->name();

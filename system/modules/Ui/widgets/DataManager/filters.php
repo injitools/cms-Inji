@@ -59,9 +59,9 @@ if (!$dataManager->checkAccess()) {
                                 break;
                             case 'method':
                                 if (!empty($colInfo['colParams']['params'])) {
-                                    $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
+                                    $values = call_user_func_array([App::$cur->{$colInfo['colParams']['module']}, $colInfo['colParams']['method']], $colInfo['colParams']['params']);
                                 } else {
-                                    $values = ['' => 'Не важно'] + App::$cur->$colInfo['colParams']['module']->$colInfo['colParams']['method']();
+                                    $values = ['' => 'Не важно'] + App::$cur->{$colInfo['colParams']['module']}->{$colInfo['colParams']['method']}();
                                 }
                                 break;
                             case 'model':
@@ -228,10 +228,10 @@ if (!$dataManager->checkAccess()) {
                             <label><?= $colInfo['label']; ?></label>
                             <div class="row">
                                 <div class="col-xs-6">
-                                    <?php $form->input('date', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : '']); ?>
+                                    <?php $form->input('date', "datamanagerFilters[{$col}][min]", false, ['placeholder' => 'начиная с', 'value' => !empty($params['filters'][$col]['min']) ? $params['filters'][$col]['min'] : (isset($_GET['datamanagerFilters'][$col]['min']) ? $_GET['datamanagerFilters'][$col]['min'] : '')]); ?>
                                 </div>
                                 <div class="col-xs-6">
-                                    <?php $form->input('date', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : '']); ?>
+                                    <?php $form->input('date', "datamanagerFilters[{$col}][max]", false, ['placeholder' => 'заканчивая по', 'value' => !empty($params['filters'][$col]['max']) ? $params['filters'][$col]['max'] : (isset($_GET['datamanagerFilters'][$col]['max']) ? $_GET['datamanagerFilters'][$col]['max'] : '')]); ?>
                                 </div>
                             </div>
                         </div>
