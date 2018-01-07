@@ -27,20 +27,16 @@ class Config {
      * Load system config
      *
      * @param bool $forceLoad
-     * @param bool|string $systemPath
      * @return array
      */
-    public static function system($forceLoad = false, $systemPath = false) {
+    public static function system($forceLoad = false) {
         if (!$forceLoad && isset(self::$_configs['system'])) {
             return self::$_configs['system'];
         }
-        if ($systemPath === false) {
-            $systemPath = INJI_SYSTEM_DIR;
-        }
-        if (!file_exists($systemPath . '/config/config.php')) {
+        if (!file_exists(INJI_SYSTEM_DIR . '/config/config.php')) {
             return [];
         }
-        return self::$_configs['system'] = include $systemPath . '/config/config.php';
+        return self::$_configs['system'] = include INJI_SYSTEM_DIR . '/config/config.php';
     }
 
     /**

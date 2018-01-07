@@ -18,9 +18,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase {
 
         $config = Config::system(true);
         $this->assertEquals($time, $config['test']);
-
-        $config = \Inji\Config::system(true, 'notExist');
-        $this->assertEmpty($config);
     }
 
     public function testCustom() {
