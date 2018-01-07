@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * Router
  *
@@ -9,27 +10,74 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class Router {
+    public static $folders = [];
+
+    /**
+     * @param string $folder
+     * @param string $prefix
+     * @param int|float $priority
+     * @param int|bool $moduleIndex
+     * @param array $moduleDirs
+     */
+    public static function addPath(string $folder, $prefix = '*', $priority = 0, $moduleIndex = false, $moduleDirs = []): void {
+        self::$folders[] = compact('folder', 'prefix', 'priority', 'moduleIndex', 'moduleDirs');
+        usort(self::$folders, function ($a, $b) {
+            return $b['priority'] <=> $a['priority'];
+        });
+    }
 
     /**
      * Find class by name
      *
      * @param string $className
-     * @return boolean
+     * @return bool
      */
-    public static function findClass($className) {
-        if (strpos($className, '\\')) {
-            $classPath = explode('\\', $className);
-            $moduleName = $classPath[0];
-            $result = Router::loadClass($className);
-            if ($result && App::$cur) {
-                if (!App::$cur->isLoaded($moduleName)) {
-                    App::$cur->loadObject($moduleName);
+    public static function findClass(string $className): bool {
+        foreach (self::$folders as $folder) {
+            $paths = self::genFolderPaths($folder, $className);
+            foreach ($paths as $path) {
+                if (file_exists($path)) {
+                    return self::loadClass($path);
                 }
             }
-            return $result;
-        } else {
-            return Router::loadClass($className);
         }
+        return false;
+    }
+
+    /**
+     * Return possible paths for class path
+     *
+     * @param array $folder
+     * @param string $className
+     * @return array
+     */
+    public static function genFolderPaths($folder, $className) {
+        $classPath = str_replace('\\', '/', $className);
+        $paths = [];
+        if ($folder['moduleIndex'] !== false && $folder['moduleIndex'] < substr_count($classPath, '/')) {
+            $classPathItems = explode('/', $classPath);
+            $moduleName = $classPathItems[$folder['moduleIndex']];
+            $classPathStart = implode('/', array_slice($classPathItems, 0, $folder['moduleIndex'] + 1));
+            if (strpos($classPathStart, str_replace('\\', '/', $folder['prefix'])) === 0) {
+                $classPathStart = substr($classPathStart, strlen($folder['prefix']));
+            }
+            $classPathEnd = implode('/', array_slice($classPathItems, $folder['moduleIndex'] + 1));
+            foreach ($folder['moduleDirs'] as $moduleDir) {
+                $dirPath = implode('/', [rtrim($folder['folder'], '/'), $classPathStart, $moduleDir, $classPathEnd]);
+                $paths['folderModuleDirPath_' . $moduleDir] = $dirPath . '.php';
+                $paths['folderModuleDirPathDir_' . $moduleDir] = $dirPath . substr($dirPath, strrpos($dirPath, '/')) . '.php';
+            }
+        }
+        if (strpos($className, $folder['prefix']) === 0) {
+            $cuttedPath = substr($classPath, strlen($folder['prefix']));
+            $paths['folderPrefixPath'] = $folder['folder'] . $cuttedPath . '.php';
+            $paths['folderPrefixPathDir'] = $folder['folder'] . $cuttedPath . substr($classPath, strrpos($classPath, '/')) . '.php';
+        }
+        if ($folder['prefix'] === '*') {
+            $paths['folderPath'] = $folder['folder'] . $classPath . '.php';
+            $paths['folderPathDir'] = $folder['folder'] . $classPath . substr($classPath, strrpos($classPath, '/')) . '.php';
+        }
+        return $paths;
     }
 
     /**
@@ -38,78 +86,11 @@ class Router {
      * @param string $className
      * @return boolean
      */
-    public static function loadClass($className) {
-        $folders = [];
-        if (strpos($className, '\\')) {
-            $classPath = explode('\\', $className);
-            $moduleName = $classPath[0];
-            if (Module::installed($moduleName, App::$cur)) {
-                $classPath = implode('/', array_slice($classPath, 1));
-                if (App::$cur) {
-                    if (App::$cur !== App::$primary) {
-                        $folders['appModule'] = ['folder' => App::$primary->path . '/modules/' . $moduleName, 'classPath' => $classPath];
-                    }
-                    $folders['primaryAppModule'] = ['folder' => App::$cur->path . '/modules/' . $moduleName, 'classPath' => $classPath];
-                }
-                $folders['systemModule'] = ['folder' => INJI_SYSTEM_DIR . '/modules/' . $moduleName, 'classPath' => $classPath];
-            }
-        }
-        $classPath = str_replace('\\', '/', $className);
-
-        if (App::$cur) {
-            if (App::$cur !== App::$primary) {
-                $folders['primaryApp'] = ['folder' => App::$primary->path, 'classPath' => $classPath];
-            }
-            $folders['app'] = ['folder' => App::$cur->path, 'classPath' => $classPath];
-        }
-        $folders['system'] = ['folder' => INJI_SYSTEM_DIR, 'classPath' => $classPath];
-        $paths = [];
-        foreach ($folders as $code => $folderParams) {
-            $paths = $paths + static::genFolderPaths($code, $folderParams['folder'], $folderParams['classPath']);
-        }
-        foreach ($paths as $path) {
-            if (file_exists($path)) {
-                include_once $path;
-                if (in_array('Model', class_parents($className, false)) && \App::$primary) {
-                    $filename = Cache::getDir('system') . '/classData.php';
-                    $classData = Config::custom($filename);
-                    if (empty($classData['Model'][$className]['tableCreated'])) {
-                        $classData['Model'][$className]['tableCreated'] = $className::createTable();
-                        Config::save($filename, $classData);
-                    }
-                }
-                return true;
-            }
-        }
-        return false;
+    public static function loadClass($classPath) {
+        include_once $classPath;
+        return true;
     }
 
-    /**
-     * Return posible paths for class path
-     *
-     * @param string $code
-     * @param string $folder
-     * @param string $classPath
-     * @return string
-     */
-    public static function genFolderPaths($code, $folder, $classPath) {
-        $paths = [];
-        if (strpos($classPath, '/') === false) {
-            $paths[$code . '_Object'] = $folder . '/objects/' . $classPath . '.php';
-            $paths[$code . '_ObjectDir'] = $folder . '/objects/' . $classPath . '/' . $classPath . '.php';
-            $paths[$code . '_Model'] = $folder . '/models/' . $classPath . '.php';
-            $paths[$code . '_ModelDir'] = $folder . '/models/' . $classPath . '/' . $classPath . '.php';
-        } else {
-            $classFile = substr($classPath, strrpos($classPath, '/') + 1);
-            $classPathWithotClass = substr($classPath, 0, strrpos($classPath, '/'));
-
-            $paths[$code . '_Object'] = $folder . '/objects/' . $classPathWithotClass . '/' . $classFile . '.php';
-            $paths[$code . '_ObjectDir'] = $folder . '/objects/' . $classPath . '/' . $classFile . '.php';
-            $paths[$code . '_Model'] = $folder . '/models/' . $classPathWithotClass . '/' . $classFile . '.php';
-            $paths[$code . '_ModelDir'] = $folder . '/models/' . $classPath . '/' . $classFile . '.php';
-        }
-        return $paths;
-    }
 
     /**
      * Return dir for class name
@@ -118,7 +99,7 @@ class Router {
      * @return string
      */
     public static function getLoadedClassPath($className) {
-        $rc = new ReflectionClass($className);
+        $rc = new \ReflectionClass($className);
         return dirname($rc->getFileName());
     }
 
