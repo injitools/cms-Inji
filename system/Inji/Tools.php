@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Tools object
  *
@@ -278,7 +278,7 @@ class Tools extends Model {
             $href = $_SERVER['REQUEST_URI'];
         }
         if ($text !== false) {
-            Msg::add($text, $status);
+            \Inji\Msg::add($text, $status);
         }
         if (!headers_sent()) {
             header("Location: {$href}");

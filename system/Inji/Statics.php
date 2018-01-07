@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Statics
  *
@@ -22,7 +22,7 @@ class Statics {
     public static function file($path, $resize = '', $resizeCrop = '', $resizePos = '', $pathAbsolute = false) {
         if (!$path) {
             $pathAbsolute = false;
-            $path = !empty(\App::$primary->config['site']['noimage']) ? \App::$primary->config['site']['noimage'] : '/static/system/images/no-image.png';
+            $path = !empty(App::$primary->config['site']['noimage']) ? App::$primary->config['site']['noimage'] : '/static/system/images/no-image.png';
         }
 
         $absolutePath = $pathAbsolute ? $path : App::$cur->staticLoader->parsePath($path);
