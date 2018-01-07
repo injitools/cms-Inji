@@ -1,7 +1,7 @@
 <?php
 
 /**
- * INJI CMS 4.0.0 dev
+ * INJI CMS 5.0.0 dev
  *
  * @author Alexey Krupskiy <admin@inji.ru>
  * @link http://inji.ru/
@@ -16,11 +16,11 @@ date_default_timezone_set('Asia/Krasnoyarsk');
 // time start
 define('INJI_TIME_START', microtime(true));
 // system files dir
-define('INJI_SYSTEM_DIR', __DIR__ . '/system');
+define('INJI_SYSTEM_DIR', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__) . '/system');
 // apps files dir
-define('INJI_PROGRAM_DIR', __DIR__ . '/program');
+define('INJI_PROGRAM_DIR', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__) . '/program');
 // base dir for outputing system files and dirs
-define('INJI_BASE_DIR', __DIR__ . '/');
+define('INJI_BASE_DIR', str_replace(DIRECTORY_SEPARATOR, '/', __DIR__) . '/');
 
 // check base config
 if (!file_exists(INJI_SYSTEM_DIR) || !is_dir(INJI_SYSTEM_DIR)) {
@@ -37,7 +37,7 @@ foreach ($_SERVER as $key => $item) {
     }
 }
 
-require_once( INJI_SYSTEM_DIR . '/init.php' );
+require_once(INJI_SYSTEM_DIR . '/init.php');
 
 /**
  * System error messages
