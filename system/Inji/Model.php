@@ -1,12 +1,22 @@
 <?php
-
 /**
- * Log
+ * Model
  *
  * @author Alexey Krupskiy <admin@inji.ru>
  * @link http://inji.ru/
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
+ */
+
+namespace Inji;
+
+use Inji\Model\Builder;
+
+/**
+ * Class Model
+ * @package Inji
+ *
+ * @method static Model\Builder connection($connectionName)
  */
 class Model {
 
@@ -110,13 +120,34 @@ class Model {
      */
     public static $relJoins = [];
 
+    public $connectionName = 'default';
+    public $dbOptions = [];
+    public $app;
+
     /**
      * Set params when model create
      *
      * @param array $params
+     * @param App $app
      */
-    public function __construct($params = []) {
+    public function __construct($params = [], $app = null) {
         $this->setParams($params);
+        if (!$app) {
+            $this->app = App::$primary;
+        } else {
+            $this->app = $app;
+        }
+    }
+
+    public static function new($params = [], $app = null) {
+        return new static($params, $app);
+    }
+
+    public static function __callStatic($name, $arguments) {
+        if (method_exists('Inji\Model\Builder', $name)) {
+            return call_user_func_array([new Model\Builder(get_called_class()), $name], $arguments);
+        }
+        trigger_error('Undefined method in Inji\Model', E_USER_ERROR);
     }
 
     public static $logging = true;
@@ -624,14 +655,14 @@ class Model {
         if (static::$storage['type'] == 'moduleConfig') {
             return [];
         }
-        if (empty(\Model::$cols[static::table()]) || $refresh) {
-            \Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
+        if (empty(\Inji\Model::$cols[static::table()]) || $refresh) {
+            \Inji\Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
         }
-        if (!isset(\Model::$cols[static::table()])) {
+        if (!isset(\Inji\Model::$cols[static::table()])) {
             static::createTable();
-            \Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
+            \Inji\Model::$cols[static::table()] = App::$cur->db->getTableCols(static::table());
         }
-        return \Model::$cols[static::table()];
+        return \Inji\Model::$cols[static::table()];
     }
 
     /**
@@ -807,7 +838,7 @@ class Model {
      */
     public static function colPrefix() {
         $classPath = explode('\\', get_called_class());
-        $classPath = array_slice($classPath, 1);
+        $classPath = array_slice($classPath, 2);
         return strtolower(implode('_', $classPath)) . '_';
     }
 
@@ -864,8 +895,9 @@ class Model {
         if (is_array($param)) {
             static::fixPrefix($param, 'first');
         }
+        $query = App::$cur->db->newQuery();
         foreach (static::$relJoins as $join) {
-            App::$cur->db->join($join);
+            $query->join($join);
         }
         static::$relJoins = [];
         foreach (static::$needJoin as $rel) {
@@ -876,19 +908,19 @@ class Model {
                     case 'to':
                         $relCol = $relations[$rel]['col'];
                         static::fixPrefix($relCol);
-                        App::$cur->db->join($relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol);
+                        $query->join($relations[$rel]['model']::table(), $relations[$rel]['model']::index() . ' = ' . $relCol);
                         break;
                     case 'one':
                         $col = $relations[$rel]['col'];
                         $relations[$rel]['model']::fixPrefix($col);
-                        App::$cur->db->join($relations[$rel]['model']::table(), static::index() . ' = ' . $col);
+                        $query->join($relations[$rel]['model']::table(), static::index() . ' = ' . $col);
                         break;
                 }
             }
         }
         static::$needJoin = [];
         if (is_array($param)) {
-            App::$cur->db->where($param);
+            $query->where($param);
         } else {
             if ($col === null) {
 
@@ -899,23 +931,23 @@ class Model {
                 if (!isset($cols[$col]) && isset($cols[static::colPrefix() . $col])) {
                     $col = static::colPrefix() . $col;
                 }
-                App::$cur->db->where($col, $param);
+                $query->where($col, $param);
             } else {
                 return false;
             }
         }
-        if (!App::$cur->db->where) {
+        if (!$query->where) {
             return false;
         }
         try {
-            $result = App::$cur->db->select(static::table());
-        } catch (PDOException $exc) {
+            $result = $query->select(static::table());
+        } catch (\PDOException $exc) {
             if ($exc->getCode() == '42S02') {
                 static::createTable();
             } else {
                 throw $exc;
             }
-            $result = App::$cur->db->select(static::table());
+            $result = $query->select(static::table());
         }
         if (!$result) {
             return false;
@@ -1068,204 +1100,6 @@ class Model {
         return static::get_list($options, $debug);
     }
 
-    /**
-     * Get single item from module storage
-     *
-     * @param array $param
-     * @param string $col
-     * @param array $options
-     * @return boolean|\Model
-     */
-    public static function getFromModuleStorage($param = null, $col = null, $options = []) {
-        if ($col === null) {
-
-            $col = static::index();
-        }
-        if ($param == null) {
-            return false;
-        }
-        $classPath = explode('\\', get_called_class());
-        if (!empty(static::$storage['options']['share'])) {
-            $moduleConfig = Config::share($classPath[0]);
-        } else {
-            $moduleConfig = Config::module($classPath[0], strpos(static::$storage['type'], 'system') !== false);
-        }
-        $appType = App::$cur->type;
-        if (!empty($moduleConfig['storage']['appTypeSplit'])) {
-            if (!empty($options['appType'])) {
-                $appType = $options['appType'];
-            }
-            $storage = !empty($moduleConfig['storage'][$appType]) ? $moduleConfig['storage'][$appType] : [];
-        } else {
-            $storage = !empty($moduleConfig['storage']) ? $moduleConfig['storage'] : [];
-        }
-        if (!empty($storage[$classPath[1]])) {
-            $items = $storage[$classPath[1]];
-            $class = get_called_class();
-            $where = is_array($param) ? $param : [$col, $param];
-            foreach ($items as $key => $item) {
-                if (!Model::checkWhere($item, $where)) {
-                    continue;
-                }
-                if (!empty($options['array'])) {
-                    return $item;
-                }
-                $item = new $class($item);
-                $item->appType = $appType;
-                return $item;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Return list items from module storage
-     *
-     * @param array $options
-     * @return array
-     */
-    public static function getListFromModuleStorage($options = []) {
-        $classPath = explode('\\', get_called_class());
-        if (!empty(static::$storage['options']['share'])) {
-            $moduleConfig = Config::share($classPath[0]);
-        } else {
-            $moduleConfig = Config::module($classPath[0], strpos(static::$storage['type'], 'system') !== false);
-        }
-        if (!empty($moduleConfig['storage']['appTypeSplit'])) {
-            if (empty($options['appType'])) {
-                $appType = App::$cur->type;
-            } else {
-                $appType = $options['appType'];
-            }
-            $storage = !empty($moduleConfig['storage'][$appType]) ? $moduleConfig['storage'][$appType] : [];
-        } else {
-            $storage = !empty($moduleConfig['storage']) ? $moduleConfig['storage'] : [];
-        }
-        if (!empty($storage[$classPath[1]])) {
-            $items = [];
-            $class = get_called_class();
-            if (isset($options['key'])) {
-                $arrayKey = $options['key'];
-            } else {
-                $arrayKey = static::index();
-            }
-            foreach ($storage[$classPath[1]] as $key => $item) {
-                if (!empty($options['where']) && !Model::checkWhere($item, $options['where'])) {
-                    continue;
-                }
-                $items[$item[$arrayKey]] = new $class($item);
-            }
-            if (!empty($options['order'])) {
-                usort($items, function ($a, $b) use ($options) {
-                    if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'asc') {
-                        return 1;
-                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'asc') {
-                        return -1;
-                    } elseif ($a->{$options['order'][0]} > $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'desc') {
-                        return -1;
-                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'desc') {
-                        return 1;
-                    } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id > $b->id) {
-                        return 1;
-                    } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id < $b->id) {
-                        return -1;
-                    }
-                    return 0;
-                });
-            }
-            if (!empty($options['forSelect'])) {
-                $return = [];
-                foreach ($items as $key => $item) {
-                    $return[$key] = $item->name();
-                }
-                return $return;
-            }
-            return $items;
-        }
-        return [];
-    }
-
-    /**
-     * Return count of records from module storage
-     *
-     * @param array $options
-     * @return int
-     */
-    public static function getCountFromModuleStorage($options = []) {
-
-        $classPath = explode('\\', get_called_class());
-        $count = 0;
-        if (empty($options['appType'])) {
-            $appType = App::$cur->type;
-        } else {
-            $appType = $options['appType'];
-        }
-        if (!empty(static::$storage['options']['share'])) {
-            $moduleConfig = Config::share($classPath[0]);
-        } else {
-            $moduleConfig = Config::module($classPath[0], strpos(static::$storage['type'], 'system') !== false);
-        }
-        if (!empty($moduleConfig['storage'][$appType][$classPath[1]])) {
-            $items = $moduleConfig['storage'][$appType][$classPath[1]];
-            if (empty($options['where'])) {
-                return count($items);
-            }
-            foreach ($items as $key => $item) {
-                if (!empty($options['where'])) {
-                    if (Model::checkWhere($item, $options['where'])) {
-                        $count++;
-                    }
-                } else {
-                    $count++;
-                }
-            }
-        }
-        return $count;
-    }
-
-    /**
-     * Check where for module storage query
-     *
-     * @param array $item
-     * @param array|string $where
-     * @param string $value
-     * @param string $operation
-     * @param string $concatenation
-     * @return boolean
-     */
-    public static function checkWhere($item = [], $where = '', $value = '', $operation = '=', $concatenation = 'AND') {
-
-        if (is_array($where)) {
-            if (is_array($where[0])) {
-                $result = true;
-                foreach ($where as $key => $whereItem) {
-                    $concatenation = empty($whereItem[3]) ? 'AND' : strtoupper($whereItem[3]);
-                    switch ($concatenation) {
-                        case 'AND':
-                            $result = $result && forward_static_call_array(['Model', 'checkWhere'], [$item, $whereItem]);
-                            break;
-                        case 'OR':
-                            $result = $result || forward_static_call_array(['Model', 'checkWhere'], [$item, $whereItem]);
-                            break;
-                    }
-                }
-
-                return $result;
-            } else {
-                return forward_static_call_array(['Model', 'checkWhere'], array_merge([$item], $where));
-            }
-        }
-        if (!isset($item[$where]) && !$value) {
-            return true;
-        }
-        if (!isset($item[$where]) && $value) {
-            return false;
-        }
-        if ($item[$where] == $value) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * Return count of records from data base
@@ -1517,7 +1351,7 @@ class Model {
     /**
      * Return tree path
      *
-     * @param \Model $catalog
+     * @param \Inji\Model $catalog
      * @return string
      */
     public function getCatalogTree($catalog) {
@@ -1555,24 +1389,25 @@ class Model {
      */
     public function save($options = []) {
 
-        if (static::$storage['type'] == 'moduleConfig') {
-            return static::saveModuleStorage($options);
+        $builder = new Builder(get_called_class(), $this->app);
+        $builder->connection($this->connectionName);
+        foreach ($this->dbOptions as $dbOption => $value) {
+            $builder->setDbOption($dbOption, $value);
         }
-        $class = get_class($this);
+        $class = get_called_class();
         if (!empty($this->_changedParams) && $this->pk()) {
-            Inji::$inst->event('modelItemParamsChanged-' . get_called_class(), $this);
+            \Inji::$inst->event('modelItemParamsChanged-' . $class, $this);
         }
         $this->beforeSave();
         $values = [];
 
-        foreach ($this->cols() as $col => $param) {
+        foreach (static::$cols as $col => $param) {
             if (in_array($col, array_keys($this->_params)) && (!$this->pk() || ($this->pk() && in_array($col, array_keys($this->_changedParams))))) {
                 $values[$col] = $this->_params[$col];
             }
         }
         if (!$this->pk()) {
             foreach ($class::$cols as $colName => $params) {
-                $class::fixPrefix($colName);
                 if (isset($params['default']) && !isset($values[$colName])) {
                     $this->_params[$colName] = $values[$colName] = $params['default'];
                 }
@@ -1588,32 +1423,17 @@ class Model {
         if (static::$treeCategory) {
             $this->changeCategoryTree();
         }
-        if ($this->pk()) {
-            $new = false;
-            if ($this->get($this->_params[$this->index()])) {
-                App::$cur->db->where($this->index(), $this->_params[$this->index()]);
-                App::$cur->db->update($this->table(), $values);
-            } else {
-                $this->_params[$this->index()] = App::$cur->db->insert($this->table(), $values);
-            }
+        $new = !$this->pk();
+        if ($new) {
+            $builder->where(static::index(), $builder->insert($values));
         } else {
-            $new = true;
-            $this->_params[$this->index()] = App::$cur->db->insert($this->table(), $values);
+            $builder->where(static::index(), $this->pk());
+            $builder->update($values);
         }
         $this->logChanges($new);
-        App::$cur->db->where($this->index(), $this->_params[$this->index()]);
-
-        try {
-            $result = App::$cur->db->select($this->table());
-        } catch (PDOException $exc) {
-            if ($exc->getCode() == '42S02') {
-                $this->createTable();
-            }
-            $result = App::$cur->db->select($this->table());
-        }
-        $this->_params = $result->fetch();
+        $this->_params = $builder->get(['array' => true]);
         if ($new) {
-            Inji::$inst->event('modelCreatedItem-' . get_called_class(), $this);
+            \Inji::$inst->event('modelCreatedItem-' . get_called_class(), $this);
         }
         $this->afterSave();
         return $this->pk();
@@ -1692,13 +1512,14 @@ class Model {
      */
     public function delete($options = []) {
         $this->beforeDelete();
-
-        if (static::$storage['type'] == 'moduleConfig') {
-            return static::deleteFromModuleStorage($options);
-        }
-        if (!empty($this->_params[$this->index()])) {
-            App::$cur->db->where($this->index(), $this->_params[$this->index()]);
-            $result = App::$cur->db->delete($this->table());
+        if (!empty($this->pk())) {
+            $builder = new Builder(get_called_class(), $this->app);
+            $builder->connection($this->connectionName);
+            foreach ($this->dbOptions as $dbOption => $value) {
+                $builder->setDbOption($dbOption, $value);
+            }
+            $builder->where($this->index(), $this->pk());
+            $result = $builder->delete();
             if ($result) {
                 $this->afterDelete();
                 return $result;
@@ -1860,8 +1681,8 @@ class Model {
      * Add relation item
      *
      * @param string $relName
-     * @param \Model $objectId
-     * @return \Model|boolean
+     * @param \Inji\Model $objectId
+     * @return \Inji\Model|boolean
      */
     public function addRelation($relName, $objectId) {
         $relation = $this->getRelation($relName);
@@ -1933,10 +1754,8 @@ class Model {
      * @return mixed
      */
     public function __get($name) {
-        $fixedName = $name;
-        static::fixPrefix($fixedName);
-        if (isset($this->_params[$fixedName])) {
-            return $this->_params[$fixedName];
+        if (isset($this->_params[$name])) {
+            return $this->_params[$name];
         }
         if (isset($this->loadedRelations[$name][json_encode([])])) {
             return $this->loadedRelations[$name][json_encode([])];
@@ -2027,9 +1846,9 @@ class Model {
      * @param mixed $value
      */
     public function __set($name, $value) {
-        static::fixPrefix($name);
+        //static::fixPrefix($name);
         $className = get_called_class();
-        $shortName = preg_replace('!' . $this->colPrefix() . '!', '', $name);
+        $shortName = $name;
         if (!$value && !empty(static::$cols[$shortName]) && in_array('emptyValue', array_keys(static::$cols[$shortName]))) {
             $value = static::$cols[$shortName]['emptyValue'];
         }
