@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Property
+ * Method
  *
  * @author Alexey Krupskiy <admin@inji.ru>
  * @link http://inji.ru/
@@ -9,24 +9,27 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace CodeGenerator;
+namespace Inji\CodeGenerator;
 
-class Property extends \InjiObject {
+class Method extends \Inji\InjiObject {
 
     public $security = 'public';
     public $static = false;
     public $name = 'property';
-    public $value = 'value';
+    public $propertys = [];
+    public $body = '';
 
     public function generate() {
         $code = $this->security . ' ';
         $code .= $this->static ? 'static ' : '';
-        $code .= '$' . $this->name . ' = ';
-        if (is_array($this->value)) {
-            $code .= \CodeGenerator::genArray($this->value);
-        } else {
-            $code .= '"' . str_replace('"', '\"', $this->value) . '";';
+        $code .= 'function ' . $this->name . '(';
+        foreach ($this->propertys as $param) {
+            $code .= '$' . $param . ',';
         }
+        $code = rtrim($code, ',');
+        $code .= ") {\n";
+        $code .= '    ' . str_replace("\n", "\n    ", $this->body);
+        $code .= "\n}";
         return $code;
     }
 

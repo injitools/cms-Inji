@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * Code generator
  *
@@ -16,16 +17,26 @@ class CodeGenerator {
             $return = "[";
         foreach ($data as $key => $item) {
             $return .= "\n" . str_repeat(' ', ($level * 4 + 4)) . "'{$key}' => ";
-            if (!is_array($item))
-                $return .= "'{$item}',";
-            else {
+            if (!is_array($item)) {
+                if (is_bool($item)) {
+                    $item = $item ? 'true' : 'false';
+                    $return .= "{$item},";
+                } elseif (is_null($item)) {
+                    $return .= "null,";
+                } elseif (is_int($item) || is_float($item)) {
+                    $return .= "{$item},";
+                } else {
+                    $return .= "'" . addcslashes($item, "'") . "',";
+                }
+            } else {
                 $return .= "[";
                 $return .= rtrim(self::genArray($item, $level + 1), ',');
                 $return .= "\n" . str_repeat(' ', ($level * 4 + 4)) . "],";
             }
         }
-        if ($level == 0)
+        if ($level == 0) {
             $return = rtrim($return, ',') . "\n];";
+        }
 
         return $return;
     }

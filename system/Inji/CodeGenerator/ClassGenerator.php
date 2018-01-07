@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace CodeGenerator;
+namespace Inji\CodeGenerator;
 
 class ClassGenerator extends \InjiObject {
 
