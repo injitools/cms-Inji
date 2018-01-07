@@ -24,7 +24,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testCustom() {
-        $temp = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'testConf.php';
+        $temp = INJI_PROGRAM_DIR . DIRECTORY_SEPARATOR . 'testConf.php';
         $time = time();
 
         Config::save($temp, ['test' => $time]);

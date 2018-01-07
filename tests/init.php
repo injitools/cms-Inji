@@ -9,7 +9,7 @@ define('INJI_TIME_START', microtime(true));
 // system files dir
 define('INJI_SYSTEM_DIR', __DIR__ . '/../system');
 // apps files dir
-define('INJI_PROGRAM_DIR', sys_get_temp_dir() . '/injiTestProgramData');
+define('INJI_PROGRAM_DIR', __DIR__ . '/../program');
 session_start();
 
 include_once INJI_SYSTEM_DIR . '/Inji/Inji.php';
@@ -43,7 +43,7 @@ $appConfig = [
 Inji\App::$cur = new Inji\App($appConfig);
 
 Inji\App::$cur->type = 'app';
-Inji\App::$cur->path = INJI_PROGRAM_DIR . '/' . Inji\App::$cur->dir;
+Inji\App::$cur->path = INJI_PROGRAM_DIR . '/apps/' . Inji\App::$cur->dir;
 Inji\App::$cur->params = [];
 Inji\App::$cur->config = Inji\Config::app(Inji\App::$cur);
 Inji\App::$primary = Inji\App::$cur;
