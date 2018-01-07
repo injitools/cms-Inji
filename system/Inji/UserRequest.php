@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * User Request parser
  *
