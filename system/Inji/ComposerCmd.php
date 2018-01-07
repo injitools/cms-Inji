@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Composer command tool
  *
@@ -14,7 +14,7 @@ class ComposerCmd {
 
     public static function getInstance() {
         if (!self::$appInstance) {
-            self::$appInstance = new Composer\Console\Application();
+            self::$appInstance = new \Composer\Console\Application();
         }
         return self::$appInstance;
     }
@@ -33,7 +33,7 @@ class ComposerCmd {
      * @return bool
      */
     public static function installComposer($path) {
-        while (!Inji::$inst->blockParallel()) {
+        while (!\Inji::$inst->blockParallel()) {
             sleep(2);
         }
         ini_set('memory_limit', '4000M');
@@ -54,15 +54,15 @@ class ComposerCmd {
             $cafile = false;
             setUseAnsi([]);
             ob_start();
-            $installer = new Installer($quiet, $disableTls, $cafile);
+            $installer = new \Installer($quiet, $disableTls, $cafile);
             $installer->run($version, $installDir, $filename, $channel);
             ob_end_clean();
         }
-        $composer = new Phar($path . '/composer/composer.phar');
+        $composer = new \Phar($path . '/composer/composer.phar');
         $composer->extractTo($path . '/composer/');
         $composer = null;
         gc_collect_cycles();
-        Inji::$inst->unBlockParallel();
+        \Inji::$inst->unBlockParallel();
         return true;
     }
 
@@ -72,14 +72,14 @@ class ComposerCmd {
         }
         if (!file_exists($path . '/composer.json')) {
             $json = [
-                "name" => get_current_user() . "/" . $_SERVER['SERVER_NAME'],
+                "name" => get_current_user() . "/" . INJI_DOMAIN_NAME,
                 "config" => [
                     "cache-dir" => Cache::folder() . "composer/"
                 ],
                 "authors" => [
                     [
                         "name" => get_current_user(),
-                        "email" => get_current_user() . "@" . $_SERVER['SERVER_NAME']
+                        "email" => get_current_user() . "@" . INJI_DOMAIN_NAME
                     ]
                 ],
                 "require" => [
@@ -98,18 +98,18 @@ class ComposerCmd {
      * @param string $path
      */
     public static function command($command, $needOutput = true, $path = null) {
-        while (!Inji::$inst->blockParallel()) {
+        while (!\Inji::$inst->blockParallel()) {
             sleep(2);
         }
         ini_set('memory_limit', '4000M');
         include_once getenv('COMPOSER_HOME') . '/composer/vendor/autoload.php';
         if ($needOutput) {
-            $output = new Symfony\Component\Console\Output\StreamOutput(fopen('php://output', 'w'));
+            $output = new \Symfony\Component\Console\Output\StreamOutput(fopen('php://output', 'w'));
         } else {
             $output = null;
         }
         $path = str_replace('\\', '/', $path === null ? App::$primary->path . '/' : $path);
-        $input = new Symfony\Component\Console\Input\StringInput($command . ' -d ' . $path);
+        $input = new \Symfony\Component\Console\Input\StringInput($command . ' -d ' . $path);
         $app = self::getInstance();
         $app->setAutoExit(false);
         $dir = getcwd();
@@ -118,7 +118,7 @@ class ComposerCmd {
         $input = null;
         chdir($dir);
         gc_collect_cycles();
-        Inji::$inst->unBlockParallel();
+        \Inji::$inst->unBlockParallel();
         include getenv('COMPOSER_HOME') . '/vendor/autoload.php';
     }
 
