@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Inji core
  *
@@ -56,9 +55,9 @@ class Inji {
      */
     public function listen($eventName, $listenCode, $callback, $save = false) {
         if ($save) {
-            $config = Config::custom(App::$primary->path . '/config/events.php');
+            $config = Inji\Config::custom(Inji\App::$primary->path . '/config/events.php');
             $config[$eventName][$listenCode] = serialize($callback);
-            Config::save(App::$primary->path . '/config/events.php', $config);
+            Inji\Config::save(Inji\App::$primary->path . '/config/events.php', $config);
         } else {
             $this->_listeners[$eventName][$listenCode] = $callback;
         }
@@ -81,7 +80,7 @@ class Inji {
         if (!empty($this->_listeners[$eventName])) {
             $listeners = $this->_listeners[$eventName];
         }
-        $config = Config::custom(App::$primary->path . '/config/events.php');
+        $config = Inji\Config::custom(Inji\App::$primary->path . '/config/events.php');
         if (!empty($config[$eventName])) {
             foreach ($config[$eventName] as $listenCode => $callback) {
                 $listeners[$listenCode] = (@unserialize($callback) !== false) ? unserialize($callback) : $callback;
@@ -98,7 +97,7 @@ class Inji {
                 } elseif (is_array($callback) && isset($callback['callback'])) {
                     $event['eventObject'] = $callback['callback']($event, $callback);
                 } else {
-                    $event['eventObject'] = App::$cur->{$callback['module']}->{$callback['method']}($event, $callback);
+                    $event['eventObject'] = Inji\App::$cur->{$callback['module']}->{$callback['method']}($event, $callback);
                 }
                 $calledBefore[$iteration] = $listenCode;
             }
@@ -115,10 +114,10 @@ class Inji {
      */
     public function unlisten($eventName, $listenCode, $save = false) {
         if ($save) {
-            $config = Config::custom(App::$primary->path . '/config/events.php');
+            $config = Inji\Config::custom(Inji\App::$primary->path . '/config/events.php');
             if (!empty($config[$eventName][$listenCode])) {
                 unset($config[$eventName][$listenCode]);
-                Config::save(App::$primary->path . '/config/events.php', $config);
+                Inji\Config::save(Inji\App::$primary->path . '/config/events.php', $config);
             }
         }
         if (!empty($this->_listeners[$eventName][$listenCode])) {
