@@ -7,9 +7,9 @@
     <testsuite name="System">
       <directory suffix="Test.php">tests/</directory>
     </testsuite>
-    <testsuite name="Modules">
+    <!--<testsuite name="Modules">
       <directory suffix="Test.php">system/</directory>
-    </testsuite>
+    </testsuite>-->
   </testsuites>
   <logging>
     <log type="coverage-html" target="build/coverage"/>
