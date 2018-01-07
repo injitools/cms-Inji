@@ -71,6 +71,9 @@ class InjiStorage {
     }
 
     public function checkWhere($item = [], $where = '', $value = '', $operation = '=', $concatenation = 'AND') {
+        if (!$where) {
+            return true;
+        }
         if (is_array($where)) {
             if (is_array($where[0])) {
                 $result = true;
