@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * App
  *
@@ -28,6 +29,7 @@ class App {
      */
     public $name = '';
     public $dir = '';
+    public $namespace = '';
     public $type = 'app';
     public $system = false;
     public $default = false;
@@ -72,28 +74,45 @@ class App {
      * @return mixed
      */
     public function findModuleClass($moduleName) {
-        $paths = Module::getModulePaths($moduleName);
-        foreach ($paths as $path) {
-            if (file_exists($path . '/' . $moduleName . '.php')) {
-                include_once $path . '/' . $moduleName . '.php';
-                return $moduleName;
+        $possibleModules = $this->possibleModuleClasses($moduleName);
+        foreach ($possibleModules as $possibleModule) {
+            if (class_exists($possibleModule)) {
+                return $possibleModule;
             }
         }
         if (!empty($this->config['moduleRouter'])) {
             foreach ($this->config['moduleRouter'] as $route => $module) {
                 if (preg_match("!{$route}!i", $moduleName)) {
-                    return $module;
+                    $possibleModules = $this->possibleModuleClasses($module);
+                    foreach ($possibleModules as $possibleModule) {
+                        if (class_exists($possibleModule)) {
+                            return $possibleModule;
+                        }
+                    }
                 }
             }
         }
-        if (!empty(Inji::$config['moduleRouter'])) {
-            foreach (Inji::$config['moduleRouter'] as $route => $module) {
+        if (!empty(\Inji::$config['moduleRouter'])) {
+            foreach (\Inji::$config['moduleRouter'] as $route => $module) {
                 if (preg_match("!{$route}!i", $moduleName)) {
-                    return $module;
+                    $possibleModules = $this->possibleModuleClasses($module);
+                    foreach ($possibleModules as $possibleModule) {
+                        if (class_exists($possibleModule)) {
+                            return $possibleModule;
+                        }
+                    }
                 }
             }
         }
         return false;
+    }
+    public function possibleModuleClasses($moduleName){
+        $possibleModules = [];
+        if ($this->namespace) {
+            $possibleModules[] = $this->namespace . '\\' . $moduleName;
+        }
+        $possibleModules[] = "Inji\\{$moduleName}";
+        return $possibleModules;
     }
 
     public function isLoaded($moduleName) {
@@ -113,11 +132,10 @@ class App {
     public function loadObject($className, $params = []) {
         $paramsStr = serialize($params);
         $moduleClassName = $this->findModuleClass($className);
-        if (!is_bool($moduleClassName) && $moduleClassName != $className) {
-            return $this->_objects[$moduleClassName][$paramsStr] = $this->_objects[$className][$paramsStr] = $this->getObject($moduleClassName);
-        } elseif (Module::installed($className, $this) && class_exists($className)) {
-            $this->_objects[$className][$paramsStr] = new $className($this);
+        if ($moduleClassName === false) {
+            return false;
         }
+        $this->_objects[$className][$paramsStr] = new $moduleClassName($this);
         if (isset($this->_objects[$className][$paramsStr])) {
             $this->_objects[$className][$paramsStr]->checkDbMigration();
             if (method_exists($this->_objects[$className][$paramsStr], 'init')) {
@@ -125,7 +143,7 @@ class App {
             }
             return $this->_objects[$className][$paramsStr];
         }
-        return null;
+        return false;
     }
 
     /**
