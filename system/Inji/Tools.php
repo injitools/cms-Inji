@@ -58,10 +58,6 @@ class Tools extends Model {
         if (file_exists($path)) {
             return true;
         }
-        $root = rtrim(str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER['DOCUMENT_ROOT']), '/') . '/';
-        if (strpos($path, $root) === 0) {
-            $path = str_replace($root, '', $path);
-        }
         $path = explode('/', $path);
         $cur = '';
         foreach ($path as $item) {
