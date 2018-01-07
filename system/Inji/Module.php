@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * Module
  *
@@ -13,7 +14,7 @@ class Module {
     /**
      * Storage of cur requested module
      *
-     * @var \Module
+     * @var Module
      */
     public static $cur = null;
 
@@ -22,7 +23,7 @@ class Module {
      *
      * @var string
      */
-    public $moduleName = '';
+    public $name = '';
 
     /**
      * Module config
@@ -55,23 +56,25 @@ class Module {
     /**
      * Module app
      *
-     * @var \App
+     * @var App
      */
     public $app = null;
 
     /**
      * Parse cur module
      *
-     * @param \App $app
+     * @param App $app
      */
     public function __construct($app) {
         $this->app = $app;
-        $this->moduleName = get_class($this);
-        $this->path = Router::getLoadedClassPath($this->moduleName);
+        if (!$this->name) {
+            $this->name = get_class($this);
+        }
+        $this->path = Router::getLoadedClassPath(get_class($this));
         $this->info = $this->getInfo();
-        $this->config = Config::module($this->moduleName, !empty($this->info['systemConfig']));
+        $this->config = Config::module($this->name, !empty($this->info['systemConfig']));
         $that = $this;
-        Inji::$inst->listen('Config-change-module-' . $this->app->name . '-' . $this->moduleName, $this->app->name . '-' . $this->moduleName . 'config', function ($event) use ($that) {
+        \Inji::$inst->listen('Config-change-module-' . $this->app->name . '-' . $this->name, $this->app->name . '-' . $this->name . 'config', function ($event) use ($that) {
             $that->config = $event['eventObject'];
             return $event['eventObject'];
         });
@@ -114,7 +117,7 @@ class Module {
      * Check module for installed
      *
      * @param string $moduleName
-     * @param \App $app
+     * @param \Inji\App $app
      * @return boolean
      */
     public static function installed($moduleName, $app) {
@@ -127,15 +130,15 @@ class Module {
     /**
      * Get installed modules for app
      *
-     * @param \App $app
+     * @param \Inji\App $app
      * @param App $primary
      * @return array
      */
     public static function getInstalled($app, $primary = false) {
         if (!$primary) {
-            $primary = \App::$primary;
+            $primary = \Inji\App::$primary;
         }
-        $system = !empty(Inji::$config['modules']) ? Inji::$config['modules'] : [];
+        $system = !empty(\Inji::$config['modules']) ? \Inji::$config['modules'] : [];
         $primary = !empty($primary->config['modules']) ? $primary->config['modules'] : [];
         $actual = $app !== $primary && !empty($app->config['modules']) ? $app->config['modules'] : [];
         $modules = array_unique(array_merge($system, $primary, $actual));
@@ -172,13 +175,12 @@ class Module {
     /**
      * Find module by request
      *
-     * @param \App $app
+     * @param \Inji\App $app
      * @param array|null $params
-     * @return \Module
+     * @return \Inji\Module
      */
     public static function resolveModule($app, $params = null) {
         $search = is_array($params) ? $params : $app->params;
-
         if (!empty($search[0]) && $app->{$search[0]}) {
             $module = $app->{$search[0]};
             $module->params = array_slice($search, 1);
@@ -203,61 +205,37 @@ class Module {
      *
      * @return array
      */
-    public function getControllerPaths() {
-        $paths = [];
-        if (App::$cur != App::$primary) {
-            if (!empty($this->params[0]) && strtolower($this->params[0]) != strtolower($this->moduleName)) {
-                $paths['primaryAppAppTypePath_slice'] = App::$primary->path . '/modules/' . $this->moduleName . '/' . $this->app->type . 'Controllers/' . ucfirst($this->params[0]) . 'Controller.php';
-                if (App::$primary->{$this->moduleName}) {
-                    $paths['primaryAppAppTypePath_slice'] = App::$primary->{$this->moduleName}->path . '/' . $this->app->type . 'Controllers/' . ucfirst($this->params[0]) . 'Controller.php';
-                }
-            }
-            $paths['primaryAppAppAppTypePath'] = App::$primary->path . '/modules/' . $this->moduleName . '/' . $this->app->type . 'Controllers/' . $this->moduleName . 'Controller.php';
-            if (App::$primary->{$this->moduleName}) {
-                $paths['primaryAppAppTypePath'] = App::$primary->{$this->moduleName}->path . '/' . $this->app->type . 'Controllers/' . $this->moduleName . 'Controller.php';
-            }
-            $paths['curAppAppTypePath'] = $this->app->{$this->moduleName}->path . '/' . $this->app->type . 'Controllers/' . $this->moduleName . 'Controller.php';
+    public function getPossibleControllers() {
+        $possibleClasses = [];
+        if (!empty($this->params[0]) && ucfirst($this->params[0]) != $this->name) {
+            $possibleClasses['curApp_splice'] = $this->app->namespace . '\\' . $this->name . '\\' . ucfirst($this->params[0]) . ucfirst($this->app->type) . 'Controller';
+            $possibleClasses['system_splice'] = 'Inji\\' . $this->name . '\\' . ucfirst($this->params[0]) . ucfirst($this->app->type) . 'Controller';
         }
-
-        if (!empty($this->params[0]) && strtolower($this->params[0]) != strtolower($this->moduleName)) {
-            $paths['appAppTypePath_slice'] = $this->app->path . '/modules/' . $this->moduleName . '/' . $this->app->type . 'Controllers/' . ucfirst($this->params[0]) . 'Controller.php';
-            $paths['appTypePath_slice'] = $this->path . '/' . $this->app->type . 'Controllers/' . ucfirst($this->params[0]) . 'Controller.php';
-        }
-        $paths['appAppTypePath'] = $this->app->path . '/modules/' . $this->moduleName . '/' . $this->app->type . 'Controllers/' . $this->moduleName . 'Controller.php';
-        $paths['appTypePath'] = $this->path . '/' . $this->app->type . 'Controllers/' . $this->moduleName . 'Controller.php';
-
-        if (!empty($this->params[0]) && strtolower($this->params[0]) != strtolower($this->moduleName)) {
-            $paths['appUniversalPath_slice'] = $this->app->path . '/modules/' . $this->moduleName . '/Controllers/' . ucfirst($this->params[0]) . 'Controller.php';
-            $paths['universalPath_slice'] = $this->path . '/Controllers/' . ucfirst($this->params[0]) . 'Controller.php';
-        }
-        $paths['appUniversalPath'] = $this->app->path . '/modules/' . $this->moduleName . '/Controllers/' . $this->moduleName . 'Controller.php';
-        $paths['universalPath'] = $this->path . '/Controllers/' . $this->moduleName . 'Controller.php';
-
-        return $paths;
+        $possibleClasses['curApp'] = $this->app->namespace . '\\' . $this->name . '\\' . $this->name . ucfirst($this->app->type) . 'Controller';
+        $possibleClasses['system'] = 'Inji\\' . $this->name . '\\' . $this->name . ucfirst($this->app->type) . 'Controller';
+        return $possibleClasses;
     }
 
     /**
      * Find controller by request
      *
-     * @return \Controller
+     * @return \Inji\Controller
      */
     public function findController() {
-        $paths = $this->getControllerPaths();
-        foreach ($paths as $pathName => $path) {
-            if (file_exists($path)) {
-                include_once $path;
-                if (strpos($pathName, 'slice')) {
+        $possibleClasses = $this->getPossibleControllers();
+        foreach ($possibleClasses as $possibleClassType => $possibleClass) {
+            if (class_exists($possibleClass)) {
+                if (strpos($possibleClassType, 'slice')) {
                     $controllerName = ucfirst($this->params[0]);
                     $params = array_slice($this->params, 1);
                 } else {
-                    $controllerName = $this->moduleName;
+                    $controllerName = $this->name;
                     $params = $this->params;
                 }
-                $fullControllerName = $controllerName . 'Controller';
-                $controller = new $fullControllerName();
+                $controller = new $possibleClass();
                 $controller->params = $params;
                 $controller->module = $this;
-                $controller->path = pathinfo($path, PATHINFO_DIRNAME);
+                $controller->path = Router::getLoadedClassPath($possibleClass);
                 $controller->name = $controllerName;
                 return $controller;
             }
@@ -295,7 +273,7 @@ class Module {
      * @return array
      */
     public function getSnippets($snippetsPath, $extensions = true, $dir = '/snippets', $moduleName = '') {
-        $moduleName = $moduleName ? $moduleName : $this->moduleName;
+        $moduleName = $moduleName ? $moduleName : $this->name;
         $modulePaths = Module::getModulePaths($moduleName);
         $modulePaths = array_reverse($modulePaths);
         $modulePaths['templatePath'] = App::$cur->view->template->path . '/modules/' . ucfirst($moduleName);
@@ -324,7 +302,7 @@ class Module {
      * @return array
      */
     public function getObjects($filterNamespace = '') {
-        $moduleName = $this->moduleName;
+        $moduleName = $this->name;
         $modulePaths = Module::getModulePaths($moduleName);
         $modulePaths = array_reverse($modulePaths);
         $scanFn = function ($path, $namespace, &$files = []) use (&$scanFn, $filterNamespace) {
@@ -397,7 +375,7 @@ class Module {
         $modules = Module::getInstalled(App::$cur);
         $method = 'get' . ucfirst($extensionType);
         foreach ($modules as $module) {
-            $extensions = array_merge($extensions, $this->{$method}($request, false, "/extensions/{$this->moduleName}/" . $extensionType, $module));
+            $extensions = array_merge($extensions, $this->{$method}($request, false, "/extensions/{$this->name}/" . $extensionType, $module));
         }
         return $extensions;
     }
