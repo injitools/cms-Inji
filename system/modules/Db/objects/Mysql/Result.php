@@ -9,14 +9,20 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Db\Mysql;
+namespace Inji\Db\Mysql;
 
-class Result extends \InjiObject {
+use Inji\Db\DriverResult;
+
+class Result implements DriverResult {
 
     public $pdoResult = null;
 
+    public function __construct($dbResult) {
+        $this->pdoResult = $dbResult;
+    }
+
     public function getArray($keyCol = '') {
-        $key = \App::$cur->log->start('parse result');
+        $key = \Inji\App::$cur->log->start('parse result');
         if (!$keyCol) {
             return $this->pdoResult->fetchAll(\PDO::FETCH_ASSOC);
         }
@@ -28,12 +34,12 @@ class Result extends \InjiObject {
                 $array[] = $row;
             }
         }
-        \App::$cur->log->end($key);
+        \Inji\App::$cur->log->end($key);
         return $array;
     }
 
     public function getObjects($class, $keyCol = '') {
-        $key = \App::$cur->log->start('parse result');
+        $key = \Inji\App::$cur->log->start('parse result');
         $array = [];
         while ($object = $this->pdoResult->fetchObject($class)) {
             if ($keyCol) {
@@ -42,7 +48,7 @@ class Result extends \InjiObject {
                 $array[] = $object;
             }
         }
-        \App::$cur->log->end($key);
+        \Inji\App::$cur->log->end($key);
         return $array;
     }
 

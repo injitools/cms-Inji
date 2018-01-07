@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Db;
+namespace Inji\Db;
 
-class Mysql extends \InjiObject {
+class Mysql extends \Inji\InjiObject {
 
     public $config = []; // настройки подключения выбраной базы
     public $connect = false; // ярлык соединения с MySQL
@@ -22,7 +22,7 @@ class Mysql extends \InjiObject {
     public $lastQuery = '';
     public $last_error = '';
     public $noConnectAbort = false;
-    public $dbInstance = null;
+    public $dbInstance;
 
     /**
      * Подключение к MySQL

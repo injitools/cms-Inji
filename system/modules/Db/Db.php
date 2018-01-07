@@ -1,7 +1,8 @@
 <?php
 
+namespace Inji;
 class Db extends Module {
-
+    public $name = 'Db';
     public $connection = null;
     public $connect = false;
     public $dbConfig = [];
@@ -11,29 +12,35 @@ class Db extends Module {
     public $ResultClassName = '';
     public $migrationsVersions = [];
 
-    public function init($param = null) {
-        if (!$param) {
+    public function init($param = 'default') {
+        if (!$param || $param === 'default') {
             $param = isset($this->config['default']) ? $this->config['default'] : 'local';
         }
-        if (!is_array($param)) {
-            if (!($dbOption = Db\Options::get($param, 'connect_alias', ['array' => true]))) {
+        if ($param === 'injiStorage') {
+            $db = [
+                'driver' => 'InjiStorage'
+            ];
+        } else if (!is_array($param)) {
+            if (!($dbOption = Db\Options::sharedStorage()->where($param, 'connect_alias')->get(['array' => true]))) {
                 return false;
             }
-
             $db = $dbOption;
         } else {
             $db = $param;
         }
-        $className = 'Db\\' . $db['driver'];
+
+        $className = 'Inji\Db\\' . $db['driver'];
         $this->connection = new $className();
-        $this->connection->init($db);
+        if (method_exists($className, 'init')) {
+            $this->connection->init($db);
+        }
         $this->connection->dbInstance = $this;
         $this->connect = $this->connection->connect;
         $this->dbConfig = $db;
 
-        $this->className = 'Db\\' . $this->dbConfig['driver'];
-        $this->QueryClassName = 'Db\\' . $this->dbConfig['driver'] . '\\Query';
-        $this->ResultClassName = 'Db\\' . $this->dbConfig['driver'] . '\\Result';
+        $this->className = 'Inji\Db\\' . $this->dbConfig['driver'];
+        $this->QueryClassName = 'Inji\Db\\' . $this->dbConfig['driver'] . '\\Query';
+        $this->ResultClassName = 'Inji\Db\\' . $this->dbConfig['driver'] . '\\Result';
     }
 
     public function loadMigrationsVersion($code) {

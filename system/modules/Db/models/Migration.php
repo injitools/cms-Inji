@@ -1,8 +1,8 @@
 <?php
 
-namespace Db;
+namespace Inji\Db;
 
-class Migration extends \Model {
+class Migration extends \Inji\Model {
 
     public static $cols = [
         'code' => ['type' => 'text'],

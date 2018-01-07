@@ -9,15 +9,30 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Db;
+namespace Inji\Db;
 
-class Options extends \Model {
+/**
+ * Class Options
+ * @package Inji\Db
+ *
+ * @property int $id
+ * @property string $connect_name
+ * @property string $connect_alias
+ * @property string $driver
+ * @property string $host
+ * @property string $user
+ * @property string $pass
+ * @property string $db_name
+ * @property string $encoding
+ * @property string $table_prefix
+ * @property string $port
+ */
+class Options extends \Inji\Model {
 
     /**
      * Model options
      */
     public static $objectName = 'Db options';
-    public static $storage = ['type' => 'moduleConfig', 'options' => ['share' => true]];
     public static $labels = [
         'id' => '#',
         'connect_name' => 'Название',
@@ -87,6 +102,12 @@ class Options extends \Model {
 
     public static function index() {
         return 'id';
+    }
+
+    public static function sharedStorage() {
+        $builder = \Inji\Db\Options::connection('injiStorage');
+        $builder->setDbOption('share', true);
+        return $builder;
     }
 
 }

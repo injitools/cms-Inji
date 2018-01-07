@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Db\Mysql;
+namespace Inji\Db\Mysql;
 
-class Query extends \InjiObject {
+class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
 
     public $curInstance = null;
     public $where = [];
@@ -30,6 +30,7 @@ class Query extends \InjiObject {
     public $indexes = [];
     public $params = [];
     public $distinct = false;
+    public $dbOptions = [];
 
     /**
      * @param  $instance
@@ -42,6 +43,14 @@ class Query extends \InjiObject {
         }
     }
 
+    public function setDbOption($name, $value) {
+        $this->dbOptions[$name] = $value;
+    }
+
+    public function setTable($tableName) {
+        $this->table = $tableName;
+    }
+
     public function insert($table, $data) {
         $this->operation = 'INSERT';
         $this->table = $table;
@@ -50,9 +59,11 @@ class Query extends \InjiObject {
         return $this->curInstance->pdo->lastInsertId();
     }
 
-    public function select($table) {
+    public function select($table = null) {
         $this->operation = 'SELECT';
-        $this->table = $table;
+        if ($table !== null) {
+            $this->table = $table;
+        }
         return $this->query();
     }
 
@@ -425,7 +436,7 @@ class Query extends \InjiObject {
      * Execute query
      *
      * @param string|array $query
-     * @return \Db\Mysql\Result
+     * @return Result
      */
     public function query($query = []) {
         if (!$query) {
@@ -442,9 +453,9 @@ class Query extends \InjiObject {
         foreach ($query['params'] as $param) {
             $prepare->bindValue($pos++, $param, is_null($param) ? \PDO::PARAM_NULL : \PDO::PARAM_STR);
         }
-        $key = \App::$cur->log->start('query: '.$query['query']);
+        $key = \Inji\App::$cur->log->start('query: ' . $query['query']);
         $prepare->execute();
-        \App::$cur->log->end($key);
+        \Inji\App::$cur->log->end($key);
         $this->curInstance->lastQuery = $query;
         $result = new Result();
         $result->pdoResult = $prepare;
