@@ -11,7 +11,7 @@
 
 namespace Money;
 
-class Currency extends \Model {
+class Currency extends \Inji\Model {
 
     public static $objectName = 'Валюта';
     public static $labels = [

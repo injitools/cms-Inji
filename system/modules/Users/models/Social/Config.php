@@ -11,7 +11,7 @@
 
 namespace Users\Social;
 
-class Config extends \Model {
+class Config extends \Inji\Model {
 
     public static $objectName = "Опция коннектора с социальной сетью";
     public static $cols = [
@@ -45,7 +45,7 @@ class Config extends \Model {
     public static function relations() {
         return [
             'social' => [
-                'model' => 'Users\Social',
+                'model' => 'Inji\Users\Social',
                 'col' => 'social_id'
             ]
         ];

@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\UserAdds;
+namespace Inji\Ecommerce\UserAdds;
 /**
  * @property int $id
  * @property string $name
@@ -28,7 +28,7 @@ namespace Ecommerce\UserAdds;
  *
  * @method \Ecommerce\UserAdds\Field\Item[] fieldItems($options)
  */
-class Field extends \Model {
+class Field extends \Inji\Model {
 
     public static $objectName = 'Поле информации при заказе';
     public static $cols = [
@@ -84,7 +84,7 @@ class Field extends \Model {
     public static function relations() {
         return [
             'fieldItems' => [
-                'model' => 'Ecommerce\UserAdds\Field\Item',
+                'model' => 'Inji\Ecommerce\UserAdds\Field\Item',
                 'col' => 'useradds_field_id',
                 'type' => 'many'
             ],

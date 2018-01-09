@@ -20,7 +20,7 @@ namespace Geography;
  * @property \Geography\City\Data[] $datas
  * @property \Geography\Country $country
  */
-class City extends \Model {
+class City extends \Inji\Model {
     /**
      * @var City
      */

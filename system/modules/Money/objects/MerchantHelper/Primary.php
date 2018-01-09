@@ -18,7 +18,7 @@ class Primary extends \Money\MerchantHelper {
     }
 
     public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/') {
-        \Tools::redirect('/money/primaryPay/' . $payId . '/' . $currency->id);
+        \Inji\Tools::redirect('/money/primaryPay/' . $payId . '/' . $currency->id);
     }
 
     public static function getFinalSum($pay, $method) {

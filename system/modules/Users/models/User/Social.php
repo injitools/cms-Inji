@@ -11,7 +11,7 @@
 
 namespace Users\User;
 
-class Social extends \Model {
+class Social extends \Inji\Model {
 
     public static $objectName = "Связь с соц.сетью";
     public static $cols = [
@@ -30,11 +30,11 @@ class Social extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'social' => [
-                'model' => 'Users\Social',
+                'model' => 'Inji\Users\Social',
                 'col' => 'social_id'
             ],
         ];

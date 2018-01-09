@@ -11,7 +11,7 @@
 
 namespace Callbacks;
 
-class Category extends \Model {
+class Category extends \Inji\Model {
 
     public static $objectName = 'Категория отзывов';
     public static $treeCategory = 'Callbacks\Callback';

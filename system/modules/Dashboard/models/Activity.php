@@ -11,14 +11,14 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Dashboard;
+namespace Inji\Dashboard;
 
 /**
  * Description of Activity
  *
  * @author benzu
  */
-class Activity extends \Model {
+class Activity extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [
@@ -79,12 +79,12 @@ class Activity extends \Model {
         return [
             'user' => [
                 'col' => 'user_id',
-                'model' => 'Users\User'
+                'model' => 'Inji\Users\User'
             ],
             'changes' => [
                 'type' => 'many',
                 'col' => 'activity_id',
-                'model' => 'Dashboard\Activity\Change'
+                'model' => 'Inji\Dashboard\Activity\Change'
             ]
         ];
     }

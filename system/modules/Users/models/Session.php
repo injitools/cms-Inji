@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Users;
+namespace Inji\Users;
 
-class Session extends \Model {
+class Session extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [
@@ -24,7 +24,7 @@ class Session extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => '\Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ]
         ];

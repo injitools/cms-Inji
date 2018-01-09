@@ -3,8 +3,8 @@
 $currency_id = !empty($_GET['currency_id']) ? (int)$_GET['currency_id'] : 0;
 $wallets = App::$cur->money->getUserWallets();
 if ($currency_id && empty($wallets[$currency_id])) {
-    Msg::add('У вас нет такого кошелька');
-    Msg::show();
+    \Inji\Msg::add('У вас нет такого кошелька');
+    \Inji\Msg::show();
     return;
 }
 

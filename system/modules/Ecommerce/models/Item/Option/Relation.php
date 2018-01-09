@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Option;
+namespace Inji\Ecommerce\Item\Option;
 
-class Relation extends \Model {
+class Relation extends \Inji\Model {
 
     public static $objectName = 'Связь каталога и опций';
     public static $labels = [
@@ -45,11 +45,11 @@ class Relation extends \Model {
     public static function relations() {
         return [
             'category' => [
-                'model' => 'Ecommerce\Category',
+                'model' => 'Inji\Ecommerce\Category',
                 'col' => 'category_id'
             ],
             'option' => [
-                'model' => 'Ecommerce\Item\Option',
+                'model' => 'Inji\Ecommerce\Item\Option',
                 'col' => 'item_option_id'
             ],
         ];

@@ -11,7 +11,7 @@
 
 namespace Notifications\Subscriber;
 
-class Device extends \Model {
+class Device extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [

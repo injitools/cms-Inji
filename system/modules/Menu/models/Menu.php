@@ -9,10 +9,18 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Menu;
-
-class Menu extends \Model {
-
+namespace Inji\Menu;
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @property Item $items
+ * @property \Users\Group $group_id
+ *
+ * @method Item items($options)
+ * @method \Users\Group group_id($options)
+ */
+class Menu extends \Inji\Model {
     public static $objectName = 'Меню';
     public static $labels = [
         'name' => 'Название',
@@ -64,7 +72,7 @@ class Menu extends \Model {
                 'type' => 'many',
                 'model' => 'Menu\Item',
                 'col' => 'Menu_id',
-                'where'=>[['parent_id',0]]
+                'where' => [['parent_id', 0]]
             ],
             'group' => [
                 'col' => 'group_id',

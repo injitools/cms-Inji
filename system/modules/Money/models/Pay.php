@@ -28,7 +28,7 @@ namespace Money;
  * @property-read \Money\Pay\Status $status
  * @property-read \Users\User $user
  */
-class Pay extends \Model {
+class Pay extends \Inji\Model {
 
     public static function relations() {
         return [

@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 
-class Discount extends \Model {
+class Discount extends \Inji\Model {
 
     public static $objectName = 'Скидка';
     public static $cols = [

@@ -11,7 +11,7 @@
 
 namespace Users;
 
-class Activity extends \Model {
+class Activity extends \Inji\Model {
     public static $logging = false;
     public static $objectName = 'Activity';
     public static $labels = [
@@ -45,11 +45,11 @@ class Activity extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'category' => [
-                'model' => 'Users\Activity\Category',
+                'model' => 'Inji\Users\Activity\Category',
                 'col' => 'category_id'
             ],
         ];

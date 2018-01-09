@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery;
+namespace Inji\Ecommerce\Delivery;
 
 /**
  * @property int $id
@@ -23,7 +23,7 @@ namespace Ecommerce\Delivery;
  * @method \Ecommerce\Delivery\Value[] values($options)
  * @method \Users\User user($options)
  */
-class Save extends \Model {
+class Save extends \Inji\Model {
     public static $logging = false;
     public static $cols = [
         'name' => ['type' => 'text'],
@@ -34,12 +34,12 @@ class Save extends \Model {
         return [
             'values' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Delivery\Value',
+                'model' => 'Inji\Ecommerce\Delivery\Value',
                 'col' => 'delivery_save_id',
                 'resultKey' => 'delivery_field_id',
             ],
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ]
         ];

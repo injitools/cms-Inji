@@ -9,12 +9,12 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Materials;
+namespace Inji\Materials;
 
-class Category extends \Model {
+class Category extends \Inji\Model {
 
     public static $objectName = 'Категория';
-    public static $treeCategory = 'Materials\Material';
+    public static $treeCategory = 'Inji\Materials\Material';
     public static $labels = [
         'name' => 'Название',
         'description' => 'Описание',
@@ -108,25 +108,25 @@ class Category extends \Model {
     public static function relations() {
         return [
             'parent' => [
-                'model' => 'Materials\Category',
+                'model' => 'Inji\Materials\Category',
                 'col' => 'parent_id'
             ],
             'childs' => [
                 'type' => 'many',
-                'model' => 'Materials\Category',
+                'model' => 'Inji\Materials\Category',
                 'col' => 'parent_id'
             ],
             'items' => [
                 'type' => 'many',
-                'model' => 'Materials\Material',
+                'model' => 'Inji\Materials\Material',
                 'col' => 'category_id'
             ],
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ],
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ]
         ];

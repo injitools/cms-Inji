@@ -11,7 +11,7 @@
 
 namespace Geography\City;
 
-class Data extends \Model {
+class Data extends \Inji\Model {
 
     public static $objectName = 'Данные города';
     public static $labels = [

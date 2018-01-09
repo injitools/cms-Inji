@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Offer;
+namespace Inji\Ecommerce\Item\Offer;
 
-class Bonus extends \Model {
+class Bonus extends \Inji\Model {
 
     public static $cols = [
         //Основные параметры
@@ -28,7 +28,7 @@ class Bonus extends \Model {
     public static function relations() {
         return [
             'offer' => [
-                'model' => 'Ecommerce\Item\Offer',
+                'model' => 'Inji\Ecommerce\Item\Offer',
                 'col' => 'item_offer_id'
             ]
         ];

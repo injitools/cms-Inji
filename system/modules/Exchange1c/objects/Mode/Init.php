@@ -21,7 +21,7 @@ class Init extends \Exchange1c\Mode {
         } elseif ($this->log->type == 'sale') {
             echo "zip=no\n";
         }
-        echo 'file_limit=' . \Tools::toBytes(ini_get('upload_max_filesize')) . "\n";
+        echo 'file_limit=' . \Inji\Tools::toBytes(ini_get('upload_max_filesize')) . "\n";
         if (!empty($_GET["version"])) {
             echo "sessid=" . $this->log->exchange->session . "\n";
             echo "version=2.08";
@@ -40,7 +40,7 @@ class Init extends \Exchange1c\Mode {
 
             $exc = $query->query($queryArr)->getArray();
             foreach ($exc as $exchangeArr) {
-                \Tools::delDir($exchangeArr[\Exchange1c\Exchange::colPrefix() . 'path']);
+                \Inji\Tools::delDir($exchangeArr[\Exchange1c\Exchange::colPrefix() . 'path']);
                 $query = \App::$cur->db->newQuery();
                 $query->where([\Exchange1c\Exchange::index(), $exchangeArr[\Exchange1c\Exchange::index()]]);
                 $query->update(\Exchange1c\Exchange::table(), [\Exchange1c\Exchange::colPrefix() . 'cleared' => 1]);

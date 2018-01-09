@@ -11,7 +11,7 @@
 
 namespace Chats\Chat;
 
-class Ban extends \Model {
+class Ban extends \Inji\Model {
 
     public static $cols = [
         'chat_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'chat'],

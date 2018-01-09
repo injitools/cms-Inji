@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class FontAwesome extends \InjiObject {
+class FontAwesome extends \Inji\InjiObject {
 
     public static $name = 'Font Awesome';
     public static $bowerPacks = [

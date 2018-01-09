@@ -11,7 +11,7 @@
 
 namespace Materials\Material;
 
-class Link extends \Model {
+class Link extends \Inji\Model {
 
     public static $objectName = 'Связь с материалом';
     public static $labels = [
@@ -59,11 +59,11 @@ class Link extends \Model {
     public static function relations() {
         return [
             'material' => [
-                'model' => '\Materials\Material',
+                'model' => 'Inji\Materials\Material',
                 'col' => 'material_id'
             ],
             'linkedMaterial' => [
-                'model' => '\Materials\Material',
+                'model' => 'Inji\Materials\Material',
                 'col' => 'linked_material_id'
             ],
         ];

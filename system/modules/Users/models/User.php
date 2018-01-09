@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Users;
+namespace Inji\Users;
 /**
  * @property int $id
  * @property string $login
@@ -31,9 +31,9 @@ namespace Users;
  * @property \Users\User $parent
  * @property \Users\User[] $users
  */
-class User extends \Model {
+class User extends \Inji\Model {
     /**
-     * @var \Users\User
+     * @var User
      */
     public static $cur;
     public static $objectName = "Пользователь";
@@ -44,6 +44,7 @@ class User extends \Model {
         'parent_id' => 'Пригласивший',
         'group_id' => 'Группа',
         'role_id' => 'Роль',
+        'user_avatar_id' => 'Аватар',
         'admin_text' => 'Комментарий администратора',
         'activation' => 'Код активации',
         'blocked' => 'Заблокирован',
@@ -57,6 +58,7 @@ class User extends \Model {
         'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent'],
         'group_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'group'],
         'role_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'role'],
+        'user_avatar_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'avatar'],
         'admin_text' => ['type' => 'html'],
         'activation' => ['type' => 'text', 'logging' => false],
         'blocked' => ['type' => 'bool'],
@@ -155,35 +157,39 @@ class User extends \Model {
     public static function relations() {
         return [
             'group' => [
-                'model' => 'Users\Group',
+                'model' => 'Inji\Users\Group',
                 'col' => 'group_id'
             ],
             'role' => [
-                'model' => 'Users\Role',
+                'model' => 'Inji\Users\Role',
                 'col' => 'role_id'
             ],
             'info' => [
                 'type' => 'one',
-                'model' => 'Users\User\Info',
+                'model' => 'Inji\Users\User\Info',
                 'col' => 'user_id'
+            ],
+            'avatar' => [
+                'model' => 'Inji\Users\User\Avatar',
+                'col' => 'user_avatar_id'
             ],
             'inventory' => [
                 'type' => 'one',
-                'model' => 'Users\User\Inventory',
+                'model' => 'Inji\Users\User\Inventory',
                 'col' => 'user_id'
             ],
             'socials' => [
                 'type' => 'many',
-                'model' => 'Users\User\Social',
+                'model' => 'Inji\Users\User\Social',
                 'col' => 'user_id'
             ],
             'parent' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'parent_id'
             ],
             'users' => [
                 'type' => 'many',
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'parent_id'
             ]
         ];

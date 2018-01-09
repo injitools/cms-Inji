@@ -23,10 +23,10 @@ class Google extends \Users\SocialHelper {
                 'response_type' => 'code',
                 'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/google'
             ];
-            \Tools::redirect("https://accounts.google.com/o/oauth2/auth?" . http_build_query($query));
+            \Inji\Tools::redirect("https://accounts.google.com/o/oauth2/auth?" . http_build_query($query));
         }
         if (empty($_GET['code']) && !empty($_GET['error'])) {
-            \Tools::redirect('/', 'Произошла ошибка во время авторизации через соц. сеть: ' . $_GET['error_description']);
+            \Inji\Tools::redirect('/', 'Произошла ошибка во время авторизации через соц. сеть: ' . $_GET['error_description']);
         }
         $query = [
             'client_id' => $config['client_id'],
@@ -45,29 +45,29 @@ class Google extends \Users\SocialHelper {
             curl_close($curl);
         }
         if ($result === false) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $result = json_decode($result, true);
         if (empty($result['access_token'])) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $userQuery = [
             'access_token' => $result['access_token']
         ];
         $userResult = @file_get_contents("https://www.googleapis.com/oauth2/v1/userinfo?" . http_build_query($userQuery));
         if (!$userResult) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $userDetail = json_decode($userResult, true);
         if (empty($userDetail['id'])) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $social = static::getObject();
         $userSocial = \Users\User\Social::get([['uid', $userDetail['id']], ['social_id', $social->id]]);
         if ($userSocial && $userSocial->user) {
             \App::$cur->users->newSession($userSocial->user);
             if (!empty(\App::$cur->users->config['loginUrl'][\App::$cur->type])) {
-                \Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type]);
+                \Inji\Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type]);
             }
         } else {
             if ($userSocial && !$userSocial->user) {
@@ -90,11 +90,11 @@ class Google extends \Users\SocialHelper {
                         $invite = \Users\User\Invite::get($invite_code, 'code');
                         $inveiteError = false;
                         if (!$invite) {
-                            Msg::add('Такой код пришлашения не найден', 'danger');
+                            \Inji\Msg::add('Такой код пришлашения не найден', 'danger');
                             $inveiteError = true;
                         }
                         if ($invite->limit && !($invite->limit - $invite->count)) {
-                            Msg::add('Лимит приглашений для данного кода исчерпан', 'danger');
+                            \Inji\Msg::add('Лимит приглашений для данного кода исчерпан', 'danger');
                             $inveiteError = true;
                         }
                         if (!$inveiteError) {
@@ -133,7 +133,7 @@ class Google extends \Users\SocialHelper {
             $userSocial->user_id = $user->id;
             $userSocial->save();
             \App::$cur->users->newSession($user);
-            \Tools::redirect('/users/cabinet/profile', 'Вы успешно зарегистрировались через Google+', 'success');
+            \Inji\Tools::redirect('/users/cabinet/profile', 'Вы успешно зарегистрировались через Google+', 'success');
         }
     }
 

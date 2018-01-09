@@ -13,7 +13,7 @@
 
 namespace Money\Reward\Trigger;
 
-class Param extends \Model {
+class Param extends \Inji\Model {
 
     public static $cols = [
         'reward_trigger_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'trigger'],

@@ -11,7 +11,7 @@
 
 namespace Money\Wallet;
 
-class History extends \Model {
+class History extends \Inji\Model {
 
     public static $objectName = 'История кошелька';
     public static $cols = [

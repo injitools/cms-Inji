@@ -43,9 +43,9 @@ class Robokassa extends \Money\MerchantHelper {
             'SignatureValue' => $hash
         ];
         if (empty($config['test'])) {
-            \Tools::redirect('https://auth.robokassa.ru/Merchant/Index.aspx?' . http_build_query($data));
+            \Inji\Tools::redirect('https://auth.robokassa.ru/Merchant/Index.aspx?' . http_build_query($data));
         } else {
-            \Tools::redirect('http://test.robokassa.ru/Index.aspx?' . http_build_query($data));
+            \Inji\Tools::redirect('http://test.robokassa.ru/Index.aspx?' . http_build_query($data));
         }
     }
 

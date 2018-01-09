@@ -1,13 +1,9 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: inji
- * Date: 04.11.2017
- * Time: 15:40
- */
+namespace Inji\I18n;
+use Inji\App;
+use Inji\InjiObject;
 
-namespace I18n;
-class Text extends \InjiObject {
+class Text extends InjiObject {
     public static $strings = [];
 
     public static function module($module, $code, $params = [], $default = false, $lang = false) {
@@ -23,12 +19,12 @@ class Text extends \InjiObject {
     }
 
     public static function findString($module, $code, $lang = false) {
-        $lang = $lang ? $lang : \App::$cur->i18n->lang();
+        $lang = $lang ? $lang : App::$cur->i18n->lang();
         return static::loadStrings($module, $lang) && isset(static::$strings[$module][$lang][$code]) ? static::$strings[$module][$lang][$code] : false;
     }
 
     public static function loadStrings($module, $lang = false) {
-        $lang = $lang ? $lang : \App::$cur->i18n->lang();
+        $lang = $lang ? $lang : App::$cur->i18n->lang();
         $modulePaths = array_reverse(\Module::getModulePaths($module), true);
         if (isset(static::$strings[$module][$lang])) {
             return true;

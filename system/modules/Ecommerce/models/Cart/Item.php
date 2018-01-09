@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Cart;
+namespace Inji\Ecommerce\Cart;
 /**
  * Class Cart
  *
@@ -25,7 +25,7 @@ namespace Ecommerce\Cart;
  * @property \Ecommerce\Item\Offer\Price $price
  * @property \Ecommerce\Cart $cart
  */
-class Item extends \Model {
+class Item extends \Inji\Model {
 
     public function beforeSave() {
         if (!$this->id) {
@@ -185,15 +185,15 @@ class Item extends \Model {
     public static function relations() {
         return [
             'item' => [
-                'model' => 'Ecommerce\Item',
+                'model' => 'Inji\Ecommerce\Item',
                 'col' => 'item_id'
             ],
             'price' => [
-                'model' => 'Ecommerce\Item\Offer\Price',
+                'model' => 'Inji\Ecommerce\Item\Offer\Price',
                 'col' => 'item_offer_price_id'
             ],
             'cart' => [
-                'model' => 'Ecommerce\Cart',
+                'model' => 'Inji\Ecommerce\Cart',
                 'col' => 'cart_id'
             ]
         ];

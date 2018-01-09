@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class Ace extends \InjiObject {
+class Ace extends \Inji\InjiObject {
 
     public static $name = 'Ace editor';
     public static $bowerPacks = [

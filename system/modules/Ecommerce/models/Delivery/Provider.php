@@ -8,7 +8,7 @@
  * @license https://github.com/injitools/Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery;
+namespace Inji\Ecommerce\Delivery;
 
 /**
  * Class Provider
@@ -18,7 +18,7 @@ namespace Ecommerce\Delivery;
  * @property bool $active
  * @property \Ecommerce\Delivery\Provider\ConfigItem[] $configs
  */
-class Provider extends \Model {
+class Provider extends \Inji\Model {
     static $objectName = 'Провайдер доставки';
     static $cols = [
         'name' => ['type' => 'text'],
@@ -44,7 +44,7 @@ class Provider extends \Model {
         return [
             'configs' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Delivery\Provider\ConfigItem',
+                'model' => 'Inji\Ecommerce\Delivery\Provider\ConfigItem',
                 'col' => 'delivery_provider_id'
             ]
         ];

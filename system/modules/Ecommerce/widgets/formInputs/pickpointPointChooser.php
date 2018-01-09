@@ -1,7 +1,7 @@
 <div class="form-group">
     <?= $label ? "<label>{$label}</label>" : ''; ?>
     <?php
-    $id = 'pickpoint' . \Tools::randomString();
+    $id = 'pickpoint' . \Inji\Tools::randomString();
     $address = '';
     if (!empty($options['value'])) {
         $points = \Cache::get('PickPointPostamts', []);

@@ -22,7 +22,7 @@ namespace Exchange1c;
  * @property \Exchange1c\Exchange\Log[] $logs
  * @property \Exchange1c\Exchange\File[] $files
  */
-class Exchange extends \Model {
+class Exchange extends \Inji\Model {
 
     public static $labels = [
         'type' => 'Тип',

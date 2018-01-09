@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Files;
+namespace Inji\Files;
 /**
  * @property int $id
  * @property string $code
@@ -28,7 +28,7 @@ namespace Files;
  * @property-read \Files\Folder $folder
  * method  \Files\Folder folder($options)
  */
-class File extends \Model {
+class File extends \Inji\Model {
 
     public static $cols = [
         'code' => ['type' => 'text'],
@@ -58,18 +58,18 @@ class File extends \Model {
     }
 
     public function getRealPath() {
-        $sitePath = \App::$primary->path;
+        $sitePath = \Inji\App::$primary->path;
         return "{$sitePath}{$this->path}";
     }
 
     public static function relations() {
         return [
             'type' => [
-                'model' => 'Files\Type',
+                'model' => 'Inji\Files\Type',
                 'col' => 'type_id'
             ],
             'folder' => [
-                'model' => 'Files\Folder',
+                'model' => 'Inji\Files\Folder',
                 'col' => 'folder_id'
             ],
         ];

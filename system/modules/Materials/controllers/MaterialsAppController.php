@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji\Materials;
 /**
  * Materials app controller
  *
@@ -8,7 +9,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MaterialsController extends Controller {
+class MaterialsAppController extends \Inji\Controller {
 
     public function indexAction() {
         $args = func_get_args();
@@ -16,11 +17,11 @@ class MaterialsController extends Controller {
         $material = null;
         $path = trim(implode('/', $args));
         if (is_numeric($path)) {
-            $material = Materials\Material::get([['id', (int) $path], ['date_publish', null, 'IS NOT']]);
+            $material = Material::get([['id', (int)$path], ['date_publish', null, 'IS NOT']]);
         }
         if (!$material && $args) {
             foreach ($args as $key => $alias) {
-                $nextCategory = Materials\Category::get([['parent_id', $category ? $category->id : 0], ['alias', $alias]]);
+                $nextCategory = Category::get([['parent_id', $category ? $category->id : 0], ['alias', $alias]]);
                 if (!$nextCategory) {
                     break;
                 }
@@ -37,32 +38,32 @@ class MaterialsController extends Controller {
             } else {
                 $where = [['alias', $path], ['date_publish', null, 'IS NOT']];
             }
-            $material = Materials\Material::get($where);
+            $material = Material::get($where);
             if (!$material) {
                 if ($category) {
                     $where = [
                         ['category_id', $category->id],
-                        ['id', (int) $args[count($args) - 1]],
+                        ['id', (int)$args[count($args) - 1]],
                         ['date_publish', null, 'IS NOT']
                     ];
                 } else {
                     $where = [['alias', $path], ['date_publish', null, 'IS NOT']];
                 }
-                $material = Materials\Material::get($where);
+                $material = Material::get($where);
             }
             if (!$material) {
-                $category = Materials\Category::get($path, 'alias');
+                $category = Category::get($path, 'alias');
                 if ($category) {
                     $this->categoryAction($category->id);
                 }
             }
         } elseif (!$material) {
-            $material = Materials\Material::get(1, 'default');
+            $material = Material::get(1, 'default');
         }
         if ($material) {
             $this->viewAction($material->id);
         } elseif (!$category && !$material) {
-            Tools::header('404');
+            \Inji\Tools::header('404');
             $this->view->page([
                 'content' => '404',
                 'data' => ['text' => 'Такой страницы не найдено']
@@ -75,21 +76,21 @@ class MaterialsController extends Controller {
         $path = trim(implode('/', $args));
         $category = null;
         if (is_numeric($path)) {
-            $category = Materials\Category::get((int) $path);
+            $category = Category::get((int)$path);
         }
         if (!$category) {
             foreach ($args as $alias) {
-                $category = Materials\Category::get([['parent_id', $category ? $category->id : 0], ['alias', $alias]]);
+                $category = Category::get([['parent_id', $category ? $category->id : 0], ['alias', $alias]]);
                 if (!$category) {
                     break;
                 }
             }
         }
         if (!$category) {
-            $category = Materials\Category::get($path, 'alias');
+            $category = Category::get($path, 'alias');
         }
         if (!$category) {
-            Tools::header('404');
+            \Inji\Tools::header('404');
             $this->view->page([
                 'content' => '404',
                 'data' => ['text' => 'Такой страницы не найдено']
@@ -97,8 +98,8 @@ class MaterialsController extends Controller {
         } else {
             $this->view->setTitle($category->name);
 
-            $pages = new Ui\Pages($_GET, ['count' => Materials\Material::getCount(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']]]), 'limit' => 10]);
-            $materials = Materials\Material::getList(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']], 'order' => ['date_create', 'desc'], 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
+            $pages = new \Inji\Ui\Pages($_GET, ['count' => Material::getCount(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']]]), 'limit' => 10]);
+            $materials = Material::getList(['where' => [['tree_path', $category->tree_path . $category->id . '/%', 'LIKE'], ['date_publish', null, 'IS NOT']], 'order' => ['date_create', 'desc'], 'start' => $pages->params['start'], 'limit' => $pages->params['limit']]);
 
             $this->view->page(['page' => $category->resolveTemplate(), 'content' => $category->resolveViewer(), 'data' => compact('materials', 'pages', 'category')]);
         }
@@ -110,18 +111,20 @@ class MaterialsController extends Controller {
         $material = false;
         if ($alias) {
             if (is_numeric($alias)) {
-                $material = Materials\Material::get([['id', (int) $alias], ['date_publish', null, 'IS NOT']]);
+                $material = Material::get([['id', (int)$alias], ['date_publish', null, 'IS NOT']]);
             }
             if (!$material) {
-                $material = Materials\Material::get([['alias', $alias], ['date_publish', null, 'IS NOT']]);
-                if (!$material) {
-                    Tools::header('404');
-                    $this->view->page([
-                        'content' => '404',
-                        'data' => ['text' => 'Такой страницы не найдено']
-                    ]);
-                }
+                $material = Material::get([['alias', $alias], ['date_publish', null, 'IS NOT']]);
+
             }
+        }
+        if (!$material) {
+            \Inji\Tools::header('404');
+            $this->view->page([
+                'content' => '404',
+                'data' => ['text' => 'Такой страницы не найдено']
+            ]);
+            return;
         }
         if ($material->keywords) {
             $this->view->addMetaTag(['name' => 'keywords', 'content' => $material->keywords]);
@@ -136,7 +139,7 @@ class MaterialsController extends Controller {
         }
         if ($material->image) {
             $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . idn_to_utf8(INJI_DOMAIN_NAME) . $material->image->path]);
-        } elseif ($logo = Files\File::get('site_logo', 'code')) {
+        } elseif ($logo = \Inji\Files\File::get('site_logo', 'code')) {
             $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . idn_to_utf8(INJI_DOMAIN_NAME) . $logo->path]);
         }
         $this->view->setTitle($material->name);

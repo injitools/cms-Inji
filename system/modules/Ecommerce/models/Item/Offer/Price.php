@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Offer;
+namespace Inji\Ecommerce\Item\Offer;
 
 use Users\User;
 
@@ -33,7 +33,7 @@ use Users\User;
  * @method \Ecommerce\Item\Offer offer($options)
  * @method \Money\Currency currency($options)
  */
-class Price extends \Model {
+class Price extends \Inji\Model {
 
     public static $objectName = 'Цена';
     public static $cols = [
@@ -87,15 +87,15 @@ class Price extends \Model {
     public static function relations() {
         return [
             'offer' => [
-                'model' => 'Ecommerce\Item\Offer',
+                'model' => 'Inji\Ecommerce\Item\Offer',
                 'col' => 'item_offer_id'
             ],
             'type' => [
-                'model' => 'Ecommerce\Item\Offer\Price\Type',
+                'model' => 'Inji\Ecommerce\Item\Offer\Price\Type',
                 'col' => 'item_offer_price_type_id'
             ],
             'currency' => [
-                'model' => 'Money\Currency',
+                'model' => 'Inji\Money\Currency',
                 'col' => 'currency_id'
             ],
         ];

@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Ecommerce\Item;
+namespace Inji\Ecommerce\Item;
 
 /**
  * Description of Badge
  *
  * @author benzu
  */
-class Badge extends \Model {
+class Badge extends \Inji\Model {
 
     public static $cols = [
         'name' => ['type' => 'text'],
@@ -39,7 +39,7 @@ class Badge extends \Model {
     public static function relations() {
         return [
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ]
         ];

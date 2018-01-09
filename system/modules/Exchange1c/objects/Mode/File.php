@@ -15,17 +15,17 @@ class File extends \Exchange1c\Mode {
 
     public function process() {
         $dir = $this->exchange->path;
-        \Tools::createDir($dir);
+        \Inji\Tools::createDir($dir);
         $file = new \Exchange1c\Exchange\File();
         $file->name = $_GET['filename'];
         $file->exchange_id = $this->exchange->id;
         $file->status = 'pending';
         $file->save();
 
-        $filename = \Tools::parsePath($_GET['filename']);
+        $filename = \Inji\Tools::parsePath($_GET['filename']);
         if (strpos($filename, '/') !== false) {
             $subDir = substr($filename, 0, strrpos($filename, "/") + 1);
-            \Tools::createDir($dir . '/' . $subDir);
+            \Inji\Tools::createDir($dir . '/' . $subDir);
         }
         $text = '';
         if (false === file_put_contents($dir . '/' . $filename, file_get_contents("php://input"), FILE_APPEND)) {

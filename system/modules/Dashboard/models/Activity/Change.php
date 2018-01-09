@@ -13,7 +13,7 @@
 
 namespace Dashboard\Activity;
 
-class Change extends \Model {
+class Change extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [
@@ -39,7 +39,7 @@ class Change extends \Model {
         return [
             'activity' => [
                 'col' => 'activity_id',
-                'model' => 'Dashboard\Activity'
+                'model' => 'Inji\Dashboard\Activity'
             ]
         ];
     }

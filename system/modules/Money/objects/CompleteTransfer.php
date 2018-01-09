@@ -41,7 +41,7 @@ class CompleteTransfer extends \Ui\DataManager\Action {
             $transfer->confirm();
         }
         $count = count($transfers);
-        return 'Завершено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['перевод', 'перевода', 'переводов']);
+        return 'Завершено <b>' . $count . '</b> ' . \Inji\Tools::getNumEnding($count, ['перевод', 'перевода', 'переводов']);
     }
 
 }

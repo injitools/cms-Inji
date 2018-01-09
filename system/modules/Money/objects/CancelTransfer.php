@@ -41,7 +41,7 @@ class CancelTransfer extends \Ui\DataManager\Action {
             $transfer->cancel();
         }
         $count = count($transfers);
-        return 'Отменено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['перевод', 'перевода', 'переводов']);
+        return 'Отменено <b>' . $count . '</b> ' . \Inji\Tools::getNumEnding($count, ['перевод', 'перевода', 'переводов']);
     }
 
 }

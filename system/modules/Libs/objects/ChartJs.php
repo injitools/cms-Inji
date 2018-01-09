@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class ChartJs extends \InjiObject {
+class ChartJs extends \Inji\InjiObject {
 
     public static $name = 'ChartJs';
     public static $composerPacks = [

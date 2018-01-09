@@ -35,7 +35,7 @@ return function ($step = NULL, $params = []) {
         ]
     ];
     foreach ($statuses as $status) {
-        $statusObj = new \Ecommerce\Cart\Status($status);
+        $statusObj = new \Inji\Ecommerce\Cart\Status($status);
         $statusObj->save();
     }
     //Стандартные типы событий

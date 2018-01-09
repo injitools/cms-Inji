@@ -29,7 +29,7 @@ namespace Migrations\Migration\Object;
  * @method \Migrations\Migration\Object\Param\Value[] values($params)
  * @method \Migrations\Migration\Object\Param[] childs($params)
  */
-class Param extends \Model {
+class Param extends \Inji\Model {
 
     public static $objectName = 'Параметр объекта миграции';
     public static $labels = [

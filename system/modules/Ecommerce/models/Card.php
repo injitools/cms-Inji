@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 
-class Card extends \Model {
+class Card extends \Inji\Model {
 
     public static $objectName = 'Карта';
     public static $cols = [
@@ -70,20 +70,20 @@ class Card extends \Model {
         return [
             'levels' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Card\Level',
+                'model' => 'Inji\Ecommerce\Card\Level',
                 'col' => 'card_id'
             ],
             'prices' => [
                 'type' => 'relModel',
-                'model' => 'Ecommerce\Item\Offer\Price\Type',
+                'model' => 'Inji\Ecommerce\Item\Offer\Price\Type',
                 'relModel' => 'Ecommerce\Card\PriceTypeLink'
             ],
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ],
             'offer' => [
-                'model' => 'Ecommerce\Item\Offer',
+                'model' => 'Inji\Ecommerce\Item\Offer',
                 'col' => 'item_offer_id'
             ]
         ];

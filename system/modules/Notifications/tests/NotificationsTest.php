@@ -1,6 +1,6 @@
 <?php
 
-class NotificationsTest extends PHPUnit_Framework_TestCase {
+class NotificationsTest extends \PHPUnit\Framework\TestCase {
 
     public function setUp() {
         \App::$cur->Modules->install('Users');

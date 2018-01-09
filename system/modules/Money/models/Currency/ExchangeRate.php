@@ -11,7 +11,7 @@
 
 namespace Money\Currency;
 
-class ExchangeRate extends \Model {
+class ExchangeRate extends \Inji\Model {
 
     public static $objectName = 'Курс обмена';
     public static $labels = [

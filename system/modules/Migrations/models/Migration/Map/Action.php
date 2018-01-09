@@ -11,7 +11,7 @@
 
 namespace Migrations\Migration\Map;
 
-class Action extends \Model {
+class Action extends \Inji\Model {
 
     public static $cols = [
         'type' => ['type' => 'text']

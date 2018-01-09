@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery;
+namespace Inji\Ecommerce\Delivery;
 /**
  * @property int $id
  * @property string $name
@@ -30,7 +30,7 @@ namespace Ecommerce\Delivery;
  * @method \Ecommerce\Delivery\Field\Item[] fieldItems($options)
  * @method \Ecommerce\Delivery\DeliveryFieldLink[] fieldRel($options)
  */
-class Field extends \Model {
+class Field extends \Inji\Model {
 
     public static $objectName = 'Поле доставки';
     public static $cols = [
@@ -40,6 +40,7 @@ class Field extends \Model {
             'text' => 'Текстовое поле',
             'textarea' => 'Многострочный текст',
             'select' => 'Выпадающий список',
+            'checkbox' => 'Чекбокс',
         ]],
         'code' => ['type' => 'text'],
         'help_text' => ['type' => 'text'],
@@ -87,12 +88,12 @@ class Field extends \Model {
     public static function relations() {
         return [
             'fieldItems' => [
-                'model' => 'Ecommerce\Delivery\Field\Item',
+                'model' => 'Inji\Ecommerce\Delivery\Field\Item',
                 'col' => 'delivery_field_id',
                 'type' => 'many'
             ],
             'fieldRel' => [
-                'model' => 'Ecommerce\Delivery\DeliveryFieldLink',
+                'model' => 'Inji\Ecommerce\Delivery\DeliveryFieldLink',
                 'col' => 'delivery_field_id',
             ],
         ];

@@ -11,7 +11,7 @@
 
 namespace Money;
 
-class Reward extends \Model {
+class Reward extends \Inji\Model {
 
     public static $cols = [
         'name' => ['type' => 'text'],

@@ -19,7 +19,7 @@ class Wallet extends \Money\MerchantHelper {
 
     public static function goToMerchant($payId, $amount, $currency, $description = '', $success = '/', $false = '/') {
         $wallets = \App::$cur->money->getUserWallets();
-        \Tools::redirect('/money/walletPay/' . $payId . '/' . $wallets[$currency->id]->id);
+        \Inji\Tools::redirect('/money/walletPay/' . $payId . '/' . $wallets[$currency->id]->id);
     }
 
 }

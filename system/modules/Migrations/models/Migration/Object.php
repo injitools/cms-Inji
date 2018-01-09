@@ -11,7 +11,7 @@
 
 namespace Migrations\Migration;
 
-class Object extends \Model {
+class Object extends \Inji\Model {
 
     public static $objectName = 'Объект миграции';
     public static $labels = [

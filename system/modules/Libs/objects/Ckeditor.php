@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class Ckeditor extends \InjiObject {
+class Ckeditor extends \Inji\InjiObject {
 
     public static $name = 'CKEditor';
     public static $bowerPacks = [

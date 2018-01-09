@@ -9,12 +9,12 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Materials;
+namespace Inji\Materials;
 
-class Material extends \Model {
+class Material extends \Inji\Model {
 
     public static $objectName = 'Материал';
-    public static $categoryModel = 'Materials\Category';
+    public static $categoryModel = 'Inji\Materials\Category';
     public static $labels = [
         'name' => 'Заголовок',
         'category_id' => 'Раздел',
@@ -63,7 +63,7 @@ class Material extends \Model {
                 'date_create'
             ],
             'categorys' => [
-                'model' => 'Materials\Category',
+                'model' => 'Inji\Materials\Category',
             ],
             'sortMode' => true
         ]
@@ -114,27 +114,27 @@ class Material extends \Model {
     public static function relations() {
         return [
             'category' => [
-                'model' => '\Materials\Category',
+                'model' => 'Inji\Materials\Category',
                 'col' => 'category_id'
             ],
             'image' => [
-                'model' => '\Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ],
             'user' => [
-                'model' => '\Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'links' => [
                 'type' => 'many',
-                'model' => '\Materials\Material\Link',
+                'model' => 'Inji\Materials\Material\Link',
                 'col' => 'material_id'
             ]
         ];
     }
 
     public function getHref() {
-        $href = !empty(\App::$primary->config['defaultModule']) && \App::$primary->config['defaultModule'] == 'Materials' ? '' : '/materials';
+        $href = !empty(\Inji\App::$primary->config['defaultModule']) && \Inji\App::$primary->config['defaultModule'] == 'Materials' ? '' : '/materials';
         $treePath = array_filter(explode('/', $this->tree_path));
         if ($treePath) {
             $categorys = Category::getList(['where' => ['id', implode(',', $treePath), 'IN']]);

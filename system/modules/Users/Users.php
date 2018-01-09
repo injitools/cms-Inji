@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Users module
  *
@@ -14,9 +14,9 @@ class Users extends Module {
 
     public function init() {
         if (!empty($this->config['cookieSplit'])) {
-            $this->cookiePrefix = \App::$cur->type;
+            $this->cookiePrefix = App::$cur->type;
         }
-        \Users\User::$cur = new Users\User(array('group_id' => 1, 'role_id' => 1));
+        Users\User::$cur = new Users\User(array('group_id' => 1, 'role_id' => 1));
         if (!empty($_GET['invite_code']) && is_string($_GET['invite_code'])) {
             setcookie('invite_code', $_GET['invite_code'], time() + 360000, "/");
         }
@@ -83,7 +83,7 @@ class Users extends Module {
                 setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
                 setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
             }
-            Msg::add(\I18n\Text::module('Users', 'Ваш аккаунт заблокирован'), 'info');
+            \Inji\Msg::add(\I18n\Text::module('Users', 'Ваш аккаунт заблокирован'), 'info');
             return;
         }
         if ($session && $session->user && !$session->user->blocked) {
@@ -94,10 +94,10 @@ class Users extends Module {
                 }
                 Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $session->user->id . '"><b>повторно выслать ссылку активации</b></a>');
             } elseif ($session->user->activation) {
-                Msg::add('Этот аккаунт ещё не активирован, не все функции могут быть доступны. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $session->user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                \Inji\Msg::add('Этот аккаунт ещё не активирован, не все функции могут быть доступны. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $session->user->id . '"><b>повторно выслать ссылку активации</b></a>');
             }
             if (!$session->user->mail && !empty($this->config['noMailNotify'])) {
-                Msg::add($this->config['noMailNotify']);
+                \Inji\Msg::add($this->config['noMailNotify']);
             }
             Users\User::$cur = $session->user;
             Users\User::$cur->date_last_active = 'CURRENT_TIMESTAMP';
@@ -107,7 +107,7 @@ class Users extends Module {
                 setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
                 setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
             }
-            Msg::add(\I18n\Text::module('Users', 'needrelogin'), 'info');
+            \Inji\Msg::add(\I18n\Text::module('Users', 'needrelogin'), 'info');
         }
     }
 
@@ -117,7 +117,7 @@ class Users extends Module {
     public function passre($user_mail) {
         $user = $this->get($user_mail, 'mail');
         if (!$user) {
-            Msg::add(\I18n\Text::module('Users', 'mailnotfound', ['user_mail' => $user_mail]), 'danger');
+            \Inji\Msg::add(\I18n\Text::module('Users', 'mailnotfound', ['user_mail' => $user_mail]), 'danger');
             return false;
         }
         $passre = Users\Passre::get([['user_id', $user->id], ['status', 1]]);
@@ -168,7 +168,7 @@ class Users extends Module {
             }
             $loginHistoryErrorCount = \Users\User\LoginHistory::getCount(['where' => $where]);
             if ($loginHistoryErrorCount > 5) {
-                Msg::add(\I18n\Text::module('Users', 'logintrylimit', ['user_mail' => $user->mail]), 'danger');
+                \Inji\Msg::add(\I18n\Text::module('Users', 'logintrylimit', ['user_mail' => $user->mail]), 'danger');
                 return false;
             }
         }
@@ -182,10 +182,10 @@ class Users extends Module {
             if (!empty($this->config['needActivation']) && $user->activation) {
                 Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
             } elseif ($user->activation) {
-                Msg::add('Этот аккаунт ещё не активирован, не все функции могут быть доступны. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                \Inji\Msg::add('Этот аккаунт ещё не активирован, не все функции могут быть доступны. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
             }
             if (!$user->mail && !empty($this->config['noMailNotify'])) {
-                Msg::add($this->config['noMailNotify']);
+                \Inji\Msg::add($this->config['noMailNotify']);
             }
             $this->newSession($user);
 
@@ -203,7 +203,7 @@ class Users extends Module {
         }
         if (!$noMsg) {
             if ($user && $user->blocked) {
-                Msg::add('Вы заблокированы', 'danger');
+                \Inji\Msg::add('Вы заблокированы', 'danger');
             } elseif ($user) {
                 $loginHistory = new \Users\User\LoginHistory([
                     'user_id' => $user->id,
@@ -211,9 +211,9 @@ class Users extends Module {
                     'success' => false
                 ]);
                 $loginHistory->save();
-                Msg::add(\I18n\Text::module('Users', 'loginfail', ['user_mail' => $user->mail]), 'danger');
+                \Inji\Msg::add(\I18n\Text::module('Users', 'loginfail', ['user_mail' => $user->mail]), 'danger');
             } else {
-                Msg::add(\I18n\Text::module('Users', 'Данный почтовый ящик не зарегистрирован в системе'), 'danger');
+                \Inji\Msg::add(\I18n\Text::module('Users', 'Данный почтовый ящик не зарегистрирован в системе'), 'danger');
             }
         }
 
@@ -226,7 +226,7 @@ class Users extends Module {
             setcookie($this->cookiePrefix . "_user_session_hash", $session->hash, time() + 360000, "/");
             setcookie($this->cookiePrefix . "_user_id", $user->id, time() + 360000, "/");
         } else {
-            Msg::add('Не удалось провести авторизацию. Попробуйте позже', 'info');
+            \Inji\Msg::add('Не удалось провести авторизацию. Попробуйте позже', 'info');
         }
     }
 
@@ -270,7 +270,7 @@ class Users extends Module {
 
     private function msgOrErr($err, $msg) {
         if ($msg) {
-            Msg::add($err, 'danger');
+            \Inji\Msg::add($err, 'danger');
             return false;
         }
         return ['success' => false, 'error' => $err];
@@ -321,6 +321,17 @@ class Users extends Module {
         if (empty($data['user_phone'])) {
             $data['user_phone'] = '';
         }
+
+        if (empty($data['user_avatar_id']) || !is_numeric($data['user_avatar_id'])) {
+            $data['user_avatar_id'] = 0;
+        } else {
+            $avatar = \Users\User\Avatar::get($data['user_avatar_id']);
+            if ($avatar) {
+                $data['user_avatar_id'] = $avatar->id;
+            } else {
+                $data['user_avatar_id'] = 0;
+            }
+        }
         $invite_code = (!empty($data['invite_code']) ? $data['invite_code'] : (!empty($_POST['invite_code']) ? $_POST['invite_code'] : ((!empty($_COOKIE['invite_code']) ? $_COOKIE['invite_code'] : ((!empty($_GET['invite_code']) ? $_GET['invite_code'] : ''))))));
         if (!empty($invite_code)) {
             $invite = Users\User\Invite::get($invite_code, 'code');
@@ -352,13 +363,13 @@ class Users extends Module {
         } else {
             $pass = Tools::randomString(10);
         }
-
         $user = new Users\User([
             'pass' => $this->hashpass($pass),
             'mail' => $data['user_mail'],
             'login' => htmlspecialchars($data['user_login']),
             'role_id' => 2,
             'group_id' => 2,
+            'user_avatar_id' => $data['user_avatar_id'],
             'parent_id' => !empty($data['parent_id']) ? $data['parent_id'] : 0
         ]);
         if (!empty($this->config['needActivation'])) {
@@ -394,7 +405,7 @@ class Users extends Module {
             $text .= 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . $user->id . '/' . $user->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . $user->id . '/' . $user->activation . '</a>';
             Tools::sendMail($from, $to, $subject, $text);
             if ($msg) {
-                Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль и ссылка для активации', 'success');
+                \Inji\Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль и ссылка для активации', 'success');
             }
         } else {
             $from = 'noreply@' . INJI_DOMAIN_NAME;
@@ -406,7 +417,7 @@ class Users extends Module {
             ]);
             Tools::sendMail($from, $to, $subject, $text);
             if ($msg) {
-                Msg::add(\I18n\Text::module('Users', 'Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль'), 'success');
+                \Inji\Msg::add(\I18n\Text::module('Users', 'Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль'), 'success');
             }
         }
         return $user->id;

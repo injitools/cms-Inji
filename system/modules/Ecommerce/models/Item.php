@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 /**
  * @property int $id
  * @property int $category_id
@@ -42,7 +42,7 @@ namespace Ecommerce;
  * @property-read \Ecommerce\Item\Image[] $images
  * @property-read \Users\User $user
  */
-class Item extends \Model {
+class Item extends \Inji\Model {
 
     public static $categoryModel = 'Ecommerce\Category';
     public static $objectName = 'Товар';
@@ -396,40 +396,40 @@ class Item extends \Model {
 
         return [
             'badge' => [
-                'model' => 'Ecommerce\Item\Badge',
+                'model' => 'Inji\Ecommerce\Item\Badge',
                 'col' => 'item_badge_id'
             ],
             'category' => [
-                'model' => 'Ecommerce\Category',
+                'model' => 'Inji\Ecommerce\Category',
                 'col' => 'category_id'
             ],
             'options' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Param',
+                'model' => 'Inji\Ecommerce\Item\Param',
                 'col' => 'item_id',
                 'resultKey' => 'item_option_id',
                 'join' => [Item\Option::table(), Item\Option::index() . ' = ' . Item\Param::colPrefix() . Item\Option::index()]
             ],
             'offers' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Offer',
+                'model' => 'Inji\Ecommerce\Item\Offer',
                 'col' => 'item_id',
             ],
             'type' => [
-                'model' => 'Ecommerce\Item\Type',
+                'model' => 'Inji\Ecommerce\Item\Type',
                 'col' => 'item_type_id',
             ],
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ],
             'images' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Image',
+                'model' => 'Inji\Ecommerce\Item\Image',
                 'col' => 'item_id'
             ],
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ]
         ];
@@ -448,7 +448,7 @@ class Item extends \Model {
     }
 
     public function name() {
-        if (!empty(\App::$primary->ecommerce->config['item_option_as_name'])) {
+        if (!empty(\Inji\App::$primary->ecommerce->config['item_option_as_name'])) {
             $param = Item\Param::get([['item_id', $this->id], ['item_option_id', \App::$primary->ecommerce->config['item_option_as_name']]]);
             if ($param && $param->value) {
                 return $param->value;
@@ -462,7 +462,7 @@ class Item extends \Model {
             return;
         }
         $itemId = $this->id;
-        \App::$primary->daemon->task(function () use ($itemId) {
+        \Inji\App::$primary->daemon->task(function () use ($itemId) {
             $item = \Ecommerce\Item::get($itemId);
             foreach ($item->options as $option) {
                 $option->delete();

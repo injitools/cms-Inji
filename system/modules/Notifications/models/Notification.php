@@ -11,7 +11,7 @@
 
 namespace Notifications;
 
-class Notification extends \Model {
+class Notification extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [

@@ -47,7 +47,7 @@ class ClosePayBtn extends \Ui\DataManager\Action {
             }
         }
         $count = count($pays);
-        return 'Оплачено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['счет', 'счета', 'счетов']);
+        return 'Оплачено <b>' . $count . '</b> ' . \Inji\Tools::getNumEnding($count, ['счет', 'счета', 'счетов']);
     }
 
 }

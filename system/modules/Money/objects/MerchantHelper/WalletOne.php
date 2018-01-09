@@ -143,6 +143,6 @@ class WalletOne extends \Money\MerchantHelper {
         //Добавление параметра WMI_SIGNATURE в словарь параметров формы
 
         $fields["WMI_SIGNATURE"] = $signature;
-        \Tools::redirect('https://www.walletone.com/checkout/default.aspx?' . http_build_query($fields));
+        \Inji\Tools::redirect('https://www.walletone.com/checkout/default.aspx?' . http_build_query($fields));
     }
 }

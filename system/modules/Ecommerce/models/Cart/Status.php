@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Cart;
+namespace Inji\Ecommerce\Cart;
 
-class Status extends \Model {
+class Status extends \Inji\Model {
 
     public static $objectName = 'Статус корзины';
     public static $cols = [

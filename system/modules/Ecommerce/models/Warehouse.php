@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 /**
  * @property int $id
  * @property string $name
@@ -19,7 +19,7 @@ namespace Ecommerce;
  * @property int $city_id
  * @property string $date_create
  */
-class Warehouse extends \Model {
+class Warehouse extends \Inji\Model {
 
     public static $objectName = 'Склад';
     public static $labels = [
@@ -67,7 +67,7 @@ class Warehouse extends \Model {
     public static function relations() {
         return [
             'city' => [
-                'model' => 'Geography\City',
+                'model' => 'Inji\Geography\City',
                 'col' => 'city_id'
             ]
         ];

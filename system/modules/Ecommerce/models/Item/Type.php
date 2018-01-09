@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item;
+namespace Inji\Ecommerce\Item;
 
-class Type extends \Model {
+class Type extends \Inji\Model {
 
     public static $objectName = 'Тип товара';
     public static $cols = [

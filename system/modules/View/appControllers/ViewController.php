@@ -16,7 +16,7 @@ class ViewController extends Controller {
 
     public function editorcssAction() {
         if (file_exists($this->view->template->path . '/css/editor.css')) {
-            Tools::redirect('/static/templates/' . $this->view->template->name . '/css/editor.css');
+            \Inji\Tools::redirect('/static/templates/' . $this->view->template->name . '/css/editor.css');
         } else {
             header("Content-type: text/css");
             exit();

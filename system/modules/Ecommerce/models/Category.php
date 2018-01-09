@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 /**
  * @property int $id
  * @property int $parent_id
@@ -38,7 +38,7 @@ namespace Ecommerce;
  * @property-read \Ecommerce\Category[] $catalogs
  * @property-read \Users\User $user
  */
-class Category extends \Model {
+class Category extends \Inji\Model {
 
     public static $objectName = 'Категория магазина';
     public static $treeCategory = 'Ecommerce\Item';
@@ -110,33 +110,33 @@ class Category extends \Model {
         return [
             'items' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item',
+                'model' => 'Inji\Ecommerce\Item',
                 'col' => 'category_id',
             ],
             'parent' => [
-                'model' => 'Ecommerce\Category',
+                'model' => 'Inji\Ecommerce\Category',
                 'col' => 'parent_id'
             ],
             'options' => [
                 'type' => 'relModel',
-                'model' => 'Ecommerce\Item\Option',
+                'model' => 'Inji\Ecommerce\Item\Option',
                 'relModel' => 'Ecommerce\Item\Option\Relation',
             ],
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ],
             'icon' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'icon_file_id'
             ],
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'catalogs' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Category',
+                'model' => 'Inji\Ecommerce\Category',
                 'col' => 'parent_id',
             ]
         ];
@@ -168,7 +168,7 @@ class Category extends \Model {
     public function beforeSave() {
         if ($this->id && $this->id == $this->parent_id) {
             $this->parent_id = 0;
-            \Msg::add('Категория не может быть сама себе родителем');
+            \Inji\Msg::add('Категория не может быть сама себе родителем');
         }
     }
 

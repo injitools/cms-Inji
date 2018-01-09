@@ -11,7 +11,7 @@
 
 namespace Users\User;
 
-class ParentHistory extends \Model {
+class ParentHistory extends \Inji\Model {
 
     public static $cols = [
         'user_id' => ['type' => 'number'],

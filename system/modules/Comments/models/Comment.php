@@ -2,7 +2,7 @@
 
 namespace Comments;
 
-class Comment extends \Model {
+class Comment extends \Inji\Model {
 
     public static $objectName = 'Комментарии';
     static $cols = [

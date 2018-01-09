@@ -11,7 +11,7 @@
 
 namespace Chats\Chat;
 
-class Event extends \Model {
+class Event extends \Inji\Model {
 
     public static $cols = [
         'type' => ['type' => 'text'],

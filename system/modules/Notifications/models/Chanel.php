@@ -11,7 +11,7 @@
 
 namespace Notifications;
 
-class Chanel extends \Model {
+class Chanel extends \Inji\Model {
 
     public static $cols = [
         'name' => ['type' => 'text'],

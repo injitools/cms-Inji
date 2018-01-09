@@ -11,7 +11,7 @@
 
 namespace Money\Reward\Condition;
 
-class Item extends \Model {
+class Item extends \Inji\Model {
 
     public function recivedCount($userId = 0) {
         $userId = $userId ? $userId : \Users\User::$cur->id;

@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Warehouse;
+namespace Inji\Ecommerce\Warehouse;
 
-class Block extends \Model {
+class Block extends \Inji\Model {
     public static $logging = false;
     public static $cols = [
         //Основные параметры
@@ -25,11 +25,11 @@ class Block extends \Model {
     public static function relations() {
         return [
             'cart' => [
-                'model' => 'Ecommerce\Cart',
+                'model' => 'Inji\Ecommerce\Cart',
                 'col' => 'cart_id'
             ],
             'offer' => [
-                'model' => 'Ecommerce\Item\Offer',
+                'model' => 'Inji\Ecommerce\Item\Offer',
                 'col' => 'item_offer_id'
             ],
         ];

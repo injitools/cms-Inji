@@ -11,7 +11,7 @@
 
 namespace Users\User\Invite;
 
-class History extends \Model {
+class History extends \Inji\Model {
 
     public static $objectName = "История кода пришлашения";
     public static $labels = [
@@ -48,11 +48,11 @@ class History extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'invite' => [
-                'model' => 'Users\User\Invite',
+                'model' => 'Inji\Users\User\Invite',
                 'col' => 'user_invite_id'
             ],
         ];

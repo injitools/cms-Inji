@@ -28,7 +28,7 @@ class UserForms extends \Module {
                         $data['input' . $input->id] = htmlspecialchars($inputs['input' . $input->id]);
                     } elseif ($input->required) {
                         $error = true;
-                        Msg::add('Вы не заполнили поле: ' . $input->label);
+                        \Inji\Msg::add('Вы не заполнили поле: ' . $input->label);
                     } else {
                         $data['input' . $input->id] = '';
                     }

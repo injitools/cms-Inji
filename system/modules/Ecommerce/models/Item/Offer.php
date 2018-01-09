@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item;
+namespace Inji\Ecommerce\Item;
 
 /**
  * Class Offer
@@ -33,7 +33,7 @@ namespace Ecommerce\Item;
  * @method \Ecommerce\Item\Offer\Param[] options($options)
  * @method \Ecommerce\Item item($options)
  */
-class Offer extends \Model {
+class Offer extends \Inji\Model {
 
     public static $objectName = 'Торговое предложение';
     public static $cols = [
@@ -79,28 +79,28 @@ class Offer extends \Model {
         return [
             'warehouses' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Offer\Warehouse',
+                'model' => 'Inji\Ecommerce\Item\Offer\Warehouse',
                 'col' => 'item_offer_id'
             ],
             'prices' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Offer\Price',
+                'model' => 'Inji\Ecommerce\Item\Offer\Price',
                 'col' => 'item_offer_id',
             ],
             'bonuses' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Offer\Bonus',
+                'model' => 'Inji\Ecommerce\Item\Offer\Bonus',
                 'col' => 'item_offer_id',
             ],
             'options' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Offer\Param',
+                'model' => 'Inji\Ecommerce\Item\Offer\Param',
                 'col' => 'item_offer_id',
                 'resultKey' => 'item_offer_option_id',
                 'join' => [Offer\Option::table(), Offer\Option::index() . ' = ' . Offer\Param::colPrefix() . Offer\Option::index()]
             ],
             'item' => [
-                'model' => 'Ecommerce\Item',
+                'model' => 'Inji\Ecommerce\Item',
                 'col' => 'item_id'
             ]
         ];
@@ -122,8 +122,8 @@ class Offer extends \Model {
 
     public function warehouseCount($cart_id = 0) {
         $warehouseIds = [];
-        if (\App::$cur->geography && \Geography\City::$cur) {
-            $warehouses = \Geography\City\Data::get([['code', 'warehouses'], ['city_id', \Geography\City::$cur->id]]);
+        if (\Inji\App::$cur->geography && \Inji\Geography\City::$cur) {
+            $warehouses = \Inji\Geography\City\Data::get([['code', 'warehouses'], ['city_id', \Inji\Geography\City::$cur->id]]);
             if ($warehouses && $warehouses->data) {
                 foreach (explode(',', $warehouses->data) as $id) {
                     $warehouseIds[$id] = $id;
@@ -131,27 +131,27 @@ class Offer extends \Model {
             }
         }
         if ($warehouseIds) {
-            \App::$cur->db->where(\Ecommerce\Item\Offer\Warehouse::colPrefix() . \Ecommerce\Warehouse::index(), $warehouseIds, 'IN');
+            \Inji\App::$cur->db->where(\Ecommerce\Item\Offer\Warehouse::colPrefix() . \Inji\Ecommerce\Warehouse::index(), $warehouseIds, 'IN');
         }
-        \App::$cur->db->where(\Ecommerce\Item\Offer\Warehouse::colPrefix() . \Ecommerce\Item\Offer::index(), $this->id);
-        \App::$cur->db->cols = 'COALESCE(sum(' . \Ecommerce\Item\Offer\Warehouse::colPrefix() . 'count),0) as `sum` ';
-        $warehouse = \App::$cur->db->select(\Ecommerce\Item\Offer\Warehouse::table())->fetch();
+        \Inji\App::$cur->db->where(\Ecommerce\Item\Offer\Warehouse::colPrefix() . \Ecommerce\Item\Offer::index(), $this->id);
+        \Inji\App::$cur->db->cols = 'COALESCE(sum(' . \Ecommerce\Item\Offer\Warehouse::colPrefix() . 'count),0) as `sum` ';
+        $warehouse = \Inji\App::$cur->db->select(\Ecommerce\Item\Offer\Warehouse::table())->fetch();
 
-        \App::$cur->db->cols = 'COALESCE(sum(' . \Ecommerce\Warehouse\Block::colPrefix() . 'count) ,0) as `sum` ';
-        \App::$cur->db->where(\Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Item\Offer::index(), $this->id);
+        \Inji\App::$cur->db->cols = 'COALESCE(sum(' . \Inji\Ecommerce\Warehouse\Block::colPrefix() . 'count) ,0) as `sum` ';
+        \Inji\App::$cur->db->where(\Inji\Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Item\Offer::index(), $this->id);
         if ($cart_id) {
-            \App::$cur->db->where(\Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Cart::index(), (int) $cart_id, '!=');
+            \Inji\App::$cur->db->where(\Inji\Ecommerce\Warehouse\Block::colPrefix() . \Inji\Ecommerce\Cart::index(), (int) $cart_id, '!=');
         }
         $on = '
-            ' . \Ecommerce\Cart::index() . ' = ' . \Ecommerce\Warehouse\Block::colPrefix() . \Ecommerce\Cart::index() . ' AND (
-            (`' . \Ecommerce\Cart::colPrefix() . 'warehouse_block` = 1 and `' . \Ecommerce\Cart::colPrefix() . 'cart_status_id` in(2,3,6)) || 
-            (`' . \Ecommerce\Cart::colPrefix() . 'cart_status_id` in(0,1) and `' . \Ecommerce\Cart::colPrefix() . 'date_last_activ` >=subdate(now(),INTERVAL 30 MINUTE))
+            ' . \Inji\Ecommerce\Cart::index() . ' = ' . \Inji\Ecommerce\Warehouse\Block::colPrefix() . \Inji\Ecommerce\Cart::index() . ' AND (
+            (`' . \Inji\Ecommerce\Cart::colPrefix() . 'warehouse_block` = 1 and `' . \Inji\Ecommerce\Cart::colPrefix() . 'cart_status_id` in(2,3,6)) || 
+            (`' . \Inji\Ecommerce\Cart::colPrefix() . 'cart_status_id` in(0,1) and `' . \Inji\Ecommerce\Cart::colPrefix() . 'date_last_activ` >=subdate(now(),INTERVAL 30 MINUTE))
             )
         ';
-        \App::$cur->db->join(\Ecommerce\Cart::table(), $on, 'inner');
+        \Inji\App::$cur->db->join(\Ecommerce\Cart::table(), $on, 'inner');
 
 
-        $blocked = \App::$cur->db->select(\Ecommerce\Warehouse\Block::table())->fetch();
+        $blocked = \Inji\App::$cur->db->select(\Inji\Ecommerce\Warehouse\Block::table())->fetch();
         return (float) $warehouse['sum'] - (float) $blocked['sum'];
     }
 
@@ -161,13 +161,13 @@ class Offer extends \Model {
      */
     public function getPrice($cart = false) {
         $where = [];
-        if (empty(\App::$cur->Ecommerce->config['show_zero_price'])) {
+        if (empty(\Inji\App::$cur->Ecommerce->config['show_zero_price'])) {
             $where[] = ['price', 0, '>'];
         }
         if ($cart) {
             $types = $cart->availablePricesTypes();
         } else {
-            $types = \App::$primary->Ecommerce->availablePricesTypes();
+            $types = \Inji\App::$primary->Ecommerce->availablePricesTypes();
         }
         if ($types !== true) {
             $where[] = ['item_offer_price_type_id', array_values($types), 'IN'];

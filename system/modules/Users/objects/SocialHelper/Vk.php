@@ -23,10 +23,10 @@ class Vk extends \Users\SocialHelper {
                 'display' => 'page',
                 'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/vk'
             ];
-            \Tools::redirect("https://oauth.vk.com/authorize?" . http_build_query($query));
+            \Inji\Tools::redirect("https://oauth.vk.com/authorize?" . http_build_query($query));
         }
         if (empty($_GET['code']) && !empty($_GET['error'])) {
-            \Tools::redirect('/', 'Произошла ошибка во время авторизации через соц. сеть: ' . $_GET['error_description']);
+            \Inji\Tools::redirect('/', 'Произошла ошибка во время авторизации через соц. сеть: ' . $_GET['error_description']);
         }
         $query = [
             'client_id' => $config['appId'],
@@ -36,11 +36,11 @@ class Vk extends \Users\SocialHelper {
         ];
         $result = @file_get_contents("https://oauth.vk.com/access_token?" . http_build_query($query));
         if ($result === false) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $result = json_decode($result, true);
         if (empty($result['user_id'])) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $userQuery = [
             'user_id' => $result['user_id'],
@@ -49,18 +49,18 @@ class Vk extends \Users\SocialHelper {
         ];
         $userResult = @file_get_contents("https://api.vk.com/method/users.get?" . http_build_query($userQuery));
         if (!$userResult) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $userDetail = json_decode($userResult, true);
         if (empty($userDetail['response'][0])) {
-            \Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
+            \Inji\Tools::redirect('/', 'Во время авторизации произошли ошибки', 'danger');
         }
         $social = static::getObject();
         $userSocial = \Users\User\Social::get([['uid', $result['user_id']], ['social_id', $social->id]]);
         if ($userSocial && $userSocial->user) {
             \App::$cur->users->newSession($userSocial->user);
             if (!empty(\App::$cur->users->config['loginUrl'][\App::$cur->type])) {
-                \Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type]);
+                \Inji\Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type]);
             }
         } else {
             if ($userSocial && !$userSocial->user) {
@@ -83,11 +83,11 @@ class Vk extends \Users\SocialHelper {
                         $invite = \Users\User\Invite::get($invite_code, 'code');
                         $inveiteError = false;
                         if (!$invite) {
-                            Msg::add('Такой код пришлашения не найден', 'danger');
+                            \Inji\Msg::add('Такой код пришлашения не найден', 'danger');
                             $inveiteError = true;
                         }
                         if ($invite->limit && !($invite->limit - $invite->count)) {
-                            Msg::add('Лимит приглашений для данного кода исчерпан', 'danger');
+                            \Inji\Msg::add('Лимит приглашений для данного кода исчерпан', 'danger');
                             $inveiteError = true;
                         }
                         if (!$inveiteError) {
@@ -132,7 +132,7 @@ class Vk extends \Users\SocialHelper {
             $userSocial->user_id = $user->id;
             $userSocial->save();
             \App::$cur->users->newSession($user);
-            \Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type], 'Вы успешно зарегистрировались через ВКонтакте', 'success');
+            \Inji\Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type], 'Вы успешно зарегистрировались через ВКонтакте', 'success');
         }
     }
 

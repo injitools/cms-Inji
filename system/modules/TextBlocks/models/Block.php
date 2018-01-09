@@ -11,7 +11,7 @@
 
 namespace TextBlocks;
 
-class Block extends \Model {
+class Block extends \Inji\Model {
 
     public static $objectName = "Текстовый блок";
     public static $cols = [

@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class Bootstrap extends \InjiObject {
+class Bootstrap extends \Inji\InjiObject {
 
     public static $name = 'BootStrap';
     public static $bowerPacks = [

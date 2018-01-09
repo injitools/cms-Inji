@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class YandexMap extends \InjiObject {
+class YandexMap extends \Inji\InjiObject {
 
     public static $name = 'YandexMap';
     public static $files = [

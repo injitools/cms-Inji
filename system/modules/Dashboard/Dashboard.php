@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Dashboard module
  *
@@ -8,7 +8,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Dashboard extends Module {
+class Dashboard extends \Inji\Module {
 
     public function itemHref($item, $col) {
         $modelName = $item->model;
@@ -23,7 +23,7 @@ class Dashboard extends Module {
         if (!$item->$col) {
             return 'Модуль не задан';
         }
-        if (!Module::installed($item->$col, \App::$primary)) {
+        if (!Module::installed($item->$col, \Inji\App::$primary)) {
             return 'Модуль ' . $item->$col . ' не установлен';
         }
         $moduleInfo = Module::getInfo($item->$col);

@@ -11,7 +11,7 @@
 
 namespace Money;
 
-class Merchant extends \Model {
+class Merchant extends \Inji\Model {
 
     public static $objectName = 'Система оплаты';
     public static $cols = [

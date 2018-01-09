@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * Server module
  *
@@ -9,6 +10,8 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class Server extends Module {
+    public $name = 'Server';
+
     function checkCsrf($key, $token) {
         return !empty($_SESSION['csrf'][$key]) && $_SESSION['csrf'][$key] == $token;
     }

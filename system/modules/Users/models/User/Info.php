@@ -11,7 +11,7 @@
 
 namespace Users\User;
 
-class Info extends \Model {
+class Info extends \Inji\Model {
     public static $logging = 'changes';
     public static $objectName = "Расширенная информация";
     public static $cols = [
@@ -76,11 +76,11 @@ class Info extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'photo' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'photo_file_id'
             ]
         ];

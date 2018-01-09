@@ -86,10 +86,10 @@ class Exchange1cController extends adminController {
                 $id->delete();
             }
             if ($countModels) {
-                Msg::add("Удалено {$countModels} объектов с сайта");
+                \Inji\Msg::add("Удалено {$countModels} объектов с сайта");
             }
             if ($countIds) {
-                Msg::add("Удалено {$countIds} объектов миграции");
+                \Inji\Msg::add("Удалено {$countIds} объектов миграции");
             }
         }
         $this->view->setTitle('Объекты миграции не обновляемые при обмене');

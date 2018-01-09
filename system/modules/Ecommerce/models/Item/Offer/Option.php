@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Offer;
+namespace Inji\Ecommerce\Item\Offer;
 
-class Option extends \Model {
+class Option extends \Inji\Model {
 
     public static $objectName = 'Свойство предложения';
     public static $cols = [
@@ -72,16 +72,16 @@ class Option extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'items' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Offer\Option\Item',
+                'model' => 'Inji\Ecommerce\Item\Offer\Option\Item',
                 'col' => 'item_offer_option_id'
             ],
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ],
         ];

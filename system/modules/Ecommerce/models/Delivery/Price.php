@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery;
+namespace Inji\Ecommerce\Delivery;
 
-class Price extends \Model {
+class Price extends \Inji\Model {
 
     public static $labels = [
         'delivery_id' => 'Тип доставки',
@@ -44,11 +44,11 @@ class Price extends \Model {
     public static function relations() {
         return [
             'delivery' => [
-                'model' => 'Ecommerce\Delivery',
+                'model' => 'Inji\Ecommerce\Delivery',
                 'col' => 'delivery_id'
             ],
             'currency' => [
-                'model' => 'Money\Currency',
+                'model' => 'Inji\Money\Currency',
                 'col' => 'currency_id'
             ],
         ];

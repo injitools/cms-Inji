@@ -17,7 +17,7 @@
 
 namespace Users\Activity;
 
-class Category extends \Model {
+class Category extends \Inji\Model {
 
     public static $objectName = 'Activity category';
     public static $labels = [

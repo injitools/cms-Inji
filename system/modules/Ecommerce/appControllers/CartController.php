@@ -63,14 +63,14 @@ class CartController extends Controller {
                     $warecount = $cartitem->price->offer->warehouseCount($cart->id);
                     if ($cartitem->count > $warecount) {
                         $error = true;
-                        Msg::add('Вы заказали <b>' . $cartitem->item->name . '</b> больше чем есть на складе. на складе: <b>' . $warecount . '</b>', 'danger');
+                        \Inji\Msg::add('Вы заказали <b>' . $cartitem->item->name . '</b> больше чем есть на складе. на складе: <b>' . $warecount . '</b>', 'danger');
                     }
                 }
             }
             $this->module->parseFields($_POST['userAdds']['fields'], $cart);
             if ($deliverys && !$cart->delivery_id && (empty($_POST['delivery']) || empty($deliverys[$_POST['delivery']]))) {
                 $error = 1;
-                Msg::add('Выберите способ доставки', 'danger');
+                \Inji\Msg::add('Выберите способ доставки', 'danger');
             } elseif ($deliverys && !empty($_POST['delivery']) && !empty($deliverys[$_POST['delivery']])) {
                 $cart->delivery_id = $_POST['delivery'];
             }
@@ -78,7 +78,7 @@ class CartController extends Controller {
                 foreach ($deliverys[$cart->delivery_id]->fields as $field) {
                     if (empty($_POST['deliveryFields'][$field->id]) && $field->required) {
                         $error = 1;
-                        Msg::add('Вы не указали: ' . $field->name, 'danger');
+                        \Inji\Msg::add('Вы не указали: ' . $field->name, 'danger');
                     }
                 }
                 $this->module->parseDeliveryFields($_POST['deliveryFields'], $cart, $cart->delivery->fields);
@@ -88,7 +88,7 @@ class CartController extends Controller {
             $payType = false;
             if ($payTypes && (empty($_POST['payType']) || empty($payTypes[$_POST['payType']]) || ($cart->paytype_id && !isset($payTypes[$cart->paytype_id])))) {
                 $error = 1;
-                Msg::add('Выберите способ оплаты', 'danger');
+                \Inji\Msg::add('Выберите способ оплаты', 'danger');
             } elseif ($payTypes && !empty($payTypes[$_POST['payType']])) {
                 $payType = $payTypes[$_POST['payType']];
                 $cart->paytype_id = $payType->id;
@@ -96,17 +96,17 @@ class CartController extends Controller {
             foreach (\Ecommerce\UserAdds\Field::getList() as $field) {
                 if (empty($_POST['userAdds']['fields'][$field->id]) && $field->required) {
                     $error = 1;
-                    Msg::add('Вы не указали: ' . $field->name, 'danger');
+                    \Inji\Msg::add('Вы не указали: ' . $field->name, 'danger');
                 }
             }
             if (!empty($_POST['discounts']['card_item_id'])) {
                 $userCard = \Ecommerce\Card\Item::get((int) $_POST['discounts']['card_item_id']);
                 if (!$userCard) {
                     $error = true;
-                    Msg::add('Такой карты не существует', 'danger');
+                    \Inji\Msg::add('Такой карты не существует', 'danger');
                 } elseif ($userCard->user_id != $user->id) {
                     $error = true;
-                    Msg::add('Это не ваша карта', 'danger');
+                    \Inji\Msg::add('Это не ваша карта', 'danger');
                 } else {
                     $cart->card_item_id = $userCard->id;
                 }
@@ -137,11 +137,11 @@ class CartController extends Controller {
 
                 if ($user && !empty($user->mail)) {
                     $text = '<p><b><a href = "http://' . App::$cur->getDomain() . '/ecommerce/cart/orderDetail/' . ($cart->id) . '">Посмотреть на сайте</a></b></p>' . $orderInfo;
-                    \Tools::sendMail('noreply@' . $domainRaw, $cart->user->mail, $title, $text);
+                    \Inji\Tools::sendMail('noreply@' . $domainRaw, $cart->user->mail, $title, $text);
                 }
                 if (!empty(\App::$cur->ecommerce->config['notify_mail'])) {
                     $text = '<p><b><a href = "http://' . App::$cur->getDomain() . '/admin/Ecommerce/view/Cart/' . ($cart->id) . '">Открыть заказ в админ панеле</a></b></p>' . $orderInfo;
-                    \Tools::sendMail('noreply@' . $domainRaw, \App::$cur->ecommerce->config['notify_mail'], $title, $text);
+                    \Inji\Tools::sendMail('noreply@' . $domainRaw, \App::$cur->ecommerce->config['notify_mail'], $title, $text);
                 }
 
                 if ($this->notifications) {

@@ -54,11 +54,11 @@ class UsersController extends Controller {
                 $response = $this->Recaptcha->check($_POST['g-recaptcha-response']);
                 if ($response) {
                     if (!$response->success) {
-                        Msg::add('Вы не прошли проверку на робота', 'danger');
+                        \Inji\Msg::add('Вы не прошли проверку на робота', 'danger');
                         $error = true;
                     }
                 } else {
-                    Msg::add('Произошла ошибка, попробуйте ещё раз');
+                    \Inji\Msg::add('Произошла ошибка, попробуйте ещё раз');
                     $error = true;
                 }
             }
@@ -129,11 +129,11 @@ class UsersController extends Controller {
         if (!empty($_POST['mail'])) {
             $user_mail = trim($_POST['mail']);
             if (!filter_var($user_mail, FILTER_VALIDATE_EMAIL)) {
-                Msg::add('Вы ввели не корректный E-mail', 'danger');
+                \Inji\Msg::add('Вы ввели не корректный E-mail', 'danger');
             } else {
                 $user = Users\User::get($user_mail, 'mail');
                 if ($user && $user->id != Users\User::$cur->id) {
-                    Msg::add('Данный E-mail уже привязан к другому аккаунту', 'danger');
+                    \Inji\Msg::add('Данный E-mail уже привязан к другому аккаунту', 'danger');
                 } else {
                     Users\User::$cur->mail = $user_mail;
                     if (!empty($this->module->config['needActivation'])) {
@@ -143,9 +143,9 @@ class UsersController extends Controller {
                         $subject = 'Активация аккаунта на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
                         $text = 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '</a>';
                         Tools::sendMail($from, $to, $subject, $text);
-                        Msg::add('На указанный почтовый ящик была выслана ваша ссылка для подтверждения E-Mail', 'success');
+                        \Inji\Msg::add('На указанный почтовый ящик была выслана ваша ссылка для подтверждения E-Mail', 'success');
                     } else {
-                        Msg::add('Вы успешно привязали E-Mail к своему аккаунту', 'success');
+                        \Inji\Msg::add('Вы успешно привязали E-Mail к своему аккаунту', 'success');
                     }
                     Users\User::$cur->save();
                     Tools::redirect('/');

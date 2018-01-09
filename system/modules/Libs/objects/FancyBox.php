@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class FancyBox extends \InjiObject {
+class FancyBox extends \Inji\InjiObject {
 
     public static $name = 'Fancy Box';
     public static $bowerPacks = [

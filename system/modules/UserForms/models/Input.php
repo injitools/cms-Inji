@@ -11,7 +11,7 @@
 
 namespace UserForms;
 
-class Input extends \Model {
+class Input extends \Inji\Model {
 
     public static $objectName = 'Поле формы';
     public static $labels = [

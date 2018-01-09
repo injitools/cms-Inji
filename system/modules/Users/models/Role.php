@@ -11,7 +11,7 @@
 
 namespace Users;
 
-class Role extends \Model {
+class Role extends \Inji\Model {
 
     public static $objectName = 'Роль пользователей';
     public static $labels = [
@@ -43,12 +43,12 @@ class Role extends \Model {
     public static function relations() {
         return [
             'group' => [
-                'model' => 'Users\Group',
+                'model' => 'Inji\Users\Group',
                 'col' => 'group_id'
             ],
             'users' => [
                 'type' => 'many',
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'group_id'
             ]
         ];

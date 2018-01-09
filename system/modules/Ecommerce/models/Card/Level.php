@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Card;
+namespace Inji\Ecommerce\Card;
 
-class Level extends \Model {
+class Level extends \Inji\Model {
 
     public static $objectName = 'Уровень карты';
     public static $cols = [
@@ -51,11 +51,11 @@ class Level extends \Model {
     public static function relations() {
         return [
             'card' => [
-                'model' => 'Ecommerce\Card',
+                'model' => 'Inji\Ecommerce\Card',
                 'col' => 'card_id'
             ],
             'discount' => [
-                'model' => 'Ecommerce\Discount',
+                'model' => 'Inji\Ecommerce\Discount',
                 'col' => 'discount_id'
             ]
         ];

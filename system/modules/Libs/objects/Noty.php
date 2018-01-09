@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class Noty extends \InjiObject {
+class Noty extends \Inji\InjiObject {
 
     public static $name = 'Noty';
     public static $bowerPacks = [

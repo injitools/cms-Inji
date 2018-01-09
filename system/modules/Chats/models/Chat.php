@@ -11,7 +11,7 @@
 
 namespace Chats;
 
-class Chat extends \Model {
+class Chat extends \Inji\Model {
 
     public static $cols = [
         'name' => ['type' => 'text'],

@@ -11,7 +11,7 @@
 
 namespace Migrations;
 
-class Log extends \Model {
+class Log extends \Inji\Model {
 
     public static $logging = false;
     public static $objectName = 'История миграции';

@@ -11,7 +11,7 @@
 
 namespace Events;
 
-class Event extends \Model {
+class Event extends \Inji\Model {
 
     public static $objectName = 'Событие системы';
     public static $labels = [

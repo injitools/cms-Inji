@@ -11,7 +11,7 @@
 
 namespace Chats\Chat\Member;
 
-class Status extends \Model {
+class Status extends \Inji\Model {
 
     public static $cols = [
         'name' => ['type' => 'text']

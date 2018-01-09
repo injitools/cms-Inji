@@ -120,12 +120,12 @@ class Twitter extends \Users\SocialHelper {
         if (empty($_GET['oauth_verifier']) || empty($_SESSION['oauth_token_secret'])) {
             $tokens = self::requestToken();
             $_SESSION['oauth_token_secret'] = $tokens['oauth_token_secret'];
-            \Tools::redirect("https://api.twitter.com/oauth/authorize?oauth_token={$tokens['oauth_token']}");
+            \Inji\Tools::redirect("https://api.twitter.com/oauth/authorize?oauth_token={$tokens['oauth_token']}");
         }
         $verify = self::verify();
 
         if (!$verify['user_id']) {
-            \Tools::redirect('/', 'Не удалось авторизоваться через twitter');
+            \Inji\Tools::redirect('/', 'Не удалось авторизоваться через twitter');
         }
         $userDetail = self::getInfo($verify);
 
@@ -134,7 +134,7 @@ class Twitter extends \Users\SocialHelper {
         if ($userSocial && $userSocial->user) {
             \App::$cur->users->newSession($userSocial->user);
             if (!empty(\App::$cur->users->config['loginUrl'][\App::$cur->type])) {
-                \Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type]);
+                \Inji\Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type]);
             }
         } else {
             if ($userSocial && !$userSocial->user) {
@@ -149,11 +149,11 @@ class Twitter extends \Users\SocialHelper {
                     $invite = \Users\User\Invite::get($invite_code, 'code');
                     $inveiteError = false;
                     if (!$invite) {
-                        Msg::add('Такой код пришлашения не найден', 'danger');
+                        \Inji\Msg::add('Такой код пришлашения не найден', 'danger');
                         $inveiteError = true;
                     }
                     if ($invite->limit && !($invite->limit - $invite->count)) {
-                        Msg::add('Лимит приглашений для данного кода исчерпан', 'danger');
+                        \Inji\Msg::add('Лимит приглашений для данного кода исчерпан', 'danger');
                         $inveiteError = true;
                     }
                     if (!$inveiteError) {
@@ -184,9 +184,9 @@ class Twitter extends \Users\SocialHelper {
             $userSocial->save();
             \App::$cur->users->newSession($user);
             if (!empty(\App::$cur->users->config['loginUrl'][\App::$cur->type])) {
-                \Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type], 'Вы успешно зарегистрировались через Twitter', 'success');
+                \Inji\Tools::redirect(\App::$cur->users->config['loginUrl'][\App::$cur->type], 'Вы успешно зарегистрировались через Twitter', 'success');
             } else {
-                \Tools::redirect('/users/cabinet/profile', 'Вы успешно зарегистрировались через Twitter', 'success');
+                \Inji\Tools::redirect('/users/cabinet/profile', 'Вы успешно зарегистрировались через Twitter', 'success');
             }
         }
     }

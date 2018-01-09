@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery;
+namespace Inji\Ecommerce\Delivery;
 
-class CityLink extends \Model {
+class CityLink extends \Inji\Model {
 
     public static $labels = [
         'delivery_id' => 'Тип доставки',
@@ -42,11 +42,11 @@ class CityLink extends \Model {
     public static function relations() {
         return [
             'city' => [
-                'model' => 'Geography\City',
+                'model' => 'Inji\Geography\City',
                 'col' => 'city_id'
             ],
             'delivery' => [
-                'model' => 'Ecommerce\Delivery',
+                'model' => 'Inji\Ecommerce\Delivery',
                 'col' => 'delivery_id'
             ],
         ];

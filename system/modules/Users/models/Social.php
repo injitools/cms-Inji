@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Users;
+namespace Inji\Users;
 
-class Social extends \Model {
+class Social extends \Inji\Model {
 
     public static $objectName = "Коннектор с социальной сетью";
     public static $cols = [
@@ -54,11 +54,11 @@ class Social extends \Model {
         return [
             'configs' => [
                 'type' => 'many',
-                'model' => 'Users\Social\Config',
+                'model' => 'Inji\Users\Social\Config',
                 'col' => 'social_id'
             ],
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ]
         ];

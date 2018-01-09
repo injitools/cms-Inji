@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item;
+namespace Inji\Ecommerce\Item;
 /**
  * @property int $id
  * @property string $name
@@ -32,7 +32,7 @@ namespace Ecommerce\Item;
  * @property-read \Ecommerce\Item\Option\Item[] $items
  * @property-read \Files\File $image
  */
-class Option extends \Model {
+class Option extends \Inji\Model {
 
     public static $objectName = 'Свойство';
     public static $cols = [
@@ -96,20 +96,20 @@ class Option extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'group' => [
-                'model' => 'Ecommerce\Item\Option\Group',
+                'model' => 'Inji\Ecommerce\Item\Option\Group',
                 'col' => 'item_option_group_id'
             ],
             'items' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Item\Option\Item',
+                'model' => 'Inji\Ecommerce\Item\Option\Item',
                 'col' => 'item_option_id'
             ],
             'image' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'image_file_id'
             ],
         ];

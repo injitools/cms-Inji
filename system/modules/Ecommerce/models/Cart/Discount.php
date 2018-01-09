@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Cart;
+namespace Inji\Ecommerce\Cart;
 
-class Discount extends \Model {
+class Discount extends \Inji\Model {
 
     public static $objectName = 'Скидка корзины';
     public static $cols = [
@@ -43,11 +43,11 @@ class Discount extends \Model {
     public static function relations() {
         return [
             'cart' => [
-                'model' => 'Ecommerce\Cart',
+                'model' => 'Inji\Ecommerce\Cart',
                 'col' => 'cart_id'
             ],
             'discount' => [
-                'model' => 'Ecommerce\Discount',
+                'model' => 'Inji\Ecommerce\Discount',
                 'col' => 'discount_id'
             ]
         ];

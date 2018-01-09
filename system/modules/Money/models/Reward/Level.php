@@ -11,7 +11,7 @@
 
 namespace Money\Reward;
 
-class Level extends \Model {
+class Level extends \Inji\Model {
 
     public static $cols = [
         'reward_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'reward'],

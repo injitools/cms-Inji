@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Modules module
  *
@@ -187,7 +187,7 @@ class Modules extends Module {
 
     public function addInMenu($items, $appType, $parent = 0) {
         foreach ($items as $item) {
-            $menuItem = new \Menu\Item();
+            $menuItem = new \Inji\Menu\Item();
             $menuItem->name = $item['name'];
             $menuItem->href = $item['href'];
             $menuItem->Menu_id = 1;

@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Menu;
+namespace Inji\Menu;
 
-class Item extends \Model {
+class Item extends \Inji\Model {
 
     public static $objectName = 'Пункт меню';
     public static $labels = [

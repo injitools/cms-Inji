@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * Access module
  *
@@ -9,7 +10,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class Access extends Module {
-
+    public $name = 'Access';
     public $accessCheckers = [];
 
     public function init() {

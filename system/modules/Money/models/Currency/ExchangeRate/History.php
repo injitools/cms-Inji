@@ -11,7 +11,7 @@
 
 namespace Money\Currency\ExchangeRate;
 
-class History extends \Model {
+class History extends \Inji\Model {
 
     public static $cols = [
         'currency_exchangerate_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'rate'],

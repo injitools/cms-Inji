@@ -22,7 +22,7 @@ namespace Migrations;
  * @method  \Migrations\Migration\Map[] maps($params)
  * @method \Migrations\Migration\Object[] objects($params)
  */
-class Migration extends \Model {
+class Migration extends \Inji\Model {
 
     public static $objectName = 'Миграция данных';
     public static $labels = [

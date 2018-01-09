@@ -11,7 +11,7 @@
 
 namespace Chats\Chat;
 
-class Message extends \Model {
+class Message extends \Inji\Model {
 
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],

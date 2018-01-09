@@ -23,7 +23,7 @@ namespace Sliders;
  * @property-read \Files\File $image
  * @property-read \Users\User $user
  */
-class Slider extends \Model {
+class Slider extends \Inji\Model {
 
     public static $objectName = "Слайдер";
     public static $cols = [

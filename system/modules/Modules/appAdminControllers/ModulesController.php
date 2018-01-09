@@ -37,7 +37,7 @@ class ModulesController extends Controller {
         if ($codeName && filter_input(INPUT_POST, 'name')) {
             $codeName = ucfirst($codeName);
             if (file_exists(App::$primary->path . '/modules/' . $codeName . '.php')) {
-                Msg::add('Модуль с таким именем уже существует');
+                \Inji\Msg::add('Модуль с таким именем уже существует');
             } else {
                 $this->modules->createBlankModule(filter_input(INPUT_POST, 'name'), $codeName);
                 $config = App::$primary->config;
@@ -51,7 +51,7 @@ class ModulesController extends Controller {
 
     public function editorAction($module) {
         if (!file_exists(Module::getModulePath($module) . '/generatorHash.php')) {
-            Msg::add('Этот модуль был создан без помощи генератора. Возможности его изменения ограничены и могут привести к порче модуля', 'danger');
+            \Inji\Msg::add('Этот модуль был создан без помощи генератора. Возможности его изменения ограничены и могут привести к порче модуля', 'danger');
         }
         $this->view->page(['data' => compact('module')]);
     }

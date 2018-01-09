@@ -8,7 +8,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Cart;
+namespace Inji\Ecommerce\Cart;
 /**
  * Class DeliveryInfo
  * @property int $id
@@ -21,7 +21,7 @@ namespace Ecommerce\Cart;
  * @property \Ecommerce\Cart $cart
  *
  */
-class DeliveryInfo extends \Model {
+class DeliveryInfo extends \Inji\Model {
 
     public static $objectName = 'Информация о доставке';
     public static $labels = [
@@ -59,11 +59,11 @@ class DeliveryInfo extends \Model {
     public static function relations() {
         return [
             'field' => [
-                'model' => 'Ecommerce\Delivery\Field',
+                'model' => 'Inji\Ecommerce\Delivery\Field',
                 'col' => 'delivery_field_id'
             ],
             'cart' => [
-                'model' => 'Ecommerce\Cart',
+                'model' => 'Inji\Ecommerce\Cart',
                 'col' => 'cart_id'
             ],
         ];

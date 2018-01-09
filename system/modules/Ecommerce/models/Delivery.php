@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 /**
  * Class Delivery
  *
@@ -32,7 +32,7 @@ namespace Ecommerce;
  * @property \Ecommerce\Delivery\Field[] $fields
  * @property \Ecommerce\Delivery\Price[] $prices
  */
-class Delivery extends \Model {
+class Delivery extends \Inji\Model {
 
     public static $objectName = 'Доставка';
     public static $cols = [
@@ -106,30 +106,30 @@ class Delivery extends \Model {
     public static function relations() {
         return [
             'icon' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'icon_file_id'
             ],
             'currency' => [
-                'model' => 'Money\Currency',
+                'model' => 'Inji\Money\Currency',
                 'col' => 'currency_id'
             ],
             'fields' => [
                 'type' => 'relModel',
-                'model' => 'Ecommerce\Delivery\Field',
+                'model' => 'Inji\Ecommerce\Delivery\Field',
                 'relModel' => 'Ecommerce\Delivery\DeliveryFieldLink'
             ],
             'cities' => [
                 'type' => 'relModel',
-                'model' => 'Geography\City',
+                'model' => 'Inji\Geography\City',
                 'relModel' => 'Ecommerce\Delivery\CityLink'
             ],
             'prices' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Delivery\Price',
+                'model' => 'Inji\Ecommerce\Delivery\Price',
                 'col' => 'delivery_id'
             ],
             'provider' => [
-                'model' => 'Ecommerce\Delivery\Provider',
+                'model' => 'Inji\Ecommerce\Delivery\Provider',
                 'col' => 'delivery_provider_id'
             ]
         ];

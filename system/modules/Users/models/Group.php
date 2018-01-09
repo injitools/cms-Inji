@@ -11,7 +11,7 @@
 
 namespace Users;
 
-class Group extends \Model {
+class Group extends \Inji\Model {
 
     public static $objectName = 'Группа пользователей';
     public static $labels = [
@@ -44,12 +44,12 @@ class Group extends \Model {
         return [
             'roles' => [
                 'type' => 'many',
-                'model' => 'Users\Role',
+                'model' => 'Inji\Users\Role',
                 'col' => 'group_id'
             ],
             'users' => [
                 'type' => 'many',
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'group_id'
             ]
         ];

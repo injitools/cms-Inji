@@ -18,7 +18,7 @@ namespace Migrations;
  * @property string $last_access
  * @property string $date_create
  */
-class Id extends \Model {
+class Id extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [

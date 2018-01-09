@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Card\Item;
+namespace Inji\Ecommerce\Card\Item;
 
-class History extends \Model {
+class History extends \Inji\Model {
 
     public static $cols = [
         //Основные параметры
@@ -24,7 +24,7 @@ class History extends \Model {
     public static function relations() {
         return [
             'cardItem' => [
-                'model' => 'Ecommerce\Card\Item',
+                'model' => 'Inji\Ecommerce\Card\Item',
                 'col' => 'card_item_id'
             ]
         ];

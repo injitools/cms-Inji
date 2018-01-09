@@ -11,7 +11,7 @@
 
 namespace Geography;
 
-class Country extends \Model {
+class Country extends \Inji\Model {
 
     public static $objectName = 'Страна';
     public static $labels = [

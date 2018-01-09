@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Cart;
+namespace Inji\Ecommerce\Cart;
 
-class Extra extends \Model {
+class Extra extends \Inji\Model {
 
     public static $labels = [
         'name' => 'Название',
@@ -58,11 +58,11 @@ class Extra extends \Model {
     public static function relations() {
         return [
             'cart' => [
-                'model' => 'Ecommerce\Cart',
+                'model' => 'Inji\Ecommerce\Cart',
                 'col' => 'cart_id'
             ],
             'currency' => [
-                'model' => 'Money\Currency',
+                'model' => 'Inji\Money\Currency',
                 'col' => 'currency_id'
             ]
         ];

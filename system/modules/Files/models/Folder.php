@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Files;
+namespace Inji\Files;
 
-class Folder extends \Model {
+class Folder extends \Inji\Model {
 
     public static $cols = [
         'dir' => ['type' => 'text'],
@@ -31,7 +31,7 @@ class Folder extends \Model {
         return [
             'files' => [
                 'type' => 'many',
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'folder_id'
             ]
         ];

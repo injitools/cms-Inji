@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 
-class PayType extends \Model {
+class PayType extends \Inji\Model {
 
     public static $objectName = 'Оплата';
     public static $labels = [
@@ -60,7 +60,7 @@ class PayType extends \Model {
     public static function relations() {
         return [
             'icon' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'icon_file_id'
             ],
         ];

@@ -11,7 +11,7 @@
 
 namespace Exchange1c\Exchange;
 
-class Log extends \Model {
+class Log extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [

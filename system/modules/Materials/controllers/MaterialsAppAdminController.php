@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji\Materials;
 /**
  * Materials  admin controller
  *
@@ -8,6 +8,6 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MaterialsController extends adminController {
+class MaterialsAppAdminController extends \Inji\Admin\AdminController {
     
 }

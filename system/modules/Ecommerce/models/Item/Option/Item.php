@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Option;
+namespace Inji\Ecommerce\Item\Option;
 
-class Item extends \Model {
+class Item extends \Inji\Model {
 
     public static $objectName = 'Элемент коллекции опции';
     public static $cols = [
@@ -45,7 +45,7 @@ class Item extends \Model {
     public static function relations() {
         return [
             'option' => [
-                'model' => 'Ecommerce\Item\Option',
+                'model' => 'Inji\Ecommerce\Item\Option',
                 'col' => 'item_option_id'
             ]
         ];

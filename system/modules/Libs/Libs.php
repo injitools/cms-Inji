@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Libs module
  *
@@ -11,7 +11,7 @@
 class Libs extends Module {
 
     public function loadLib($libName, $options = []) {
-        $className = 'Libs\\' . ucfirst($libName);
+        $className = 'Inji\Libs\\' . ucfirst($libName);
         if (class_exists($className)) {
             if (!empty($className::$composerPacks)) {
                 foreach ($className::$composerPacks as $packageName => $version) {
@@ -68,7 +68,7 @@ class Libs extends Module {
     public function staticCalled($file, $dir) {
         $libPath = preg_replace('!^libs/!', '', $file);
         $libName = substr($libPath, 0, strpos($libPath, '/'));
-        $className = 'Libs\\' . ucfirst($libName);
+        $className = 'Inji\Libs\\' . ucfirst($libName);
         if (class_exists($className)) {
             if (!empty($className::$programDirs)) {
                 $fileDir = substr($libPath, strlen($libName) + 1, strpos($libPath, '/', strlen($libName) + 1) - strlen($libName) - 1);
@@ -85,7 +85,7 @@ class Libs extends Module {
 
     public function getPath($args) {
         if (!empty($args[0])) {
-            $libName = 'Libs\\' . ucfirst($args[0]);
+            $libName = 'Inji\Libs\\' . ucfirst($args[0]);
             if (class_exists($libName) && !empty($libName::$staticDirs)) {
                 $file = implode('/', array_slice($args, 1));
                 foreach ($libName::$staticDirs as $dir) {

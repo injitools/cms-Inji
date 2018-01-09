@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * StaticLoader module
  *
@@ -9,7 +10,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class StaticLoader extends Module {
-
+    public $name = 'StaticLoader';
     public $mimes = [];
 
     public function init() {
@@ -26,7 +27,7 @@ class StaticLoader extends Module {
 
         if ($app && file_exists(INJI_SYSTEM_DIR . '/program/' . $app)) {
             $path = substr($path, strpos($path, '/') + 1);
-            if (\App::$cur->name != $app) {
+            if (App::$cur->name != $app) {
                 $scriptApp = new App();
                 $scriptApp->name = $app;
                 $scriptApp->system = true;
@@ -38,10 +39,10 @@ class StaticLoader extends Module {
                 $scriptApp->params = [];
                 $scriptApp->config = Config::app($scriptApp);
             } else {
-                $scriptApp = \App::$cur;
+                $scriptApp = App::$cur;
             }
         } else {
-            $scriptApp = \App::$cur->system ? \App::$primary : \App::$cur;
+            $scriptApp = App::$cur->system ? App::$primary : App::$cur;
         }
 
         if (strpos($path, 'static/') !== false && strpos($path, 'static/') <= 1) {

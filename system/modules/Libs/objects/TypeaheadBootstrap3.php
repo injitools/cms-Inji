@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class TypeaheadBootstrap3 extends \InjiObject {
+class TypeaheadBootstrap3 extends \Inji\InjiObject {
 
     public static $name = 'Typeahead Bootstrap 3';
     public static $bowerPacks = [

@@ -8,8 +8,8 @@
  * @license https://github.com/injitools/Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Catalog;
-class Category extends \Model {
+namespace Inji\Ecommerce\Catalog;
+class Category extends \Inji\Model {
     static $cols = [
         'catalog_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'catalog'],
         'category_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'category'],
@@ -39,11 +39,11 @@ class Category extends \Model {
         return [
             'catalog' => [
                 'col' => 'catalog_id',
-                'model' => 'Ecommerce\Catalog',
+                'model' => 'Inji\Ecommerce\Catalog',
             ],
             'category' => [
                 'col' => 'category_id',
-                'model' => 'Ecommerce\Category',
+                'model' => 'Inji\Ecommerce\Category',
             ]
         ];
     }

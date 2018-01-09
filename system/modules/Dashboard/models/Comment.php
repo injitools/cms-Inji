@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Dashboard;
+namespace Inji\Dashboard;
 
-class Comment extends \Model {
+class Comment extends \Inji\Model {
 
     public static $objectName = 'Комментарии';
     public static $labels = [
@@ -61,7 +61,7 @@ class Comment extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ]
         ];

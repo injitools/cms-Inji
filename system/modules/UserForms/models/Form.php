@@ -22,7 +22,7 @@ namespace UserForms;
  * @property-read \UserForms\Input[] $inputs
  * @method inputs (Array $options)
  */
-class Form extends \Model {
+class Form extends \Inji\Model {
 
     public static $objectName = 'Форма обращения с сайта';
     public static $labels = [

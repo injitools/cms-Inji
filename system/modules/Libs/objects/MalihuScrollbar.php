@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class MalihuScrollbar extends \InjiObject {
+class MalihuScrollbar extends \Inji\InjiObject {
 
     public static $name = 'Malihu Scrollbar';
     public static $bowerPacks = [

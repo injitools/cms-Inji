@@ -8,10 +8,10 @@
  * @license https://github.com/injitools/Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Option;
+namespace Inji\Ecommerce\Item\Option;
 
 
-class Group extends \Model {
+class Group extends \Inji\Model {
     static $cols = [
         'name' => ['type' => 'text'],
     ];

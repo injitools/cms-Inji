@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Offer;
+namespace Inji\Ecommerce\Item\Offer;
 /**
  * @property int $id
  * @property int $item_offer_option_id
@@ -22,7 +22,7 @@ namespace Ecommerce\Item\Offer;
  * @property-read \Ecommerce\Item\Offer $offer
  * @property-read \Files\File $file
  */
-class Param extends \Model {
+class Param extends \Inji\Model {
 
     public static $objectName = 'Параметр товара';
     public static $labels = [
@@ -116,19 +116,19 @@ class Param extends \Model {
     public static function relations() {
         return [
             'file' => [
-                'model' => 'Files\File',
+                'model' => 'Inji\Files\File',
                 'col' => 'value'
             ],
             'option' => [
-                'model' => 'Ecommerce\Item\Offer\Option',
+                'model' => 'Inji\Ecommerce\Item\Offer\Option',
                 'col' => 'item_offer_option_id'
             ],
             'offer' => [
-                'model' => 'Ecommerce\Item\Offer',
+                'model' => 'Inji\Ecommerce\Item\Offer',
                 'col' => 'item_offer_id'
             ],
             'optionItem' => [
-                'model' => 'Ecommerce\Item\Offer\Option\Item',
+                'model' => 'Inji\Ecommerce\Item\Offer\Option\Item',
                 'col' => 'value'
             ]
         ];

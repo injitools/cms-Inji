@@ -11,7 +11,7 @@
 
 namespace Money\Reward;
 
-class Recive extends \Model {
+class Recive extends \Inji\Model {
 
     public static $cols = [
         'reward_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'reward'],

@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery\Field;
+namespace Inji\Ecommerce\Delivery\Field;
 /**
  * Class Item
  * @property int $id
@@ -20,7 +20,7 @@ namespace Ecommerce\Delivery\Field;
  * @property string $date_create
  * @property \Ecommerce\Delivery\Field $field
  */
-class Item extends \Model {
+class Item extends \Inji\Model {
 
     public static $objectName = 'Элемент коллекции поля доставки';
     public static $cols = [
@@ -56,7 +56,7 @@ class Item extends \Model {
     public static function relations() {
         return [
             'field' => [
-                'model' => 'Ecommerce\Delivery\Field',
+                'model' => 'Inji\Ecommerce\Delivery\Field',
                 'col' => 'delivery_field_id'
             ]
         ];

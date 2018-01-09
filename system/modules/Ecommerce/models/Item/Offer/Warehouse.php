@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item\Offer;
+namespace Inji\Ecommerce\Item\Offer;
 /**
  * Class Delivery
  *
@@ -22,7 +22,7 @@ namespace Ecommerce\Item\Offer;
  * @property-read \Ecommerce\Warehouse $warehouse
  * @property-read \Ecommerce\Item\Offer $offer
  */
-class Warehouse extends \Model {
+class Warehouse extends \Inji\Model {
     public static $logging = 'changes';
     public static $objectName = 'Товар на складе';
     public static $labels = [
@@ -69,11 +69,11 @@ class Warehouse extends \Model {
     public static function relations() {
         return [
             'warehouse' => [
-                'model' => 'Ecommerce\Warehouse',
+                'model' => 'Inji\Ecommerce\Warehouse',
                 'col' => 'warehouse_id'
             ],
             'offer' => [
-                'model' => 'Ecommerce\Item\Offer',
+                'model' => 'Inji\Ecommerce\Item\Offer',
                 'col' => 'item_offer_id'
             ],
         ];

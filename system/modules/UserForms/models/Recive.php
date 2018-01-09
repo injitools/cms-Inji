@@ -11,7 +11,7 @@
 
 namespace UserForms;
 
-class Recive extends \Model {
+class Recive extends \Inji\Model {
 
     public static $objectName = 'Полученная форма';
     public static $labels = [

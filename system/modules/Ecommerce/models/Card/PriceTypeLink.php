@@ -6,10 +6,10 @@
  * Time: 16:59
  */
 
-namespace Ecommerce\Card;
+namespace Inji\Ecommerce\Card;
 
 
-class PriceTypeLink extends \Model {
+class PriceTypeLink extends \Inji\Model {
     static $cols = [
         'card_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'card'],
         'item_offer_price_type_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'type'],
@@ -30,11 +30,11 @@ class PriceTypeLink extends \Model {
     static function relations() {
         return [
             'card' => [
-                'model' => 'Ecommerce\Card',
+                'model' => 'Inji\Ecommerce\Card',
                 'col' => 'card_id'
             ],
             'type' => [
-                'model' => 'Ecommerce\Item\Offer\Price\Type',
+                'model' => 'Inji\Ecommerce\Item\Offer\Price\Type',
                 'col' => 'item_offer_price_type_id'
             ]
         ];

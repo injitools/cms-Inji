@@ -11,7 +11,7 @@
 
 namespace Migrations\Migration\Map;
 
-class Path extends \Model {
+class Path extends \Inji\Model {
 
     public static $cols = [
         'migration_map_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'map'],

@@ -11,7 +11,7 @@
 
 namespace Users\User;
 
-class Inventory extends \Model {
+class Inventory extends \Inji\Model {
 
     public static $objectName = "Инвентарь";
     public static $cols = [
@@ -33,11 +33,11 @@ class Inventory extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'items' => [
-                'model' => 'Users\User\Inventory\Item',
+                'model' => 'Inji\Users\User\Inventory\Item',
                 'col' => 'user_inventory_id'
             ]
         ];

@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Files;
+namespace Inji\Files;
 
-class Type extends \Model {
+class Type extends \Inji\Model {
 
     public static $cols = [
         'dir' => ['type' => 'text'],

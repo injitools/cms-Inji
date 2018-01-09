@@ -47,7 +47,7 @@ class CloseCartBtn extends \Ui\DataManager\Action {
             $cart->save();
         }
         $count = count($carts);
-        return 'Завершено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['корзина', 'корзины', 'корзин']);
+        return 'Завершено <b>' . $count . '</b> ' . \Inji\Tools::getNumEnding($count, ['корзина', 'корзины', 'корзин']);
     }
 
 }

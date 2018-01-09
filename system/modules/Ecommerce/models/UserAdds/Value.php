@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\UserAdds;
+namespace Inji\Ecommerce\UserAdds;
 
-class Value extends \Model {
+class Value extends \Inji\Model {
     public static $logging = false;
     public static $labels = [
         'useradds_field_id' => 'Поле',
@@ -45,11 +45,11 @@ class Value extends \Model {
     public static function relations() {
         return [
             'field' => [
-                'model' => 'Ecommerce\UserAdds\Field',
+                'model' => 'Inji\Ecommerce\UserAdds\Field',
                 'col' => 'useradds_field_id'
             ],
             'userAdd' => [
-                'model' => 'Ecommerce\UserAdds',
+                'model' => 'Inji\Ecommerce\UserAdds',
                 'col' => 'useradds_id'
             ],
         ];

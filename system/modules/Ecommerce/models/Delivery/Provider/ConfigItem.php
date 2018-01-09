@@ -8,7 +8,7 @@
  * @license https://github.com/injitools/Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery\Provider;
+namespace Inji\Ecommerce\Delivery\Provider;
 /**
  * Class ConfigItem
  * @property int $id
@@ -17,7 +17,7 @@ namespace Ecommerce\Delivery\Provider;
  * @property int $delivery_provider_id
  * @property \Ecommerce\Delivery\Provider $deliveryProvider
  */
-class ConfigItem extends \Model {
+class ConfigItem extends \Inji\Model {
 
     static $cols = [
         'name' => ['type' => 'text'],
@@ -40,7 +40,7 @@ class ConfigItem extends \Model {
     static function relations() {
         return [
             'deliveryProvider' => [
-                'model' => 'Ecommerce\Delivery\Provider',
+                'model' => 'Inji\Ecommerce\Delivery\Provider',
                 'col' => 'delivery_provider_id'
             ]
         ];

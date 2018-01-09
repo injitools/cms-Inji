@@ -11,7 +11,7 @@
 
 namespace Ecommerce\Cart;
 
-class Event extends \Model {
+class Event extends \Inji\Model {
 
     public static $cols = [
         //Основные параметры
@@ -43,15 +43,15 @@ class Event extends \Model {
     public static function relations() {
         return [
             'type' => [
-                'model' => 'Ecommerce\Cart\Event\Type',
+                'model' => 'Inji\Ecommerce\Cart\Event\Type',
                 'col' => 'cart_event_type_id',
             ],
             'cart' => [
-                'model' => 'Ecommerce\Cart',
+                'model' => 'Inji\Ecommerce\Cart',
                 'col' => 'cart_id',
             ],
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id',
             ],
         ];

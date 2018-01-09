@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class PrettyPhoto extends \InjiObject {
+class PrettyPhoto extends \Inji\InjiObject {
 
     public static $name = 'PrettyPhoto';
     public static $bowerPacks = [

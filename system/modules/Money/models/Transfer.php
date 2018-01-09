@@ -11,7 +11,7 @@
 
 namespace Money;
 
-class Transfer extends \Model {
+class Transfer extends \Inji\Model {
 
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],

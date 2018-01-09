@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class JqueryUi extends \InjiObject {
+class JqueryUi extends \Inji\InjiObject {
 
     public static $name = 'jQuery Ui';
     public static $bowerPacks = [

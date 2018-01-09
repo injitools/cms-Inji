@@ -11,7 +11,7 @@
 
 namespace Migrations\Log;
 
-class Event extends \Model {
+class Event extends \Inji\Model {
 
     public static $objectName = 'Событие истории миграции';
     public static $labels = [

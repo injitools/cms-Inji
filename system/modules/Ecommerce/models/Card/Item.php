@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Card;
+namespace Inji\Ecommerce\Card;
 /**
  * @property string $code
  * @property string $sum
@@ -22,7 +22,7 @@ namespace Ecommerce\Card;
  * @property-read \Ecommerce\Card\Level $level
  * @property-read \Users\User $user
  */
-class Item extends \Model {
+class Item extends \Inji\Model {
 
     public static $objectName = 'Карта пользователя';
     public static $cols = [
@@ -73,15 +73,15 @@ class Item extends \Model {
     public static function relations() {
         return [
             'card' => [
-                'model' => 'Ecommerce\Card',
+                'model' => 'Inji\Ecommerce\Card',
                 'col' => 'card_id'
             ],
             'level' => [
-                'model' => 'Ecommerce\Card\Level',
+                'model' => 'Inji\Ecommerce\Card\Level',
                 'col' => 'card_level_id'
             ],
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ]
         ];

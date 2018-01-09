@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 
-class Unit extends \Model {
+class Unit extends \Inji\Model {
 
     public static $objectName = 'Единица измерения';
     public static $labels = [

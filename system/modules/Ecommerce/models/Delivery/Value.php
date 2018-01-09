@@ -8,9 +8,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery;
+namespace Inji\Ecommerce\Delivery;
 
-class Value extends \Model {
+class Value extends \Inji\Model {
     public static $logging = false;
     public static $cols = [
         //Основные параметры
@@ -40,11 +40,11 @@ class Value extends \Model {
     public static function relations() {
         return [
             'field' => [
-                'model' => 'Ecommerce\Delivery\Field',
+                'model' => 'Inji\Ecommerce\Delivery\Field',
                 'col' => 'delivery_field_id'
             ],
             'save' => [
-                'model' => 'Ecommerce\Delivery\Save',
+                'model' => 'Inji\Ecommerce\Delivery\Save',
                 'col' => 'cart_id'
             ],
         ];

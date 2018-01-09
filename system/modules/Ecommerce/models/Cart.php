@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 /**
  * Class Cart
  *
@@ -54,7 +54,7 @@ namespace Ecommerce;
  * @method \Money\Pay[] pays($options)
  * @method \Ecommerce\Cart\Discount[] discounts($options)
  */
-class Cart extends \Model {
+class Cart extends \Inji\Model {
 
     public static $logging = false;
     public static $objectName = 'Корзины';
@@ -86,60 +86,60 @@ class Cart extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
             'cartItems' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Cart\Item',
+                'model' => 'Inji\Ecommerce\Cart\Item',
                 'col' => 'cart_id',
             ],
             'events' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Cart\Event',
+                'model' => 'Inji\Ecommerce\Cart\Event',
                 'col' => 'cart_id',
             ],
             'status' => [
-                'model' => 'Ecommerce\Cart\Status',
+                'model' => 'Inji\Ecommerce\Cart\Status',
                 'col' => 'cart_status_id'
             ],
             'delivery' => [
-                'model' => 'Ecommerce\Delivery',
+                'model' => 'Inji\Ecommerce\Delivery',
                 'col' => 'delivery_id'
             ],
             'payType' => [
-                'model' => 'Ecommerce\PayType',
+                'model' => 'Inji\Ecommerce\PayType',
                 'col' => 'paytype_id'
             ],
             'infos' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Cart\Info',
+                'model' => 'Inji\Ecommerce\Cart\Info',
                 'col' => 'cart_id',
                 'resultKey' => 'useradds_field_id'
             ],
             'deliveryInfos' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Cart\DeliveryInfo',
+                'model' => 'Inji\Ecommerce\Cart\DeliveryInfo',
                 'col' => 'cart_id',
                 'resultKey' => 'delivery_field_id'
             ],
             'extras' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\Cart\Extra',
+                'model' => 'Inji\Ecommerce\Cart\Extra',
                 'col' => 'cart_id'
             ],
             'card' => [
-                'model' => 'Ecommerce\Card\Item',
+                'model' => 'Inji\Ecommerce\Card\Item',
                 'col' => 'card_item_id'
             ],
             'pays' => [
                 'type' => 'many',
-                'model' => 'Money\Pay',
+                'model' => 'Inji\Money\Pay',
                 'col' => 'data'
             ],
             'discounts' => [
                 'type' => 'relModel',
-                'relModel' => 'Ecommerce\Cart\Discount',
+                'relModel' => 'Inji\Ecommerce\Cart\Discount',
                 'model' => 'Ecommerce\Discount',
             ]
         ];
@@ -351,7 +351,7 @@ class Cart extends \Model {
             $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
             $orderInfo .= "<tr><td>E-mail</td><td><b>{$this->user->mail}</b></td></tr>";
             foreach ($this->infos as $info) {
-                $value = \Model::resloveTypeValue($info, 'value');
+                $value = \Inji\Model::resloveTypeValue($info, 'value');
                 $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$value}</b></td></tr>";
             }
             $orderInfo .= '</table>';
@@ -361,7 +361,7 @@ class Cart extends \Model {
             $orderInfo .= "<p><b>{$this->delivery->name}</b></p>";
             $orderInfo .= '<table cellspacing="2" border="1" cellpadding="5">';
             foreach ($this->deliveryInfos as $info) {
-                $value = \Model::resloveTypeValue($info, 'value');
+                $value = \Inji\Model::resloveTypeValue($info, 'value');
                 $orderInfo .= "<tr><td>{$info->name}</td><td><b>{$value}</b></td></tr>";
             }
             $orderInfo .= '</table>';

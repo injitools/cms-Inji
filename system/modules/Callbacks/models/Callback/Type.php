@@ -11,7 +11,7 @@
 
 namespace Callbacks\Callback;
 
-class Type extends \Model {
+class Type extends \Inji\Model {
 
     public static $objectName = "Тип отзыва";
     public static $cols = [

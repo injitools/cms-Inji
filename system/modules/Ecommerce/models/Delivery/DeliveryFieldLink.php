@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Delivery;
+namespace Inji\Ecommerce\Delivery;
 
-class DeliveryFieldLink extends \Model {
+class DeliveryFieldLink extends \Inji\Model {
 
     public static $labels = [
         'delivery_id' => 'Тип доставки',
@@ -42,11 +42,11 @@ class DeliveryFieldLink extends \Model {
     public static function relations() {
         return [
             'field' => [
-                'model' => 'Ecommerce\Delivery\Field',
+                'model' => 'Inji\Ecommerce\Delivery\Field',
                 'col' => 'delivery_field_id'
             ],
             'delivery' => [
-                'model' => 'Ecommerce\Delivery',
+                'model' => 'Inji\Ecommerce\Delivery',
                 'col' => 'delivery_id'
             ],
         ];

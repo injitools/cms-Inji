@@ -10,7 +10,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class TemplateController extends \Controller {
+class TemplateController extends \Inji\Controller {
 
     public function indexAction($templateName) {
         $template = \View\Template::get($templateName, \App::$primary);

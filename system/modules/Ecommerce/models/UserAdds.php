@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 /**
  * @property int $id
  * @property string $name
@@ -22,7 +22,7 @@ namespace Ecommerce;
  * @method \Ecommerce\UserAdds\Value[] values($options)
  * @method \Users\User user($options)
  */
-class UserAdds extends \Model {
+class UserAdds extends \Inji\Model {
     public static $logging = false;
     public static $labels = [
         'value' => 'Информация'
@@ -41,12 +41,12 @@ class UserAdds extends \Model {
         return [
             'values' => [
                 'type' => 'many',
-                'model' => 'Ecommerce\UserAdds\Value',
+                'model' => 'Inji\Ecommerce\UserAdds\Value',
                 'col' => 'useradds_id',
                 'resultKey' => 'useradds_field_id'
             ],
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id',
             ],
         ];

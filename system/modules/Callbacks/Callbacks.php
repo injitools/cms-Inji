@@ -17,19 +17,19 @@ class Callbacks extends Module {
             $error = false;
             if (empty($callbacksData['text'])) {
                 $error = true;
-                Msg::add('Вы не написали текст отзыва');
+                \Inji\Msg::add('Вы не написали текст отзыва');
             } else {
                 $callback->text = nl2br(htmlspecialchars($callbacksData['text']));
             }
             if (empty($callbacksData['name'])) {
                 $error = true;
-                Msg::add('Вы не указали свое имя');
+                \Inji\Msg::add('Вы не указали свое имя');
             } else {
                 $callback->name = htmlspecialchars($callbacksData['name']);
             }
             if (empty($callbacksData['phone'])) {
                 $error = true;
-                Msg::add('Вы не указали свой номер телефона');
+                \Inji\Msg::add('Вы не указали свой номер телефона');
             } else {
                 $callback->phone = htmlspecialchars($callbacksData['phone']);
             }

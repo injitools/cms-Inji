@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 
 /**
  * Description of Favorite
  *
  * @author benzu
  */
-class Favorite extends \Model {
+class Favorite extends \Inji\Model {
 
     static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],

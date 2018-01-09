@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Ecommerce\Item;
+namespace Inji\Ecommerce\Item;
 
 /**
  * Description of Review
  *
  * @author benzu
  */
-class Review extends \Model {
+class Review extends \Inji\Model {
 
     public static $cols = [
         'item_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'item'],
@@ -64,11 +64,11 @@ class Review extends \Model {
         return [
             'user' => [
                 'col' => 'user_id',
-                'model' => 'Users\User'
+                'model' => 'Inji\Users\User'
             ],
             'item' => [
                 'col' => 'item_id',
-                'model' => 'Ecommerce\Item'
+                'model' => 'Inji\Ecommerce\Item'
             ],
         ];
     }

@@ -50,7 +50,7 @@ class MoneyController extends Controller {
         }
         if (!empty($_POST['code'])) {
             if ($transfer->code != $_POST['code']) {
-                Msg::add('Код не совпадает', 'danger');
+                \Inji\Msg::add('Код не совпадает', 'danger');
             } else {
                 $transfer->complete = 1;
                 $block = Money\Wallet\Block::get('Money\Transfer:' . $transfer->id, 'data');
@@ -131,13 +131,13 @@ class MoneyController extends Controller {
             $error = false;
             $rate = $rates[$_GET['exchange']['rate_id']];
             if (empty($_GET['exchange']['give']['amount']) || !(float) $_GET['exchange']['give']['amount']) {
-                Msg::add('Укажите сумму которую вы хотите отдать');
+                \Inji\Msg::add('Укажите сумму которую вы хотите отдать');
                 $error = true;
             } else {
                 $amount = (float) $_GET['exchange']['give']['amount'];
             }
             if (!empty($amount) && $amount > $wallets[$currency->id]->amount) {
-                Msg::add('Вы указали сумму большую чем вам доступно');
+                \Inji\Msg::add('Вы указали сумму большую чем вам доступно');
                 $error = true;
             }
             if (!$error) {

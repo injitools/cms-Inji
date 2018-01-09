@@ -11,7 +11,7 @@
 
 namespace Users;
 
-class Passre extends \Model {
+class Passre extends \Inji\Model {
     public static $logging = false;
     public static $cols = [
         'hash' => ['type' => 'textarea'],
@@ -23,7 +23,7 @@ class Passre extends \Model {
         return [
             'user' => [
                 'col' => 'user_id',
-                'model' => 'Users\User'
+                'model' => 'Inji\Users\User'
             ]
         ];
     }

@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Libs;
+namespace Inji\Libs;
 
-class JsCookie extends \InjiObject {
+class JsCookie extends \Inji\InjiObject {
 
     public static $name = 'JavaScript Cookie';
     public static $bowerPacks = [

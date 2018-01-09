@@ -8,7 +8,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class NotificationsController extends \Controller {
+class NotificationsController extends \Inji\Controller {
 
     public function checkAction() {
         $result = new Server\Result();

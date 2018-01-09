@@ -11,7 +11,7 @@
 
 namespace Users\User;
 
-class Invite extends \Model {
+class Invite extends \Inji\Model {
 
     public static $objectName = "Код пришлашения";
     public static $labels = [
@@ -55,7 +55,7 @@ class Invite extends \Model {
     public static function relations() {
         return [
             'user' => [
-                'model' => 'Users\User',
+                'model' => 'Inji\Users\User',
                 'col' => 'user_id'
             ],
         ];

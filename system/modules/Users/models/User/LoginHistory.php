@@ -11,7 +11,7 @@
 namespace Users\User;
 
 
-class LoginHistory extends \Model {
+class LoginHistory extends \Inji\Model {
     public static $logging = false;
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
@@ -39,7 +39,7 @@ class LoginHistory extends \Model {
         return [
             'user' => [
                 'col' => 'user_id',
-                'model' => 'Users\User'
+                'model' => 'Inji\Users\User'
             ]
         ];
     }

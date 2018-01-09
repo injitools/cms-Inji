@@ -17,7 +17,7 @@ return function($step = NULL, $params = []) {
         ],
     ];
     foreach ($currencies as $currency) {
-        $currencyObject = new \Money\Currency($currency);
+        $currencyObject = new \Inji\Money\Currency($currency);
         $currencyObject->save();
     }
     $statuses = [
@@ -39,29 +39,29 @@ return function($step = NULL, $params = []) {
         ]
     ];
     foreach ($statuses as $status) {
-        $statusObj = new \Money\Pay\Status($status);
+        $statusObj = new \Inji\Money\Pay\Status($status);
         $statusObj->save();
     }
     $merchants = [
         [
             'name' => 'Wallet One',
             'object_name' => 'WalletOne',
-            'image_file_id' => App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/WalletOne.png')
+            'image_file_id' => Inji\App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/WalletOne.png')
         ],
         [
             'name' => 'Robokassa',
             'object_name' => 'Robokassa',
-            'image_file_id' => App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/Robokassa.png')
+            'image_file_id' => Inji\App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/Robokassa.png')
         ],
         [
             'name' => 'Payeer',
             'object_name' => 'Payeer',
-            'image_file_id' => App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/Payeer.png')
+            'image_file_id' => Inji\App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/Payeer.png')
         ],
         [
             'name' => 'PerfectMoney',
             'object_name' => 'PerfectMoney',
-            'image_file_id' => App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/PerfectMoney.png')
+            'image_file_id' => Inji\App::$cur->Files->uploadFromUrl(__DIR__ . '/static/images/PerfectMoney.png')
         ],
     ];
     $merchantsConfig = [
@@ -126,15 +126,15 @@ return function($step = NULL, $params = []) {
         ]
     ];
     foreach ($merchants as $key => $merchant) {
-        $merchantObj = new \Money\Merchant($merchant);
+        $merchantObj = new Inji\Money\Merchant($merchant);
         $merchantObj->save();
         foreach ($merchantsConfig[$key] as $config) {
-            $merchantConfigObj = new Money\Merchant\Config($config);
+            $merchantConfigObj = new Inji\Money\Merchant\Config($config);
             $merchantConfigObj->merchant_id = $merchantObj->id;
             $merchantConfigObj->save();
         }
         foreach ($merchantsCurrencies[$key] as $currency) {
-            $currencyObj = new Money\Merchant\Currency($currency);
+            $currencyObj = new Inji\Money\Merchant\Currency($currency);
             $currencyObj->merchant_id = $merchantObj->id;
             $currencyObj->save();
         }

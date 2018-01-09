@@ -2,7 +2,7 @@
 
 <?= "namespace {$module};\n"; ?>
 
-class <?= $codeName; ?> extends \Model {
+class <?= $codeName; ?> extends \Inji\Model {
 //modelParams<?php
 if (!empty($name)) {
     echo "\n    static " . '$objectName = \'' . $name . "';";

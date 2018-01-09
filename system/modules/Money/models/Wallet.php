@@ -11,7 +11,7 @@
 
 namespace Money;
 
-class Wallet extends \Model {
+class Wallet extends \Inji\Model {
 
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],

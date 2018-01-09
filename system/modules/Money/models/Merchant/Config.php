@@ -11,7 +11,7 @@
 
 namespace Money\Merchant;
 
-class Config extends \Model {
+class Config extends \Inji\Model {
 
     public static $objectName = 'Опция системы оплаты';
     public static $cols = [

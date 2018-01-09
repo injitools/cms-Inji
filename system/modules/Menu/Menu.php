@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * Menu module
  *
@@ -9,5 +10,5 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class Menu extends Module {
-    
+    public $name = 'Menu';
 }

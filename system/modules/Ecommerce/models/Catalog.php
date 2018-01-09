@@ -8,7 +8,7 @@
  * @license https://github.com/injitools/Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce;
+namespace Inji\Ecommerce;
 
 /**
  * @property int $id
@@ -22,7 +22,7 @@ namespace Ecommerce;
  * @property \Ecommerce\Catalog\Category[] $categories
  * @property \Files\File $icon
  */
-class Catalog extends \Model {
+class Catalog extends \Inji\Model {
     static $cols = [
         'name' => ['type' => 'text'],
         'weight' => ['type' => 'number'],
@@ -75,22 +75,22 @@ class Catalog extends \Model {
     static function relations() {
         return [
             'parent' => [
-                'model' => 'Ecommerce\Catalog',
+                'model' => 'Inji\Ecommerce\Catalog',
                 'col' => 'parent_id'
             ],
             'childs' => [
                 'type' => 'many',
                 'col' => 'parent_id',
-                'model' => 'Ecommerce\Catalog'
+                'model' => 'Inji\Ecommerce\Catalog'
             ],
             'categories' => [
                 'type' => 'many',
                 'col' => 'catalog_id',
-                'model' => 'Ecommerce\Catalog\Category'
+                'model' => 'Inji\Ecommerce\Catalog\Category'
             ],
             'icon' => [
                 'col' => 'icon_file_id',
-                'model' => 'Files\File'
+                'model' => 'Inji\Files\File'
             ]
         ];
     }

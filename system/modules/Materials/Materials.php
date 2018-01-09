@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Materials module
  *
@@ -8,7 +8,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class Materials extends Module {
+class Materials extends \Inji\Module {
+    public $name = 'Materials';
 
     public function viewsList() {
         $return = [

@@ -33,7 +33,7 @@ class Payeer extends \Money\MerchantHelper {
             $data['m_key']
         );
         $data['m_sign'] = strtoupper(hash('sha256', implode(':', $arHash)));
-        \Tools::redirect('http://payeer.com/merchant/?' . http_build_query($data));
+        \Inji\Tools::redirect('http://payeer.com/merchant/?' . http_build_query($data));
     }
 
     public static function reciver($data, $status) {

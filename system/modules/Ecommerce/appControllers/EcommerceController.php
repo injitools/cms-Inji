@@ -50,7 +50,7 @@ class ecommerceController extends Controller {
             $card = \Ecommerce\Card::get((int) $_POST['card_id']);
             if (!$card) {
                 $error = true;
-                Msg::add('Такой карты не существует', 'danger');
+                \Inji\Msg::add('Такой карты не существует', 'danger');
             }
 
             if (!Users\User::$cur->id) {
@@ -65,14 +65,14 @@ class ecommerceController extends Controller {
             $userCard = \Ecommerce\Card\Item::get([['card_id', $card->id], ['user_id', $user->id]]);
             if ($userCard) {
                 $error = true;
-                Msg::add('У вас уже есть такая карта', 'danger');
+                \Inji\Msg::add('У вас уже есть такая карта', 'danger');
             }
 
             $fields = \Ecommerce\UserAdds\Field::getList();
             foreach ($fields as $field) {
                 if (empty($_POST['userAdds']['fields'][$field->id]) && $field->required) {
                     $error = 1;
-                    Msg::add('Вы не указали: ' . $field->name);
+                    \Inji\Msg::add('Вы не указали: ' . $field->name);
                 }
             }
             if (!$error) {

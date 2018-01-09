@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Item;
+namespace Inji\Ecommerce\Item;
 /**
  * @property int $id
  * @property int $file_id
@@ -18,7 +18,7 @@ namespace Ecommerce\Item;
  * @property string $description
  * @property string $date_create
  */
-class Image extends \Model {
+class Image extends \Inji\Model {
 
     public static $objectName = 'Фото товара';
     public static $labels = [
@@ -39,11 +39,11 @@ class Image extends \Model {
         return [
             'item' => [
                 'col' => 'item_id',
-                'model' => 'Ecommerce\Item'
+                'model' => 'Inji\Ecommerce\Item'
             ],
             'file' => [
                 'col' => 'file_id',
-                'model' => 'Files\File'
+                'model' => 'Inji\Files\File'
             ]
         ];
     }

@@ -11,7 +11,7 @@
 
 namespace Money\Wallet;
 
-class Block extends \Model {
+class Block extends \Inji\Model {
 
     public static $objectName = 'Блокировка кошелька';
     public static $cols = [

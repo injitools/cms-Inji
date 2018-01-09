@@ -9,9 +9,11 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Server;
+namespace Inji\Server;
 
-class Result extends \InjiObject {
+use Inji\App;
+
+class Result extends \Inji\InjiObject {
 
     public $content = null;
     public $success = true;
@@ -33,7 +35,7 @@ class Result extends \InjiObject {
             header('Content-type: application/json');
         }
         $return['commands'] = $this->commands;
-        $return['scripts'] = \App::$cur->view->getScripts();
+        $return['scripts'] = App::$cur->view->getScripts();
         if ($applyCallback && !empty($_GET['callback'])) {
             echo $_GET['callback'] . '(';
         }

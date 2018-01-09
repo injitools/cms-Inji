@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Cart\Event;
+namespace Inji\Ecommerce\Cart\Event;
 
-class Type extends \Model {
+class Type extends \Inji\Model {
 
     public static $cols = [
         'name' => ['type' => 'text']

@@ -21,7 +21,7 @@ namespace Exchange1c\Exchange;
  * @property int $date_create
  * @property \Exchange1c\Exchange $exchange
  */
-class File extends \Model {
+class File extends \Inji\Model {
 
     public static $logging = false;
     public static $cols = [

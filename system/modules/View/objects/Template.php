@@ -11,48 +11,48 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace View;
+namespace Inji\View;
 
-class Template extends \InjiObject {
+class Template extends \Inji\InjiObject {
 
     /**
      * App for template
-     * 
-     * @var \App 
+     *
+     * @var \App
      */
     public $app = null;
 
     /**
      * Template name
-     * 
+     *
      * @var string
      */
     public $name = 'default';
 
     /**
      * Template path
-     * 
+     *
      * @var string
      */
     public $path = '';
 
     /**
      * Template config path
-     * 
-     * @var string 
+     *
+     * @var string
      */
     public $configPath = '';
 
     /**
      * Template config
-     * 
+     *
      * @var array
      */
     public $config = [];
 
     /**
      * Current template page for rendering
-     * 
+     *
      * @var string
      */
     public $page = 'index';
@@ -66,28 +66,28 @@ class Template extends \InjiObject {
 
     /**
      * Template module for content path finder
-     * 
+     *
      * @var \Module
      */
     public $module = null;
 
     /**
      * Current content file for rendering
-     * 
+     *
      * @var string
      */
     public $content = '';
 
     /**
      * Current content file path for rendering
-     * 
+     *
      * @var string|boolean
      */
     public $contentPath = '';
 
     /**
      * Setup template object
-     * 
+     *
      * @param array $params
      */
     public function __construct($params = []) {
@@ -103,7 +103,7 @@ class Template extends \InjiObject {
 
     /**
      * Load template config
-     * 
+     *
      * @param string $configPath
      */
     public function loadConfig($configPath = '') {
@@ -111,12 +111,12 @@ class Template extends \InjiObject {
             $configPath = $this->path . '/config.php';
         }
         $this->configPath = $configPath;
-        $this->config = \Config::custom($this->configPath);
+        $this->config = \Inji\Config::custom($this->configPath);
     }
 
     /**
      * Set params for template
-     * 
+     *
      * @param array $params
      */
     public function setParams($params) {
@@ -127,7 +127,7 @@ class Template extends \InjiObject {
 
     /**
      * Set page and page path for template
-     * 
+     *
      * @param string $page
      */
     public function setPage($page = '') {
@@ -138,12 +138,12 @@ class Template extends \InjiObject {
         if (!$this->pagePath) {
             $this->pagePath = $this->path . '/' . $this->page . '.html';
         }
-        $this->pagePath = \Tools::pathsResolve($this->getPagePaths(), $this->pagePath);
+        $this->pagePath = \Inji\Tools::pathsResolve($this->getPagePaths(), $this->pagePath);
     }
 
     /**
      * Get posible paths for template page by name
-     * 
+     *
      * @param string $page
      * @return array
      */
@@ -153,18 +153,18 @@ class Template extends \InjiObject {
         }
         return [
             'template' => $this->path . '/' . $page . '.html',
-            'defaultPage' => \Module::getModulePath('View') . '/templatePages/' . $page . '.html'
+            'defaultPage' => \Inji\Module::getModulePath('View') . '/templatePages/' . $page . '.html'
         ];
     }
 
     /**
      * Set module for content path finder
-     * 
-     * @param \Module $module
+     *
+     * @param \Inji\Module $module
      */
     public function setModule($module = null) {
         if (!$module && !$this->module) {
-            $this->module = \Module::$cur;
+            $this->module = \Inji\Module::$cur;
         } else {
             $this->module = $module;
         }
@@ -175,27 +175,27 @@ class Template extends \InjiObject {
 
     /**
      * Set content file for rendering
-     * 
+     *
      * @param string $content
      */
     public function setContent($content = '') {
         if ($content) {
             $this->content = $content;
         }
-        if (\Controller::$cur && \Controller::$cur->run) {
+        if (\Inji\Controller::$cur && \Inji\Controller::$cur->run) {
             if (!$this->content) {
-                $this->content = \Controller::$cur->method;
+                $this->content = \Inji\Controller::$cur->method;
             }
-            if ((!$this->contentPath || $content) && \Module::$cur) {
-                $this->contentPath = \Module::$cur->path . '/' . \Module::$cur->app->type . "Controllers/content/{$this->content}.php";
+            if ((!$this->contentPath || $content) && \Inji\Module::$cur) {
+                $this->contentPath = \Inji\Module::$cur->path . '/' . \Inji\Module::$cur->app->type . "Controllers/content/{$this->content}.php";
             }
-            $this->contentPath = \Tools::pathsResolve($this->getContentPaths(), $this->contentPath);
+            $this->contentPath = \Inji\Tools::pathsResolve($this->getContentPaths(), $this->contentPath);
         }
     }
 
     /**
      * Return posible path for content file by name
-     * 
+     *
      * @param string $content
      * @return string
      */
@@ -205,48 +205,49 @@ class Template extends \InjiObject {
         }
         $paths = [];
         if ($this->module) {
-            if (\Controller::$cur) {
-                $paths['templateModuleController'] = $this->path . "/modules/{$this->module->moduleName}/" . \Controller::$cur->name . "/{$content}.php";
+            if (\Inji\Controller::$cur) {
+                $paths['templateModuleController'] = $this->path . "/modules/{$this->module->name}/" . \Inji\Controller::$cur->name . "/{$content}.php";
             }
-            $paths['templateModule'] = $this->path . "/modules/{$this->module->moduleName}/{$content}.php";
+            $paths['templateModule'] = $this->path . "/modules/{$this->module->name}/{$content}.php";
         }
-        if (\Module::$cur) {
-            if (\Controller::$cur) {
-                $paths['templateCurModuleController'] = $this->path . "/modules/" . \Module::$cur->moduleName . "/" . \Controller::$cur->name . "/{$content}.php";
+        if (\Inji\Module::$cur) {
+            if (\Inji\Controller::$cur) {
+                $paths['templateCurModuleController'] = $this->path . "/modules/" . \Inji\Module::$cur->name . "/" . \Inji\Controller::$cur->name . "/{$content}.php";
             }
-            $paths['templateCurModule'] = $this->path . "/modules/" . \Module::$cur->moduleName . "/{$content}.php";
+            $paths['templateCurModule'] = $this->path . "/modules/" . \Inji\Module::$cur->name . "/{$content}.php";
         }
-        if (\Controller::$cur) {
-            $paths['appControllerContentController'] = \Controller::$cur->module->app->path . '/modules/' . \Controller::$cur->module->moduleName . '/' . \Controller::$cur->module->app->type . "Controllers/content/" . \Controller::$cur->name . "/{$content}.php";
-            $paths['appControllerContent'] = \Controller::$cur->module->app->path . '/modules/' . \Controller::$cur->module->moduleName . '/' . \Controller::$cur->module->app->type . "Controllers/content/{$content}.php";
-            $paths['controllerContentController'] = \Controller::$cur->path . "/content/" . \Controller::$cur->name . "/{$content}.php";
-            $paths['controllerContent'] = \Controller::$cur->path . "/content/{$content}.php";
-            $paths['moduleControllerContentController'] = \Controller::$cur->module->path . '/' . \Controller::$cur->module->app->type . "Controllers/content/" . \Controller::$cur->name . "/{$content}.php";
-            $paths['moduleControllerContent'] = \Controller::$cur->module->path . '/' . \Controller::$cur->module->app->type . "Controllers/content/{$content}.php";
+        if (\Inji\Controller::$cur) {
+            $modulePaths = \Inji\Module::getModulePaths(\Inji\Controller::$cur->module->name);
+            foreach ($modulePaths as $key => $modulePath) {
+                $paths['module_' . $key . '_appType'] = $modulePath . '/views/' . \Inji\Controller::$cur->module->app->type . '/' . \Inji\Controller::$cur->name . "/{$content}.php";
+                $paths['module_' . $key . '_appType_controllerName'] = $modulePath . '/views/' . \Inji\Controller::$cur->module->app->type . "/{$content}.php";
+                $paths['module_' . $key] = $modulePath . '/views/' . "/{$content}.php";
+            }
         }
+
         if ($this->module) {
-            if (\Controller::$cur) {
-                $paths['customModuleTemplateControllerContentController'] = $this->path . "/modules/" . $this->module->moduleName . "/" . \Controller::$cur->name . "/{$content}.php";
+            if (\Inji\Controller::$cur) {
+                $paths['customModuleTemplateControllerContentController'] = $this->path . "/modules/" . $this->module->name . "/" . \Inji\Controller::$cur->name . "/{$content}.php";
             }
-            $paths['customModuleTemplateControllerContent'] = $this->path . "/modules/" . $this->module->moduleName . "/{$content}.php";
+            $paths['customModuleTemplateControllerContent'] = $this->path . "/modules/" . $this->module->name . "/{$content}.php";
         }
-        if ($this->module && \Controller::$cur) {
-            $paths['customModuleControllerContentController'] = $this->module->path . '/' . \Controller::$cur->module->app->type . "Controllers/content/" . \Controller::$cur->name . "/{$content}.php";
-            $paths['customModuleControllerContent'] = $this->module->path . '/' . \Controller::$cur->module->app->type . "Controllers/content/{$content}.php";
+        if ($this->module && \Inji\Controller::$cur) {
+            $paths['customModuleControllerContentController'] = $this->module->path . '/' . \Inji\Controller::$cur->module->app->type . "Controllers/content/" . \Inji\Controller::$cur->name . "/{$content}.php";
+            $paths['customModuleControllerContent'] = $this->module->path . '/' . \Inji\Controller::$cur->module->app->type . "Controllers/content/{$content}.php";
         }
         return $paths;
     }
 
     /**
      * Retrn object of template by template name
-     * 
+     *
      * @param string $templateName
-     * @param \App $app
-     * @return \View\Template
+     * @param \Inji\App $app
+     * @return \Inji\View\Template
      */
     public static function get($templateName, $app = null, $templatesPath = '') {
         if (!$app) {
-            $app = \App::$cur;
+            $app = \Inji\App::$cur;
         }
         if (!$templatesPath) {
             $templatesPath = $app->view->templatesPath;

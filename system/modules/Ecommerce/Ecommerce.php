@@ -1,5 +1,5 @@
 <?php
-
+namespace Inji;
 /**
  * Ecommerce module
  *
@@ -490,8 +490,8 @@ class Ecommerce extends Module {
     }
 
     public function getFavoriteCount() {
-        if (Users\User::$cur->id) {
-            return \Ecommerce\Favorite::getCount(['user_id', Users\User::$cur->id]);
+        if (Inji\Users\User::$cur->id) {
+            return Favorite::getCount(['user_id', Inji\Users\User::$cur->id]);
         } else {
             $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             return count($favs);
@@ -513,7 +513,7 @@ class Ecommerce extends Module {
         foreach ($items as $item) {
             $details = '<div>';
             if ($item->image) {
-                $details .= "<img style='margin-right:10px;margin-bottom:10px;' class='pull-left' src ='" . Statics::file($item->image->path, '70x70', 'q') . "' />";
+                $details .= "<img style='margin-right:10px;margin-bottom:10px;' class='pull-left' src ='" . Inji\Statics::file($item->image->path, '70x70', 'q') . "' />";
             }
             $details .= '<b>' . $item->category->name . '</b><br />';
             $shortdes = mb_substr($item->description, 0, 200);

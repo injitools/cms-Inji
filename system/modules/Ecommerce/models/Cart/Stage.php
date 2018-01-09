@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ecommerce\Cart;
+namespace Inji\Ecommerce\Cart;
 
-class Stage extends \Model {
+class Stage extends \Inji\Model {
 
     public static $objectName = 'Этап наполнения корзины';
     public static $cols = [
@@ -45,7 +45,7 @@ class Stage extends \Model {
     public static function relations() {
         return [
             'currency' => [
-                'model' => 'Money\Currency',
+                'model' => 'Inji\Money\Currency',
                 'col' => 'currency_id'
             ]
         ];

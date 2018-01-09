@@ -11,7 +11,7 @@
 
 namespace Notifications;
 
-class Subscribe extends \Model {
+class Subscribe extends \Inji\Model {
 
     public static $cols = [
         'chanel_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'chanel'],

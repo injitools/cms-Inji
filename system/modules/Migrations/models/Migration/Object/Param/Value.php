@@ -11,7 +11,7 @@
 
 namespace Migrations\Migration\Object\Param;
 
-class Value extends \Model {
+class Value extends \Inji\Model {
 
     public static $cols = [
         'origianl' => ['type' => 'textarea'],

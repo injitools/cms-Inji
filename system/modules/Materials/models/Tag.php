@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Materials;
+namespace Inji\Materials;
 
-class Tag extends \Model {
+class Tag extends \Inji\Model {
 
     static $cols = [
         'name' => ['type' => 'text'],

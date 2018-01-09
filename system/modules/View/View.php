@@ -1,5 +1,8 @@
 <?php
 
+namespace Inji;
+use Inji\View\Template;
+
 /**
  * View module
  *
@@ -10,8 +13,8 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class View extends \Module {
-
+class View extends Module {
+    public $name = 'View';
     public $title = 'No title';
 
     /**
@@ -45,9 +48,9 @@ class View extends \Module {
         if (!$this->templatesPath) {
             $this->templatesPath = $this->app->path . "/templates";
         }
-        $this->template = \View\Template::get($templateName, $this->app, $this->templatesPath);
+        $this->template = View\Template::get($templateName, $this->app, $this->templatesPath);
         if (!$this->template) {
-            $this->template = new \View\Template([
+            $this->template = new View\Template([
                 'name' => 'default',
                 'path' => $this->templatesPath . '/default',
                 'app' => $this->app
@@ -72,7 +75,7 @@ class View extends \Module {
     public function paramsParse($params) {
         // set template
         if (!empty($params['template']) && $params['template'] != 'current') {
-            $this->template = \View\Template::get($params['template']);
+            $this->template = Template::get($params['template']);
         }
         //set page
         if (!empty($params['page']) && $params['page'] != 'current') {
@@ -232,8 +235,8 @@ class View extends \Module {
     public function head() {
 
         echo "<title>{$this->title}</title>\n";
-        if (!empty(\App::$primary->config['site']['favicon']) && file_exists(\App::$primary->path . '/' . \App::$primary->config['site']['favicon'])) {
-            echo "        <link rel='shortcut icon' href='" . \App::$primary->config['site']['favicon'] . "' />";
+        if (!empty(App::$primary->config['site']['favicon']) && file_exists(App::$primary->path . '/' . App::$primary->config['site']['favicon'])) {
+            echo "        <link rel='shortcut icon' href='" . App::$primary->config['site']['favicon'] . "' />";
         } elseif (!empty($this->template->config['favicon']) && file_exists($this->template->path . "/{$this->template->config['favicon']}")) {
             echo "        <link rel='shortcut icon' href='/templates/{$this->template->name}/{$this->template->config['favicon']}' />";
         } elseif (!empty($this->template->config['favicon']) && file_exists($this->app->path . "/static/images/{$this->template->config['favicon']}")) {
@@ -246,8 +249,8 @@ class View extends \Module {
             echo "\n        " . Html::el('meta', $meta, '', null);
         }
 
-        if (!empty(Inji::$config['assets']['js'])) {
-            foreach (Inji::$config['assets']['js'] as $js) {
+        if (!empty(\Inji::$config['assets']['js'])) {
+            foreach (\Inji::$config['assets']['js'] as $js) {
                 $this->customAsset('js', $js);
             }
         }
@@ -310,34 +313,34 @@ class View extends \Module {
             $hash = md5($hash);
             ?>
             <script>
-              setInterval(function () {
-                var hash = '<?=$hash;?>';
-                var files = '<?=http_build_query(['files' => array_keys($urls)]);?>';
-                var timeHash = '<?=$timeMd5?>';
-                var id = '<?=$id;?>';
-                // 1. Создаём новый объект XMLHttpRequest
-                var xhr = new XMLHttpRequest();
+                setInterval(function () {
+                    var hash = '<?=$hash;?>';
+                    var files = '<?=http_build_query(['files' => array_keys($urls)]);?>';
+                    var timeHash = '<?=$timeMd5?>';
+                    var id = '<?=$id;?>';
+                    // 1. Создаём новый объект XMLHttpRequest
+                    var xhr = new XMLHttpRequest();
 
-                // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
-                xhr.open('GET', '/view/checkStaticUpdates/' + hash + '/' + timeHash + '?' + files, false);
+                    // 2. Конфигурируем его: GET-запрос на URL 'phones.json'
+                    xhr.open('GET', '/view/checkStaticUpdates/' + hash + '/' + timeHash + '?' + files, false);
 
-                // 3. Отсылаем запрос
-                xhr.send();
+                    // 3. Отсылаем запрос
+                    xhr.send();
 
-                // 4. Если код ответа сервера не 200, то это ошибка
-                if (xhr.status != 200) {
-                  // обработать ошибку
-                  //alert(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
-                } else {
-                  if (xhr.responseText.length > 0) {
-                    var result = JSON.parse(xhr.responseText);
-                    document.getElementById(id).href = result.path;
-                    timeHash = result.timeHash;
-                  }
-                  // вывести результат
-                  //alert(xhr.responseText); // responseText -- текст ответа.
-                }
-              }, 2000);
+                    // 4. Если код ответа сервера не 200, то это ошибка
+                    if (xhr.status != 200) {
+                        // обработать ошибку
+                        //alert(xhr.status + ': ' + xhr.statusText); // пример вывода: 404: Not Found
+                    } else {
+                        if (xhr.responseText.length > 0) {
+                            var result = JSON.parse(xhr.responseText);
+                            document.getElementById(id).href = result.path;
+                            timeHash = result.timeHash;
+                        }
+                        // вывести результат
+                        //alert(xhr.responseText); // responseText -- текст ответа.
+                    }
+                }, 2000);
             </script>
             <?php
         }

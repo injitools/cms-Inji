@@ -11,7 +11,7 @@
 
 namespace Money\Merchant;
 
-class Request extends \Model {
+class Request extends \Inji\Model {
 
     public static $cols = [
         'post' => ['type' => 'textarea'],

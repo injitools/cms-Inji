@@ -11,7 +11,7 @@
 
 namespace Money\Pay;
 
-class Status extends \Model {
+class Status extends \Inji\Model {
 
     public static $cols = [
 

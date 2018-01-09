@@ -1,12 +1,9 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: inji
- * Date: 04.11.2017
- * Time: 15:38
- */
+
+namespace Inji;
 
 class I18n extends Module {
+    public $name = 'I18n';
     public $curLang = '';
 
     function lang() {

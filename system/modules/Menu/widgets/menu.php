@@ -31,7 +31,7 @@ $activeFind = function ($item, $activeFind) {
     return false;
 };
 
-$menu = \Menu\Menu::get($code, 'code');
+$menu = \Inji\Menu\Menu::connection('injiStorage')->where( 'code',$code)->get();
 if ($menu) {
     foreach ($menu->items(['where' => ['parent_id', 0], 'order' => ['weight', 'asc']]) as $item) {
         $class = '';

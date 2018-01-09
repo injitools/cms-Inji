@@ -11,7 +11,7 @@
 
 namespace Migrations\Migration;
 
-class Map extends \Model {
+class Map extends \Inji\Model {
 
     public static $objectName = 'Карта миграции данных';
     public static $labels = [
