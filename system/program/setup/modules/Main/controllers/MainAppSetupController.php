@@ -1,4 +1,8 @@
 <?php
+namespace Inji\Setup\Main;
+use Inji\Config;
+use Inji\Controller;
+use Inji\Tools;
 
 /**
  * setup controller
@@ -8,7 +12,7 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class MainController extends Controller {
+class MainAppSetupController extends Controller {
 
     public function indexAction() {
         $this->view->setTitle('Система');

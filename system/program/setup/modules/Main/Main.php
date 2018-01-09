@@ -1,5 +1,12 @@
 <?php
 
+namespace Inji\Setup;
+
+use Inji\App;
+use Inji\Config;
+use Inji\Module;
+use Inji\Tools;
+
 /**
  * Main module
  *
@@ -9,6 +16,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class Main extends Module {
+    public $name = 'Main';
 
     public function init() {
         $config = Config::share();

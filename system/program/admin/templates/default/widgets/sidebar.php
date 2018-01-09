@@ -4,15 +4,15 @@
         <div class="sidebar-brand">
             <div class="col-xs-4">
                 <img
-                    src="<?= Statics::file(!empty(\App::$primary->config['site']['site_logo']) ? \App::$primary->config['site']['site_logo'] : ''); ?>"
+                    src="<?= Inji\Statics::file(!empty(\Inji\App::$primary->config['site']['site_logo']) ? \Inji\App::$primary->config['site']['site_logo'] : ''); ?>"
                     class="img-responsive"/>
             </div>
             <div class="col-xs-8">
-                <?= !empty(\App::$primary->config['site']['name']) ? \App::$primary->config['site']['name'] : 'Название не задано'; ?>
+                <?= !empty(\Inji\App::$primary->config['site']['name']) ? \Inji\App::$primary->config['site']['name'] : 'Название не задано'; ?>
                 <br/>
-                <?= !empty(\App::$primary->config['site']['email']) ? \App::$primary->config['site']['email'] : 'E-mail не задан'; ?>
+                <?= !empty(\Inji\App::$primary->config['site']['email']) ? \Inji\App::$primary->config['site']['email'] : 'E-mail не задан'; ?>
                 <?php
-                $resolved = Router::resolvePath('/admin/dashboard/siteConfig');
+                $resolved = Inji\Router::resolvePath('/admin/dashboard/siteConfig');
                 if (isset($resolved['controller']) && $resolved['controller']->checkAccess()) {
                     echo "<br/><a href=\"/admin/dashboard/siteConfig\">Редактировать</a>";
                 }
@@ -25,8 +25,8 @@
 
         $where = [];
         if (class_exists('Users\User')) {
-            $where[] = ['group_id', Users\User::$cur->group_id];
-            if (Users\User::$cur->group_id == 3) {
+            $where[] = ['group_id', Inji\Users\User::$cur->group_id];
+            if (Inji\Users\User::$cur->group_id == 3) {
                 $where[] = ['group_id', 0, '=', 'OR'];
             }
         } else {
@@ -37,7 +37,7 @@
             <a href="/admin">Панель управления</a>
         </li>
         <?php
-        $menu = Menu\Menu::get([['code', 'sidebarMenu'], $where]);
+        $menu = Inji\Menu\Menu::get([['code', 'sidebarMenu'], $where]);
         if ($menu) {
             foreach ($menu->items(['where' => ['parent_id', 0], 'order' => ['weight', 'asc']]) as $item) {
                 echo "<li><a href = '{$item->href}'>{$item->name}</a>";
