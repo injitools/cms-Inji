@@ -208,11 +208,16 @@ class Module {
     public function getPossibleControllers() {
         $possibleClasses = [];
         if (!empty($this->params[0]) && ucfirst($this->params[0]) != $this->name) {
-            $possibleClasses['curApp_splice'] = $this->app->namespace . '\\' . $this->name . '\\' . ucfirst($this->params[0]) . ucfirst($this->app->type) . 'Controller';
-            $possibleClasses['system_splice'] = 'Inji\\' . $this->name . '\\' . ucfirst($this->params[0]) . ucfirst($this->app->type) . 'Controller';
+            $possibleClasses['curApp_slice'] = $this->app->namespace . '\\' . $this->name . '\\' . ucfirst($this->params[0]) . ucfirst($this->app->type) . 'Controller';
+            $possibleClasses['system_slice'] = 'Inji\\' . $this->name . '\\' . ucfirst($this->params[0]) . ucfirst($this->app->type) . 'Controller';
+            $possibleClasses['universal_curApp_slice'] = $this->app->namespace . '\\' . $this->name . '\\' . ucfirst($this->params[0]) . 'Controller';
+            $possibleClasses['universal_system_slice'] = 'Inji\\' . $this->name . '\\' . ucfirst($this->params[0]) . 'Controller';
         }
         $possibleClasses['curApp'] = $this->app->namespace . '\\' . $this->name . '\\' . $this->name . ucfirst($this->app->type) . 'Controller';
         $possibleClasses['system'] = 'Inji\\' . $this->name . '\\' . $this->name . ucfirst($this->app->type) . 'Controller';
+
+        $possibleClasses['universal_curApp'] = $this->app->namespace . '\\' . $this->name . '\\' . $this->name . 'Controller';
+        $possibleClasses['universal_system'] = 'Inji\\' . $this->name . '\\' . $this->name . 'Controller';
         return $possibleClasses;
     }
 
