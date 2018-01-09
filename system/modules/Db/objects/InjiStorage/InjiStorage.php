@@ -25,7 +25,7 @@ class InjiStorage {
     }
 
     public function deleteItems($file, $where, $options) {
-        $items = $this->getItems($file, $where, $options);
+        $items = $this->getItems($file, [], $where, $options);
         if ($items) {
             $path = $this->getStoragePath($file, $options);
             $storage = Config::custom($path);
@@ -38,7 +38,7 @@ class InjiStorage {
     }
 
     public function updateItems($file, $where, $values, $options) {
-        $items = $this->getItems($file, $where, $options);
+        $items = $this->getItems($file, [], $where, $options);
         if ($items) {
             foreach ($items as &$item) {
                 $item = array_replace_recursive($item, $values);
@@ -52,20 +52,43 @@ class InjiStorage {
         return count($items);
     }
 
-    public function getItems($file, $where, $options) {
+    public function getItems($file, $cols, $where, $options) {
         $path = $this->getStoragePath($file, $options);
         $storage = Config::custom($path);
         if (empty($storage['items'])) {
             return [];
         }
-        return $this->filterItems($storage['items'], $where);
+        return $this->filterItems($storage['items'], $cols, $where);
     }
 
-    public function filterItems($items, $where) {
+    public function filterItems($items, $cols, $where) {
+        $colsMap = [];
+        $count = false;
+        if ($cols) {
+            foreach ($cols as $col) {
+                if (($asIndex = stripos($col, ' as ')) !== false) {
+                    $origCol = substr($col, 0, $asIndex);
+                    $newCol = substr($col, $asIndex + 4);
+                } else {
+                    $newCol = $origCol = $col;
+                }
+                preg_match('!count\((.*)\)!i', $origCol, $match);
+                if (!empty($match[1])) {
+                    $count = ['counted' => $match[1], 'as' => $newCol, 'result' => 0];
+                }
+            }
+        }
         foreach ($items as $key => $item) {
             if (!$this->checkWhere($item, $where)) {
                 unset($items[$key]);
+                continue;
             }
+            if ($count) {
+                $count['result']++;
+            }
+        }
+        if ($count) {
+            return [[$count['as'] => $count['result']]];
         }
         return $items;
     }

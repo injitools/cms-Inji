@@ -9,7 +9,17 @@ Interface DriverQuery {
 
     public function setTable($tableName);
 
-    public function where($col, $value, $comparision, $concatenation);
+    public function colPrefix($colPrefix);
+
+    public function where($col, $value = '', $comparision = '=', $concatenation = 'AND');
+
+    public function cols($cols);
+
+    public function order($col, $direction = 'ASC');
+
+    public function start($start);
+
+    public function limit($limit);
 
     /**
      * @param string $tableName

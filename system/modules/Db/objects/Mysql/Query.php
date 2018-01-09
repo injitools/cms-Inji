@@ -22,7 +22,8 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
     public $order = null;
     public $join = [];
     public $group = [];
-    public $limit = '';
+    public $limit = 0;
+    public $start = 0;
     public $error = '';
     public $query = '';
     public $table = '';
@@ -31,6 +32,7 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
     public $params = [];
     public $distinct = false;
     public $dbOptions = [];
+    public $colPrefix = '';
 
     /**
      * @param  $instance
@@ -41,6 +43,10 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
         } else {
             $this->curInstance = $instance;
         }
+    }
+
+    public function colPrefix($colPrefix) {
+        $this->colPrefix = $colPrefix;
     }
 
     public function setDbOption($name, $value) {
@@ -133,11 +139,13 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
         $this->group[] = $colname;
     }
 
+    public function start($start) {
+        $this->start = $start;
+    }
+
     public function order($order, $type = 'ASC') {
-
-
         if (!is_array($order)) {
-            $this->order[] = "{$order} {$type}";
+            $this->order[] = "{$this->colPrefix}{$order} {$type}";
         } else {
             foreach ($order as $item) {
                 if (!is_array($item)) {
@@ -150,13 +158,18 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
         }
     }
 
-    public function limit($start = 0, $len = 0) {
-        $start = intval($start);
-        $len = intval($len);
-        $this->limit = "LIMIT {$start}";
+    public function limit($limit = 0, $len = 0) {
+        $this->limit = $limit;
+    }
+
+    public function buildLimit() {
+        $start = intval($this->start);
+        $len = intval($this->limit);
+        $str = "LIMIT {$start}";
         if ($len !== 0) {
-            $this->limit .= ",{$len}";
+            $str .= ",{$len}";
         }
+        return $str;
     }
 
     public function buildJoin($table, $where = false, $type = 'LEFT', $alias = '') {
@@ -227,9 +240,9 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
             }
 
             if (substr($this->whereString, -1, 1) == '(' || substr($this->whereString, -2, 2) == 'E ') {
-                $this->whereString .= " {$where} {$operation} {$value} ";
+                $this->whereString .= " {$this->colPrefix}{$where} {$operation} {$value} ";
             } else {
-                $this->whereString .= "{$concatenation} {$where} {$operation} {$value} ";
+                $this->whereString .= "{$concatenation} {$this->colPrefix}{$where} {$operation} {$value} ";
             }
         } else {
             $i = -1;
@@ -313,9 +326,9 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
                 $value = "?";
             }
             if (substr($this->havingString, -1, 1) == '(' || substr($this->havingString, -2, 2) == 'G ') {
-                $this->havingString .= " {$where} {$operation} {$value} ";
+                $this->havingString .= " {$this->colPrefix}{$where} {$operation} {$value} ";
             } else {
-                $this->havingString .= "{$concatenation} {$where} {$operation} {$value} ";
+                $this->havingString .= "{$concatenation} {$this->colPrefix}{$where} {$operation} {$value} ";
             }
         } else {
             $i = -1;
@@ -426,8 +439,8 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
         if ($this->order) {
             $query .= ' ORDER BY ' . implode(',', $this->order);
         }
-        if ($this->limit) {
-            $query .= ' ' . $this->limit;
+        if ($this->limit || $this->start) {
+            $query .= ' ' . $this->buildLimit();
         }
         return ['query' => $query, 'params' => $this->params];
     }
@@ -448,7 +461,6 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
         }
 
         $prepare = $this->curInstance->pdo->prepare($query['query']);
-        $params = [];
         $pos = 1;
         foreach ($query['params'] as $param) {
             $prepare->bindValue($pos++, $param, is_null($param) ? \PDO::PARAM_NULL : \PDO::PARAM_STR);
@@ -457,8 +469,7 @@ class Query extends \Inji\InjiObject implements \Inji\Db\DriverQuery {
         $prepare->execute();
         \Inji\App::$cur->log->end($key);
         $this->curInstance->lastQuery = $query;
-        $result = new Result();
-        $result->pdoResult = $prepare;
+        $result = new Result($prepare, $this);
         if ($this->curInstance->dbInstance && $this->curInstance->dbInstance->curQuery && $this->curInstance->dbInstance->curQuery === $this) {
             $this->curInstance->dbInstance->curQuery = null;
         }

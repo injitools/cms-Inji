@@ -16,9 +16,11 @@ use Inji\Db\DriverResult;
 class Result implements DriverResult {
 
     public $pdoResult = null;
+    public $query = null;
 
-    public function __construct($dbResult) {
+    public function __construct($dbResult, $query) {
         $this->pdoResult = $dbResult;
+        $this->query = $query;
     }
 
     public function getArray($keyCol = '') {
@@ -41,7 +43,7 @@ class Result implements DriverResult {
     public function getObjects($class, $keyCol = '') {
         $key = \Inji\App::$cur->log->start('parse result');
         $array = [];
-        while ($object = $this->pdoResult->fetchObject($class)) {
+        while ($object = $this->fetch($class)) {
             if ($keyCol) {
                 $array[$object->$keyCol] = $object;
             } else {
@@ -53,10 +55,29 @@ class Result implements DriverResult {
     }
 
     public function fetch($className = '') {
-        if ($className) {
-            return $this->pdoResult->fetchObject($className);
-        } else {
-            return $this->pdoResult->fetch(\PDO::FETCH_ASSOC);
+        $rawItem = $this->pdoResult->fetch(\PDO::FETCH_ASSOC);
+        if (!$rawItem) {
+            return false;
         }
+        $item = [];
+        if ($this->query->colPrefix) {
+            foreach ($rawItem as $key => $value) {
+                $item[substr($key, strlen($this->query->colPrefix))] = $value;
+            }
+        } else {
+            $item = $rawItem;
+        }
+        if ($className) {
+            return $className::create($item);
+        } else {
+            return $item;
+        }
+    }
+
+    public function fetchAll(string $className = '', $keyCol = '') {
+        if (!$className) {
+            return $this->getArray($keyCol);
+        }
+        return $this->getObjects($className, $keyCol);
     }
 }
