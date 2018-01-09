@@ -10,25 +10,31 @@
  */
 session_start();
 
-spl_autoload_register(function ($class_name) {
-    if (file_exists(INJI_SYSTEM_DIR . '/Inji/' . $class_name . '.php')) {
-        include_once INJI_SYSTEM_DIR . '/Inji/' . $class_name . '.php';
-    }
-});
+include_once INJI_SYSTEM_DIR . '/Inji/Inji.php';
+include_once INJI_SYSTEM_DIR . '/Inji/Router.php';
+include_once INJI_SYSTEM_DIR . '/Inji/Router/Folder.php';
+include_once INJI_SYSTEM_DIR . '/Inji/Router/Path.php';
+
+spl_autoload_register('Inji\Router::findClass');
+
+Inji\Router::addPath(INJI_SYSTEM_DIR . '/Inji/', 'Inji\\');
+Inji\Router::addPath(INJI_SYSTEM_DIR . '/modules/', 'Inji\\', 10);
+Inji\Router::addPath(INJI_SYSTEM_DIR . '/modules/', 'Inji\\', 20, 1, ['models', 'objects', 'controllers']);
+
 //load core
 Inji::$inst = new Inji();
-Inji::$config = Config::system();
+Inji::$config = Inji\Config::system();
 Inji::$inst->listen('Config-change-system', 'systemConfig', function ($event) {
     Inji::$config = $event['eventObject'];
     return $event['eventObject'];
 });
-spl_autoload_register('Router::findClass');
+
 
 putenv('COMPOSER_HOME=' . getcwd());
 putenv('COMPOSER_CACHE_DIR=' . getcwd() . DIRECTORY_SEPARATOR . 'cache/composer');
-ComposerCmd::check();
+Inji\ComposerCmd::check();
 if (!function_exists('idn_to_utf8')) {
-    ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", '.');
+    Inji\ComposerCmd::requirePackage("mabrahamde/idna-converter", "dev-master", '.');
 
     function idn_to_utf8($domain) {
         if (empty(Inji::$storage['IdnaConvert'])) {
@@ -38,7 +44,7 @@ if (!function_exists('idn_to_utf8')) {
     }
 }
 
-BowerCmd::check();
+Inji\BowerCmd::check();
 
 if (file_exists('vendor/autoload.php')) {
     include 'vendor/autoload.php';
@@ -51,7 +57,6 @@ if (strpos($domain, 'www.') === 0) {
 define('INJI_DOMAIN_NAME', $domain);
 
 
-$apps = Apps\App::getList();
 //Make default app params
 $finalApp = [
     'name' => INJI_DOMAIN_NAME,
@@ -60,6 +65,8 @@ $finalApp = [
     'default' => true,
     'route' => INJI_DOMAIN_NAME,
 ];
+Inji\App::$primary = Inji\App::$cur = new Inji\App($finalApp);
+$apps = Inji\Apps\App::connection('injiStorage')->setDbOption('share', true)->getList();
 foreach ($apps as $app) {
     if ($app->default) {
         $finalApp = $app->_params;
@@ -69,64 +76,74 @@ foreach ($apps as $app) {
         break;
     }
 }
-App::$cur = new App($finalApp);
-$params = Tools::uriParse($_SERVER['REQUEST_URI']);
+Inji\App::$cur = new Inji\App($finalApp);
+$params = Inji\Tools::uriParse($_SERVER['REQUEST_URI']);
 
-App::$cur->type = 'app';
-App::$cur->path = INJI_PROGRAM_DIR . '/' . App::$cur->dir;
-App::$cur->params = $params;
-App::$cur->config = Config::app(App::$cur);
-App::$primary = App::$cur;
+Inji\App::$cur->type = 'app';
+Inji\App::$cur->path = INJI_PROGRAM_DIR . '/' . Inji\App::$cur->dir;
+Inji\App::$cur->params = $params;
+Inji\App::$cur->config = Inji\Config::app(Inji\App::$cur);
+Inji\App::$primary = Inji\App::$cur;
 
 if (!empty($params[0]) && file_exists(INJI_SYSTEM_DIR . '/program/' . $params[0] . '/')) {
 
-    App::$primary->params = [];
+    Inji\App::$primary->params = [];
 
-    App::$cur = new App();
-    App::$cur->name = $params[0];
-    App::$cur->system = true;
-    App::$cur->staticPath = "/" . App::$cur->name . "/static";
-    App::$cur->templatesPath = "/" . App::$cur->name . "/static/templates";
-    App::$cur->path = INJI_SYSTEM_DIR . '/program/' . App::$cur->name;
-    App::$cur->type = 'app' . ucfirst(strtolower(App::$cur->name));
-    App::$cur->installed = true;
-    App::$cur->params = array_slice($params, 1);
-    App::$cur->config = Config::app(App::$cur);
+    Inji\App::$cur = new Inji\App();
+    Inji\App::$cur->name = $params[0];
+    Inji\App::$cur->namespace = 'Inji\\' . ucfirst($params[0]);
+    Inji\App::$cur->system = true;
+    Inji\App::$cur->staticPath = "/" . Inji\App::$cur->name . "/static";
+    Inji\App::$cur->templatesPath = "/" . Inji\App::$cur->name . "/static/templates";
+    Inji\App::$cur->path = INJI_SYSTEM_DIR . '/program/' . Inji\App::$cur->name;
+    Inji\App::$cur->type = 'app' . ucfirst(strtolower(Inji\App::$cur->name));
+    Inji\App::$cur->installed = true;
+    Inji\App::$cur->params = array_slice($params, 1);
+    Inji\App::$cur->config = Inji\Config::app(Inji\App::$cur);
 
-    Inji::$inst->listen('Config-change-app-' . App::$primary->name, 'primaryAppConfig', function ($event) {
-        App::$primary->config = $event['eventObject'];
+    Inji::$inst->listen('Config-change-app-' . Inji\App::$primary->name, 'primaryAppConfig', function ($event) {
+        Inji\App::$primary->config = $event['eventObject'];
         return $event['eventObject'];
     });
+
+    Inji\Router::addPath(Inji\App::$cur->path . '/objects/', Inji\App::$cur->namespace . '\\', 60);
+    Inji\Router::addPath(Inji\App::$cur->path . '/modules/', Inji\App::$cur->namespace . '\\', 70);
+    Inji\Router::addPath(Inji\App::$cur->path . '/modules/', Inji\App::$cur->namespace . '\\', 80, 2, ['models', 'objects', 'controllers']);
+
 }
-App::$cur->log = new \Log();
-App::$cur->log->run = defined('LOG_ENABLED');
-Inji::$inst->listen('Config-change-app-' . App::$cur->name, 'curAppConfig', function ($event) {
-    App::$cur->config = $event['eventObject'];
+if (!empty(Inji\App::$primary->namespace)) {
+    Inji\Router::addPath(Inji\App::$primary->path . '/objects/', Inji\App::$primary->namespace . '\\', 30);
+    Inji\Router::addPath(Inji\App::$primary->path . '/modules/', Inji\App::$primary->namespace . '\\', 40);
+    Inji\Router::addPath(Inji\App::$primary->path . '/modules/', Inji\App::$primary->namespace . '\\', 50, 1, ['models', 'objects', 'controllers']);
+}
+Inji\App::$cur->log = new Inji\Log();
+Inji\App::$cur->log->run = defined('LOG_ENABLED');
+Inji::$inst->listen('Config-change-app-' . Inji\App::$cur->name, 'curAppConfig', function ($event) {
+    Inji\App::$cur->config = $event['eventObject'];
     return $event['eventObject'];
 });
-$shareConfig = Config::share();
-if (empty($shareConfig['installed']) && App::$cur->name != 'setup' && (empty(App::$cur->params[0]) || App::$cur->params[0] != 'static')) {
-    Tools::redirect('/setup');
+$shareConfig = Inji\Config::share();
+if (empty($shareConfig['installed']) && Inji\App::$cur->name != 'setup' && (empty(Inji\App::$cur->params[0]) || Inji\App::$cur->params[0] != 'static')) {
+    Inji\Tools::redirect('/setup');
 }
+Inji\Module::$cur = Inji\Module::resolveModule(Inji\App::$cur);
 
-Module::$cur = Module::resolveModule(App::$cur);
-
-if (Module::$cur === null) {
+if (Inji\Module::$cur === null) {
     INJI_SYSTEM_ERROR('Module not found', true);
 }
 
-Controller::$cur = Module::$cur->findController();
-if (Controller::$cur === null) {
+Inji\Controller::$cur = Inji\Module::$cur->findController();
+if (Inji\Controller::$cur === null) {
     INJI_SYSTEM_ERROR('Controller not found', true);
 }
-if (!empty(App::$primary->config['autoloadModules'])) {
-    foreach (App::$primary->config['autoloadModules'] as $module) {
-        App::$cur->$module;
+if (!empty(Inji\App::$primary->config['autoloadModules'])) {
+    foreach (Inji\App::$primary->config['autoloadModules'] as $module) {
+        Inji\App::$cur->$module;
     }
 }
-if (App::$primary !== App::$cur) {
-    foreach (App::$cur->config['autoloadModules'] as $module) {
-        App::$cur->$module;
+if (Inji\App::$primary !== Inji\App::$cur) {
+    foreach (Inji\App::$cur->config['autoloadModules'] as $module) {
+        Inji\App::$cur->$module;
     }
 }
-Controller::$cur->run();
+Inji\Controller::$cur->run();

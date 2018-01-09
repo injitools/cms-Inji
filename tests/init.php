@@ -14,6 +14,8 @@ session_start();
 
 include_once INJI_SYSTEM_DIR . '/Inji/Inji.php';
 include_once INJI_SYSTEM_DIR . '/Inji/Router.php';
+include_once INJI_SYSTEM_DIR . '/Inji/Router/Folder.php';
+include_once INJI_SYSTEM_DIR . '/Inji/Router/Path.php';
 
 spl_autoload_register('Inji\Router::findClass');
 

@@ -1,6 +1,9 @@
 <?php
 
 namespace Inji;
+
+use Inji\Router\Folder;
+
 /**
  * Router
  *
@@ -10,6 +13,9 @@ namespace Inji;
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class Router {
+    /**
+     * @var Folder[]
+     */
     public static $folders = [];
 
     /**
@@ -20,9 +26,9 @@ class Router {
      * @param array $moduleDirs
      */
     public static function addPath(string $folder, $prefix = '*', $priority = 0, $moduleIndex = false, $moduleDirs = []): void {
-        self::$folders[] = compact('folder', 'prefix', 'priority', 'moduleIndex', 'moduleDirs');
+        self::$folders[] = new Folder($folder, $prefix, $priority, $moduleIndex, $moduleDirs);
         usort(self::$folders, function ($a, $b) {
-            return $b['priority'] <=> $a['priority'];
+            return $b->priority <=> $a->priority;
         });
     }
 
@@ -34,10 +40,13 @@ class Router {
      */
     public static function findClass(string $className): bool {
         foreach (self::$folders as $folder) {
-            $paths = self::genFolderPaths($folder, $className);
+            $paths = $folder->forClass($className);
             foreach ($paths as $path) {
-                if (file_exists($path)) {
-                    return self::loadClass($path);
+                if (file_exists($path->path)) {
+                    self::loadClass($path->path);
+                    if ($path->moduleName) {
+                        App::$cur->{$path->moduleName};
+                    }
                 }
             }
         }
