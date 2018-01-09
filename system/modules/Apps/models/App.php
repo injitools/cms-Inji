@@ -1,5 +1,4 @@
 <?php
-
 /**
  * App
  *
@@ -9,15 +8,14 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Apps;
+namespace Inji\Apps;
 
-class App extends \Model {
+class App extends \Inji\Model {
 
     /**
      * Model options
      */
     public static $objectName = 'App options';
-    public static $storage = ['type' => 'moduleConfig', 'options' => ['share' => true]];
     public static $labels = [
         'id' => '#',
         'name' => 'Название',
@@ -51,7 +49,7 @@ class App extends \Model {
                 'default',
                 'route',
             ],
-            'editForm' => 'setup',
+            'activeForm' => 'setup',
             'actions' => [
                 'manage' => [
                     'className' => 'Href',

@@ -74,7 +74,7 @@ class Options extends \Inji\Model {
                 'connect_alias',
                 'db_name'
             ],
-            'editForm' => 'setup',
+            'activeForm' => 'setup',
         ]
     ];
     public static $forms = [
@@ -105,9 +105,7 @@ class Options extends \Inji\Model {
     }
 
     public static function sharedStorage() {
-        $builder = \Inji\Db\Options::connection('injiStorage');
-        $builder->setDbOption('share', true);
-        return $builder;
+        return \Inji\Db\Options::connection('injiStorage')->setDbOption('share', true);
     }
 
 }

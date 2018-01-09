@@ -21,7 +21,7 @@ class Db extends Module {
                 'driver' => 'InjiStorage'
             ];
         } else if (!is_array($param)) {
-            if (!($dbOption = Db\Options::sharedStorage()->where($param, 'connect_alias')->get(['array' => true]))) {
+            if (!($dbOption = Db\Options::sharedStorage()->where('connect_alias', $param)->get(['array' => true]))) {
                 return false;
             }
             $db = $dbOption;
@@ -107,6 +107,9 @@ class Db extends Module {
         return false;
     }
 
+    /**
+     * @return false|\Inji\Db\DriverQuery
+     */
     public function newQuery() {
         if ($this->QueryClassName) {
             return new $this->QueryClassName($this->connection);
