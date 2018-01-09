@@ -17,6 +17,7 @@ class Router {
      * @var Folder[]
      */
     public static $folders = [];
+    public static $touchedModules = [];
 
     /**
      * @param string $folder
@@ -44,49 +45,14 @@ class Router {
             foreach ($paths as $path) {
                 if (file_exists($path->path)) {
                     self::loadClass($path->path);
-                    if ($path->moduleName) {
+                    if ($path->moduleName && !isset(static::$touchedModules[$path->moduleName])) {
+                        static::$touchedModules[$path->moduleName] = true;
                         App::$cur->{$path->moduleName};
                     }
                 }
             }
         }
         return false;
-    }
-
-    /**
-     * Return possible paths for class path
-     *
-     * @param array $folder
-     * @param string $className
-     * @return array
-     */
-    public static function genFolderPaths($folder, $className) {
-        $classPath = str_replace('\\', '/', $className);
-        $paths = [];
-        if ($folder['moduleIndex'] !== false && $folder['moduleIndex'] < substr_count($classPath, '/')) {
-            $classPathItems = explode('/', $classPath);
-            $moduleName = $classPathItems[$folder['moduleIndex']];
-            $classPathStart = implode('/', array_slice($classPathItems, 0, $folder['moduleIndex'] + 1));
-            if (strpos($classPathStart, str_replace('\\', '/', $folder['prefix'])) === 0) {
-                $classPathStart = substr($classPathStart, strlen($folder['prefix']));
-            }
-            $classPathEnd = implode('/', array_slice($classPathItems, $folder['moduleIndex'] + 1));
-            foreach ($folder['moduleDirs'] as $moduleDir) {
-                $dirPath = implode('/', [rtrim($folder['folder'], '/'), $classPathStart, $moduleDir, $classPathEnd]);
-                $paths['folderModuleDirPath_' . $moduleDir] = $dirPath . '.php';
-                $paths['folderModuleDirPathDir_' . $moduleDir] = $dirPath . substr($dirPath, strrpos($dirPath, '/')) . '.php';
-            }
-        }
-        if (strpos($className, $folder['prefix']) === 0) {
-            $cuttedPath = substr($classPath, strlen($folder['prefix']));
-            $paths['folderPrefixPath'] = $folder['folder'] . $cuttedPath . '.php';
-            $paths['folderPrefixPathDir'] = $folder['folder'] . $cuttedPath . substr($classPath, strrpos($classPath, '/')) . '.php';
-        }
-        if ($folder['prefix'] === '*') {
-            $paths['folderPath'] = $folder['folder'] . $classPath . '.php';
-            $paths['folderPathDir'] = $folder['folder'] . $classPath . substr($classPath, strrpos($classPath, '/')) . '.php';
-        }
-        return $paths;
     }
 
     /**
