@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui;
+namespace Inji\Ui;
 
-class FastEdit extends \InjiObject {
+class FastEdit extends \Inji\InjiObject {
 
     public static function block($object, $col, $value = null, $parse = false) {
 
@@ -23,7 +23,7 @@ class FastEdit extends \InjiObject {
         $value = $value !== null ? $value : ($object ? $object->$col : '');
         if ($parse) {
             ob_start();
-            \App::$cur->view->parseSource($value);
+            \Inji\App::$cur->view->parseSource($value);
             $str .= ob_get_contents();
             ob_end_clean();
         } else {

@@ -5,7 +5,7 @@
             if (is_string($col)) {
                 echo "<th>{$col}</th>";
             } else {
-                echo Html::el('th', !empty($col['attributes']) ? $col['attributes'] : [], $col['text']);
+                echo Inji\Html::el('th', !empty($col['attributes']) ? $col['attributes'] : [], $col['text']);
             }
         }
         ?>

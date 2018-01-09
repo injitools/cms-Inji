@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\DataManager\Action;
+namespace Inji\Ui\DataManager\Action;
 
-class Edit extends \Ui\DataManager\Action {
+class Edit extends \Inji\Ui\DataManager\Action {
 
     public static $name = 'Редактировать';
     public static $groupAction = false;
@@ -20,7 +20,7 @@ class Edit extends \Ui\DataManager\Action {
     public static function rowButton($dataManager, $item, $params, $actionParams) {
         $formParams = [
             'dataManagerParams' => $params,
-            'formName' => !empty($dataManager->managerOptions['editForm']) ? $dataManager->managerOptions['editForm'] : 'manager'
+            'formName' => !empty($dataManager->activeForm) ? $dataManager->activeForm : 'manager'
         ];
         $modelName = get_class($item);
         if (empty($modelName::$forms[$formParams['formName']])) {

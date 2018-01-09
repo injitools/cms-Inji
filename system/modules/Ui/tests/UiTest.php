@@ -1,18 +1,18 @@
 <?php
 
-class UiTest extends PHPUnit_Framework_TestCase {
+class UiTest extends \PHPUnit\Framework\TestCase {
     /**
      * @covers Modules::install
      */
     public function setUp() {
-        \App::$cur->Modules->install('Ui');
+        \Inji\App::$cur->Modules->install('Ui');
     }
 
     /**
      * @covers Ui::init
      */
     public function testInit() {
-        \App::$cur->Ui;
+        \Inji\App::$cur->Ui;
         $this->assertEquals(true, true);
     }
 }

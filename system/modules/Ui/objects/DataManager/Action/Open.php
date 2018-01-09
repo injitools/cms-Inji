@@ -9,20 +9,20 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\DataManager\Action;
+namespace Inji\Ui\DataManager\Action;
 
-class Open extends \Ui\DataManager\Action {
+class Open extends \Inji\Ui\DataManager\Action {
 
     public static $name = 'Просмотр';
     public static $groupAction = false;
     public static $rowAction = true;
 
     public static function rowButton($dataManager, $item, $params, $actionParams) {
-        if (\App::$cur->name != 'admin') {
+        if (\Inji\App::$cur->name != 'admin') {
             return '';
         }
         $query = [
-            'formName' => !empty($dataManager->managerOptions['editForm']) ? $dataManager->managerOptions['editForm'] : 'manager',
+            'formName' => !empty($dataManager->activeForm) ? $dataManager->activeForm : 'manager',
             'redirectUrl' => !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : str_replace('\\', '/', $dataManager->modelName)
         ];
         return "<a href='/admin/{$item->genViewLink()}?" . http_build_query($query) . "'><i class='glyphicon glyphicon-eye-open'></i></a>";

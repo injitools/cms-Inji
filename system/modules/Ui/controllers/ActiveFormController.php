@@ -8,10 +8,14 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+namespace Inji\Ui;
+use Inji\Controller;
+use Inji\Server\Result;
+
 class ActiveFormController extends Controller {
 
     public function searchAction() {
-        $result = new Server\Result();
+        $result = new Result();
         $searchString = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING);
         $searchString = trim(preg_replace('![^A-zА-я0-9@-_\. ]!iSu', ' ', urldecode($searchString)));
         if (!$searchString) {
@@ -21,18 +25,18 @@ class ActiveFormController extends Controller {
         try {
             $modelName = trim(filter_input(INPUT_GET, 'modelName', FILTER_SANITIZE_STRING));
             if (!$modelName) {
-                throw new Exception('Не указана модель');
+                throw new \Exception('Не указана модель');
             }
             $model = new $modelName;
             if (!$model || !is_subclass_of($model, 'Model')) {
-                throw new Exception('Модель не найдена');
+                throw new \Exception('Модель не найдена');
             }
             $formName = trim(filter_input(INPUT_GET, 'formName', FILTER_SANITIZE_STRING));
             if (!$formName) {
-                throw new Exception('Не указано название формы');
+                throw new \Exception('Не указано название формы');
             }
             if (empty($modelName::$forms[$formName])) {
-                throw new Exception('Не существует указанной формы');
+                throw new \Exception('Не существует указанной формы');
             }
             $activeForm = new Ui\ActiveForm($model, $formName);
             $inputs = $activeForm->getInputs();
@@ -40,7 +44,7 @@ class ActiveFormController extends Controller {
             if (empty($inputs[$inputName])) {
                 throw new Exception('У формы нет такого поля');
             }
-        } catch (Exception $exc) {
+        } catch (\Exception $exc) {
             $result->success = false;
             $result->content = $exc->getMessage();
             return $result->send();

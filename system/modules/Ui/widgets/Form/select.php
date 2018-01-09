@@ -69,7 +69,7 @@ if (!empty($options['attributes'])) {
 if (!empty($attributes['onchange'])) {
     $attributes['onchange'] .= ';inji.Ui.forms.checkAditionals(this);';
 }
-echo Html::el('select', $attributes, $optionsHtml);
+echo Inji\Html::el('select', $attributes, $optionsHtml);
 foreach ($aditionalInputs as $key => $input) {
     $input['options']['noContainer'] = true;
 
@@ -80,7 +80,7 @@ foreach ($aditionalInputs as $key => $input) {
         $input['options']['value'] = empty($input['options']['value']) ? $aditionValue : $input['options']['value'];
     }
     if ($input['type'] == 'select') {
-        $input['options']['values'] = \Ui\ActiveForm::getOptionsList($input);
+        $input['options']['values'] = \Inji\Ui\ActiveForm::getOptionsList($input);
     }
     $form->input($input['type'], empty($input['name']) ? $name . '[aditional]' : $input['name'], false, $input['options']);
 }

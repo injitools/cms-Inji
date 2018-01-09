@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class File extends \Ui\ActiveForm\Input {
+class File extends \Inji\Ui\ActiveForm\Input {
 
     public function parseRequest($request) {
         if (!empty($_FILES[$this->activeForm->requestFormName]['tmp_name'][$this->modelName][$this->colName])) {

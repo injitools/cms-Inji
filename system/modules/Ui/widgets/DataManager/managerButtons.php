@@ -7,6 +7,6 @@ foreach ($buttons as $button) {
     } else {
         $button['class'] = 'btn btn-primary btn-sm';
     }
-    $html .= Html::el('a', $button, $button['text']);
+    $html .= Inji\Html::el('a', $button, $button['text']);
 }
 echo $html;

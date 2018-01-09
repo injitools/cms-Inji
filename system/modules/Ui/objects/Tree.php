@@ -8,9 +8,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui;
+namespace Inji\Ui;
 
-class Tree extends \InjiObject {
+class Tree extends \Inji\InjiObject {
 
     /**
      * Function for generate item body html
@@ -111,7 +111,7 @@ class Tree extends \InjiObject {
                     if ($activeFunc && $activeFunc($objectChild)) {
                         $attributes['class'] = $activeClass;
                     }
-                    echo \Html::el('li', $attributes, $item, true);
+                    echo \Inji\Html::el('li', $attributes, $item, true);
                     echo '<ul>';
                 }
                 $count += static::showLi($objectChild, $deep + 1, $maxDeep, $hrefFunc, $order, $activeFunc, $activeClass);
@@ -120,7 +120,7 @@ class Tree extends \InjiObject {
         if ($isset) {
             echo '</ul></li>';
         } else {
-            echo \Html::el('li', $attributes, $item);
+            echo \Inji\Html::el('li', $attributes, $item);
         }
         return $count;
     }

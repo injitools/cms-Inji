@@ -9,8 +9,8 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class Hidden extends \Ui\ActiveForm\Input {
+class Hidden extends \Inji\Ui\ActiveForm\Input {
     
 }

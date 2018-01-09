@@ -20,7 +20,7 @@ foreach ($cols as $colName) {
     if ($type != 'dataManager') {
         $table->addRow([
             str_replace(' ','&nbsp;',!empty($modelName::$labels[$colName]) ? $modelName::$labels[$colName] : $colName),
-            \Model::resloveTypeValue($item, $colName, true)
+            \Inji\Model::resloveTypeValue($item, $colName, true)
         ]);
     }
 }

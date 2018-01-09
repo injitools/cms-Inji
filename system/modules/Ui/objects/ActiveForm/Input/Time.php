@@ -9,8 +9,8 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class Time extends \Ui\ActiveForm\Input {
+class Time extends \Inji\Ui\ActiveForm\Input {
     
 }

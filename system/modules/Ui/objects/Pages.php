@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui;
+namespace Inji\Ui;
 
-class Pages extends \InjiObject {
+class Pages extends \Inji\InjiObject {
 
     public $data = [];
     public $options = [];
@@ -53,6 +53,6 @@ class Pages extends \InjiObject {
     public function draw($class = 'pagination pagination-centered margin-none pagination-sm') {
         $getArr = $this->data;
         $getArr['limit'] = $this->params['limit'];
-        \App::$cur->view->widget('Ui\Pages/pages', ['class' => $class, 'pagesInstance' => $this, 'getArr' => $getArr]);
+        \Inji\App::$cur->view->widget('Ui\Pages/pages', ['class' => $class, 'pagesInstance' => $this, 'getArr' => $getArr]);
     }
 }

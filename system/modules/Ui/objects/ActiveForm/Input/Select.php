@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class Select extends \Ui\ActiveForm\Input {
+class Select extends \Inji\Ui\ActiveForm\Input {
 
     public function draw() {
         $inputName = $this->colName();
@@ -21,7 +21,7 @@ class Select extends \Ui\ActiveForm\Input {
         $inputOptions = [
             'value' => $this->value(),
             'disabled' => $this->readOnly(),
-            'values' => \Ui\ActiveForm::getOptionsList($this->colParams, $this->activeFormParams, !empty($this->modelName) ? $this->modelName : $this->activeForm->modelName, $inputName,[],$this->activeForm->model)
+            'values' => \Inji\Ui\ActiveForm::getOptionsList($this->colParams, $this->activeFormParams, !empty($this->modelName) ? $this->modelName : $this->activeForm->modelName, $inputName,[],$this->activeForm->model)
         ];
         $modelName = '';
 

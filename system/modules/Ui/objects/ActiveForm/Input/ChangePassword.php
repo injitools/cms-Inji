@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class ChangePassword extends \Ui\ActiveForm\Input {
+class ChangePassword extends \Inji\Ui\ActiveForm\Input {
 
     public function parseRequest($request) {
         if (!empty($request[$this->colName]['pass'])) {

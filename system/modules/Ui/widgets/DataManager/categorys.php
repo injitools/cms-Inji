@@ -4,6 +4,9 @@
     </div>
 </h4>
 <?php
+/**
+ * @var \Inji\Ui\DataManager $dataManager
+ */
 $model = $dataManager->managerOptions['categorys']['model'];
 ?>
 <a href='#' onclick='inji.Ui.dataManagers.get(this).switchCategory(this);return false;' data-index='<?= $model::index(); ?>' data-path ='/' data-id='0'> Корень</a>

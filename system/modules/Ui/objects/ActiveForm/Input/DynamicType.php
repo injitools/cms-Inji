@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class DynamicType extends \Ui\ActiveForm\Input {
+class DynamicType extends \Inji\Ui\ActiveForm\Input {
 
     public function draw() {
         $inputName = $this->colName();

@@ -16,7 +16,7 @@ return [
             'models',
             $element->modelName,
             'dataManager',
-            $element->managerName
+            $element->name
         ];
         $moduleName = explode('\\', $element->modelName)[0];
         if (isset(\App::$cur->{$moduleName}->config['access'])) {

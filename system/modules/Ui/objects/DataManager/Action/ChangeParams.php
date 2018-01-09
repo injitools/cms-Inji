@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\DataManager\Action;
+namespace Inji\Ui\DataManager\Action;
 
-class ChangeParams extends \Ui\DataManager\Action {
+class ChangeParams extends \Inji\Ui\DataManager\Action {
 
     public static $name = 'Изменить параметр';
     public static $groupAction = true;
@@ -29,7 +29,7 @@ class ChangeParams extends \Ui\DataManager\Action {
                 $count++;
             }
         }
-        return 'Измненено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['запись', 'записи', 'записей']);
+        return 'Измненено <b>' . $count . '</b> ' . \Inji\Tools::getNumEnding($count, ['запись', 'записи', 'записей']);
     }
 
 }

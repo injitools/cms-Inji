@@ -11,9 +11,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\DataManager\Action;
+namespace Inji\Ui\DataManager\Action;
 
-class Href extends \Ui\DataManager\Action {
+class Href extends \Inji\Ui\DataManager\Action {
 
     public static $name = 'Ссылка';
     public static $groupAction = false;

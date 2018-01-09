@@ -9,63 +9,75 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui;
+namespace Inji\Ui;
 
-class ActiveForm extends \InjiObject {
+use Inji\App;
+use Inji\Model\Builder;
+
+class ActiveForm extends \Inji\InjiObject {
 
     /**
-     * @var \Model
+     * @var \Inji\Model
      */
     public $model = null;
     public $modelName = '';
-    public $header = "";
+    public $label = null;
     public $action = "";
     public $form = [];
     public $inputs = [];
-    public $formName = 'noNameForm';
+    public $name = 'manager';
     public $requestFormName = '';
     public $requestFullFormName = '';
     public $parent = null;
+    public $connection = 'default';
+    public $dbOptions = [];
 
-    public function __construct($model, $form = '') {
-        if (is_array($model)) {
-            $this->form = $model;
-            if (is_string($form)) {
-                $this->formName = $form;
-            }
-        } else {
-            $this->model = $model;
-            $this->modelName = get_class($model);
-            if (is_array($form)) {
-                if (empty($form)) {
-                    throw new \Exception('empty form');
-                }
-                $this->form = $form;
-            } else {
-                $this->formName = $form;
-                $this->form = \App::$cur->ui->getModelForm($this->modelName, $form);
-                if (empty($this->form)) {
-                    throw new \Exception('empty form ' . $form);
-                }
-                $this->inputs = $this->getInputs();
-            }
-        }
-        $this->requestFormName = "ActiveForm_{$this->formName}";
-        $modeName = $this->modelName;
+    public function __construct() {
+        $this->requestFormName = 'ActiveForm_' . str_replace('\\', '_', $this->modelName);
+    }
 
-        if (!empty($this->form['name'])) {
-            $this->header = $this->form['name'];
-        } elseif (!empty($modeName::$objectName)) {
-            $this->header = $modeName::$objectName;
+    /**
+     * @param $modelName
+     * @param $formName
+     * @return static
+     */
+    public static function forModel($modelName, $formName = 'manager') {
+        if ($formName !== 'manager') {
+            $className = $modelName . ucfirst($formName) . 'ActiveForm';
         } else {
-            $this->header = $this->modelName;
+            $className = $modelName . 'ActiveForm';
         }
+        return new $className();
+    }
+
+    public function modelBuilderFromParams($params = []) {
+        /**
+         * @var Builder
+         */
+        $builder = $this->modelName::connection($this->connection)->setDbOptions($this->dbOptions);
+        return $builder;
+    }
+
+    public function loadModelById($id, $options = []) {
+        $builder = $this->modelBuilderFromParams($options);
+        $builder->where($this->modelName::index(), $id);
+        $this->model = $builder->get();
+    }
+
+    public function setModel($model) {
+        $this->model = $model;
+    }
+
+    public function emptyModel() {
+        $this->model = $this->modelName::create();
+        $this->model->connectionName = $this->connection;
+        $this->model->dbOptions = $this->dbOptions;
     }
 
     public function getInputs() {
         $inputs = !empty($this->form['inputs']) ? $this->form['inputs'] : [];
         $modelName = $this->modelName;
-        foreach ($this->form['map'] as $row) {
+        foreach ($this->map as $row) {
             foreach ($row as $col) {
                 if (!$col || !empty($inputs[$col])) {
                     continue;
@@ -73,14 +85,14 @@ class ActiveForm extends \InjiObject {
                 if (strpos($col, 'form:') === 0) {
                     $colPath = explode(':', $col);
                     if ($this->model->{$colPath[1]}) {
-                        $inputs[$col] = new ActiveForm($this->model->{$colPath[1]}, $colPath[2]);
+                        //$inputs[$col] = new ActiveForm($this->model->{$colPath[1]}, $colPath[2]);
                     } else {
                         $relOptions = $modelName::getRelation($colPath[1]);
                         if (!isset($this->model->_params[$modelName::index()])) {
                             $this->model->_params[$modelName::index()] = 0;
                         }
                         $relOptions['model']::fixPrefix($relOptions['col']);
-                        $inputs[$col] = new ActiveForm(new $relOptions['model'](), $colPath[2]);
+                        //$inputs[$col] = new ActiveForm(new $relOptions['model'](), $colPath[2]);
                     }
                     $inputs[$col]->parent = $this;
 
@@ -107,16 +119,16 @@ class ActiveForm extends \InjiObject {
 
                     $modelName::{$this->form['handler']}($request);
                     $text = 'Новый элемент был успешно добавлен';
-                    \Msg::add($text, 'success');
-                    \Msg::show();
+                    \Inji\Msg::add($text, 'success');
+                    \Inji\Msg::show();
                 } else {
                     $presets = !empty($this->form['preset']) ? $this->form['preset'] : [];
-                    if (!empty($this->form['userGroupPreset'][\Users\User::$cur->group_id])) {
-                        $presets = array_merge($presets, $this->form['userGroupPreset'][\Users\User::$cur->group_id]);
+                    if (!empty($this->form['userGroupPreset'][\Inji\Users\User::$cur->group_id])) {
+                        $presets = array_merge($presets, $this->form['userGroupPreset'][\Inji\Users\User::$cur->group_id]);
                     }
                     $afterSave = [];
                     $error = false;
-                    foreach ($this->inputs as $col => $param) {
+                    foreach ($this->getInputs() as $col => $param) {
                         if (!empty($presets[$col])) {
                             continue;
                         }
@@ -124,10 +136,10 @@ class ActiveForm extends \InjiObject {
                             $afterSave[$col] = $param;
                             continue;
                         }
-                        if (!empty($this->form['userGroupReadonly'][\Users\User::$cur->group_id]) && in_array($col, $this->form['userGroupReadonly'][\Users\User::$cur->group_id])) {
+                        if (!empty($this->form['userGroupReadonly'][\Inji\Users\User::$cur->group_id]) && in_array($col, $this->form['userGroupReadonly'][\Inji\Users\User::$cur->group_id])) {
                             continue;
                         }
-                        $type = ucfirst($param['type']);
+                        $type = $param['type'];
                         if ($type == 'DynamicType') {
                             switch ($param['typeSource']) {
                                 case 'selfMethod':
@@ -139,8 +151,11 @@ class ActiveForm extends \InjiObject {
                                     break;
                             }
                         }
-                        $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($type);
-                        /** @var \Ui\ActiveForm\Input $input */
+                        if ($type == 'bool') {
+                            $type = 'checkbox';
+                        }
+                        $inputClassName = 'Inji\Ui\ActiveForm\Input\\' . ucfirst($type);
+                        /** @var \Inji\Ui\ActiveForm\Input $input */
                         $input = new $inputClassName();
                         $input->activeForm = $this;
                         $input->activeFormParams = $params;
@@ -151,7 +166,7 @@ class ActiveForm extends \InjiObject {
                             $input->validate($request);
                             $input->parseRequest($request);
                         } catch (\Exception $exc) {
-                            \Msg::add($exc->getMessage(), 'danger');
+                            \Inji\Msg::add($exc->getMessage(), 'danger');
                             $error = true;
                         }
                     }
@@ -163,9 +178,9 @@ class ActiveForm extends \InjiObject {
                                 if (strpos($preset['userCol'], ':')) {
                                     $rel = substr($preset['userCol'], 0, strpos($preset['userCol'], ':'));
                                     $param = substr($preset['userCol'], strpos($preset['userCol'], ':') + 1);
-                                    $this->model->$col = \Users\User::$cur->$rel->$param;
+                                    $this->model->$col = \Inji\Users\User::$cur->$rel->$param;
                                 } else {
-                                    $this->model->$col = \Users\User::$cur->{$preset['userCol']};
+                                    $this->model->$col = \Inji\Users\User::$cur->{$preset['userCol']};
                                 }
                             }
                         }
@@ -175,9 +190,8 @@ class ActiveForm extends \InjiObject {
                             } else {
                                 $text = $this->model->pk() ? 'Изменения были успешно сохранены' : 'Новый элемент был успешно добавлен';
                             }
-                            \Msg::add($text, 'success');
+                            \Inji\Msg::add($text, 'success');
                         }
-
                         $this->model->save(!empty($params['dataManagerParams']) ? $params['dataManagerParams'] : []);
                         foreach ($afterSave as $col => $form) {
                             if (strpos($col, 'form:') === 0) {
@@ -194,9 +208,9 @@ class ActiveForm extends \InjiObject {
                             $form->checkRequest();
                         }
                         if ($ajax) {
-                            \Msg::show();
+                            \Inji\Msg::show();
                         } elseif (!empty($_GET['redirectUrl'])) {
-                            \Tools::redirect($_GET['redirectUrl'] . (!empty($_GET['dataManagerHash']) ? '#' . $_GET['dataManagerHash'] : ''));
+                            \Inji\Tools::redirect($_GET['redirectUrl'] . (!empty($_GET['dataManagerHash']) ? '#' . $_GET['dataManagerHash'] : ''));
                         }
                         $successId = $this->model->pk();
                     }
@@ -215,14 +229,14 @@ class ActiveForm extends \InjiObject {
             return [];
         }
         $form = new Form(!empty($this->form['formOptions']) ? $this->form['formOptions'] : []);
-        \App::$cur->view->widget('Ui\ActiveForm', ['form' => $form, 'activeForm' => $this, 'ajax' => $ajax, 'params' => $params]);
+        App::$cur->view->widget('Ui\ActiveForm', ['form' => $form, 'activeForm' => $this, 'ajax' => $ajax, 'params' => $params]);
     }
 
     public function drawCol($colName, $options, $form, $params = []) {
         if (is_object($options)) {
             $options->draw();
         } else {
-            $type = ucfirst($options['type']);
+            $type = $options['type'];
             if ($type == 'DynamicType') {
                 switch ($options['typeSource']) {
                     case 'selfMethod':
@@ -234,7 +248,10 @@ class ActiveForm extends \InjiObject {
                         break;
                 }
             }
-            $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($type);
+            if ($type == 'bool') {
+                $type = 'checkbox';
+            }
+            $inputClassName = '\Inji\Ui\ActiveForm\Input\\' . ucfirst($type);
             $input = new $inputClassName();
             $input->form = $form;
             $input->activeForm = $this;
@@ -248,7 +265,7 @@ class ActiveForm extends \InjiObject {
         return true;
     }
 
-    public static function getOptionsList($inputParams, $params = [], $modelName = '', $aditionalInputNamePrefix = 'aditional', $options = [],$model=false) {
+    public static function getOptionsList($inputParams, $params = [], $modelName = '', $aditionalInputNamePrefix = 'aditional', $options = [], $model = false) {
         $values = [];
         switch ($inputParams['source']) {
             case 'model':
@@ -259,7 +276,7 @@ class ActiveForm extends \InjiObject {
                 break;
             case 'method':
                 if (!empty($inputParams['params'])) {
-                    $values = call_user_func_array([\App::$cur->{$inputParams['module']}, $inputParams['method']], $inputParams['params']+[$model]);
+                    $values = call_user_func_array([\App::$cur->{$inputParams['module']}, $inputParams['method']], $inputParams['params'] + [$model]);
                 } else {
                     $values = \App::$cur->{$inputParams['module']}->{$inputParams['method']}($model);
                 }
@@ -334,23 +351,19 @@ class ActiveForm extends \InjiObject {
      * @return boolean
      */
     public function checkAccess() {
-        if (empty($this->form)) {
-            $this->drawError('"' . $this->modelName . '" form with name: "' . $this->formName . '" not found');
+        if (\Inji\App::$cur->Access && !\Inji\App::$cur->Access->checkAccess($this)) {
             return false;
         }
-        if (\App::$cur->Access && !\App::$cur->Access->checkAccess($this)) {
+        if (!empty($this->form['options']['access']['apps']) && !in_array(\Inji\App::$cur->name, $this->form['options']['access']['apps'])) {
             return false;
         }
-        if (!empty($this->form['options']['access']['apps']) && !in_array(\App::$cur->name, $this->form['options']['access']['apps'])) {
-            return false;
-        }
-        if (!empty($this->form['options']['access']['groups']) && in_array(\Users\User::$cur->group_id, $this->form['options']['access']['groups'])) {
+        if (!empty($this->form['options']['access']['groups']) && in_array(\Inji\Users\User::$cur->group_id, $this->form['options']['access']['groups'])) {
             return true;
         }
-        if ($this->model && !empty($this->form['options']['access']['self']) && \Users\User::$cur->id == $this->model->user_id) {
+        if ($this->model && !empty($this->form['options']['access']['self']) && \Inji\Users\User::$cur->id == $this->model->user_id) {
             return true;
         }
-        if ($this->formName == 'manager' && !\Users\User::$cur->isAdmin()) {
+        if ($this->formName == 'manager' && !\Inji\Users\User::$cur->isAdmin()) {
             return false;
         }
         return true;

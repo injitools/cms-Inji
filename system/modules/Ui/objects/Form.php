@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui;
+namespace Inji\Ui;
 
-class Form extends \InjiObject {
+class Form extends \Inji\InjiObject {
 
     public $id = null;
     public $method = 'POST';
@@ -39,7 +39,7 @@ class Form extends \InjiObject {
     public function begin($header = '', $options = [], $params = []) {
         $params = compact('header', 'options', 'params');
         $params['form'] = $this;
-        \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/begin', $params);
+        \Inji\App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/begin', $params);
     }
 
     /**
@@ -53,7 +53,7 @@ class Form extends \InjiObject {
     public function input($type, $name, $label = '', $options = []) {
         switch ($type) {
             case 'html':
-                \App::$cur->libs->loadLib('ckeditor');
+                \Inji\App::$cur->libs->loadLib('ckeditor');
                 $params = compact('name', 'label', 'options');
                 $params['form'] = $this;
                 if (empty($params['options']['class'])) {
@@ -61,21 +61,21 @@ class Form extends \InjiObject {
                 } else {
                     $params['options']['class'] .= ' htmleditor';
                 }
-                \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/textarea', $params);
+                \Inji\App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/textarea', $params);
                 break;
             case 'map':
                 $params = compact('name', 'label', 'options');
                 $params['form'] = $this;
-                \App::$cur->libs->loadLib('yandexMap');
-                \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/map', $params);
+                \Inji\App::$cur->libs->loadLib('yandexMap');
+                \Inji\App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/map', $params);
                 break;
             default:
                 $params = compact('name', 'label', 'options');
                 $params['form'] = $this;
                 if (strpos($type, '\\')) {
-                    \App::$cur->view->widget($type, $params);
+                    \Inji\App::$cur->view->widget($type, $params);
                 } else {
-                    \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/' . $type, $params);
+                    \Inji\App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/' . $type, $params);
                 }
 
 
@@ -91,7 +91,7 @@ class Form extends \InjiObject {
     public function end($btnText = 'Отправить', $attributs = [], $options = []) {
         $params = compact('btnText', 'attributs', 'options');
         $params['form'] = $this;
-        \App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/end', $params);
+        \Inji\App::$cur->view->widget('Ui\\' . $this->options['widgetsDir'] . '/end', $params);
     }
 
 }

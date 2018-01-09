@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\DataManager\Action;
+namespace Inji\Ui\DataManager\Action;
 
-class Delete extends \Ui\DataManager\Action {
+class Delete extends \Inji\Ui\DataManager\Action {
 
     public static $name = 'Удалить';
     public static $groupAction = true;
@@ -32,6 +32,6 @@ class Delete extends \Ui\DataManager\Action {
             }
             $count = count($models);
         }
-        return 'Удалено <b>' . $count . '</b> ' . \Tools::getNumEnding($count, ['запись', 'записи', 'записей']);
+        return 'Удалено <b>' . $count . '</b> ' . \Inji\Tools::getNumEnding($count, ['запись', 'записи', 'записей']);
     }
 }

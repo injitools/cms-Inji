@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui;
+namespace Inji\Ui;
 
-class Table extends \InjiObject {
+class Table extends \Inji\InjiObject {
 
     public $cols = [];
     public $rows = [];
@@ -28,11 +28,11 @@ class Table extends \InjiObject {
     }
 
     public function draw() {
-        \App::$cur->view->widget('Ui\Table/body', ['table' => $this]);
+        \Inji\App::$cur->view->widget('Ui\Table/body', ['table' => $this]);
     }
 
     public static function drawRow($row) {
-        \App::$cur->view->widget('Ui\Table/row', ['row' => $row]);
+        \Inji\App::$cur->view->widget('Ui\Table/row', ['row' => $row]);
     }
 
     public function addRow($row) {

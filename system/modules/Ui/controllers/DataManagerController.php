@@ -8,6 +8,13 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+
+namespace Inji\Ui;
+
+use Inji\Controller;
+use Inji\Server\Result;
+use Inji\UserRequest;
+
 class DataManagerController extends Controller {
 
     public function parseRequest() {
@@ -64,13 +71,13 @@ class DataManagerController extends Controller {
     }
 
     public function indexAction() {
-        $result = new Server\Result();
+        $result = new Result();
 
         ob_start();
 
         $request = $this->parseRequest();
 
-        $dataManager = new Ui\DataManager($request['modelName'], $request['managerName']);
+        $dataManager = new DataManager($request['modelName'], $request['managerName']);
         $dataManager->draw($request['params'], $request['model']);
 
         $result->content = ob_get_contents();
@@ -81,14 +88,16 @@ class DataManagerController extends Controller {
     }
 
     public function loadRowsAction() {
-        $result = new Server\Result();
+        $result = new Result();
         $result->content = [];
 
         ob_start();
 
         $request = $this->parseRequest();
 
-        $dataManager = new Ui\DataManager($request['modelName'], $request['managerName']);
+        $dataManager = DataManager::forModel($request['modelName'], $request['managerName']);
+
+
         if ($request['download']) {
 
             ini_set('memory_limit', '4000M');
@@ -136,7 +145,7 @@ class DataManagerController extends Controller {
                 echo "\n";
                 $endRow = true;
             } else {
-                Ui\Table::drawRow($row);
+                Table::drawRow($row);
             }
         }
         if ($request['download']) {
@@ -144,7 +153,7 @@ class DataManagerController extends Controller {
         }
 
         $result->content['rows'] = ob_get_contents();
-        $result->content['summary'] =  $dataManager->getSummary($request['params'], $request['model']);
+        $result->content['summary'] = $dataManager->getSummary($request['params'], $request['model']);
         ob_clean();
 
         $result->content['pages'] = '';
@@ -178,16 +187,16 @@ class DataManagerController extends Controller {
     public function delRowAction() {
 
         $request = $this->parseRequest();
-
-        $dataManager = new Ui\DataManager($request['modelName'], $request['managerName']);
-
+        $dataManager = DataManager::forModel($request['modelName'], $request['managerName']);
         if ($dataManager->checkAccess()) {
-            $model = $request['modelName']::get($request['key'], $request['modelName']::index(), $request['params']);
+            $builder = $dataManager->modelBuilderFromParams();
+            $builder->where($dataManager->modelName::index());
+            $model = $builder->get();
             if ($model) {
-                $model->delete($request['params']);
+                $model->delete();
             }
         }
-        $result = new Server\Result();
+        $result = new Result();
         $result->successMsg = empty($request['silence']) ? 'Запись удалена' : '';
         $result->send();
     }

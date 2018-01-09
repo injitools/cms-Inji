@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\DataManager;
+namespace Inji\Ui\DataManager;
 
-class Action extends \InjiObject {
+class Action extends \Inji\InjiObject {
 
     public static $name = '';
     public static $groupAction = false;
@@ -22,7 +22,7 @@ class Action extends \InjiObject {
      * Must return button text for row in manager
      * 
      * @param \Ui\DataManager $dataManager
-     * @param \Model $item
+     * @param \Inji\Model $item
      * @param array $params
      * @param array $actionParams
      * @return string

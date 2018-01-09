@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class Map extends \Ui\ActiveForm\Input {
+class Map extends \Inji\Ui\ActiveForm\Input {
 
     public function parseRequest($request) {
         $colName = empty($this->colParams['col']) ? $this->colName : $this->colParams['col'];

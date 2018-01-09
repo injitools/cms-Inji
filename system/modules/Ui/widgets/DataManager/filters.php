@@ -1,6 +1,6 @@
 <?php
 if (!$dataManager->checkAccess()) {
-    echo 'you not have access to "' . $dataManager->modelName . '" manager with name: "' . $dataManager->managerName . '"';
+    echo 'you not have access to "' . $dataManager->modelName . '" manager with name: "' . $dataManager->name . '"';
     return false;
 }
 ?>
@@ -10,7 +10,7 @@ if (!$dataManager->checkAccess()) {
     <div class="row">
         <?php
         $i = -1;
-        $form = new Ui\Form();
+        $form = new Inji\Ui\Form();
         foreach ($dataManager->managerOptions['filters'] as $col) {
 
             if ($dataManager->modelName) {
@@ -21,16 +21,16 @@ if (!$dataManager->checkAccess()) {
             }
             $values = [];
             $inputOptions = [];
-            if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
-                $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
+            if (!empty($dataManager->managerOptions['userGroupFilter'][\Inji\Users\User::$cur->group_id]['getRows'][$col])) {
+                $colOptions = $dataManager->managerOptions['userGroupFilter'][\Inji\Users\User::$cur->group_id]['getRows'][$col];
                 if (!empty($colOptions['userCol'])) {
                     if (strpos($colOptions['userCol'], ':')) {
                         $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
                         $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
 
-                        $inputOptions['value'] = \Users\User::$cur->$rel->$param;
+                        $inputOptions['value'] = \Inji\Users\User::$cur->$rel->$param;
                     } else {
-                        $this->model->$col = \Users\User::$cur->{$preset['userCol']};
+                        $this->model->$col = \Inji\Users\User::$cur->{$preset['userCol']};
                     }
                 } elseif (!empty($colOptions['value'])) {
                     $inputOptions['value'] = $colOptions['value'];
@@ -59,9 +59,9 @@ if (!$dataManager->checkAccess()) {
                                 break;
                             case 'method':
                                 if (!empty($colInfo['colParams']['params'])) {
-                                    $values = call_user_func_array([App::$cur->{$colInfo['colParams']['module']}, $colInfo['colParams']['method']], $colInfo['colParams']['params']);
+                                    $values = call_user_func_array([Inji\App::$cur->{$colInfo['colParams']['module']}, $colInfo['colParams']['method']], $colInfo['colParams']['params']);
                                 } else {
-                                    $values = ['' => 'Не важно'] + App::$cur->{$colInfo['colParams']['module']}->{$colInfo['colParams']['method']}();
+                                    $values = ['' => 'Не важно'] + Inji\App::$cur->{$colInfo['colParams']['module']}->{$colInfo['colParams']['method']}();
                                 }
                                 break;
                             case 'model':
@@ -93,18 +93,18 @@ if (!$dataManager->checkAccess()) {
                         }
                         $value = isset($_GET['datamanagerFilters'][$col]['value']) ? $_GET['datamanagerFilters'][$col]['value'] : (isset($params['filters'][$col]['value']) ? $params['filters'][$col]['value'] : '');
                         $inputOptions = ['value' => $value, 'values' => $values, 'multiple' => true];
-                        if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
+                        if (!empty($dataManager->managerOptions['userGroupFilter'][\Inji\Users\User::$cur->group_id]['getRows'][$col])) {
 
                             $inputOptions['disabled'] = true;
-                            $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
+                            $colOptions = $dataManager->managerOptions['userGroupFilter'][\Inji\Users\User::$cur->group_id]['getRows'][$col];
                             if (!empty($colOptions['userCol'])) {
                                 if (strpos($colOptions['userCol'], ':')) {
                                     $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
                                     $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
 
-                                    $inputOptions['value'] = \Users\User::$cur->$rel->$param;
+                                    $inputOptions['value'] = \Inji\Users\User::$cur->$rel->$param;
                                 } else {
-                                    $this->model->$col = \Users\User::$cur->{$preset['userCol']};
+                                    $this->model->$col = \Inji\Users\User::$cur->{$preset['userCol']};
                                 }
                             } elseif (!empty($colOptions['value'])) {
 
@@ -165,18 +165,18 @@ if (!$dataManager->checkAccess()) {
                                 '0' => 'Нет'
                             ]
                             ];
-                            if (!empty($dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col])) {
+                            if (!empty($dataManager->managerOptions['userGroupFilter'][\Inji\Users\User::$cur->group_id]['getRows'][$col])) {
 
                                 $inputOptions['disabled'] = true;
-                                $colOptions = $dataManager->managerOptions['userGroupFilter'][\Users\User::$cur->group_id]['getRows'][$col];
+                                $colOptions = $dataManager->managerOptions['userGroupFilter'][\Inji\Users\User::$cur->group_id]['getRows'][$col];
                                 if (!empty($colOptions['userCol'])) {
                                     if (strpos($colOptions['userCol'], ':')) {
                                         $rel = substr($colOptions['userCol'], 0, strpos($colOptions['userCol'], ':'));
                                         $param = substr($colOptions['userCol'], strpos($colOptions['userCol'], ':') + 1);
 
-                                        $inputOptions['value'] = \Users\User::$cur->$rel->$param;
+                                        $inputOptions['value'] = \Inji\Users\User::$cur->$rel->$param;
                                     } else {
-                                        $this->model->$col = \Users\User::$cur->{$preset['userCol']};
+                                        $this->model->$col = \Inji\Users\User::$cur->{$preset['userCol']};
                                     }
                                 } elseif (!empty($colOptions['value'])) {
 

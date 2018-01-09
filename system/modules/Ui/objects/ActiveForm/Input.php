@@ -9,10 +9,10 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm;
+namespace Inji\Ui\ActiveForm;
 
 
-class Input extends \InjiObject {
+class Input extends \Inji\InjiObject {
 
     public $form = null;
     /**
@@ -101,8 +101,8 @@ class Input extends \InjiObject {
 
     public function preset() {
         $preset = !empty($this->activeForm->form['preset'][$this->colName]) ? $this->activeForm->form['preset'][$this->colName] : [];
-        if (!empty($this->activeForm->form['userGroupPreset'][\Users\User::$cur->group_id][$this->colName])) {
-            $preset = array_merge($preset, $this->activeForm->form['userGroupPreset'][\Users\User::$cur->group_id][$this->colName]);
+        if (!empty($this->activeForm->form['userGroupPreset'][\Inji\Users\User::$cur->group_id][$this->colName])) {
+            $preset = array_merge($preset, $this->activeForm->form['userGroupPreset'][\Inji\Users\User::$cur->group_id][$this->colName]);
         }
         if ($preset) {
             $value = '';
@@ -112,7 +112,7 @@ class Input extends \InjiObject {
                 if (strpos($preset['userCol'], ':')) {
                     $rel = substr($preset['userCol'], 0, strpos($preset['userCol'], ':'));
                     $param = substr($preset['userCol'], strpos($preset['userCol'], ':') + 1);
-                    $value = \Users\User::$cur->$rel->$param;
+                    $value = \Inji\Users\User::$cur->$rel->$param;
                 }
             }
             return $value;
@@ -152,7 +152,7 @@ class Input extends \InjiObject {
                 return true;
             }
         }
-        return !empty($this->activeForm->form['userGroupReadonly'][\Users\User::$cur->group_id]) && in_array($this->colName, $this->activeForm->form['userGroupReadonly'][\Users\User::$cur->group_id]);
+        return !empty($this->activeForm->form['userGroupReadonly'][\Inji\Users\User::$cur->group_id]) && in_array($this->colName, $this->activeForm->form['userGroupReadonly'][\Inji\Users\User::$cur->group_id]);
     }
 
     public function validate(&$request) {

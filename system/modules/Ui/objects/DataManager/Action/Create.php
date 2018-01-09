@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\DataManager\Action;
+namespace Inji\Ui\DataManager\Action;
 
-class Create extends \Ui\DataManager\Action {
+class Create extends \Inji\Ui\DataManager\Action {
 
     public static $name = 'Создать';
     public static $managerAction = true;
@@ -20,7 +20,7 @@ class Create extends \Ui\DataManager\Action {
         $modelName = $dataManager->modelName;
         $name = 'Элемент';
         if (!empty($modelName::$forms[$formParams['formName']])) {
-            $aform = new \Ui\ActiveForm(new $modelName, $formParams['formName']);
+            $aform = new \Inji\Ui\ActiveForm(new $modelName, $formParams['formName']);
             if ($aform->checkAccess()) {
                 if ($modelName::$objectName) {
                     $name = $modelName::$objectName;

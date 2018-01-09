@@ -1,17 +1,20 @@
 <?php
-echo Html::el('div', [
+/**
+ * @var \Inji\Ui\DataManager $dataManager
+ */
+echo Inji\Html::el('div', [
     'id' => $dataManager->managerId,
     'class' => 'dataManager',
     'data-params' => $params,
     'data-modelname' => ($model ? get_class($model) : $dataManager->modelName) . ($model && $model->pk() ? ':' . $model->pk() : ''),
-    'data-managername' => $dataManager->managerName,
+    'data-managername' => $dataManager->name,
     'data-cols' => $dataManager->cols,
     'data-options' => array_merge($dataManager->managerOptions, ['actions' => $dataManager->getActions()])
         ], '', true);
 $buttons = $dataManager->getButtons($params, $model);
-if ($dataManager->name || $buttons) {
+if ($dataManager->label || $buttons) {
     ?>
-    <h3 class="dataManager-title"><?= $dataManager->name; ?> 
+    <h3 class="dataManager-title"><?= $dataManager->label; ?>
       <?php if ($buttons) { ?>
             <div class ='pull-right dataManager-managerButtons'>
                 <div class="btn-group">
@@ -54,7 +57,7 @@ if (empty($params['noFilters']) && !empty($dataManager->managerOptions['filters'
     </div>
     <?php
 }
-echo Html::el('div', $mainCol, '', true);
+echo Inji\Html::el('div', $mainCol, '', true);
 $table->draw();
 ?>
 <div class="dataManager-bottomFloat-container">

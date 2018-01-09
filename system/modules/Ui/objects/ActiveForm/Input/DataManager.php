@@ -9,9 +9,9 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Ui\ActiveForm\Input;
+namespace Inji\Ui\ActiveForm\Input;
 
-class DataManager extends \Ui\ActiveForm\Input {
+class DataManager extends \Inji\Ui\ActiveForm\Input {
 
     public function draw() {
         $inputOptions = [];
