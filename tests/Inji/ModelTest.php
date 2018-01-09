@@ -5,7 +5,7 @@ class ModelTest extends \PHPUnit\Framework\TestCase {
 
     public function testLocalInsertStorage() {
         $time = time();
-        $config = \Inji\Db\Options::new(['connect_name' => $time]);
+        $config = \Inji\Db\Options::create(['connect_name' => $time]);
         $config->connectionName = 'injiStorage';
         $config->dbOptions['share'] = true;
         $config->save();
