@@ -37,13 +37,6 @@ class Model {
     public static $objectName = '';
 
     /**
-     * App type for separate data storage
-     *
-     * @var string
-     */
-    public $appType = 'app';
-
-    /**
      * Object current params
      *
      * @var array
@@ -139,7 +132,7 @@ class Model {
         }
     }
 
-    public static function new($params = [], $app = null) {
+    public static function create($params = [], $app = null) {
         return new static($params, $app);
     }
 
@@ -147,7 +140,7 @@ class Model {
         if (method_exists('Inji\Model\Builder', $name)) {
             return call_user_func_array([new Model\Builder(get_called_class()), $name], $arguments);
         }
-        trigger_error('Undefined method in Inji\Model', E_USER_ERROR);
+        trigger_error('Undefined method ' . $name . ' in Inji\Model', E_USER_ERROR);
     }
 
     public static $logging = true;
@@ -828,7 +821,7 @@ class Model {
      * @return string
      */
     public static function index() {
-        return static::colPrefix() . 'id';
+        return 'id';
     }
 
     /**
@@ -885,6 +878,16 @@ class Model {
      * @return boolean|static
      */
     public static function get($param, $col = null, $options = []) {
+        $builder = new Builder(get_called_class());
+        foreach ($options as $optionName => $option) {
+            $builder->$optionName($option);
+        }
+        if (is_array($param)) {
+            $builder->where($param);
+        } else {
+            $builder->where($col === null ? static::index() : $col, $param);
+        }
+        return $builder->get();
         if (static::$storage['type'] == 'moduleConfig') {
             return static::getFromModuleStorage($param, $col, $options);
         }
@@ -1082,6 +1085,11 @@ class Model {
      * @return static[]
      */
     public static function getList($options = [], $debug = false) {
+        $builder = new Builder(get_called_class());
+        foreach ($options as $optionName => $option) {
+            $builder->$optionName($option);
+        }
+        return $builder->getList();
         if (static::$storage['type'] != 'db') {
             return static::getListFromModuleStorage($options);
         }
@@ -1108,44 +1116,12 @@ class Model {
      * @return array|int
      */
     public static function getCount($options = []) {
-        if (static::$storage['type'] == 'moduleConfig') {
-            return static::getCountFromModuleStorage($options);
+        $builder = new Builder(get_called_class());
+        foreach ($options as $optionName => $option) {
+            $builder->$optionName($option);
         }
-        $query = App::$cur->db->newQuery();
-        if (!$query) {
-            return 0;
-        }
-        if (!empty($options['where'])) {
-            static::fixPrefix($options['where'], 'first');
-        }
-        if (!empty($options['group'])) {
-            static::fixPrefix($options['group'], 'first');
-        }
-        if (!empty($options['order'])) {
-            static::fixPrefix($options['order'], 'first');
-        }
-        if (!empty($options['where'])) {
-            $query->where($options['where']);
-        }
-        if (!empty($options['join'])) {
-            $query->join($options['join']);
-        }
-        if (!empty($options['order'])) {
-            $query->order($options['order']);
-        }
-        if (!empty($options['limit'])) {
-            $limit = (int)$options['limit'];
-        } else {
-            $limit = 0;
-        }
-        if (!empty($options['start'])) {
-            $start = (int)$options['start'];
-        } else {
-            $start = 0;
-        }
-        if ($limit || $start) {
-            $query->limit($start, $limit);
-        }
+        $builder->count('*');
+        return $builder->get();
 
         foreach (static::$needJoin as $rel) {
             $relations = static::relations();
@@ -1261,63 +1237,6 @@ class Model {
 
     }
 
-    /**
-     * Save object to module storage
-     *
-     * @param array $options
-     * @return boolean
-     */
-    public function saveModuleStorage($options) {
-
-        $col = static::index();
-        $id = $this->pk();
-        $appType = '';
-        $classPath = explode('\\', get_called_class());
-
-        if (!empty(static::$storage['options']['share'])) {
-            $moduleConfig = Config::share($classPath[0]);
-        } else {
-            $moduleConfig = Config::module($classPath[0], strpos(static::$storage['type'], 'system') !== false);
-        }
-
-        if (!empty($moduleConfig['storage']['appTypeSplit'])) {
-            if (empty($options['appType'])) {
-                $appType = App::$cur->type;
-            } else {
-                $appType = $options['appType'];
-            }
-            $storage = !empty($moduleConfig['storage'][$appType]) ? $moduleConfig['storage'][$appType] : [];
-        } else {
-            $storage = !empty($moduleConfig['storage']) ? $moduleConfig['storage'] : [];
-        }
-        if (empty($storage[$classPath[1]])) {
-            $storage[$classPath[1]] = [];
-        }
-        if ($id) {
-            foreach ($storage[$classPath[1]] as $key => $item) {
-                if ($item[$col] == $id) {
-                    $storage[$classPath[1]][$key] = $this->_params;
-                    break;
-                }
-            }
-        } else {
-            $id = !empty($storage['scheme'][$classPath[1]]['ai']) ? $storage['scheme'][$classPath[1]]['ai'] : 1;
-            $this->$col = $id;
-            $storage['scheme'][$classPath[1]]['ai'] = $id + 1;
-            $storage[$classPath[1]][] = $this->_params;
-        }
-        if (!empty($moduleConfig['storage']['appTypeSplit'])) {
-            $moduleConfig['storage'][$appType] = $storage;
-        } else {
-            $moduleConfig['storage'] = $storage;
-        }
-        if (empty(static::$storage['options']['share'])) {
-            Config::save('module', $moduleConfig, $classPath[0]);
-        } else {
-            Config::save('share', $moduleConfig, $classPath[0]);
-        }
-        return true;
-    }
 
     /**
      * Update tree path category
@@ -1402,7 +1321,7 @@ class Model {
         $values = [];
 
         foreach (static::$cols as $col => $param) {
-            if (in_array($col, array_keys($this->_params)) && (!$this->pk() || ($this->pk() && in_array($col, array_keys($this->_changedParams))))) {
+            if (isset($this->_params[$col]) && (!$this->pk() || ($this->pk() && isset($this->_changedParams[$col])))) {
                 $values[$col] = $this->_params[$col];
             }
         }
@@ -1413,7 +1332,6 @@ class Model {
                 }
             }
         }
-
         if (empty($values) && empty($options['empty'])) {
             return false;
         }
@@ -1424,9 +1342,11 @@ class Model {
             $this->changeCategoryTree();
         }
         $new = !$this->pk();
+
         if ($new) {
             $builder->where(static::index(), $builder->insert($values));
         } else {
+
             $builder->where(static::index(), $this->pk());
             $builder->update($values);
         }
@@ -1451,57 +1371,6 @@ class Model {
      */
     public function beforeDelete() {
 
-    }
-
-    /**
-     * Delete item from module storage
-     *
-     * @param array $options
-     * @return boolean
-     */
-    public function deleteFromModuleStorage($options) {
-
-        $col = static::index();
-        $id = $this->pk();
-        $appType = '';
-        $classPath = explode('\\', get_called_class());
-        if (!empty(static::$storage['options']['share'])) {
-            $moduleConfig = Config::share($classPath[0]);
-        } else {
-            $moduleConfig = Config::module($classPath[0], strpos(static::$storage['type'], 'system') !== false);
-        }
-
-        if (!empty($moduleConfig['storage']['appTypeSplit'])) {
-            if (empty($options['appType'])) {
-                $appType = App::$cur->type;
-            } else {
-                $appType = $options['appType'];
-            }
-            $storage = !empty($moduleConfig['storage'][$appType]) ? $moduleConfig['storage'][$appType] : [];
-        } else {
-            $storage = !empty($moduleConfig['storage']) ? $moduleConfig['storage'] : [];
-        }
-        if (empty($storage[$classPath[1]])) {
-            $storage[$classPath[1]] = [];
-        }
-        foreach ($storage[$classPath[1]] as $key => $item) {
-
-            if ($item[$col] == $id) {
-                unset($storage[$classPath[1]][$key]);
-                break;
-            }
-        }
-        if (!empty($moduleConfig['storage']['appTypeSplit'])) {
-            $moduleConfig['storage'][$appType] = $storage;
-        } else {
-            $moduleConfig['storage'] = $storage;
-        }
-        if (empty(static::$storage['options']['share'])) {
-            Config::save('module', $moduleConfig, $classPath[0]);
-        } else {
-            Config::save('share', $moduleConfig, $classPath[0]);
-        }
-        return true;
     }
 
     /**
@@ -1637,7 +1506,6 @@ class Model {
                         'order' => (isset($params['order'])) ? $params['order'] : ((isset($relation['order'])) ? $relation['order'] : null),
                         'start' => (isset($params['start'])) ? $params['start'] : ((isset($relation['start'])) ? $relation['start'] : null),
                         'limit' => (isset($params['limit'])) ? $params['limit'] : ((isset($relation['limit'])) ? $relation['limit'] : null),
-                        'appType' => (isset($params['appType'])) ? $params['appType'] : ((isset($relation['appType'])) ? $relation['appType'] : null),
                         'where' => []
                     ];
                     $options['where'][] = [$relation['col'], $this->{$this->index()}];
@@ -1658,7 +1526,6 @@ class Model {
                     }
                     $getType = 'get';
                     $options = $this->{$relation['col']};
-                    $getParams['appType'] = $this->appType;
             }
             if (!empty($params['count'])) {
                 if (class_exists($relation['model'])) {
@@ -1868,13 +1735,10 @@ class Model {
                     break;
             }
         }
-        if (in_array($name, array_keys($this->_params)) && $this->_params[$name] != $value && !in_array($name, array_keys($this->_changedParams))) {
+        if (isset($this->_params[$name]) && $this->_params[$name] != $value && !isset($this->_changedParams[$name])) {
             $this->_changedParams[$name] = $this->_params[$name];
         }
         $this->_params[$name] = $value;
-        if (in_array($name, array_keys($this->_params)) && in_array($name, array_keys($this->_changedParams)) && $this->_changedParams[$name] == $value) {
-            unset($this->_changedParams[$name]);
-        }
     }
 
     /**
