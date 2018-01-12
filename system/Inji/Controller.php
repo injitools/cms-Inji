@@ -1,4 +1,5 @@
 <?php
+
 namespace Inji;
 /**
  * Controller
@@ -74,7 +75,10 @@ class Controller {
             Tools::redirect($this->access->getDeniedRedirect(), $msg);
         }
         $this->run = true;
-        call_user_func_array([$this, $this->method . 'Action'], $this->params);
+        $result = call_user_func_array([$this, $this->method . 'Action'], $this->params);
+        if ($result && is_callable([$result, 'send'])) {
+            $result->send();
+        }
     }
 
     public function resolveMethod() {
