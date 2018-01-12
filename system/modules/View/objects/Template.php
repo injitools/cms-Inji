@@ -13,6 +13,8 @@
 
 namespace Inji\View;
 
+use Inji\Config;
+
 class Template extends \Inji\InjiObject {
 
     /**
@@ -93,12 +95,9 @@ class Template extends \Inji\InjiObject {
     public function __construct($params = []) {
         $this->setParams($params);
         if (!$this->path) {
-            $this->path = $this->app->view->templatesPath . '/' . $this->name;
+            $this->path = $this->app->view->templatesPath() . '/' . $this->name;
         }
         $this->loadConfig();
-        $this->setPage();
-        $this->setModule();
-        $this->setContent();
     }
 
     /**
@@ -111,7 +110,7 @@ class Template extends \Inji\InjiObject {
             $configPath = $this->path . '/config.php';
         }
         $this->configPath = $configPath;
-        $this->config = \Inji\Config::custom($this->configPath);
+        $this->config = Config::custom($this->configPath);
     }
 
     /**
@@ -139,38 +138,6 @@ class Template extends \Inji\InjiObject {
             $this->pagePath = $this->path . '/' . $this->page . '.html';
         }
         $this->pagePath = \Inji\Tools::pathsResolve($this->getPagePaths(), $this->pagePath);
-    }
-
-    /**
-     * Get posible paths for template page by name
-     *
-     * @param string $page
-     * @return array
-     */
-    public function getPagePaths($page = '') {
-        if (!$page) {
-            $page = $this->page;
-        }
-        return [
-            'template' => $this->path . '/' . $page . '.html',
-            'defaultPage' => \Inji\Module::getModulePath('View') . '/templatePages/' . $page . '.html'
-        ];
-    }
-
-    /**
-     * Set module for content path finder
-     *
-     * @param \Inji\Module $module
-     */
-    public function setModule($module = null) {
-        if (!$module && !$this->module) {
-            $this->module = \Inji\Module::$cur;
-        } else {
-            $this->module = $module;
-        }
-        if (is_string($this->module)) {
-            $this->module = $this->app->{$this->module};
-        }
     }
 
     /**
@@ -250,15 +217,13 @@ class Template extends \Inji\InjiObject {
             $app = \Inji\App::$cur;
         }
         if (!$templatesPath) {
-            $templatesPath = $app->view->templatesPath;
+            $templatesPath = $app->view->templatesPath();
         }
-        if (file_exists($templatesPath . '/' . $templateName)) {
-            return new Template([
-                'name' => $templateName,
-                'path' => $templatesPath . '/' . $templateName,
-                'app' => $app
-            ]);
-        }
+        return new Template([
+            'name' => $templateName,
+            'path' => $templatesPath . '/' . $templateName,
+            'app' => $app
+        ]);
     }
 
 }

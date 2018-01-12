@@ -1,6 +1,8 @@
 <?php
 
 namespace Inji;
+
+use Inji\View\Page;
 use Inji\View\Template;
 
 /**
@@ -34,67 +36,16 @@ class View extends Module {
         if (!empty($this->app->config['site']['name'])) {
             $this->title = $this->app->config['site']['name'];
         }
-        $this->resolveTemplate();
+        //$this->resolveTemplate();
     }
 
-    public function resolveTemplate() {
-        $templateName = 'default';
-        if (!empty($this->config[$this->app->type]['current'])) {
-            $templateName = $this->config[$this->app->type]['current'];
-            if (!empty($this->config[$this->app->type]['installed'][$templateName]['location'])) {
-                $this->templatesPath = App::$primary->path . "/templates";
-            }
-        }
-        if (!$this->templatesPath) {
-            $this->templatesPath = $this->app->path . "/templates";
-        }
-        $this->template = View\Template::get($templateName, $this->app, $this->templatesPath);
-        if (!$this->template) {
-            $this->template = new View\Template([
-                'name' => 'default',
-                'path' => $this->templatesPath . '/default',
-                'app' => $this->app
-            ]);
-        }
+    public function templatesPath() {
+        return $this->app->path . "/templates";
     }
+
 
     public function page($params = []) {
-        $this->paramsParse($params);
-        App::$cur->log->template_parsed = true;
-        if (file_exists($this->template->pagePath)) {
-            $source = file_get_contents($this->template->pagePath);
-            if (strpos($source, 'BODYEND') === false) {
-                $source = str_replace('</body>', '{BODYEND}</body>', $source);
-            }
-            $this->parseSource($source);
-        } else {
-            $this->content();
-        }
-    }
-
-    public function paramsParse($params) {
-        // set template
-        if (!empty($params['template']) && $params['template'] != 'current') {
-            $this->template = Template::get($params['template']);
-        }
-        //set page
-        if (!empty($params['page']) && $params['page'] != 'current') {
-            $this->template->setPage($params['page']);
-        }
-        //set module
-        if (!empty($params['module'])) {
-            $this->template->setModule($params['module']);
-        }
-        //set content
-        if (!empty($params['content'])) {
-            $this->template->setContent($params['content']);
-        } elseif (!$this->template->contentPath) {
-            $this->template->setContent();
-        }
-        //set data
-        if (!empty($params['data'])) {
-            $this->contentData = array_merge($this->contentData, $params['data']);
-        }
+        return new Page($params, $this->app);
     }
 
     public function content($params = []) {
@@ -140,59 +91,6 @@ class View extends Module {
         }
     }
 
-    private function parseRaw($source) {
-        if (!$source) {
-            return [];
-        }
-
-        preg_match_all("|{([^}]+)}|", $source, $result);
-        return $result[1];
-    }
-
-    public function parseSource($source) {
-        $tags = $this->parseRaw($source);
-        foreach ($tags as $rawTag) {
-            $tag = explode(':', $rawTag);
-            switch ($tag[0]) {
-                case 'CONTENT':
-                    $source = $this->cutTag($source, $rawTag);
-                    $this->content();
-                    break;
-                case 'TITLE':
-                    $source = $this->cutTag($source, $rawTag);
-                    echo $this->title;
-                    break;
-                case 'WIDGET':
-                    $source = $this->cutTag($source, $rawTag);
-                    $params = array_slice($tag, 2);
-                    $this->widget($tag[1], ['params' => $params], ':' . implode(':', $params));
-                    break;
-                case 'HEAD':
-                    $source = $this->cutTag($source, $rawTag);
-                    $this->head();
-                    break;
-                case 'PAGE':
-                    $source = $this->cutTag($source, $rawTag);
-                    $this->page(['page' => $tag[1]]);
-                    break;
-                case 'BODYEND':
-                    $source = $this->cutTag($source, $rawTag);
-                    $this->bodyEnd();
-                    break;
-                case 'TEMPLATE_PATH':
-                    $source = $this->cutTag($source, $rawTag);
-                    echo "/static/templates/{$this->template->name}";
-                    break;
-            }
-        }
-        echo $source;
-    }
-
-    public function cutTag($source, $rawTag) {
-        $pos = strpos($source, $rawTag) - 1;
-        echo substr($source, 0, $pos);
-        return substr($source, ($pos + strlen($rawTag) + 2));
-    }
 
     public function getHref($type, $params) {
         $href = '';
@@ -232,33 +130,7 @@ class View extends Module {
         }
     }
 
-    public function head() {
 
-        echo "<title>{$this->title}</title>\n";
-        if (!empty(App::$primary->config['site']['favicon']) && file_exists(App::$primary->path . '/' . App::$primary->config['site']['favicon'])) {
-            echo "        <link rel='shortcut icon' href='" . App::$primary->config['site']['favicon'] . "' />";
-        } elseif (!empty($this->template->config['favicon']) && file_exists($this->template->path . "/{$this->template->config['favicon']}")) {
-            echo "        <link rel='shortcut icon' href='/templates/{$this->template->name}/{$this->template->config['favicon']}' />";
-        } elseif (!empty($this->template->config['favicon']) && file_exists($this->app->path . "/static/images/{$this->template->config['favicon']}")) {
-            echo "        <link rel='shortcut icon' href='/static/images/{$this->template->config['favicon']}' />";
-        } elseif (file_exists($this->app->path . '/static/images/favicon.ico')) {
-            echo "        <link rel='shortcut icon' href='/static/images/favicon.ico' />";
-        }
-
-        foreach ($this->getMetaTags() as $meta) {
-            echo "\n        " . Html::el('meta', $meta, '', null);
-        }
-
-        if (!empty(\Inji::$config['assets']['js'])) {
-            foreach (\Inji::$config['assets']['js'] as $js) {
-                $this->customAsset('js', $js);
-            }
-        }
-
-        $this->checkNeedLibs();
-        $this->parseCss();
-        echo "\n        <script src='" . Statics::file("/static/system/js/Inji.js") . "'></script>";
-    }
 
     public function parseCss() {
         $css = $this->getCss();
@@ -403,29 +275,6 @@ class View extends Module {
         }
     }
 
-    public function getMetaTags() {
-        $metas = [];
-
-        if (!empty($this->app->config['site']['keywords'])) {
-            $metas['metaName:keywords'] = ['name' => 'keywords', 'content' => $this->app->config['site']['keywords']];
-        }
-        if (!empty($this->app->config['site']['description'])) {
-            $metas['metaName:description'] = ['name' => 'description', 'content' => $this->app->config['site']['description']];
-        }
-        if (!empty($this->app->config['site']['metatags'])) {
-            foreach ($this->app->config['site']['metatags'] as $meta) {
-                if (!empty($meta['name'])) {
-                    $metas['metaName:' . $meta['name']] = $meta;
-                } elseif (!empty($meta['property'])) {
-                    $metas['metaProperty:' . $meta['property']] = $meta;
-                }
-            }
-        }
-        if ($this->dynMetas) {
-            $metas = array_merge($metas, $this->dynMetas);
-        }
-        return $metas;
-    }
 
     public function addMetaTag($meta) {
         if (!empty($meta['name'])) {
@@ -566,27 +415,7 @@ class View extends Module {
         }
     }
 
-    public function customAsset($type, $asset, $lib = false) {
-        if (!$lib) {
-            $this->dynAssets[$type][] = $asset;
-        } else {
-            if (empty($this->libAssets[$type][$lib]) || !in_array($asset, $this->libAssets[$type][$lib])) {
-                $this->libAssets[$type][$lib][] = $asset;
-            }
-        }
-    }
 
-    public function setTitle($title, $add = true) {
-        if ($add && !empty($this->app->config['site']['name'])) {
-            if ($title) {
-                $this->title = $title . ' - ' . $this->app->config['site']['name'];
-            } else {
-                $this->title = $this->app->config['site']['name'];
-            }
-        } else {
-            $this->title = $title;
-        }
-    }
 
     public function widget($_widgetName, $_params = [], $lineParams = null) {
         $_paths = $this->getWidgetPaths($_widgetName);
