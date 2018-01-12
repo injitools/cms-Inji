@@ -83,6 +83,9 @@ Inji\App::$cur->type = 'app';
 Inji\App::$cur->path = INJI_PROGRAM_DIR . '/' . Inji\App::$cur->dir;
 Inji\App::$cur->params = $params;
 Inji\App::$cur->config = Inji\Config::app(Inji\App::$cur);
+if (!Inji\App::$cur->namespace) {
+    Inji\App::$cur->namespace = ucfirst(Inji\App::$cur->name);
+}
 Inji\App::$primary = Inji\App::$cur;
 
 if (!empty($params[0]) && file_exists(INJI_SYSTEM_DIR . '/program/' . $params[0] . '/')) {
