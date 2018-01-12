@@ -8,7 +8,11 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class UsersController extends adminController {
+
+namespace Inji\Users;
+use Inji\Admin\AdminController;
+
+class UsersAppAdminController extends AdminController {
 
     public function loginAction() {
         if (!Users\User::$cur->user_id) {

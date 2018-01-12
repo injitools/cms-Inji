@@ -1,4 +1,5 @@
 <?php
+
 namespace Inji;
 /**
  * Users module
@@ -9,7 +10,7 @@ namespace Inji;
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 class Users extends Module {
-
+    public $name = 'Users';
     public $cookiePrefix = '';
 
     public function init() {

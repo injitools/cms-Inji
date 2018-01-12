@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: inji
- * Date: 20.12.2017
- * Time: 16:36
- */
+
 
 namespace Users\User;
 

@@ -8,7 +8,11 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class SocialController extends Controller {
+
+namespace Inji\Users;
+use Inji\Controller;
+
+class SocialAppController extends Controller {
 
     public function authAction($socialCode = '') {
         if (!$socialCode) {

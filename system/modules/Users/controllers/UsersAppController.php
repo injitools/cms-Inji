@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Users app controller
  *
@@ -8,7 +9,18 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
-class UsersController extends Controller {
+
+namespace Inji\Users;
+
+use Inji\App;
+use Inji\Controller;
+use Inji\I18n\Text;
+use Inji\Msg;
+use Inji\Server\Result;
+use Inji\Tools;
+use Inji\View\Page;
+
+class UsersAppController extends Controller {
 
     public function indexAction() {
         Tools::redirect('/users/cabinet/profile');
@@ -19,7 +31,7 @@ class UsersController extends Controller {
 
         $sections = $this->module->getSnippets('cabinetSection');
         if (!empty($sections[$activeSection]['name'])) {
-            $this->view->setTitle($sections[$activeSection]['name'] . ' - ' . \I18n\Text::module('Users', 'Личный кабинет'));
+            $this->view->setTitle($sections[$activeSection]['name'] . ' - ' . Text::module('Users', 'Личный кабинет'));
             $bread[] = ['text' => 'Личный кабинет', 'href' => '/users/cabinet'];
             $bread[] = ['text' => $sections[$activeSection]['name']];
         } else {
@@ -44,8 +56,7 @@ class UsersController extends Controller {
     }
 
     public function registrationAction() {
-        $this->view->setTitle('Регистрация');
-        if (Users\User::$cur->user_id) {
+        if (User::$cur->user_id) {
             Tools::redirect('/', 'Вы уже зарегистрированы');
         }
         if (!empty($_POST)) {
@@ -68,15 +79,18 @@ class UsersController extends Controller {
                 }
             }
         }
-        $this->view->setTitle('Регистрация');
         $bread = [];
         $bread[] = ['text' => 'Регистрация'];
-        $this->view->page(['data' => compact('bread')]);
+        $socials = \Inji\Users\Social::getList(['where' => ['active', 1]]);
+
+        $page = new Page(['data' => compact('bread', 'socials')]);
+        $page->setTitle('Регистрация');
+        return new Page(['data' => compact('bread', 'socials')]);
     }
 
     public function fastRegistrationAction() {
-        $result = new \Server\Result();
-        if (Users\User::$cur->user_id) {
+        $result = new Result();
+        if (User::$cur->user_id) {
             $result->success = false;
             $result->content = 'Вы уже зарегистрированы';
             return $result->send();
@@ -112,42 +126,42 @@ class UsersController extends Controller {
     }
 
     public function activationAction($userId = 0, $hash = '') {
-        $user = \Users\User::get((int) $userId);
-        if (!$user || !$hash || $user->activation !== (string) $hash) {
+        $user = User::get((int)$userId);
+        if (!$user || !$hash || $user->activation !== (string)$hash) {
             Tools::redirect('/', 'Во время активации произошли ошибки', 'danger');
         }
         $user->activation = '';
         $user->save();
-        Inji::$inst->event('Users-completeActivation', $user);
+        \Inji::$inst->event('Users-completeActivation', $user);
         Tools::redirect('/', 'Вы успешно активировали ваш аккаунт', 'success');
     }
 
     public function attachEmailAction() {
-        if (Users\User::$cur->mail) {
+        if (User::$cur->mail) {
             Tools::redirect('/', 'К вашему аккаунту уже привязан E-Mail');
         }
         if (!empty($_POST['mail'])) {
             $user_mail = trim($_POST['mail']);
             if (!filter_var($user_mail, FILTER_VALIDATE_EMAIL)) {
-                \Inji\Msg::add('Вы ввели не корректный E-mail', 'danger');
+                Msg::add('Вы ввели не корректный E-mail', 'danger');
             } else {
-                $user = Users\User::get($user_mail, 'mail');
-                if ($user && $user->id != Users\User::$cur->id) {
-                    \Inji\Msg::add('Данный E-mail уже привязан к другому аккаунту', 'danger');
+                $user = User::get($user_mail, 'mail');
+                if ($user && $user->id != User::$cur->id) {
+                    Msg::add('Данный E-mail уже привязан к другому аккаунту', 'danger');
                 } else {
-                    Users\User::$cur->mail = $user_mail;
+                    User::$cur->mail = $user_mail;
                     if (!empty($this->module->config['needActivation'])) {
-                        Users\User::$cur->activation = Tools::randomString();
+                        User::$cur->activation = Tools::randomString();
                         $from = 'noreply@' . INJI_DOMAIN_NAME;
                         $to = $user_mail;
                         $subject = 'Активация аккаунта на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
-                        $text = 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '</a>';
+                        $text = 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . User::$cur->id . '/' . User::$cur->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . User::$cur->id . '/' . User::$cur->activation . '</a>';
                         Tools::sendMail($from, $to, $subject, $text);
-                        \Inji\Msg::add('На указанный почтовый ящик была выслана ваша ссылка для подтверждения E-Mail', 'success');
+                        Msg::add('На указанный почтовый ящик была выслана ваша ссылка для подтверждения E-Mail', 'success');
                     } else {
-                        \Inji\Msg::add('Вы успешно привязали E-Mail к своему аккаунту', 'success');
+                        Msg::add('Вы успешно привязали E-Mail к своему аккаунту', 'success');
                     }
-                    Users\User::$cur->save();
+                    User::$cur->save();
                     Tools::redirect('/');
                 }
             }
@@ -156,7 +170,7 @@ class UsersController extends Controller {
     }
 
     public function resendActivationAction($userId = 0) {
-        $user = \Users\User::get((int) $userId);
+        $user = User::get((int)$userId);
         if (!$user) {
             Tools::redirect('/', 'Не указан пользователь', 'danger');
         }
@@ -172,14 +186,14 @@ class UsersController extends Controller {
     }
 
     public function getPartnerInfoAction($userId = 0) {
-        $userId = (int) $userId;
-        $result = new \Server\Result();
+        $userId = (int)$userId;
+        $result = new Result();
         if (!$userId) {
             $result->success = false;
             $result->content = 'Не указан пользователь';
             $result->send();
         }
-        $partners = App::$cur->users->getUserPartners(Users\User::$cur, 8);
+        $partners = App::$cur->users->getUserPartners(User::$cur, 8);
         if (empty($partners['users'][$userId])) {
             $result->success = false;
             $result->content = 'Этот пользователь не находится в вашей структуре';
