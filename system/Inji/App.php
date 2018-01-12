@@ -29,7 +29,7 @@ class App {
      */
     public $name = '';
     public $dir = '';
-    public $namespace = '';
+    public $namespace = 'SiteApp';
     public $type = 'app';
     public $system = false;
     public $default = false;
@@ -56,13 +56,17 @@ class App {
      * Return module object by name or alias
      *
      * @param string $className
-     * @return Module
+     * @return Module|false
      */
     public function getObject($className, $params = []) {
         $paramsStr = serialize($params);
         $className = ucfirst($className);
         if (isset($this->_objects[$className][$paramsStr])) {
             return $this->_objects[$className][$paramsStr];
+        }
+        $installed = Module::getInstalled($this);
+        if (!in_array(ucfirst($className), $installed)) {
+            return false;
         }
         return $this->loadObject($className, $params);
     }
@@ -106,7 +110,8 @@ class App {
         }
         return false;
     }
-    public function possibleModuleClasses($moduleName){
+
+    public function possibleModuleClasses($moduleName) {
         $possibleModules = [];
         if ($this->namespace) {
             $possibleModules[] = $this->namespace . '\\' . $moduleName;
@@ -130,6 +135,7 @@ class App {
      * @return mixed
      */
     public function loadObject($className, $params = []) {
+
         $paramsStr = serialize($params);
         $moduleClassName = $this->findModuleClass($className);
         if ($moduleClassName === false) {
