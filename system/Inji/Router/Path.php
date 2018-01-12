@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: inji
- * Date: 08.01.2018
- * Time: 1:20
- */
 
 namespace Inji\Router;
 

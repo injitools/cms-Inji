@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: inji
- * Date: 15.12.2017
- * Time: 16:59
- */
 
 namespace Inji\Ecommerce\Card;
 

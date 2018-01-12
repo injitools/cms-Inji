@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: inji
- * Date: 07.01.2018
- * Time: 16:39
- */
 
 namespace Inji\Db\InjiStorage;
 
