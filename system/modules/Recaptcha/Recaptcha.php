@@ -1,5 +1,6 @@
 <?php
 
+namespace Inji;
 /**
  * Recaptcha module
  *
