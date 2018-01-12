@@ -321,6 +321,17 @@ class Users extends Module {
         if (empty($data['user_phone'])) {
             $data['user_phone'] = '';
         }
+
+        if (empty($data['user_avatar_id']) || !is_numeric($data['user_avatar_id'])) {
+            $data['user_avatar_id'] = 0;
+        } else {
+            $avatar = \Users\User\Avatar::get($data['user_avatar_id']);
+            if ($avatar) {
+                $data['user_avatar_id'] = $avatar->id;
+            } else {
+                $data['user_avatar_id'] = 0;
+            }
+        }
         $invite_code = (!empty($data['invite_code']) ? $data['invite_code'] : (!empty($_POST['invite_code']) ? $_POST['invite_code'] : ((!empty($_COOKIE['invite_code']) ? $_COOKIE['invite_code'] : ((!empty($_GET['invite_code']) ? $_GET['invite_code'] : ''))))));
         if (!empty($invite_code)) {
             $invite = Users\User\Invite::get($invite_code, 'code');
@@ -352,13 +363,13 @@ class Users extends Module {
         } else {
             $pass = Tools::randomString(10);
         }
-
         $user = new Users\User([
             'pass' => $this->hashpass($pass),
             'mail' => $data['user_mail'],
             'login' => htmlspecialchars($data['user_login']),
             'role_id' => 2,
             'group_id' => 2,
+            'user_avatar_id' => $data['user_avatar_id'],
             'parent_id' => !empty($data['parent_id']) ? $data['parent_id'] : 0
         ]);
         if (!empty($this->config['needActivation'])) {
