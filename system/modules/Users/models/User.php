@@ -44,6 +44,7 @@ class User extends \Model {
         'parent_id' => 'Пригласивший',
         'group_id' => 'Группа',
         'role_id' => 'Роль',
+        'user_avatar_id' => 'Аватар',
         'admin_text' => 'Комментарий администратора',
         'activation' => 'Код активации',
         'blocked' => 'Заблокирован',
@@ -57,6 +58,7 @@ class User extends \Model {
         'parent_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'parent'],
         'group_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'group'],
         'role_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'role'],
+        'user_avatar_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'avatar'],
         'admin_text' => ['type' => 'html'],
         'activation' => ['type' => 'text', 'logging' => false],
         'blocked' => ['type' => 'bool'],
@@ -166,6 +168,10 @@ class User extends \Model {
                 'type' => 'one',
                 'model' => 'Users\User\Info',
                 'col' => 'user_id'
+            ],
+            'avatar' => [
+                'model' => 'Users\User\Avatar',
+                'col' => 'user_avatar_id'
             ],
             'inventory' => [
                 'type' => 'one',

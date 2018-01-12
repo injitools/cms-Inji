@@ -12,7 +12,7 @@
 namespace Users\User;
 
 class Info extends \Model {
-    public static $logging = 'changes';
+
     public static $objectName = "Расширенная информация";
     public static $cols = [
         'first_name' => ['type' => 'text'],
@@ -32,7 +32,7 @@ class Info extends \Model {
             ]
         ],
         'photo_file_id' => ['type' => 'image'],
-        'bday' => ['type' => 'date', 'null' => true, 'emptyValue' => null],
+        'bday' => ['type' => 'date', 'null' => true],
     ];
     public static $forms = [
         'manager' => [

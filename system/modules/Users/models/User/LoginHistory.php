@@ -12,7 +12,6 @@ namespace Users\User;
 
 
 class LoginHistory extends \Model {
-    public static $logging = false;
     public static $cols = [
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'ip' => ['type' => 'text'],
