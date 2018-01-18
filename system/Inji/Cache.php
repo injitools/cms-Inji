@@ -13,7 +13,7 @@ class Cache {
     /**
      * Connection to a set of memcache servers
      *
-     * @var Memcache
+     * @var Memcached|Memcache
      */
     public static $server = null;
 
@@ -35,7 +35,12 @@ class Cache {
      * Try connect to memcache server
      */
     public static function connect() {
-        if (!self::$connectTrying && class_exists('Memcache', false)) {
+        if (!self::$connectTrying && class_exists('Memcached', false)) {
+            self::$server = new Memcached();
+            self::$server->addServer("127.0.0.1", 11211);
+            self::$connected = @self::$server->addServer('localhost', 11211);
+        }
+        if (!self::$connectTrying && !self::$connected && class_exists('Memcache', false)) {
             self::$server = new Memcache();
             self::$connected = @self::$server->connect('localhost', 11211);
         }
@@ -106,7 +111,11 @@ class Cache {
         if ($prefix === false) {
             $prefix = App::$primary->name;
         }
-        return @self::$server->set($prefix . '_' . $name . serialize($params), $val, false, $lifeTime);
+        if (class_exists('Memcached', false) && self::$server instanceof Memcached) {
+            return @self::$server->set($prefix . '_' . $name . serialize($params), $val, $lifeTime);
+        } else {
+            return @self::$server->set($prefix . '_' . $name . serialize($params), $val, false, $lifeTime);
+        }
     }
 
     /**
