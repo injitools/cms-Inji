@@ -388,6 +388,7 @@ class Item extends \Model {
                     }
                 }
             }
+            $item->save(['disableAfterTrigger' => true]);
         });
 
     }
@@ -486,7 +487,7 @@ class Item extends \Model {
     public function inFav() {
         if (\Users\User::$cur->id) {
             $fav = \Ecommerce\Favorite::get([['user_id', \Users\User::$cur->id], ['item_id', $this->id]]);
-            return (bool) $fav;
+            return (bool)$fav;
         } else {
             $favs = !empty($_COOKIE['ecommerce_favitems']) ? json_decode($_COOKIE['ecommerce_favitems'], true) : [];
             return in_array($this->id, $favs);
