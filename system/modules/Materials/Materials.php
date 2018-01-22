@@ -116,8 +116,8 @@ class Materials extends Module {
     }
 
     function search($search) {
-        $query = 'select material_id from ' . App::$cur->db->table_prefix . \Materials\Material::table() . ' where MATCH (material_name,material_text,material_keywords,material_description) AGAINST (\'' . $search . '\')';
-        $ids = array_keys(App::$cur->db->query($query)->getArray('material_id'));
+        $query = 'select material_id from ' . App::$cur->db->table_prefix . \Materials\Material::table() . ' where MATCH (material_name,material_text,material_keywords,material_description) AGAINST (?)';
+        $ids = array_keys(App::$cur->db->query(['query' => $query, 'params' => [$search]])->getArray('material_id'));
         $count = count($ids);
         $pages = new \Ui\Pages($_GET, ['count' => $count]);
         //items
