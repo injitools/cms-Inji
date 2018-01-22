@@ -1563,7 +1563,9 @@ class Model {
         if (!empty($this->_changedParams) && $this->pk()) {
             Inji::$inst->event('modelItemParamsChanged-' . get_called_class(), $this);
         }
-        $this->beforeSave();
+        if (empty($options['disableBeforeTrigger'])) {
+            $this->beforeSave();
+        }
         $values = [];
 
         foreach ($this->cols() as $col => $param) {
@@ -1616,7 +1618,9 @@ class Model {
         if ($new) {
             Inji::$inst->event('modelCreatedItem-' . get_called_class(), $this);
         }
-        $this->afterSave();
+        if (empty($options['disableAfterTrigger'])) {
+            $this->afterSave();
+        }
         return $this->pk();
     }
 
