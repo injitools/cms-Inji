@@ -225,9 +225,7 @@ class EcommerceController extends adminController {
         } else {
             $i++;
             foreach ($items as $key => $item) {
-                $item->save();
-                unset($items[$key]);
-                unset($item);
+                $item->afterSave();
             }
             echo 'Происходит процесс индексации: проиндексировано ' . $i * $count;
             echo '<script>setTimeout(function(){window.location="/admin/ecommerce/reSearchIndex/' . $i . '"},100)</script>';
