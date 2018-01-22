@@ -991,12 +991,12 @@ class Model {
         }
         static::$relJoins = [];
         if (!empty($options['limit'])) {
-            $limit = (int) $options['limit'];
+            $limit = (int)$options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int) $options['start'];
+            $start = (int)$options['start'];
         } else {
             $start = 0;
         }
@@ -1157,13 +1157,14 @@ class Model {
             }
             if (!empty($options['order'])) {
                 usort($items, function ($a, $b) use ($options) {
-                    if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'asc') {
+                    $dir = !empty($options['order'][1]) ? strtolower($options['order'][1]) : 'asc';
+                    if ($a->{$options['order'][0]} > $b->{$options['order'][0]} && $dir == 'asc') {
                         return 1;
-                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'asc') {
+                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && $dir == 'asc') {
                         return -1;
-                    } elseif ($a->{$options['order'][0]} > $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'desc') {
+                    } elseif ($a->{$options['order'][0]} > $b->{$options['order'][0]} && $dir == 'desc') {
                         return -1;
-                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && strtolower($options['order'][1]) == 'desc') {
+                    } elseif ($a->{$options['order'][0]} < $b->{$options['order'][0]} && $dir == 'desc') {
                         return 1;
                     } elseif ($a->{$options['order'][0]} == $b->{$options['order'][0]} && $a->id > $b->id) {
                         return 1;
@@ -1300,12 +1301,12 @@ class Model {
             $query->order($options['order']);
         }
         if (!empty($options['limit'])) {
-            $limit = (int) $options['limit'];
+            $limit = (int)$options['limit'];
         } else {
             $limit = 0;
         }
         if (!empty($options['start'])) {
-            $start = (int) $options['start'];
+            $start = (int)$options['start'];
         } else {
             $start = 0;
         }
@@ -2039,13 +2040,13 @@ class Model {
         if (!empty($className::$cols[$shortName])) {
             switch ($className::$cols[$shortName]['type']) {
                 case 'decimal':
-                    $value = (float) $value;
+                    $value = (float)$value;
                     break;
                 case 'number':
-                    $value = (int) $value;
+                    $value = (int)$value;
                     break;
                 case 'bool':
-                    $value = (bool) $value;
+                    $value = (bool)$value;
                     break;
             }
         }
