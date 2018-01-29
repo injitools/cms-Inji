@@ -1,12 +1,17 @@
 <?php
 
 /**
- * Log
+ * Model
  *
  * @author Alexey Krupskiy <admin@inji.ru>
  * @link http://inji.ru/
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
+ */
+
+/**
+ * @property int $id
+ * @property string $date_create
  */
 class Model {
 
@@ -1824,7 +1829,7 @@ class Model {
                         'appType' => (isset($params['appType'])) ? $params['appType'] : ((isset($relation['appType'])) ? $relation['appType'] : null),
                         'where' => []
                     ];
-                    $options['where'][] = [$relation['col'], $this->{$this->index()}];
+                    $options['where'][] = [$relation['col'], isset($relation['parentCol']) ? $this->{$relation['parentCol']} : $this->{$this->index()}];
                     if (!empty($relation['where'])) {
                         $options['where'] = array_merge($options['where'], [$relation['where']]);
                     }
@@ -1834,7 +1839,7 @@ class Model {
                     break;
                 case 'one':
                     $getType = 'get';
-                    $options = [$relation['col'], $this->pk()];
+                    $options = [$relation['col'], isset($relation['parentCol']) ? $this->{$relation['parentCol']} : $this->pk()];
                     break;
                 default:
                     if ($this->$relation['col'] === null) {
@@ -1842,6 +1847,7 @@ class Model {
                     }
                     $getType = 'get';
                     $options = $this->$relation['col'];
+                    $getCol = isset($relation['childCol']) ? $relation['childCol'] : null;
                     $getParams['appType'] = $this->appType;
             }
             if (!empty($params['count'])) {
