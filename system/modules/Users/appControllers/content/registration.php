@@ -22,7 +22,7 @@
                 $form = new Ui\Form();
                 ?>
                 <form action='' method='POST'
-                      enctype="multipart/form-data" <? !empty(\App::$primary->users->config['csrf']) ? 'csrf' : ''; ?>>
+                      enctype="multipart/form-data" <?= !empty(\App::$primary->users->config['csrf']) ? 'csrf' : ''; ?>>
                     <div class='row'>
                         <div class="col-sm-6">
                             <?php $form->input('email', 'user_mail', 'Электронная почта', ['required' => true]); ?>
