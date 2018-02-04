@@ -138,21 +138,26 @@ Server.prototype.request = function (options, btn) {
         }
       } else {
         inji.Server.runCommands(data.commands);
-        noty({text: data.error, type: 'warning', timeout: 3500, layout: 'center'});
+        if (typeof options.error !== 'undefined') {
+          options.error(data.error);
+        }
+        if (data.error) {
+          noty({text: data.error, type: 'warning', timeout: 3500, layout: 'center'});
+        }
       }
     }
   }
   var errorCallback = null;
-  if (typeof options.error != 'undefined') {
+  if (typeof options.error !== 'undefined') {
     errorCallback = options.error;
   }
   ajaxOptions.error = function (jqXHR, textStatus, errorThrown) {
-    if (typeof btn != 'undefined') {
+    if (typeof btn !== 'undefined') {
       btn.button('reset');
     }
     if (errorCallback != null) {
       errorCallback(jqXHR, textStatus, errorThrown);
-    } else if (textStatus != 'abort') {
+    } else if (textStatus !== 'abort') {
       noty({
         text: 'Во время запроса произошла ошибка: ' + textStatus,
         type: 'warning',
