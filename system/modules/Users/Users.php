@@ -18,7 +18,8 @@ class Users extends Module {
         }
         \Users\User::$cur = new Users\User(array('group_id' => 1, 'role_id' => 1));
         if (!empty($_GET['invite_code']) && is_string($_GET['invite_code'])) {
-            setcookie('invite_code', $_GET['invite_code'], time() + 360000, "/");
+            $this->setCookie('invite_code', $_GET['invite_code']);
+
         }
         if (!App::$cur->db->connect) {
             return false;
@@ -41,6 +42,14 @@ class Users extends Module {
         }
     }
 
+    public function setCookie($name, $value) {
+        if ($value !== '') {
+            setcookie($name, $value, time() + 360000, "/", !empty($this->config['loginToSubdomain']) ? '.' . (App::$cur->config['site']['domain']) : '');
+        } else {
+            setcookie($name, $value, 0, "/", !empty($this->config['loginToSubdomain']) ? '.' . (App::$cur->config['site']['domain']) : '');
+        }
+    }
+
     public function logOut($redirect = true) {
         if (!empty($_COOKIE[$this->cookiePrefix . "_user_session_hash"]) && !empty($_COOKIE[$this->cookiePrefix . "_user_id"])) {
             $session = Users\Session::get([
@@ -52,8 +61,8 @@ class Users extends Module {
             }
         }
         if (!headers_sent()) {
-            setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
-            setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
+            $this->setCookie($this->cookiePrefix . "_user_session_hash", '');
+            $this->setCookie($this->cookiePrefix . "_user_id", '');
         }
         if ($redirect) {
             if (!empty($this->config['logoutUrl'][$this->app->type])) {
@@ -70,8 +79,8 @@ class Users extends Module {
         ]);
         if (!$session) {
             if (!headers_sent()) {
-                setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
-                setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
+                $this->setcookie($this->cookiePrefix . "_user_session_hash", '');
+                $this->setcookie($this->cookiePrefix . "_user_id", '');
             }
             Tools::redirect('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
         }
@@ -80,8 +89,8 @@ class Users extends Module {
         }
         if ($session && $session->user && $session->user->blocked) {
             if (!headers_sent()) {
-                setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
-                setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
+                $this->setcookie($this->cookiePrefix . "_user_session_hash", '');
+                $this->setcookie($this->cookiePrefix . "_user_id", '');
             }
             Msg::add(\I18n\Text::module('Users', 'Ваш аккаунт заблокирован'), 'info');
             return;
@@ -89,8 +98,8 @@ class Users extends Module {
         if ($session && $session->user && !$session->user->blocked) {
             if (!empty($this->config['needActivation']) && $session->user->activation) {
                 if (!headers_sent()) {
-                    setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
-                    setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
+                    $this->setcookie($this->cookiePrefix . "_user_session_hash", '');
+                    $this->setcookie($this->cookiePrefix . "_user_id", '');
                 }
                 Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $session->user->id . '"><b>повторно выслать ссылку активации</b></a>');
             } elseif ($session->user->activation) {
@@ -104,8 +113,8 @@ class Users extends Module {
             Users\User::$cur->save();
         } else {
             if (!headers_sent()) {
-                setcookie($this->cookiePrefix . "_user_session_hash", '', 0, "/");
-                setcookie($this->cookiePrefix . "_user_id", '', 0, "/");
+                $this->setcookie($this->cookiePrefix . "_user_session_hash", '');
+                $this->setcookie($this->cookiePrefix . "_user_id", '');
             }
             Msg::add(\I18n\Text::module('Users', 'needrelogin'), 'info');
         }
@@ -223,8 +232,8 @@ class Users extends Module {
     public function newSession($user) {
         $session = $this->createSession($user);
         if (!headers_sent()) {
-            setcookie($this->cookiePrefix . "_user_session_hash", $session->hash, time() + 360000, "/");
-            setcookie($this->cookiePrefix . "_user_id", $user->id, time() + 360000, "/");
+            $this->setcookie($this->cookiePrefix . "_user_session_hash", $session->hash);
+            $this->setcookie($this->cookiePrefix . "_user_id", $user->id);
         } else {
             Msg::add('Не удалось провести авторизацию. Попробуйте позже', 'info');
         }
