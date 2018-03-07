@@ -273,7 +273,7 @@ class Tools extends Model {
      * @param string $text
      * @param string $status
      */
-    public static function redirect($href = null, $text = false, $status = 'info', $code = 307) {
+    public static function redirect($href = null, $text = false, $status = 'info', $code = 302) {
         if ($href === null) {
             $href = $_SERVER['REQUEST_URI'];
         }
