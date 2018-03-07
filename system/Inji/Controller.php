@@ -71,7 +71,7 @@ class Controller {
         }
         if (!$this->checkAccess()) {
             $msg = !empty($this->module->app->access->config['access']['accessTree'][App::$cur->type]['msg']) ? $this->module->app->access->config['access']['accessTree'][App::$cur->type]['msg'] : \I18n\Text::module('Access', 'noaccess');
-            Tools::redirect($this->access->getDeniedRedirect(), $msg);
+            Tools::redirect($this->access->getDeniedRedirect(), $msg, 'warning', 403);
         }
         $this->run = true;
         call_user_func_array([$this, $this->method . 'Action'], $this->params);

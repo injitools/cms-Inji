@@ -154,9 +154,9 @@ class Tools extends Model {
             $new_width = $max_width;
             $new_height = $max_height;
 //Находим начальные координаты (центрируем новое изображение)
-            $imgX = (int) (($ow / 2) - ($img_width / 2));
+            $imgX = (int)(($ow / 2) - ($img_width / 2));
             if ($pos == 'center') {
-                $imgY = (int) (($oh / 2) - ($img_height / 2));
+                $imgY = (int)(($oh / 2) - ($img_height / 2));
             } else {
                 $imgY = 0;
             }
@@ -273,7 +273,7 @@ class Tools extends Model {
      * @param string $text
      * @param string $status
      */
-    public static function redirect($href = null, $text = false, $status = 'info') {
+    public static function redirect($href = null, $text = false, $status = 'info', $code = 307) {
         if ($href === null) {
             $href = $_SERVER['REQUEST_URI'];
         }
@@ -281,6 +281,7 @@ class Tools extends Model {
             Msg::add($text, $status);
         }
         if (!headers_sent()) {
+            http_response_code($code);
             header("Location: {$href}");
         } else {
             echo '\'"><script>window.location="' . $href . '";</script>';
@@ -354,9 +355,9 @@ class Tools extends Model {
      * @return string
      */
     public static function toRusDate($date) {
-        $yy = (int) substr($date, 0, 4);
-        $mm = (int) substr($date, 5, 2);
-        $dd = (int) substr($date, 8, 2);
+        $yy = (int)substr($date, 0, 4);
+        $mm = (int)substr($date, 5, 2);
+        $dd = (int)substr($date, 8, 2);
 
         $hours = substr($date, 11, 5);
 
@@ -523,7 +524,7 @@ class Tools extends Model {
     }
 
     public static function rusPrice($price, $zeroEnding = false) {
-        $afterDot = $price == (int) $price ? 0 : 2;
+        $afterDot = $price == (int)$price ? 0 : 2;
         return number_format($price, $afterDot, '.', ' ');
     }
 }
