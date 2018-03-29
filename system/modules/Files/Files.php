@@ -12,11 +12,11 @@ class Files extends Module {
 
     /**
      * Загрузка файлов
-     * 
+     *
      * $file - масив из переменной $_FILES[{input name}]
-     * $options - массив из опций заливки 
-     * --	[file_code]: уникальный код для системы медиаданых
-     * --	[allow_types]: досупные для заливки типы файлов. Например image (тип форматов из таблицы типов файлов file_type_ext)
+     * $options - массив из опций заливки
+     * --    [file_code]: уникальный код для системы медиаданых
+     * --    [allow_types]: досупные для заливки типы файлов. Например image (тип форматов из таблицы типов файлов file_type_ext)
      */
     public function upload($file, $options = []) {
 
@@ -78,21 +78,27 @@ class Files extends Module {
 
     /**
      * Загрузка файлов по урл
-     * 
+     *
      * $url - адрес файла
-     * $options - массив из опций заливки 
-     * --	[file_code]: уникальный код для системы медиаданых
-     * --	[allow_types]: досупные для заливки типы файлов. Например image (тип форматов из таблицы типов файлов file_type_ext)
+     * $options - массив из опций заливки
+     * --    [file_code]: уникальный код для системы медиаданых
+     * --    [allow_types]: досупные для заливки типы файлов. Например image (тип форматов из таблицы типов файлов file_type_ext)
      */
     public function uploadFromUrl($url, $options = []) {
         $sitePath = App::$primary->path;
+        if (empty($options['fileinfo'])) {
+            $fileinfo = pathinfo($url);
+        } else {
+            $fileinfo = $options['fileinfo'];
+        }
 
-        $fileinfo = pathinfo($url);
         if (empty($fileinfo['extension'])) {
             return 0;
         }
+        $ext = $fileinfo['extension'];
 
-        $type = Files\Type::get($fileinfo['extension'], 'ext');
+
+        $type = Files\Type::get($ext, 'ext');
         if (!$type) {
             return 0;
         }
@@ -110,7 +116,7 @@ class Files extends Module {
             }
         }
         $fileObject->name = $fileinfo['filename'];
-        $fileObject->path = $type->type_dir . date('Y-m-d') . '/' . microtime(true) . '.' . $fileinfo['extension'];
+        $fileObject->path = $type->type_dir . date('Y-m-d') . '/' . microtime(true) . '.' . $ext;
         if ($fileObject->id && file_exists($sitePath . $fileObject->path)) {
             unlink($sitePath . $fileObject->path);
         }

@@ -64,11 +64,9 @@ foreach ($apps as $app) {
     if ($app->default) {
         $finalApp = $app->_params;
     }
-    if ($app->route) {
-        if (preg_match("!{$app->route}!i", INJI_DOMAIN_NAME)) {
-            $finalApp = $app->_params;
-            break;
-        }
+    if ($app->route && preg_match("!{$app->route}!i", INJI_DOMAIN_NAME)) {
+        $finalApp = $app->_params;
+        break;
     }
 }
 App::$cur = new App($finalApp);
