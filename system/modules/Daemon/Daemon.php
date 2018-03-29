@@ -18,10 +18,9 @@ class Daemon extends Module {
                 } else {
                     $this->start(true);
                 }
-            } elseif (function_exists('fsockopen')) {
-                $fp = fsockopen($_SERVER['SERVER_NAME'],
+            } elseif (function_exists('fsockopen') && $fp = @fsockopen($_SERVER['SERVER_NAME'],
                     80,
-                    $errno, $errstr, 30);
+                    $errno, $errstr, 30)) {
                 $out = "GET /daemon/start HTTP/1.1\r\n";
                 $out .= "Host: " . $_SERVER['SERVER_NAME'] . "\r\n";
                 $out .= "Connection: Close\r\n\r\n";

@@ -175,7 +175,6 @@ class Cart extends \Model {
         'warehouse_block' => 'Блокировка товаров',
         'extra' => 'Доп.',
         'card_item_id' => 'Дисконтная карта',
-        'info' => 'Информация',
         'contacts' => 'Информация',
         'pay' => 'Счета',
         'sums' => 'Суммы',
