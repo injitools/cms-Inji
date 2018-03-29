@@ -40,6 +40,13 @@ class Users extends Module {
         if (!empty($_COOKIE[$this->cookiePrefix . '_user_session_hash']) && is_string($_COOKIE[$this->cookiePrefix . '_user_session_hash']) && !empty($_COOKIE[$this->cookiePrefix . '_user_id']) && is_string($_COOKIE[$this->cookiePrefix . '_user_id'])) {
             return $this->cuntinueSession($_COOKIE[$this->cookiePrefix . '_user_session_hash'], $_COOKIE[$this->cookiePrefix . '_user_id']);
         }
+        if (!empty($_SERVER['HTTP_AUTHORIZATION']) && strpos(($_SERVER['HTTP_AUTHORIZATION']), 'Bearer ') === 0) {
+            $token = substr($_SERVER['HTTP_AUTHORIZATION'], strlen('Bearer '));
+            $data = explode(':', $token);
+            if(count($data)===2){
+                return $this->cuntinueSession($data[1], $data[0]);
+            }
+        }
     }
 
     public function setCookie($name, $value) {
@@ -196,7 +203,7 @@ class Users extends Module {
             if (!$user->mail && !empty($this->config['noMailNotify'])) {
                 Msg::add($this->config['noMailNotify']);
             }
-            $this->newSession($user);
+            $session = $this->newSession($user, $noMsg);
 
             Users\User::$cur = $user;
             Users\User::$cur->date_last_active = 'CURRENT_TIMESTAMP';
@@ -208,7 +215,7 @@ class Users extends Module {
                 Tools::redirect($redirect);
             }
 
-            return true;
+            return $session;
         }
         if (!$noMsg) {
             if ($user && $user->blocked) {
@@ -229,14 +236,15 @@ class Users extends Module {
         return false;
     }
 
-    public function newSession($user) {
+    public function newSession($user, $noMsg = false) {
         $session = $this->createSession($user);
         if (!headers_sent()) {
             $this->setcookie($this->cookiePrefix . "_user_session_hash", $session->hash);
             $this->setcookie($this->cookiePrefix . "_user_id", $user->id);
-        } else {
+        } elseif (!$noMsg) {
             Msg::add('Не удалось провести авторизацию. Попробуйте позже', 'info');
         }
+        return $session;
     }
 
     public function createSession($user) {

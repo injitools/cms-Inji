@@ -10,7 +10,18 @@
  */
 
 namespace Users\User;
-
+/**
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $middle_name
+ * @property string $phone
+ * @property string $country
+ * @property string $city
+ * @property int $user_id
+ * @property int $sex
+ * @property int $photo_file_id
+ * @property string $bday
+ */
 class Info extends \Model {
 
     public static $objectName = "Расширенная информация";

@@ -8,6 +8,10 @@
  * @copyright 2015 Alexey Krupskiy
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
+
+/**
+ * @property Users $users
+ */
 class UsersController extends Controller {
 
     public function indexAction() {
@@ -112,13 +116,15 @@ class UsersController extends Controller {
     }
 
     public function activationAction($userId = 0, $hash = '') {
-        $user = \Users\User::get((int) $userId);
-        if (!$user || !$hash || $user->activation !== (string) $hash) {
+        $user = \Users\User::get((int)$userId);
+        if (!$user || !$hash || $user->activation !== (string)$hash) {
             Tools::redirect('/', 'Во время активации произошли ошибки', 'danger');
         }
         $user->activation = '';
         $user->save();
         Inji::$inst->event('Users-completeActivation', $user);
+        $session = $this->users->newSession($user, true);
+        $this->users->setCookie('token', $session->user_id . ':' . $session->hash);
         Tools::redirect('/', 'Вы успешно активировали ваш аккаунт', 'success');
     }
 
@@ -156,7 +162,7 @@ class UsersController extends Controller {
     }
 
     public function resendActivationAction($userId = 0) {
-        $user = \Users\User::get((int) $userId);
+        $user = \Users\User::get((int)$userId);
         if (!$user) {
             Tools::redirect('/', 'Не указан пользователь', 'danger');
         }
@@ -172,7 +178,7 @@ class UsersController extends Controller {
     }
 
     public function getPartnerInfoAction($userId = 0) {
-        $userId = (int) $userId;
+        $userId = (int)$userId;
         $result = new \Server\Result();
         if (!$userId) {
             $result->success = false;
