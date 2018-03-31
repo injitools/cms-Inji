@@ -18,9 +18,11 @@ class Daemon extends Module {
                 } else {
                     $this->start(true);
                 }
+            } elseif ($this->fileGetContentMethod()) {
             } elseif (function_exists('fsockopen') && $fp = @fsockopen($_SERVER['SERVER_NAME'],
                     80,
                     $errno, $errstr, 30)) {
+                echo 'nope2';
                 $out = "GET /daemon/start HTTP/1.1\r\n";
                 $out .= "Host: " . $_SERVER['SERVER_NAME'] . "\r\n";
                 $out .= "Connection: Close\r\n\r\n";
@@ -29,12 +31,18 @@ class Daemon extends Module {
             } elseif (function_exists('curl_init')) {
                 $ch = curl_init('http://' . $_SERVER['SERVER_NAME'] . '/daemon/start');
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 100);
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 500);
                 curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
                 $content = curl_exec($ch);
                 curl_close($ch);
             }
         }
+    }
+
+    function fileGetContentMethod() {
+        $url = 'http://' . $_SERVER['SERVER_NAME'] . '/daemon/start';
+        $result = file_get_contents($url, false, null, -1, 5);
+        return $result === 'start';
     }
 
     function start($retry = false) {

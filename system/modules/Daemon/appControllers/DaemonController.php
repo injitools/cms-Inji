@@ -3,12 +3,15 @@
 class DaemonController extends Controller {
     function startAction() {
         ignore_user_abort(true);
-        echo 'start';
+        echo 'start try';
+        flush();
         $this->module->start(true);
     }
 
     function checkAction() {
-        echo 'check';
+        ignore_user_abort(true);
+        echo 'check try';
+        flush();
         $this->module->check();
     }
 }
