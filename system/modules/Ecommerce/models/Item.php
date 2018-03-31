@@ -35,6 +35,7 @@ namespace Ecommerce;
  * @property-read \Ecommerce\Item\Badge $badge
  * @property-read \Ecommerce\Category $category
  * @property-read \Ecommerce\Item\Param[] $options
+ * @method \Ecommerce\Item\Param[] options($options)
  * @property-read \Ecommerce\Item\Offer[] $offers
  * @method  \Ecommerce\Item\Offer[] offers($options)
  * @property-read \Ecommerce\Item\Type $type
@@ -347,50 +348,53 @@ class Item extends \Model {
             if (!$item) {
                 return;
             }
-            $item->search_index = $item->name . ' ';
-            if ($item->category) {
-                $item->search_index .= $item->category->name . ' ';
-            }
-            $category = $item->category;
-            if ($category) {
-                $categoryOptions = $category->options(['key' => 'item_option_id']);
-            } else {
-                $categoryOptions = [];
-            }
-            foreach ($item->options as $option) {
-                if ($option->item_option_searchable && $option->value) {
-                    if ($option->item_option_type != 'select') {
-                        $item->search_index .= $option->value . ' ';
-                    } elseif (!empty($option->option->items[$option->value])) {
-                        $item->search_index .= $option->option->items(['where' => ['id', $option->value]])[$option->value]->value . ' ';
-                    }
-                }
-                if ($option->item_option_view && !isset($categoryOptions[$option->item_option_id])) {
-                    $item->category->addRelation('options', $option->item_option_id);
-                    $categoryOptions = $item->category->options(['key' => 'item_option_id']);
-                } elseif (!$option->item_option_view && isset($categoryOptions[$option->item_option_id])) {
-                    $categoryOptions[$option->item_option_id]->delete();
-                    unset($categoryOptions[$option->item_option_id]);
+            $item->buildSearchIndex();
+            $item->save(['disableAfterTrigger' => true]);
+        });
+    }
+
+    public function buildSearchIndex() {
+        $this->search_index = $this->name . ' ' . $this->description . ' ';
+        if ($this->category) {
+            $this->search_index .= $this->category->name . ' ';
+        }
+        $category = $this->category;
+        if ($category) {
+            $categoryOptions = $category->options(['key' => 'item_option_id']);
+        } else {
+            $categoryOptions = [];
+        }
+        foreach ($this->options(['key' => false]) as $option) {
+            if ($option->item_option_searchable && $option->value) {
+                if ($option->item_option_type != 'select') {
+                    $this->search_index .= 'option' . $option->option->id . ':' . $option->value . ' ';
+                } elseif (!empty($option->option->items[$option->value])) {
+                    $this->search_index .= 'option' . $option->option->id . ':' . $option->option->items(['where' => ['id', $option->value]])[$option->value]->value . ' ';
                 }
             }
-            if ($item->offers) {
-                foreach ($item->offers as $offer) {
-                    if ($offer->options) {
-                        foreach ($offer->options as $option) {
-                            if ($option->item_offer_option_searchable && $option->value) {
-                                if ($option->item_offer_option_type != 'select') {
-                                    $item->search_index .= $option->value . ' ';
-                                } elseif (!empty($option->option->items[$option->value])) {
-                                    $item->search_index .= $option->option->items[$option->value]->value . ' ';
-                                }
+            if ($this->category && $option->item_option_view && !isset($categoryOptions[$option->item_option_id])) {
+                $this->category->addRelation('options', $option->item_option_id);
+                $categoryOptions = $this->category->options(['key' => 'item_option_id']);
+            } elseif (!$option->item_option_view && isset($categoryOptions[$option->item_option_id])) {
+                $categoryOptions[$option->item_option_id]->delete();
+                unset($categoryOptions[$option->item_option_id]);
+            }
+        }
+        if ($this->offers) {
+            foreach ($this->offers(['key' => false]) as $offer) {
+                if ($offer->options) {
+                    foreach ($offer->options as $option) {
+                        if ($option->item_offer_option_searchable && $option->value) {
+                            if ($option->item_offer_option_type != 'select') {
+                                $this->search_index .= 'offerOption' . $option->option->id . ':' . $option->value . ' ';
+                            } elseif (!empty($option->option->items[$option->value])) {
+                                $this->search_index .= 'offerOption' . $option->option->id . ':' . $option->option->items[$option->value]->value . ' ';
                             }
                         }
                     }
                 }
             }
-            $item->save(['disableAfterTrigger' => true]);
-        });
-
+        }
     }
 
     public static function relations() {

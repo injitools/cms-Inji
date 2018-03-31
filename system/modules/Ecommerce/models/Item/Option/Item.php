@@ -17,6 +17,7 @@ class Item extends \Model {
     public static $cols = [
         //Основные параметры
         'item_option_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'option'],
+        'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'value' => ['type' => 'text'],
         //Системные
         'weight' => ['type' => 'number'],
@@ -47,6 +48,10 @@ class Item extends \Model {
             'option' => [
                 'model' => 'Ecommerce\Item\Option',
                 'col' => 'item_option_id'
+            ],
+            'user' => [
+                'model' => 'Users\User',
+                'col' => 'user_id'
             ]
         ];
     }
