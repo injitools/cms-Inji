@@ -24,6 +24,7 @@ class Users extends Module {
         if (!App::$cur->db->connect) {
             return false;
         }
+
         if (isset($_GET['logout'])) {
             return $this->logOut();
         }
@@ -40,9 +41,9 @@ class Users extends Module {
         if (!empty($_COOKIE[$this->cookiePrefix . '_user_session_hash']) && is_string($_COOKIE[$this->cookiePrefix . '_user_session_hash']) && !empty($_COOKIE[$this->cookiePrefix . '_user_id']) && is_string($_COOKIE[$this->cookiePrefix . '_user_id'])) {
             return $this->cuntinueSession($_COOKIE[$this->cookiePrefix . '_user_session_hash'], $_COOKIE[$this->cookiePrefix . '_user_id']);
         }
-        if (!empty($_SERVER['HTTP_AUTHORIZATION']) && strpos(($_SERVER['HTTP_AUTHORIZATION']), 'Bearer ') === 0) {
-            $token = substr($_SERVER['HTTP_AUTHORIZATION'], strlen('Bearer '));
-            $data = explode(':', $token);
+
+        if (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
+            $data = explode(':', $_SERVER['HTTP_AUTHORIZATION']);
             if(count($data)===2){
                 return $this->cuntinueSession($data[1], $data[0]);
             }
