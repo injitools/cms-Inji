@@ -44,7 +44,7 @@ class Users extends Module {
 
         if (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
             $data = explode(':', $_SERVER['HTTP_AUTHORIZATION']);
-            if(count($data)===2){
+            if (count($data) === 2) {
                 return $this->cuntinueSession($data[1], $data[0]);
             }
         }
@@ -197,7 +197,11 @@ class Users extends Module {
             ]);
             $loginHistory->save();
             if (!empty($this->config['needActivation']) && $user->activation) {
-                Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                if (!$noMsg) {
+                    Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                } else {
+                    return false;
+                }
             } elseif ($user->activation) {
                 Msg::add('Этот аккаунт ещё не активирован, не все функции могут быть доступны. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
             }

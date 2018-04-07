@@ -124,7 +124,7 @@ class UsersController extends Controller {
         $user->save();
         Inji::$inst->event('Users-completeActivation', $user);
         $session = $this->users->newSession($user, true);
-        $this->users->setCookie('token', $session->user_id . ':' . $session->hash);
+        $this->users->setCookie('_token.local', $session->user_id . ':' . $session->hash);
         Tools::redirect('/', 'Вы успешно активировали ваш аккаунт', 'success');
     }
 

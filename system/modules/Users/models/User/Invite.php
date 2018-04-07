@@ -10,7 +10,13 @@
  */
 
 namespace Users\User;
-
+/**
+ * @property string $code
+ * @property string $type
+ * @property int $user_id
+ * @property int $limit
+ * @property int $count
+ */
 class Invite extends \Model {
 
     public static $objectName = "Код пришлашения";

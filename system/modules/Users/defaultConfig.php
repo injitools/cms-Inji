@@ -14,6 +14,9 @@ return [
                     'activation' => [
                         '_access' => []
                     ],
+                    'resendActivation' => [
+                        '_access' => []
+                    ],
                     'registration' => [
                         '_access' => [1]
                     ],
