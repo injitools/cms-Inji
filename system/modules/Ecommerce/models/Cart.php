@@ -184,6 +184,7 @@ class Cart extends \Model {
     public static $cols = [
         //Основные параметры
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
+        'hash' => ['type' => 'text'],
         'cart_status_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'status'],
         'delivery_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'delivery'],
         'paytype_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'payType'],
