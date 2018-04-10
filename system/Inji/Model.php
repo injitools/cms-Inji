@@ -1805,6 +1805,7 @@ class Model {
                         'cols' => (isset($params['cols'])) ? $params['cols'] : ((isset($relation['cols'])) ? $relation['cols'] : null),
                         'join' => [$join],
                         'where' => (isset($params['where'])) ? $params['where'] : ((isset($relation['where'])) ? $relation['where'] : null),
+                        'having' => (isset($params['having'])) ? $params['having'] : ((isset($relation['having'])) ? $relation['having'] : null),
                         'array' => (!empty($params['array'])) ? true : false,
                         'key' => (isset($params['key'])) ? $params['key'] : ((isset($relation['resultKey'])) ? $relation['resultKey'] : null),
                         'start' => (isset($params['start'])) ? $params['start'] : ((isset($relation['start'])) ? $relation['start'] : null),
