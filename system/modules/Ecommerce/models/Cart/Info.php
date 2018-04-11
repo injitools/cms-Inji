@@ -10,7 +10,12 @@
  */
 
 namespace Ecommerce\Cart;
-
+/**
+ * @property string $name
+ * @property string $value
+ * @property int $useradds_field_id
+ * @property int $cart_id
+ */
 class Info extends \Model {
 
     public static $objectName = 'Информация';

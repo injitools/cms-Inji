@@ -17,6 +17,7 @@ namespace Ecommerce\Cart;
  * @property number $count
  * @property int $item_offer_price_id
  * @property int $item_id
+ * @property int $cart_item_status_id
  * @property number $final_price
  * @property number $discount
  * @property string $date_create
@@ -132,6 +133,7 @@ class Item extends \Model {
         'item_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'item'],
         'final_price' => ['type' => 'decimal'],
         'discount' => ['type' => 'decimal'],
+        'cart_item_status_id' => ['type' => 'number'],
         //Системные
         'date_create' => ['type' => 'dateTime'],
     ];
