@@ -215,7 +215,7 @@ class Users extends Module {
             Users\User::$cur->save();
             if (!$noMsg) {
                 $redirect = parse_url($redirect);
-                if ($redirect && !empty($redirect['host']) && $redirect['host'] === $_SERVER['SERVER_NAME']) {
+                if ($redirect && ((!empty($redirect['host']) && $redirect['host'] === $_SERVER['SERVER_NAME']) || !empty($redirect['path']))) {
                     $redirect = !empty($redirect['path']) ? $redirect['path'] : '/';
                 } else {
                     $redirect = false;
