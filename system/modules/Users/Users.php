@@ -214,6 +214,12 @@ class Users extends Module {
             Users\User::$cur->date_last_active = 'CURRENT_TIMESTAMP';
             Users\User::$cur->save();
             if (!$noMsg) {
+                $redirect = parse_url($redirect);
+                if ($redirect && !empty($redirect['host']) && $redirect['host'] === $_SERVER['SERVER_NAME']) {
+                    $redirect = !empty($redirect['path']) ? $redirect['path'] : '/';
+                } else {
+                    $redirect = false;
+                }
                 if (!empty($this->config['loginUrl'][$this->app->type]) && !$redirect) {
                     $redirect = $this->config['loginUrl'][$this->app->type];
                 }
