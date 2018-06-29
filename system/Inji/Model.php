@@ -2050,9 +2050,6 @@ class Model {
         }
         if (!empty($className::$cols[$shortName])) {
             switch ($className::$cols[$shortName]['type']) {
-                case 'decimal':
-                    $value = (float)$value;
-                    break;
                 case 'number':
                     $value = (int)$value;
                     break;
