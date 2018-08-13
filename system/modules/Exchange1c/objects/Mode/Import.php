@@ -16,6 +16,7 @@ class Import extends \Exchange1c\Mode {
         $fileName = $_GET['filename'];
         $path = $this->exchange->path;
         \App::$cur->daemon->task(function () use ($fileName, $path) {
+            \Model::$logging = false;
             ini_set('memory_limit', '-1');
             ignore_user_abort(true);
             set_time_limit(0);

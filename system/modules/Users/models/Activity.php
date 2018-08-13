@@ -12,7 +12,7 @@
 namespace Users;
 
 class Activity extends \Model {
-
+    public static $logging = false;
     public static $objectName = 'Activity';
     public static $labels = [
         'text' => 'Текст',
@@ -20,6 +20,7 @@ class Activity extends \Model {
         'category_id' => 'Категория',
     ];
     public static $cols = [
+        'ip' => ['type' => 'text'],
         'text' => ['type' => 'text'],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
         'category_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'category'],

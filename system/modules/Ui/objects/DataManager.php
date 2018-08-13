@@ -151,7 +151,11 @@ class DataManager extends \Object {
                 ];
             }
             $return[$key]['className'] = strpos($return[$key]['className'], '\\') === false && class_exists('Ui\DataManager\Action\\' . $return[$key]['className']) ? 'Ui\DataManager\Action\\' . $return[$key]['className'] : $return[$key]['className'];
-            if (!class_exists($return[$key]['className']) || ($groupActions && !$return[$key]['className']::$groupAction) || ($managerActions && !$return[$key]['className']::$managerAction)) {
+            if (!class_exists($return[$key]['className']) ||
+                ($groupActions && !$return[$key]['className']::$groupAction) ||
+                ($groupActions && isset($this->managerOptions['groupActions']) && !in_array($return[$key]['className'],$this->managerOptions['groupActions'])) ||
+                ($managerActions && !$return[$key]['className']::$managerAction)
+            ) {
                 unset($return[$key]);
             }
         }
@@ -244,10 +248,10 @@ class DataManager extends \Object {
         $queryParams = [];
         if (empty($params['all'])) {
             if (!empty($params['limit'])) {
-                $this->limit = (int) $params['limit'];
+                $this->limit = (int)$params['limit'];
             }
             if (!empty($params['page'])) {
-                $this->page = (int) $params['page'];
+                $this->page = (int)$params['page'];
             }
             $queryParams['limit'] = $this->limit;
             $queryParams['start'] = $this->page * $this->limit - $this->limit;
@@ -701,10 +705,10 @@ class DataManager extends \Object {
             return [];
         }
         if (!empty($params['limit'])) {
-            $this->limit = (int) $params['limit'];
+            $this->limit = (int)$params['limit'];
         }
         if (!empty($params['page'])) {
-            $this->page = (int) $params['page'];
+            $this->page = (int)$params['page'];
         }
         $queryParams = [
             'count' => true

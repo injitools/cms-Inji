@@ -10,7 +10,16 @@
  */
 
 namespace Money;
-
+/**
+ * @property int $user_id
+ * @property int $currency_id
+ * @property float $amount
+ * @property string $date_create
+ *
+ * @property \Users\User $user
+ * @property \Money\Currency $currency
+ * @property \Money\Wallet\History[] $history
+ */
 class Wallet extends \Model {
 
     public static $cols = [
@@ -66,7 +75,8 @@ class Wallet extends \Model {
                             'label' => 'Комментарий',
                         ],
                     ]
-                ],],
+                ],
+            ],
         ]
     ];
 
@@ -84,18 +94,58 @@ class Wallet extends \Model {
         }
     }
 
-    public function diff($amount, $comment = '') {
-        $amount = (float)$amount;
+    public function diff($amount, $comment = '', $trySpend = false, $ignoreInsufficient = false) {
+        $amount = \RtLopez\Decimal::create($amount, 8);
         $query = \App::$cur->db->newQuery();
-        $string = 'UPDATE ' . \App::$cur->db->table_prefix . $this->table() . ' SET `' . $this->colPrefix() . 'amount`=`' . $this->colPrefix() . 'amount`+' . $amount . ' where `' . $this->index() . '` = ' . $this->id;
-        $query->query($string);
-        $history = new Wallet\History();
-        $history->wallet_id = $this->pk();
-        $history->old = $this->amount;
-        $history->new = $this->amount + $amount;
-        $history->amount = $amount;
-        $history->comment = $comment;
-        $history->save();
+        $string = 'UPDATE ' . \App::$cur->db->table_prefix . $this->table() .
+            ' SET `' . $this->colPrefix() . 'amount`=`' . $this->colPrefix() . 'amount`+? where `' . $this->index() . '` = ?';
+        if ($trySpend) {
+            $params = [
+                $amount->mul(-1)->format(8, '.', ''),
+                $this->id,
+            ];
+            if (!$ignoreInsufficient) {
+                $params[] = $amount->format(8, '.', '');
+                $string .= ' AND `' . $this->colPrefix() . 'amount` >= ?';
+            }
+        } else {
+            $params = [$amount->format(8, '.', ''), $this->id];
+        }
+        if ($query->query(['query' => $string, 'params' => $params])->pdoResult->rowCount() > 0) {
+            $history = new Wallet\History();
+            $history->wallet_id = $this->pk();
+            $history->old = $this->amount;
+            $history->new = $amount->add($this->amount)->format(8, '.', '');
+            $history->amount = $amount->mul($trySpend ? -1 : 1)->format(8, '.', '');
+            $history->comment = $comment;
+            $history->save();
+            return true;
+        }
+        return false;
+    }
+
+    public function block($amount, $data, $append = false) {
+        $block = false;
+        if ($append) {
+            $block = \Money\Wallet\Block::get([['wallet_id', $this->id], ['data', $data]]);
+        }
+        if (!$block || !$append) {
+            $block = new \Money\Wallet\Block();
+            $block->amount = $amount;
+            $block->wallet_id = $this->id;
+            $block->data = $data;
+            $block->save();
+        } else {
+            $query = 'UPDATE `' . \App::$cur->db->table_prefix . \Money\Wallet\Block::table() . '` 
+            set `' . \Money\Wallet\Block::colPrefix() . 'amount` = `' . \Money\Wallet\Block::colPrefix() . 'amount` +  ? 
+            WHERE `' . \Money\Wallet\Block::index() . '` = ?';
+
+            $result = (bool)\App::$cur->db->newQuery()->query([
+                'query' => $query,
+                'params' => [$amount, $block->id]
+            ])->pdoResult->rowCount();
+        }
+        return true;
     }
 
     public function name() {

@@ -18,7 +18,7 @@ namespace Users\User;
  * @property int $count
  */
 class Invite extends \Model {
-
+    public static $logging = 'changes';
     public static $objectName = "Код пришлашения";
     public static $labels = [
         'code' => 'Код',

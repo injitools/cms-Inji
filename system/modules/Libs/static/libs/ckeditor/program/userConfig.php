@@ -16,6 +16,7 @@ config.height = '300px';
 config.extraPlugins = 'injiwidgets,justify,colorbutton,font';
 config.allowedContent = true;
 config.extraAllowedContent = '*(*);*{*}';
+config.disableNativeSpellChecker = false;
 
 <?php
 if (!empty(App::$cur->libs->config['libConfig']['ckeditor']['pasteFromWordRemoveStyle'])) {

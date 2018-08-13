@@ -427,7 +427,8 @@ class Model {
                 'module' => substr($class, 0, strpos($class, '\\')),
                 'model' => $class,
                 'item_id' => $this->pk(),
-                'type' => 'changes'
+                'type' => 'changes',
+                'ip' => $_SERVER['REMOTE_ADDR'],
             ]);
             $changes_text = [];
             foreach ($this->_changedParams as $fullColName => $oldValue) {
@@ -498,7 +499,8 @@ class Model {
                 'module' => substr($class, 0, strpos($class, '\\')),
                 'model' => $class,
                 'item_id' => $this->pk(),
-                'type' => 'new'
+                'type' => 'new',
+                'ip' => $_SERVER['REMOTE_ADDR'],
             ]);
             $activity->save();
         }

@@ -43,6 +43,7 @@ class Users extends Module {
         }
 
         if (!empty($_SERVER['HTTP_AUTHORIZATION'])) {
+            //Msg::add($_SERVER['HTTP_AUTHORIZATION']);
             $data = explode(':', $_SERVER['HTTP_AUTHORIZATION']);
             if (count($data) === 2) {
                 return $this->cuntinueSession($data[1], $data[0]);
@@ -131,7 +132,7 @@ class Users extends Module {
     /**
      * @param string $user_mail
      */
-    public function passre($user_mail) {
+    public function passre($user_mail, $redirect = true) {
         $user = $this->get($user_mail, 'mail');
         if (!$user) {
             Msg::add(\I18n\Text::module('Users', 'mailnotfound', ['user_mail' => $user_mail]), 'danger');
@@ -143,21 +144,29 @@ class Users extends Module {
             $passre->save();
         }
         $hash = $user->id . '_' . Tools::randomString(50);
-        $passre = new Users\Passre(['user_id' => $user->id, 'status' => 1, 'hash' => $hash]);
+        $passre = new Users\Passre(['user_id' => $user->id, 'status' => 1, 'hash' => $hash, 'ip' => $_SERVER['REMOTE_ADDR']]);
         $passre->save();
         $domainRaw = App::$cur->getDomain();
         $domain = App::$cur->getDomain(true);
         $title = \I18n\Text::module('Users', 'Восстановление пароля на сайте ${domain}', ['domain' => $domain]);
         $text = \I18n\Text::module('Users', 'repassmailtext', ['domain' => $domain, 'hash' => $hash]);
         Tools::sendMail('noreply@' . $domainRaw, $user_mail, $title, $text);
-        Tools::redirect('/', \I18n\Text::module('Users', 'На указанный почтовый ящик была выслана инструкция по восстановлению пароля'), 'success');
+        if ($redirect) {
+            return Tools::redirect('/', \I18n\Text::module('Users', 'На указанный почтовый ящик была выслана инструкция по восстановлению пароля'), 'success');
+        }
+        return Msg::add(\I18n\Text::module('Users', 'На указанный почтовый ящик была выслана инструкция по восстановлению пароля'), 'success');
+
     }
 
-    public function passrecont($hash) {
+    public function passrecont($hash, $redirect = true) {
         $passre = Users\Passre::get([['hash', $hash]]);
         if ($passre) {
             if ($passre->status != 1) {
-                Tools::redirect('/', 'Этот код восстановление более недействителен', 'danger');
+                if ($redirect) {
+                    return Tools::redirect('/', 'Этот код восстановление более недействителен', 'danger');
+                } else {
+                    return Msg::add('Этот код восстановление более недействителен', 'danger');
+                }
             }
             $passre->status = 3;
             $passre->save();
@@ -165,13 +174,18 @@ class Users extends Module {
             $user = Users\User::get($passre->user_id);
             $user->pass = $this->hashpass($pass);
             $user->save();
-            $this->autorization($user->id, $pass, 'id', true, true);
+            $session = $this->autorization($user->id, $pass, 'id', true, true, $redirect ? '' : false);
             $domainRaw = App::$cur->getDomain();
             $domain = App::$cur->getDomain(true);
             $title = \I18n\Text::module('Users', 'Новый пароль на сайте ${domain}', ['domain' => $domain]);
             $text = \I18n\Text::module('Users', 'newpassmail', ['domain' => $domain, 'pass' => $pass]);
             Tools::sendMail('noreply@' . $domainRaw, $user->mail, $title, $text);
-            Tools::redirect('/', \I18n\Text::module('Users', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
+            if ($redirect) {
+                return Tools::redirect('/', \I18n\Text::module('Users', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
+            }
+            Msg::add(\I18n\Text::module('Users', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
+            return $session;
+
         }
     }
 
@@ -213,7 +227,7 @@ class Users extends Module {
             Users\User::$cur = $user;
             Users\User::$cur->date_last_active = 'CURRENT_TIMESTAMP';
             Users\User::$cur->save();
-            if (!$noMsg) {
+            if (!$noMsg && $redirect !== false) {
                 $redirect = parse_url($redirect);
                 if ($redirect && ((!empty($redirect['host']) && $redirect['host'] === $_SERVER['SERVER_NAME']) || !empty($redirect['path']))) {
                     $redirect = !empty($redirect['path']) ? $redirect['path'] : '/';
@@ -489,6 +503,7 @@ class Users extends Module {
      */
     public function addUserActivity($user_id, $cat_id, $text = '') {
         $ua = new Users\Activity([
+            'ip' => $_SERVER["REMOTE_ADDR"],
             'user_id' => $user_id,
             'category_id' => $cat_id,
             'text' => $text,

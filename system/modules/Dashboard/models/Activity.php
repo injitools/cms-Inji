@@ -51,6 +51,7 @@ class Activity extends \Model {
             ]
         ],
         'user_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'user'],
+        'ip' => ['type' => 'text'],
         'changes_text' => ['type' => 'text'],
         'date_create' => ['type' => 'dateTime'],
         'change' => ['type' => 'dataManager', 'relation' => 'changes']

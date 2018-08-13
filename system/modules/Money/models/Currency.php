@@ -10,7 +10,15 @@
  */
 
 namespace Money;
-
+/**
+ * @property string $name
+ * @property string $code
+ * @property bool $wallet
+ * @property bool $deposit
+ * @property bool $withdraw
+ * @property string $round_type
+ * @property string $round_precision
+ */
 class Currency extends \Model {
 
     public static $objectName = 'Валюта';
@@ -18,7 +26,8 @@ class Currency extends \Model {
         'name' => 'Название',
         'code' => 'Обозначение',
         'wallet' => 'Кошелек на сайте',
-        'refill' => 'Пополнение',
+        'deposit' => 'Пополнение',
+        'withdraw' => 'Вывод',
         'transfer' => 'Переводы',
         'round_type' => 'Округдение при выводе',
         'round_precision' => 'Количество занков после запятов при округдлении',
@@ -27,24 +36,28 @@ class Currency extends \Model {
     public static $cols = [
         'name' => ['type' => 'text'],
         'code' => ['type' => 'text'],
-        'refill' => ['type' => 'bool'],
+        'deposit' => ['type' => 'bool'],
         'wallet' => ['type' => 'bool'],
+        'withdraw' => ['type' => 'bool'],
         'transfer' => ['type' => 'bool'],
         'round_type' => ['type' => 'text'],
         'round_precision' => ['type' => 'number'],
+        'weight' => ['type' => 'number'],
         'date_create' => ['type' => 'dateTime']
     ];
     public static $dataManagers = [
         'manager' => [
             'name' => 'Валюты',
-            'cols' => ['name', 'code', 'wallet', 'refill', 'transfer', 'date_create']
+            'sortMode'=>true,
+            'cols' => ['name', 'code', 'wallet', 'deposit','withdraw', 'transfer', 'date_create']
         ]
     ];
     public static $forms = [
         'manager' => [
             'map' => [
                 ['name', 'code'],
-                ['refill', 'wallet', 'transfer'],
+                ['round_type', 'round_precision'],
+                ['deposit', 'wallet', 'transfer','withdraw'],
             ]
         ]
     ];

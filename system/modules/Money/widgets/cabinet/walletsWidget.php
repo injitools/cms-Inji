@@ -8,6 +8,6 @@ foreach ($wallets as $wallet) {
     <?php
 }
 ?>
-<a href='/money/refill'>Пополнить</a>
+<a href='/money/deposit'>Пополнить</a>
 <a href='/money/exchange'>Обменять</a>
 <a href='/money/transfer'>Перевести</a>

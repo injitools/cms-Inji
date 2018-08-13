@@ -23,7 +23,7 @@ class MoneyController extends Controller {
             $wallets = $this->money->getUserWallets();
             $text = 'Перевод средств для ' . $transfer->toUser->name();
             $wallets[$transfer->currency_id]->diff(-$transfer->amount, $text);
-            \App::$cur->users->AddUserActivity($transfer->user_id, 4, $text . '<br />' . (float) $transfer->amount . ' ' . $wallets[$transfer->currency_id]->currency->acronym());
+            \App::$cur->users->AddUserActivity($transfer->user_id, 4, $text . '<br />' . (float)$transfer->amount . ' ' . $wallets[$transfer->currency_id]->currency->acronym());
 
             $block = new Money\Wallet\Block();
             $block->wallet_id = $wallets[$transfer->currency_id]->id;
@@ -44,7 +44,7 @@ class MoneyController extends Controller {
     }
 
     public function confirmTransferAction($transferId = 0) {
-        $transfer = Money\Transfer::get((int) $transferId);
+        $transfer = Money\Transfer::get((int)$transferId);
         if (!$transfer || $transfer->user_id != \Users\User::$cur->id || $transfer->complete || $transfer->canceled) {
             Tools::redirect('/', 'Такой перевод не найден');
         }
@@ -58,7 +58,7 @@ class MoneyController extends Controller {
                 $wallets = $this->money->getUserWallets($transfer->to_user_id);
                 $text = 'Перевод средств от ' . $transfer->user->name() . '.' . ($transfer->comment ? ' Комментарий:' . $transfer->comment : '');
                 $wallets[$transfer->currency_id]->diff($transfer->amount, $text);
-                \App::$cur->users->AddUserActivity($transfer->to_user_id, 4, $text . '<br />' . (float) $transfer->amount . ' ' . $wallets[$transfer->currency_id]->currency->acronym());
+                \App::$cur->users->AddUserActivity($transfer->to_user_id, 4, $text . '<br />' . (float)$transfer->amount . ' ' . $wallets[$transfer->currency_id]->currency->acronym());
                 $transfer->save();
                 Tools::redirect('/users/cabinet', 'Перевод был успешно завершен', 'success');
             }
@@ -68,7 +68,7 @@ class MoneyController extends Controller {
     }
 
     public function cancelTransferAction($transferId = 0) {
-        $transfer = Money\Transfer::get((int) $transferId);
+        $transfer = Money\Transfer::get((int)$transferId);
         if (!$transfer || $transfer->user_id != \Users\User::$cur->id || $transfer->complete || $transfer->canceled) {
             Tools::redirect('/', 'Такой перевод не найден');
         }
@@ -76,38 +76,38 @@ class MoneyController extends Controller {
         Tools::redirect('/users/cabinet', 'Перевод был успешно отменен', 'success');
     }
 
-    public function refillAction($currencyId = 0) {
+    public function depositAction($currencyCode = '') {
         $currency = null;
-        if (!empty($_POST['currency_id'])) {
-            $currency = Money\Currency::get((int) $_POST['currency_id']);
+        if ($currencyCode) {
+            $currency = Money\Currency::get([['code', $currencyCode], ['deposit', 1]]);
         }
         if ($currency && !empty($_POST['amount'])) {
             $pay = new Money\Pay([
                 'data' => '',
                 'user_id' => \Users\User::$cur->id,
                 'currency_id' => $currency->id,
-                'sum' => (float) str_replace(',', '.', $_POST['amount']),
+                'sum' => (float)str_replace(',', '.', $_POST['amount']),
                 'type' => 'refill',
                 'description' => 'Пополнение баланса ' . $currency->name(),
                 'callback_module' => 'Money',
                 'callback_method' => 'refillPayRecive'
             ]);
             $pay->save();
-            Tools::redirect('/money/merchants/pay/' . $pay->id);
-        } else {
-            $currencies = Money\Currency::getList(['where' => ['refill', 1], 'forSelect' => true]);
-            $this->view->setTitle('Пополнение счета');
-            $this->view->page(['data' => compact('currencies')]);
+            return Tools::redirect('/money/merchants/pay/' . $pay->id);
         }
+
+        $currencies = Money\Currency::getList(['where' => ['deposit', 1], 'forSelect' => true]);
+        $this->view->setTitle(I18n\Text::module('Money', 'Пополнение счета'));
+        $this->view->page(['data' => compact('currencies', 'currency')]);
     }
 
     public function exchangeAction() {
         $wallets = $this->module->getUserWallets();
-        $currency = !empty($_GET['currency_id']) ? \Money\Currency::get((int) $_GET['currency_id']) : null;
+        $currency = !empty($_GET['currency_id']) ? \Money\Currency::get((int)$_GET['currency_id']) : null;
         if ($currency && empty($wallets[$currency->id])) {
             $currency = null;
         }
-        $targetCurrency = !empty($_GET['target_currency_id']) ? \Money\Currency::get((int) $_GET['target_currency_id']) : null;
+        $targetCurrency = !empty($_GET['target_currency_id']) ? \Money\Currency::get((int)$_GET['target_currency_id']) : null;
         if ($targetCurrency && empty($wallets[$targetCurrency->id])) {
             $targetCurrency = null;
         }
@@ -130,11 +130,11 @@ class MoneyController extends Controller {
         if (!empty($_GET['exchange']) && $currency && $targetCurrency && !empty($rates[$_GET['exchange']['rate_id']])) {
             $error = false;
             $rate = $rates[$_GET['exchange']['rate_id']];
-            if (empty($_GET['exchange']['give']['amount']) || !(float) $_GET['exchange']['give']['amount']) {
+            if (empty($_GET['exchange']['give']['amount']) || !(float)$_GET['exchange']['give']['amount']) {
                 Msg::add('Укажите сумму которую вы хотите отдать');
                 $error = true;
             } else {
-                $amount = (float) $_GET['exchange']['give']['amount'];
+                $amount = (float)$_GET['exchange']['give']['amount'];
             }
             if (!empty($amount) && $amount > $wallets[$currency->id]->amount) {
                 Msg::add('Вы указали сумму большую чем вам доступно');
@@ -151,11 +151,11 @@ class MoneyController extends Controller {
     }
 
     public function walletPayAction($payId, $walletId) {
-        $pay = Money\Pay::get((int) $payId);
+        $pay = Money\Pay::get((int)$payId);
         if (!$pay || $pay->user_id != \Users\User::$cur->id) {
             Tools::redirect('/money/merchants/pay/', 'Такой счет не найден');
         }
-        $wallet = Money\Wallet::get((int) $walletId);
+        $wallet = Money\Wallet::get((int)$walletId);
         if (!$wallet || $wallet->user_id != \Users\User::$cur->id) {
             Tools::redirect('/money/merchants/pay/' . $pay->id, 'Такой кошелек не найден');
         }
@@ -185,7 +185,7 @@ class MoneyController extends Controller {
     }
 
     public function primaryPayAction($payId, $currencyId) {
-        $pay = Money\Pay::get((int) $payId);
+        $pay = Money\Pay::get((int)$payId);
         if (!$pay || $pay->user_id != \Users\User::$cur->id) {
             Tools::redirect('/money/merchants/pay/', 'Такой счет не найден');
         }

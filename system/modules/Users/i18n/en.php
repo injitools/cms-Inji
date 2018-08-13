@@ -1,5 +1,6 @@
 <?php
 return [
+    'Добро Пожаловать в личный кабинет' => 'Welcome to your personal cabinet',
     'Личный кабинет' => 'Personal Area',
     'Вы вышли из своего профиля' => 'You have been logged out of your profile',
     'Произошла непредвиденная ошибка при авторизации сессии' => 'Unexpected error occured during session authorization',
@@ -20,5 +21,6 @@ To unlock your account, please use <a href = "?passre=1&user_mail=${user_mail}">
     'repassmailtext' => 'You were requested to restore the password on the site ${domain} <br /> to continue password recovery, please go to: <a href="http://${domain}/?passrecont=1&hash=${hash}">${domain}/?passrecont=1&hash=${hash}</a>',
     'Новый пароль на сайте ${domain}' => 'New password on the site ${domain}',
     'newpassmail' => 'Password recovery was requested on the site ${domain} <br /> Your new password: ${pass}',
-    'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль' => 'You have successfully reset the password and have been authorized on the site. A new password has been sent to your mailbox'
+    'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль' => 'You have successfully reset the password and have been authorized on the site. A new password has been sent to your mailbox',
+    'Этот код восстановление более недействителен' => 'This recovery code is no longer valid',
 ];

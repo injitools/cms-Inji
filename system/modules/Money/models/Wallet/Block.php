@@ -11,6 +11,15 @@
 
 namespace Money\Wallet;
 
+/**
+ * @property int $wallet_id
+ * @property float $amount
+ * @property string $data
+ * @property string $comment
+ * @property string $expired_type
+ * @property string $date_expired
+ * @property \Money\Wallet $wallet
+ */
 class Block extends \Model {
 
     public static $objectName = 'Блокировка кошелька';
@@ -21,7 +30,6 @@ class Block extends \Model {
         'comment' => ['type' => 'text'],
         'expired_type' => ['type' => 'text'],
         'date_expired' => ['type' => 'dateTime', 'null' => true, 'emptyValue' => null],
-        'date_create' => ['type' => 'dateTime'],
     ];
     public static $labels = [
         'wallet:user' => 'Пользователь',

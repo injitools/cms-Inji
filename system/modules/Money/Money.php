@@ -13,6 +13,7 @@ class Money extends Module {
     public $currentMerchant = '';
 
     public function init() {
+        ComposerCmd::requirePackage('rtlopez/decimal', 'dev-master');
         if (!empty($this->config['defaultMerchant'])) {
             $this->currentMerchant = $this->config['defaultMerchant'];
         }
@@ -88,7 +89,8 @@ class Money extends Module {
         $blocked = \Money\Wallet\Block::getList(['where' => [
             ['wallet:user_id', $userId],
             [
-                ['date_expired', '0000-00-00 00:00:00'],
+                ['date_expired', null, 'IS'],
+                ['date_expired', '0000-00-00 00:00:00', '=', 'OR'],
                 ['date_expired', date('Y-m-d H:i:s'), '>', 'OR']
             ]
         ]]);
@@ -115,13 +117,20 @@ class Money extends Module {
         if (!$userId) {
             return [];
         }
-        $this->getUserBlocks($userId);
+        //$this->getUserBlocks($userId);
         $where = [['wallet', 1]];
         if ($transferOnly) {
             $where[] = ['transfer', 1];
         }
-        $currencies = Money\Currency::getList(['where' => $where]);
-        $wallets = Money\Wallet::getList(['where' => ['user_id', $userId], 'key' => 'currency_id']);
+        $currencies = Money\Currency::getList([
+            'where' => $where,
+            'order' => ['weight', 'ASC']
+        ]);
+        $wallets = Money\Wallet::getList([
+            'where' => ['user_id', $userId],
+            'key' => 'currency_id',
+            'order' => ['currency:weight', 'ASC']
+        ]);
         $result = [];
         foreach ($currencies as $currency) {
             if (empty($wallets[$currency->id])) {

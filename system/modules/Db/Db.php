@@ -100,6 +100,9 @@ class Db extends Module {
         return false;
     }
 
+    /**
+     * @return \Db\Mysql\Query
+     */
     public function newQuery() {
         if ($this->QueryClassName) {
             return new $this->QueryClassName($this->connection);

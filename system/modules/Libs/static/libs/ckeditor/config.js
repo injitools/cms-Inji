@@ -15,6 +15,7 @@ CKEDITOR.editorConfig = function (config) {
   config.extraPlugins = 'injiwidgets,justify,colorbutton';
   config.allowedContent = true;
   config.extraAllowedContent = '*(*);*{*}';
+    config.disableNativeSpellChecker = false;
 };
 console.log(inji.options.appRoot);
 CKEDITOR.basePath = '/cache/static/bowerLibs/ckeditor/';

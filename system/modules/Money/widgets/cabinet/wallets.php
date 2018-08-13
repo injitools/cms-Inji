@@ -13,8 +13,8 @@
             if (!empty($blocked[$wallet->currency_id])) {
                 echo "Заблокировано: {$blocked[$wallet->currency_id]} " . $wallet->currency->acronym() . "<br />";
             }
-            if ($wallet->currency->refill) {
-                echo "<a href = '/money/refill?currency_id={$wallet->currency_id}'>Пополнить</a> ";
+            if ($wallet->currency->deposit) {
+                echo "<a href = '/money/deposit?currency_id={$wallet->currency_id}'>Пополнить</a> ";
             }
             foreach ($rates as $rate) {
                 if ($rate->currency_id == $wallet->currency_id && !empty($wallets[$rate->target_currency_id])) {

@@ -9,8 +9,13 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Money\Merchant;
 
+namespace Money\Merchant;
+/**
+ * @property string $code
+ * @property int $currency_id
+ * @property int $merchant_id
+ */
 class Currency extends \Model {
 
     public static $objectName = 'Валюта системы оплаты';

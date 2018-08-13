@@ -23,7 +23,6 @@ namespace Users\User;
  * @property string $bday
  */
 class Info extends \Model {
-
     public static $objectName = "Расширенная информация";
     public static $cols = [
         'first_name' => ['type' => 'text'],
@@ -43,7 +42,7 @@ class Info extends \Model {
             ]
         ],
         'photo_file_id' => ['type' => 'image'],
-        'bday' => ['type' => 'date', 'null' => true],
+        'bday' => ['type' => 'date', 'null' => true, 'emptyValue' => null],
     ];
     public static $forms = [
         'manager' => [

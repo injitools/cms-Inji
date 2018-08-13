@@ -50,6 +50,7 @@ CKEDITOR.editorConfig = function (config) {
   config.extraPlugins = 'inlinesave,injiwidgets,font,justify,colorbutton';
   config.allowedContent = true;
   config.extraAllowedContent = '*(*);*{*}';
+    config.disableNativeSpellChecker = false;
 };
 CKEDITOR.basePath = '/cache/static/bowerLibs/ckeditor/';
 CKEDITOR.plugins.basePath = CKEDITOR.basePath + 'plugins/';

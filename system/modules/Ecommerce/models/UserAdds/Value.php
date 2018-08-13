@@ -10,7 +10,12 @@
  */
 
 namespace Ecommerce\UserAdds;
-
+/**
+ * @property int $useradds_id
+ * @property int $useradds_field_id
+ * @property string $value
+ * @property int $weight
+ */
 class Value extends \Model {
     public static $logging = false;
     public static $labels = [

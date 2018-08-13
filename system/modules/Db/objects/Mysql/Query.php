@@ -119,7 +119,11 @@ class Query extends \Object {
     }
 
     public function group($colname) {
-        $this->group[] = $colname;
+        if (is_array($colname)) {
+            $this->group = array_merge($this->group, array_values($colname));
+        } else {
+            $this->group[] = $colname;
+        }
     }
 
     public function order($order, $type = 'ASC') {

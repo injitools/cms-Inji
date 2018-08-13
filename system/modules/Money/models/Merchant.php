@@ -10,17 +10,31 @@
  */
 
 namespace Money;
-
+/**
+ * @property string $name
+ * @property string $object_name
+ * @property int $image_file_id
+ * @property int $preview_image_file_id
+ * @property boolean $active
+ * @property boolean $deposit
+ * @property boolean $withdraw
+ * @property boolean $pay
+ * @property string $date_create
+ *
+ * @property \Money\Merchant\Currency[] $currencies
+ */
 class Merchant extends \Model {
 
     public static $objectName = 'Система оплаты';
     public static $cols = [
         'name' => ['type' => 'text'],
+        'code' => ['type' => 'text'],
         'object_name' => ['type' => 'text'],
         'image_file_id' => ['type' => 'image'],
         'preview_image_file_id' => ['type' => 'image'],
         'active' => ['type' => 'bool'],
-        'refill' => ['type' => 'bool'],
+        'deposit' => ['type' => 'bool'],
+        'withdraw' => ['type' => 'bool'],
         'pay' => ['type' => 'bool'],
         'config' => ['type' => 'dataManager', 'relation' => 'configs'],
         'currency' => ['type' => 'dataManager', 'relation' => 'currencies'],
@@ -31,7 +45,8 @@ class Merchant extends \Model {
         'image_file_id' => 'Иконка',
         'preview_image_file_id' => 'Превью экрана оплаты',
         'active' => 'Активировано',
-        'refill' => 'Пополнение',
+        'deposit' => 'Пополнение',
+        'withdraw' => 'Вывод',
         'pay' => 'Оплата',
         'object_name' => 'Класс обработчика',
     ];
@@ -40,24 +55,26 @@ class Merchant extends \Model {
             'name' => 'Системы оплаты',
             'cols' => [
                 'name',
+                'code',
                 'object_name',
                 'active',
                 'pay',
-                'refill'
+                'deposit',
+                'withdraw'
             ],
         ],
     ];
     public static $forms = [
         'manager' => [
             'map' => [
-                ['name'],
+                ['name', 'code'],
                 ['object_name', 'active'],
-                ['pay', 'refill'],
+                ['pay', 'withdraw', 'deposit'],
                 ['image_file_id', 'preview_image_file_id'],
                 ['config'],
                 ['currency']
             ]
-    ]];
+        ]];
 
     public static function relations() {
         return [

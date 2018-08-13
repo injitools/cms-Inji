@@ -54,4 +54,10 @@ class MerchantHelper extends \Object {
         return $sum;
     }
 
+    public static function showDepositForm($currencyId = 0) {
+        \App::$cur->view->widget('Money\depositForms/primary', [
+            'helper' => static::class,
+            'currencyId' => $currencyId
+        ]);
+    }
 }
