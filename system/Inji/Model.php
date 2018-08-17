@@ -1416,7 +1416,7 @@ class Model {
 
             App::$cur->db->where($where);
         }
-        App::$cur->db->update(static::table(), $values);
+        return App::$cur->db->update(static::table(), $values);
     }
 
     /**

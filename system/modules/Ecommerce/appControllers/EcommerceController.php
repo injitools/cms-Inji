@@ -227,7 +227,7 @@ class ecommerceController extends Controller {
             'sort' => $sort,
             'filters' => !empty($_GET['filters']) ? $_GET['filters'] : []
         ]);
-
+//modules/Ecommerce/objects
         //params
         if (!empty(App::$cur->ecommerce->config['filtersByRel'])) {
             $categorysList = is_array($categorysList) ? $categorysList : explode(',', $categorysList);

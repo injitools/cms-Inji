@@ -12,6 +12,7 @@
 namespace Money;
 /**
  * @property string $name
+ * @property string $code
  * @property string $object_name
  * @property int $image_file_id
  * @property int $preview_image_file_id
