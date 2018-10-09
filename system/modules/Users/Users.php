@@ -91,10 +91,12 @@ class Users extends Module {
                 $this->setcookie($this->cookiePrefix . "_user_session_hash", '');
                 $this->setcookie($this->cookiePrefix . "_user_id", '');
             }
-            Tools::redirect('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
+            Msg::add('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
+            return false;
         }
         if ($session->user->id != $userId) {
-            Tools::redirect('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
+            Msg::add('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
+            return false;
         }
         if ($session && $session->user && $session->user->blocked) {
             if (!headers_sent()) {
