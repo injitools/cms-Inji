@@ -163,9 +163,11 @@ class Users extends Module {
         if ($passre) {
             if ($passre->status != 1) {
                 if ($redirect) {
-                    return Tools::redirect('/', 'Этот код восстановление более недействителен', 'danger');
+                    Tools::redirect('/', 'Этот код восстановление более недействителен', 'danger');
+                    return false;
                 } else {
-                    return Msg::add('Этот код восстановление более недействителен', 'danger');
+                     Msg::add('Этот код восстановление более недействителен', 'danger');
+                    return false;
                 }
             }
             $passre->status = 3;
@@ -181,12 +183,13 @@ class Users extends Module {
             $text = \I18n\Text::module('Users', 'newpassmail', ['domain' => $domain, 'pass' => $pass]);
             Tools::sendMail('noreply@' . $domainRaw, $user->mail, $title, $text);
             if ($redirect) {
-                return Tools::redirect('/', \I18n\Text::module('Users', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
+                Tools::redirect('/', \I18n\Text::module('Users', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
+                return false;
             }
             Msg::add(\I18n\Text::module('Users', 'Вы успешно сбросили пароль и были авторизованы на сайте. На ваш почтовый ящик был выслан новый пароль'), 'success');
             return $session;
-
         }
+        return false;
     }
 
     public function autorization($login, $pass, $ltype = 'login', $noMsg = true, $skipErrorCheck = false, $redirect = '') {
