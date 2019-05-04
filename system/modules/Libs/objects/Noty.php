@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class Noty extends \Object {
+class Noty {
 
     public static $name = 'Noty';
     public static $bowerPacks = [

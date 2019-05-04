@@ -10,7 +10,7 @@
 
 namespace Ui;
 
-class Tree extends \Object {
+class Tree {
 
     /**
      * Function for generate item body html

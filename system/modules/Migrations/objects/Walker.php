@@ -79,7 +79,7 @@ class Walker {
     }
 
     private function startObjectParse($object_id, &$data) {
-        $objectParser = new Parser\Object();
+        $objectParser = new Parser\ObjectItem();
         $objectParser->object = is_object($object_id) ? $object_id : \App::$cur->migrations->getMigrationObject($this->migration, $object_id);
         $objectParser->data = $data;
         $objectParser->walker = $this;

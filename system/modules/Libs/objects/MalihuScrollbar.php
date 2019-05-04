@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class MalihuScrollbar extends \Object {
+class MalihuScrollbar {
 
     public static $name = 'Malihu Scrollbar';
     public static $bowerPacks = [

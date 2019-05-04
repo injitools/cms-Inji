@@ -13,7 +13,7 @@ if (!empty($options['values'][$value])) {
                     break;
             }
         } else {
-            $displayValue = $options['values'][$value]->$options['inputObject']->colParams['showCol'];
+            $displayValue = $options['values'][$value]->{$options['inputObject']}->colParams['showCol'];
         }
     } else {
         $displayValue = $options['values'][$value]->name();

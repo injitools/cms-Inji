@@ -35,7 +35,7 @@ class Relation extends \Migrations\Parser {
                 foreach ($this->data as $code => &$item) {
                     if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
                         foreach ($this->data as &$item) {
-                            $objectParser = new \Migrations\Parser\Object();
+                            $objectParser = new \Migrations\Parser\ObjectItem();
                             $objectParser->object = $object;
                             $objectParser->parentObject = $this->object;
                             $objectParser->parentModel = $this->model;
@@ -51,7 +51,7 @@ class Relation extends \Migrations\Parser {
                             $ids = array_merge($ids, $objectParser->parse([$relation['col'] => $this->model->pk()]));
                         }
                     } else {
-                        $objectParser = new \Migrations\Parser\Object();
+                        $objectParser = new \Migrations\Parser\ObjectItem();
                         $objectParser->object = $object;
                         $objectParser->parentObject = $this->object;
                         $objectParser->parentModel = $this->model;
@@ -87,7 +87,7 @@ class Relation extends \Migrations\Parser {
                 }
             }
         } else {
-            $objectParser = new \Migrations\Parser\Object();
+            $objectParser = new \Migrations\Parser\ObjectItem();
             $objectParser->object = $object;
             $objectParser->parentObject = $this->object;
             $objectParser->parentModel = $this->model;

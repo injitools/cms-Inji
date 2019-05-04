@@ -11,7 +11,7 @@
 
 namespace Migrations\Parser;
 
-class Object extends \Object {
+class ObjectItem {
 
     public $object;
     public $parentObject;
@@ -60,7 +60,7 @@ class Object extends \Object {
                 if ($model && $param->type && $param->type != 'item_key') {
                     if ($param->type == 'object') {
                         $object = \App::$cur->migrations->getMigrationObject($this->walker->migration, $param->value);
-                        $parser = new \Migrations\Parser\Object;
+                        $parser = new \Migrations\Parser\ObjectItem;
                         $parser->data = &$data[$param->code];
                         $parser->object = $object;
                         $parser->parentObject = $this;

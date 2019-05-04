@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class Bootstrap extends \Object {
+class Bootstrap {
 
     public static $name = 'BootStrap';
     public static $bowerPacks = [

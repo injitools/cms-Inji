@@ -214,11 +214,11 @@ class Model {
                         return $item->$colName ? 'Да' : 'Нет';
                     case 'method':
                         if (!empty($colInfo['colParams']['params'])) {
-                            $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']],
+                            $values = call_user_func_array([App::$cur->{$colInfo['colParams']['module']}, $colInfo['colParams']['method']],
                                 $colInfo['colParams']['params'] + [$item]
                             );
                         } else {
-                            $values = \App::$cur->{$colInfo['colParams']['module']}->$colInfo['colParams']['method']($item);
+                            $values = \App::$cur->{$colInfo['colParams']['module']}->{$colInfo['colParams']['method']}($item);
                         }
                         $value = !empty($values[$item->$colName]) ? $values[$item->$colName] : 'Не задано';
                         break;
@@ -1845,11 +1845,11 @@ class Model {
                     $options = [$relation['col'], isset($relation['parentCol']) ? $this->{$relation['parentCol']} : $this->pk()];
                     break;
                 default:
-                    if ($this->$relation['col'] === null) {
+                    if ($this->{$relation['col']} === null) {
                         return null;
                     }
                     $getType = 'get';
-                    $options = $this->$relation['col'];
+                    $options = $this->{$relation['col']};
                     $getCol = isset($relation['childCol']) ? $relation['childCol'] : null;
                     $getParams['appType'] = $this->appType;
             }

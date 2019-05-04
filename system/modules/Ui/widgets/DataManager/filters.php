@@ -59,9 +59,9 @@ if (!$dataManager->checkAccess()) {
                                 break;
                             case 'method':
                                 if (!empty($colInfo['colParams']['params'])) {
-                                    $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
+                                    $values = call_user_func_array([App::$cur->{$colInfo['colParams']['module']}, $colInfo['colParams']['method']], $colInfo['colParams']['params']);
                                 } else {
-                                    $values = ['' => 'Не важно'] + App::$cur->$colInfo['colParams']['module']->$colInfo['colParams']['method']();
+                                    $values = ['' => 'Не важно'] + App::$cur->{$colInfo['colParams']['module']}->{$colInfo['colParams']['method']}();
                                 }
                                 break;
                             case 'model':
@@ -84,7 +84,7 @@ if (!$dataManager->checkAccess()) {
                                 }
                                 foreach ($items as $key => $item) {
                                     if (!empty($inputParams['showCol'])) {
-                                        $values[$key] = $item->$inputParams['showCol'];
+                                        $values[$key] = $item->{$inputParams['showCol']};
                                     } else {
                                         $values[$key] = $item->name();
                                     }

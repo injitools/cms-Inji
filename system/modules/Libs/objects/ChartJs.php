@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class ChartJs extends \Object {
+class ChartJs {
 
     public static $name = 'ChartJs';
     public static $composerPacks = [

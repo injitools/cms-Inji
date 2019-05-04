@@ -11,7 +11,7 @@
 
 namespace CodeGenerator;
 
-class ClassGenerator extends \Object {
+class ClassGenerator {
 
     public $propertys = [];
     public $methods = [];

@@ -77,9 +77,7 @@ App::$cur->path = INJI_PROGRAM_DIR . '/' . App::$cur->dir;
 App::$cur->params = $params;
 App::$cur->config = Config::app(App::$cur);
 App::$primary = App::$cur;
-
 if (!empty($params[0]) && file_exists(INJI_SYSTEM_DIR . '/program/' . $params[0] . '/')) {
-
     App::$primary->params = [];
 
     App::$cur = new App();

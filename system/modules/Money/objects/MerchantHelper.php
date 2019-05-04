@@ -11,7 +11,7 @@
 
 namespace Money;
 
-class MerchantHelper extends \Object {
+class MerchantHelper {
 
     public static $merchant;
 

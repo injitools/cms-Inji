@@ -11,7 +11,7 @@
 
 namespace Ui;
 
-class Pages extends \Object {
+class Pages {
 
     public $data = [];
     public $options = [];

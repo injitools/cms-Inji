@@ -11,7 +11,7 @@
 
 namespace Users;
 
-class SocialHelper extends \Object {
+class SocialHelper {
 
     public static function getObject() {
         $class = get_called_class();

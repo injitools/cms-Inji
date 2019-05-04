@@ -11,7 +11,7 @@
 
 namespace Db\Mysql;
 
-class Result extends \Object {
+class Result {
 
     public $pdoResult = null;
 

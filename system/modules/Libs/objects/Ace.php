@@ -11,7 +11,7 @@
 
 namespace Libs;
 
-class Ace extends \Object {
+class Ace {
 
     public static $name = 'Ace editor';
     public static $bowerPacks = [

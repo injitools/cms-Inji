@@ -11,7 +11,7 @@
 
 namespace Ecommerce;
 
-class OptionsParser extends \Object {
+class OptionsParser {
 
     public static function parse($options = [], $forCount = false) {
         $selectOptions = self::getDefault($options);

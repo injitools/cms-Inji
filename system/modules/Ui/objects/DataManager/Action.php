@@ -11,7 +11,7 @@
 
 namespace Ui\DataManager;
 
-class Action extends \Object {
+class Action {
 
     public static $name = '';
     public static $groupAction = false;

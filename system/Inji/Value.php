@@ -48,9 +48,9 @@ class Value {
                         return !empty($colInfo['colParams']['sourceArray'][$this->model->{$this->valueKey}]) ? $colInfo['colParams']['sourceArray'][$this->model->{$this->valueKey}] : 'Не задано';
                     case 'method':
                         if (!empty($colInfo['colParams']['params'])) {
-                            $values = call_user_func_array([App::$cur->$colInfo['colParams']['module'], $colInfo['colParams']['method']], $colInfo['colParams']['params']);
+                            $values = call_user_func_array([App::$cur->{$colInfo['colParams']['module']}, $colInfo['colParams']['method']], $colInfo['colParams']['params']);
                         } else {
-                            $values = $colInfo['colParams']['module']->$colInfo['colParams']['method']();
+                            $values = $colInfo['colParams']['module']->{$colInfo['colParams']['method']}();
                         }
                         return !empty($values[$this->model->{$this->valueKey}]) ? $values[$this->model->{$this->valueKey}] : 'Не задано';
                     case 'relation':

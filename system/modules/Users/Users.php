@@ -53,9 +53,9 @@ class Users extends Module {
 
     public function setCookie($name, $value) {
         if ($value !== '') {
-            setcookie($name, $value, time() + 360000, "/", !empty($this->config['loginToSubdomain']) ? '.' . (App::$cur->config['site']['domain']) : '');
+            setcookie($name, $value, time() + 360000, "/", !empty($this->config['loginToSubdomain']) ? '.' . (App::$primary->config['site']['domain']) : '');
         } else {
-            setcookie($name, $value, 0, "/", !empty($this->config['loginToSubdomain']) ? '.' . (App::$cur->config['site']['domain']) : '');
+            setcookie($name, $value, 0, "/", !empty($this->config['loginToSubdomain']) ? '.' . (App::$primary->config['site']['domain']) : '');
         }
     }
 

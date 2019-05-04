@@ -11,7 +11,7 @@
 
 namespace Exchange1c;
 
-class Mode extends \Object {
+class Mode {
 
     /**
      * @var \Exchange1c\Exchange

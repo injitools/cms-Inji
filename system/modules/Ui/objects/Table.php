@@ -11,7 +11,7 @@
 
 namespace Ui;
 
-class Table extends \Object {
+class Table {
 
     public $cols = [];
     public $rows = [];

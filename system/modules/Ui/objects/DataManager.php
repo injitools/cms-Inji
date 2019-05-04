@@ -10,7 +10,7 @@
 
 namespace Ui;
 
-class DataManager extends \Object {
+class DataManager {
 
     public $modelName = '';
     public $managerOptions = [];
@@ -373,7 +373,7 @@ class DataManager extends \Object {
         }
         if ($model && !empty($params['relation'])) {
             $relation = $model::getRelation($params['relation']);
-            $items = $model->$params['relation']($queryParams);
+            $items = $model->{$params['relation']}($queryParams);
         } else {
             $relation = false;
             $items = $modelName::getList($queryParams);
@@ -544,7 +544,7 @@ class DataManager extends \Object {
             $queryParams['array'] = true;
             $queryParams['key'] = false;
             if ($model && !empty($params['relation'])) {
-                $items = $model->$params['relation']($queryParams);
+                $items = $model->{$params['relation']}($queryParams);
             } else {
                 $items = $modelName::getList($queryParams);
             }
@@ -815,7 +815,7 @@ class DataManager extends \Object {
             }
         }
         if ($model && !empty($params['relation'])) {
-            $count = $model->$params['relation']($queryParams);
+            $count = $model->{$params['relation']}($queryParams);
         } else {
             $count = $modelName::getCount($queryParams);
         }

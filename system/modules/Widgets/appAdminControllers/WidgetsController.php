@@ -40,7 +40,7 @@ class WidgetsController extends Controller {
                             if ($param['type'] == 'select') {
                                 $item = $param['model']::get($widgetCode[$i++]);
                                 if ($item) {
-                                    $text .= $param['name'] . ': ' . $item->$param['showCol'] . "\n";
+                                    $text .= $param['name'] . ': ' . $item->{$param['showCol']} . "\n";
                                 } else {
                                     $text .= $widgetCode[$i - 1];
                                 }

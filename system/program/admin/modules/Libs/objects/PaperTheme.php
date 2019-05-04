@@ -11,11 +11,11 @@
 
 namespace Libs;
 
-class PaperTheme extends \Object {
+class PaperTheme {
 
     public static $name = 'PaperTheme';
     public static $bowerPacks = [
-        'bootswatch-dist' => '3.3.6-paper'
+        'bootswatch-dist' => '3.3.6'
     ];
     public static $files = [
         'bower' => [

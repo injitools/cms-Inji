@@ -11,7 +11,7 @@
 
 namespace Migrations;
 
-class Reader extends \Object {
+class Reader {
 
     public $data = null;
     public $source = '';
