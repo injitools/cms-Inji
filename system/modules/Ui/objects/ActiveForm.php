@@ -139,7 +139,7 @@ class ActiveForm {
                                     break;
                             }
                         }
-                        $inputClassName = '\Ui\ActiveForm\Input\\' . ucfirst($type);
+                        $inputClassName = '\Ui\ActiveForm\Input\\' . (ucfirst($type) == 'Bool' ? 'BoolInput' : ucfirst($type));
                         /** @var \Ui\ActiveForm\Input $input */
                         $input = new $inputClassName();
                         $input->activeForm = $this;
