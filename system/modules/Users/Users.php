@@ -217,7 +217,11 @@ class Users extends Module {
             $loginHistory->save();
             if (!empty($this->config['needActivation']) && $user->activation) {
                 if (!$noMsg) {
-                    Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                    if($redirect) {
+                        Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                    } else {
+                        Msg::add('Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                    }
                 } else {
                     return false;
                 }
