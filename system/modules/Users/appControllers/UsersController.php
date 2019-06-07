@@ -144,10 +144,10 @@ class UsersController extends Controller {
                     Users\User::$cur->mail = $user_mail;
                     if (!empty($this->module->config['needActivation'])) {
                         Users\User::$cur->activation = Tools::randomString();
-                        $from = 'noreply@' . INJI_DOMAIN_NAME;
+                        $from = 'noreply@' . App::$cur->getDomain();
                         $to = $user_mail;
-                        $subject = 'Активация аккаунта на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
-                        $text = 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '</a>';
+                        $subject = 'Активация аккаунта на сайте ' . App::$cur->getDomain(true);
+                        $text = 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . App::$cur->getDomain() . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '">http://' . App::$cur->getDomain() . '/users/activation/' . Users\User::$cur->id . '/' . Users\User::$cur->activation . '</a>';
                         Tools::sendMail($from, $to, $subject, $text);
                         Msg::add('На указанный почтовый ящик была выслана ваша ссылка для подтверждения E-Mail', 'success');
                     } else {
@@ -169,10 +169,10 @@ class UsersController extends Controller {
         if (!$user->activation) {
             Tools::redirect('/', 'Пользователь уже активирован');
         }
-        $from = 'noreply@' . INJI_DOMAIN_NAME;
+        $from = 'noreply@' . App::$cur->getDomain();
         $to = $user->mail;
-        $subject = 'Активация аккаунта на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
-        $text = 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . $user->id . '/' . $user->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . $user->id . '/' . $user->activation . '</a>';
+        $subject = 'Активация аккаунта на сайте ' . App::$cur->getDomain(true);
+        $text = 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . App::$cur->getDomain() . '/users/activation/' . $user->id . '/' . $user->activation . '">http://' . App::$cur->getDomain() . '/users/activation/' . $user->id . '/' . $user->activation . '</a>';
         Tools::sendMail($from, $to, $subject, $text);
         Tools::redirect('/', 'На указанный почтовый ящик была выслана ваша ссылка для подтверждения E-Mail', 'success');
     }

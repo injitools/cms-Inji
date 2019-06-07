@@ -87,7 +87,7 @@ class Materials extends Module {
             $map[] = [
                 'name' => $mat->name,
                 'url' => [
-                    'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . ($mat->getHref())
+                    'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . App::$cur->getDomain() . ($mat->getHref())
                 ],
             ];
         }
@@ -100,7 +100,7 @@ class Materials extends Module {
                 $map[] = [
                     'name' => $mat->name,
                     'url' => [
-                        'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . ($mat->getHref())
+                        'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . App::$cur->getDomain() . ($mat->getHref())
                     ],
                 ];
             }

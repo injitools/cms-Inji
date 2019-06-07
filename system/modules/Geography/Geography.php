@@ -16,9 +16,9 @@ class Geography extends Module {
         if (!empty(App::$primary->config['site']['domain'])) {
             $domain = App::$primary->config['site']['domain'];
         } else {
-            $domain = implode('.', array_slice(explode('.', idn_to_utf8(INJI_DOMAIN_NAME)), -2));
+            $domain = implode('.', array_slice(explode('.', App::$cur->getDomain(true)), -2));
         }
-        $alias = str_replace($domain, '', idn_to_utf8(INJI_DOMAIN_NAME));
+        $alias = str_replace($domain, '', App::$cur->getDomain(true));
         $city = null;
         if ($alias) {
             $alias = str_replace('.', '', $alias);

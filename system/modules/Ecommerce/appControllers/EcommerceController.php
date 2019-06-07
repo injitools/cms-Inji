@@ -345,9 +345,9 @@ class ecommerceController extends Controller {
         $this->view->addMetaTag(['property' => 'og:title', 'content' => $item->name]);
         $this->view->addMetaTag(['property' => 'og:description', 'content' => strip_tags($item->description)]);
         if ($item->image) {
-            $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . INJI_DOMAIN_NAME . $item->image->path]);
+            $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . App::$cur->getDomain() . $item->image->path]);
         }
-        $this->view->addMetaTag(['property' => 'og:url', 'content' => 'http://' . INJI_DOMAIN_NAME . '/view/' . $item->id]);
+        $this->view->addMetaTag(['property' => 'og:url', 'content' => 'http://' . App::$cur->getDomain() . '/view/' . $item->id]);
 
         $viewHistory = !empty($_COOKIE['ecommerce_item_view_history']) ? json_decode($_COOKIE['ecommerce_item_view_history'], true) : [];
         array_unshift($viewHistory, $item->id);

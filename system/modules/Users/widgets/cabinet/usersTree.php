@@ -7,7 +7,7 @@ if (!empty($_POST['partnerInvite']['email'])) {
     if (!filter_var($_POST['partnerInvite']['email'], FILTER_VALIDATE_EMAIL)) {
         Tools::redirect(null, 'Вы ввели не корректный E-mail', 'danger');
     }
-    $title = \Users\User::$cur->name() . ' приглашает вас зарегистрироваться на сайте: ' . idn_to_utf8(INJI_DOMAIN_NAME);
+    $title = \Users\User::$cur->name() . ' приглашает вас зарегистрироваться на сайте: ' . App::$cur->getDomain(true);
     $inviteCode = Tools::randomString(60);
     $invite = new Users\User\Invite();
     $invite->code = $inviteCode;
@@ -16,8 +16,8 @@ if (!empty($_POST['partnerInvite']['email'])) {
     $invite->limit = 1;
     $invite->save();
     $text = "<h3>{$title}</h3>";
-    $text .= '<p>Чтобы принять приглашение, перейдите по <a href = "http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/registration?invite_code=' . $inviteCode . '">этой ссылке</a> и завершите процедуру регистрации</p>';
-    Tools::sendMail('noreply@' . INJI_DOMAIN_NAME, $_POST['partnerInvite']['email'], $title, $text);
+    $text .= '<p>Чтобы принять приглашение, перейдите по <a href = "http://' . App::$cur->getDomain() . '/users/registration?invite_code=' . $inviteCode . '">этой ссылке</a> и завершите процедуру регистрации</p>';
+    Tools::sendMail('noreply@' . App::$cur->getDomain(), $_POST['partnerInvite']['email'], $title, $text);
     Tools::redirect(null, 'Приглашение было отправлено', 'success');
 }
 $partners = App::$cur->users->getUserPartners(Users\User::$cur, 8);

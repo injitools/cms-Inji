@@ -39,7 +39,7 @@ class YandexExportController extends Controller {
 
         addToXml($xml, $shop, 'name', \App::$cur->config['site']['name']);
         addToXml($xml, $shop, 'company', \App::$cur->config['site']['company_name']);
-        addToXml($xml, $shop, 'url', 'http://' . INJI_DOMAIN_NAME);
+        addToXml($xml, $shop, 'url', 'http://' . App::$cur->getDomain());
 
         $currencies = $xml->createElement('currencies');
         $currency = $currencies->appendChild($xml->createElement('currency'));
@@ -63,7 +63,7 @@ class YandexExportController extends Controller {
         $offers = $xml->createElement('offers');
         foreach (App::$cur->ecommerce->getItems() as $item) {
             $offer = $offers->appendChild($xml->createElement('offer'));
-            addToXml($xml, $offer, 'url', 'http://' . INJI_DOMAIN_NAME . '/ecommerce/view/' . $item->id);
+            addToXml($xml, $offer, 'url', 'http://' . App::$cur->getDomain() . '/ecommerce/view/' . $item->id);
             addToXml($xml, $offer, 'price', $item->getPrice()->price);
             addToXml($xml, $offer, 'currencyId', 'RUR');
             addToXml($xml, $offer, 'categoryId', $item->category_id);

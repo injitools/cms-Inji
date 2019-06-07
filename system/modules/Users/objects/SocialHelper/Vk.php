@@ -11,6 +11,8 @@
 
 namespace Users\SocialHelper;
 
+use App;
+
 class Vk extends \Users\SocialHelper {
 
     public static function auth() {
@@ -21,7 +23,7 @@ class Vk extends \Users\SocialHelper {
                 'scope' => 'email',
                 'response_type' => 'code',
                 'display' => 'page',
-                'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/vk'
+                'redirect_uri' => 'http://' . App::$cur->getDomain() . '/users/social/auth/vk'
             ];
             \Tools::redirect("https://oauth.vk.com/authorize?" . http_build_query($query));
         }
@@ -32,7 +34,7 @@ class Vk extends \Users\SocialHelper {
             'client_id' => $config['appId'],
             'client_secret' => $config['secret'],
             'code' => $_GET['code'],
-            'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/vk'
+            'redirect_uri' => 'http://' . App::$cur->getDomain() . '/users/social/auth/vk'
         ];
         $result = @file_get_contents("https://oauth.vk.com/access_token?" . http_build_query($query));
         if ($result === false) {

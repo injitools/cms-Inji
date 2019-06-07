@@ -11,6 +11,8 @@
 
 namespace Users\SocialHelper;
 
+use App;
+
 class Twitter extends \Users\SocialHelper {
 
     private static function requestToken() {
@@ -20,7 +22,7 @@ class Twitter extends \Users\SocialHelper {
         //string
         $oauth_base_text = "GET&";
         $oauth_base_text .= urlencode('https://api.twitter.com/oauth/request_token') . "&";
-        $oauth_base_text .= urlencode("oauth_callback=" . urlencode('http://' . INJI_DOMAIN_NAME . '/users/social/auth/twitter') . "&");
+        $oauth_base_text .= urlencode("oauth_callback=" . urlencode('http://' . App::$cur->getDomain() . '/users/social/auth/twitter') . "&");
         $oauth_base_text .= urlencode("oauth_consumer_key=" . $config['consumer_key'] . "&");
         $oauth_base_text .= urlencode("oauth_nonce=" . $oauthNonce . "&");
         $oauth_base_text .= urlencode("oauth_signature_method=HMAC-SHA1&");
@@ -29,7 +31,7 @@ class Twitter extends \Users\SocialHelper {
         $oauthSignature = base64_encode(hash_hmac("sha1", $oauth_base_text, $config['consumer_secret'] . "&", true));
         //request
         $url = 'https://api.twitter.com/oauth/request_token';
-        $url .= '?oauth_callback=' . urlencode('http://' . INJI_DOMAIN_NAME . '/users/social/auth/twitter');
+        $url .= '?oauth_callback=' . urlencode('http://' . App::$cur->getDomain() . '/users/social/auth/twitter');
         $url .= '&oauth_consumer_key=' . $config['consumer_key'];
         $url .= '&oauth_nonce=' . $oauthNonce;
         $url .= '&oauth_signature=' . urlencode($oauthSignature);

@@ -146,7 +146,7 @@ class CartController extends Controller {
 
                 if ($this->notifications) {
                     $notification = new Notifications\Notification();
-                    $notification->name = 'Новый заказ в интернет магазине на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
+                    $notification->name = 'Новый заказ в интернет магазине на сайте ' . App::$cur->getDomain(true);
                     $notification->text = 'Перейдите в админ панель чтобы просмотреть новый заказ';
                     $notification->chanel_id = $this->notifications->getChanel('Ecommerce-orders')->id;
                     $notification->save();

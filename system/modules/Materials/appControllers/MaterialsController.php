@@ -130,14 +130,14 @@ class MaterialsController extends Controller {
             $this->view->addMetaTag(['name' => 'description', 'content' => $material->description]);
         }
         $this->view->addMetaTag(['property' => 'og:title', 'content' => $material->name]);
-        $this->view->addMetaTag(['property' => 'og:url', 'content' => 'http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/' . $material->alias]);
+        $this->view->addMetaTag(['property' => 'og:url', 'content' => 'http://' . App::$cur->getDomain() . '/' . $material->alias]);
         if ($material->description) {
-            $this->view->addMetaTag(['property' => 'og:description', 'content' => 'http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/' . $material->description]);
+            $this->view->addMetaTag(['property' => 'og:description', 'content' => 'http://' . App::$cur->getDomain() . '/' . $material->description]);
         }
         if ($material->image) {
-            $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . idn_to_utf8(INJI_DOMAIN_NAME) . $material->image->path]);
+            $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . App::$cur->getDomain() . $material->image->path]);
         } elseif ($logo = Files\File::get('site_logo', 'code')) {
-            $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . idn_to_utf8(INJI_DOMAIN_NAME) . $logo->path]);
+            $this->view->addMetaTag(['property' => 'og:image', 'content' => 'http://' . App::$cur->getDomain() . $logo->path]);
         }
         $this->view->setTitle($material->name);
         $bread = [];

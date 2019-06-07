@@ -45,7 +45,7 @@ return function($step = NULL, $params = []) {
     } else {
         $user = new Users\User(array(
             'user_login' => 'admin',
-            'user_mail' => 'admin@' . idn_to_utf8(INJI_DOMAIN_NAME),
+            'user_mail' => 'admin@' . App::$cur->getDomain(),
             'user_pass' => password_hash('admin', PASSWORD_DEFAULT),
             'user_group_id' => $groupObject->id,
             'user_role_id' => $roleObject->id,

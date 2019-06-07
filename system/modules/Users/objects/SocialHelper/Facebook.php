@@ -11,6 +11,8 @@
 
 namespace Users\SocialHelper;
 
+use App;
+
 class Facebook extends \Users\SocialHelper {
 
     public static function auth() {
@@ -20,7 +22,7 @@ class Facebook extends \Users\SocialHelper {
                 'client_id' => $config['appId'],
                 'scope' => 'email',
                 'response_type' => 'code',
-                'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/facebook'
+                'redirect_uri' => 'http://' . App::$cur->getDomain() . '/users/social/auth/facebook'
             ];
             \Tools::redirect("https://www.facebook.com/dialog/oauth?" . http_build_query($query));
         }
@@ -29,7 +31,7 @@ class Facebook extends \Users\SocialHelper {
         }
         $query = [
             'client_id' => $config['appId'],
-            'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/facebook',
+            'redirect_uri' => 'http://' . App::$cur->getDomain() . '/users/social/auth/facebook',
             'client_secret' => $config['secret'],
             'code' => urldecode($_GET['code']),
         ];

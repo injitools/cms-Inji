@@ -256,10 +256,10 @@ class Tools extends Model {
         $msg = compact('from', 'to', 'subject', 'text', 'charset', 'ctype');
         $msg = Inji::$inst->event('sendMail', $msg);
         if (is_array($msg)) {
-            $headers = "From: ".idn_to_ascii($msg['from'])."\r\n";
+            $headers = "From: {$msg['from']}\r\n";
             $headers .= "Content-type: {$msg['ctype']}; charset={$msg['charset']}\r\n";
             $headers .= "Mime-Version: 1.0\r\n";
-            return mail(idn_to_ascii($msg['to']), $msg['subject'], $msg['text'], $headers);
+            return mail($msg['to'], $msg['subject'], $msg['text'], $headers);
         }
         return $msg;
     }

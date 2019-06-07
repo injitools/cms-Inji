@@ -20,8 +20,8 @@ class MerchantsController extends Controller {
             'callback_method' => ''
                 ], null, [
             'description' => 'Тестовый платеж',
-            'success' => 'http://' . INJI_DOMAIN_NAME . '/',
-            'false' => 'http://' . INJI_DOMAIN_NAME . '/'
+            'success' => 'http://' . App::$cur->getDomain() . '/',
+            'false' => 'http://' . App::$cur->getDomain() . '/'
         ]);
     }
 
@@ -120,9 +120,9 @@ class MerchantsController extends Controller {
             Tools::redirect('/', 'Валюта для этого способа оплаты не найдена', 'danger');
         }
         $merchantOptions = [
-            'description' => $pay->description ? '#' . $pay->id . ' ' . $pay->description : 'Оплата счета №' . $pay->id . ' на сайте: ' . idn_to_utf8(INJI_DOMAIN_NAME),
-            'success' => 'http://' . INJI_DOMAIN_NAME . '/',
-            'false' => 'http://' . INJI_DOMAIN_NAME . '/'
+            'description' => $pay->description ? '#' . $pay->id . ' ' . $pay->description : 'Оплата счета №' . $pay->id . ' на сайте: ' . App::$cur->getDomain(true),
+            'success' => 'http://' . App::$cur->getDomain() . '/',
+            'false' => 'http://' . App::$cur->getDomain() . '/'
         ];
 
         $this->Money->goToMerchant($pay, $merchant, $method, $merchantOptions);

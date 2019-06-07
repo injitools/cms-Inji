@@ -44,7 +44,7 @@ if (file_exists('vendor/autoload.php')) {
     include 'vendor/autoload.php';
 }
 
-$domain = idn_to_utf8($_SERVER['SERVER_NAME']);
+$domain = $_SERVER['SERVER_NAME'];
 if (strpos($domain, 'www.') === 0) {
     $domain = substr($domain, 4);
 }
@@ -54,17 +54,17 @@ define('INJI_DOMAIN_NAME', $domain);
 $apps = Apps\App::getList();
 //Make default app params
 $finalApp = [
-    'name' => INJI_DOMAIN_NAME,
-    'dir' => INJI_DOMAIN_NAME,
+    'name' => App::$cur->getDomain(true),
+    'dir' => App::$cur->getDomain(),
     'installed' => false,
     'default' => true,
-    'route' => INJI_DOMAIN_NAME,
+    'route' => App::$cur->getDomain(true),
 ];
 foreach ($apps as $app) {
     if ($app->default) {
         $finalApp = $app->_params;
     }
-    if ($app->route && preg_match("!{$app->route}!i", INJI_DOMAIN_NAME)) {
+    if ($app->route && preg_match("!{$app->route}!i", App::$cur->getDomain(true))) {
         $finalApp = $app->_params;
         break;
     }

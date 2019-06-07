@@ -461,7 +461,7 @@ class Ecommerce extends Module {
             $map[] = [
                 'name' => $item['item_name'],
                 'url' => [
-                    'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . '/ecommerce/view/' . $item['item_id']
+                    'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . App::$cur->getDomain() . '/ecommerce/view/' . $item['item_id']
                 ],
             ];
         }
@@ -474,7 +474,7 @@ class Ecommerce extends Module {
                 $map[] = [
                     'name' => $item['item_name'],
                     'url' => [
-                        'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . INJI_DOMAIN_NAME . '/ecommerce/view/' . $item['item_id']
+                        'loc' => (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . App::$cur->getDomain() . '/ecommerce/view/' . $item['item_id']
                     ],
                 ];
             }

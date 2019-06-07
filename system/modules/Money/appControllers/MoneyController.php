@@ -32,10 +32,10 @@ class MoneyController extends Controller {
             $block->data = 'Money\Transfer:' . $transfer->id;
             $block->save();
 
-            $from = 'noreply@' . INJI_DOMAIN_NAME;
+            $from = 'noreply@' . App::$cur->getDomain();
             $to = \Users\User::$cur->mail;
             $subject = 'Подтверждение перевода';
-            $text = 'Чтобы подтвержить перевод №' . $transfer->id . ' введите код <b>' . $transfer->code . '</b> на <a href = "http://' . INJI_DOMAIN_NAME . '/money/confirmTransfer/' . $transfer->id . '?code=' . $transfer->code . '">странице</a> перевода';
+            $text = 'Чтобы подтвержить перевод №' . $transfer->id . ' введите код <b>' . $transfer->code . '</b> на <a href = "http://' . App::$cur->getDomain() . '/money/confirmTransfer/' . $transfer->id . '?code=' . $transfer->code . '">странице</a> перевода';
             Tools::sendMail($from, $to, $subject, $text);
             Tools::redirect('/money/confirmTransfer/' . $transfer->id);
         }

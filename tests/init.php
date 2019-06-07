@@ -32,11 +32,11 @@ spl_autoload_register('Router::findClass');
 
 //Make default app params
 $appConfig = [
-    'name' => INJI_DOMAIN_NAME,
-    'dir' => INJI_DOMAIN_NAME,
+    'name' => App::$cur->getDomain(true),
+    'dir' => App::$cur->getDomain(),
     'installed' => true,
     'default' => true,
-    'route' => INJI_DOMAIN_NAME,
+    'route' => App::$cur->getDomain(true),
 ];
 App::$cur = new App($appConfig);
 

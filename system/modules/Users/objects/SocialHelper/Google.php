@@ -11,6 +11,8 @@
 
 namespace Users\SocialHelper;
 
+use App;
+
 class Google extends \Users\SocialHelper {
 
     public static function auth() {
@@ -21,7 +23,7 @@ class Google extends \Users\SocialHelper {
                 'client_id' => $config['client_id'],
                 'scope' => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
                 'response_type' => 'code',
-                'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/google'
+                'redirect_uri' => 'http://' . App::$cur->getDomain() . '/users/social/auth/google'
             ];
             \Tools::redirect("https://accounts.google.com/o/oauth2/auth?" . http_build_query($query));
         }
@@ -33,7 +35,7 @@ class Google extends \Users\SocialHelper {
             'client_secret' => $config['secret'],
             'code' => $_GET['code'],
             'grant_type' => 'authorization_code',
-            'redirect_uri' => 'http://' . INJI_DOMAIN_NAME . '/users/social/auth/google'
+            'redirect_uri' => 'http://' . App::$cur->getDomain() . '/users/social/auth/google'
         ];
         $result = false;
         if ($curl = curl_init()) {

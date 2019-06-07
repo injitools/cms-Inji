@@ -91,11 +91,11 @@ class Users extends Module {
                 $this->setcookie($this->cookiePrefix . "_user_session_hash", '');
                 $this->setcookie($this->cookiePrefix . "_user_id", '');
             }
-            Msg::add('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
+            Msg::add(\I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
             return false;
         }
         if ($session->user->id != $userId) {
-            Msg::add('/', \I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
+            Msg::add(\I18n\Text::module('Users', 'Произошла непредвиденная ошибка при авторизации сессии'));
             return false;
         }
         if ($session && $session->user && $session->user->blocked) {
@@ -221,12 +221,13 @@ class Users extends Module {
                         Tools::redirect('/', 'Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
                     } else {
                         Msg::add('Этот аккаунт ещё не активирован. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                        return false;
                     }
                 } else {
                     return false;
                 }
             } elseif ($user->activation) {
-                Msg::add('Этот аккаунт ещё не активирован, не все функции могут быть доступны. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');
+                Msg::add('Этот аккаунт ещё не активирован, не все функции могут быть доступны. <br />Если вы не получали письмо с ссылкой для активации, нажмите на - <a href = "/users/resendActivation/' . $user->id . '"><b>повторно выслать ссылку активации</b></a>');;
             }
             if (!$user->mail && !empty($this->config['noMailNotify'])) {
                 Msg::add($this->config['noMailNotify']);
@@ -447,23 +448,23 @@ class Users extends Module {
             $this->autorization($data['user_mail'], $pass, 'mail');
         }
         if (!empty($this->config['needActivation'])) {
-            $from = 'noreply@' . INJI_DOMAIN_NAME;
+            $from = 'noreply@' . App::$cur->getDomain();
             $to = $data['user_mail'];
-            $subject = 'Регистрация на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME);
-            $text = 'Вы были зарегистрированы на сайте ' . idn_to_utf8(INJI_DOMAIN_NAME) . '<br />для входа используйте ваш почтовый ящик в качестве логина и пароль: ' . $pass;
+            $subject = 'Регистрация на сайте ' . App::$cur->getDomain(true);
+            $text = 'Вы были зарегистрированы на сайте ' . App::$cur->getDomain(true) . '<br />для входа используйте ваш почтовый ящик в качестве логина и пароль: ' . $pass;
             $text .= '<br />';
             $text .= '<br />';
-            $text .= 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . INJI_DOMAIN_NAME . '/users/activation/' . $user->id . '/' . $user->activation . '">http://' . idn_to_utf8(INJI_DOMAIN_NAME) . '/users/activation/' . $user->id . '/' . $user->activation . '</a>';
+            $text .= 'Для активации вашего аккаунта перейдите по ссылке <a href = "http://' . App::$cur->getDomain() . '/users/activation/' . $user->id . '/' . $user->activation . '">http://' . App::$cur->getDomain() . '/users/activation/' . $user->id . '/' . $user->activation . '</a>';
             Tools::sendMail($from, $to, $subject, $text);
             if ($msg) {
                 Msg::add('Вы были зарегистрированы. На указанный почтовый ящик был выслан ваш пароль и ссылка для активации', 'success');
             }
         } else {
-            $from = 'noreply@' . INJI_DOMAIN_NAME;
+            $from = 'noreply@' . App::$cur->getDomain();
             $to = $data['user_mail'];
-            $subject = \I18n\Text::module('Users', 'Регистрация на сайте ${sitename}', ['sitename' => idn_to_utf8(INJI_DOMAIN_NAME)]);
+            $subject = \I18n\Text::module('Users', 'Регистрация на сайте ${sitename}', ['sitename' => App::$cur->getDomain(true)]);
             $text = \I18n\Text::module('Users', 'sucregmsg', [
-                'sitename' => idn_to_utf8(INJI_DOMAIN_NAME),
+                'sitename' => App::$cur->getDomain(),
                 'pass' => $pass
             ]);
             Tools::sendMail($from, $to, $subject, $text);
