@@ -174,6 +174,7 @@ class Users extends Module {
             }
             $passre->status = 3;
             $passre->save();
+            $passre = Users\Passre::get([['hash', $hash]]);
             $pass = Tools::randomString(10);
             $user = Users\User::get($passre->user_id);
             $user->activation = '';
