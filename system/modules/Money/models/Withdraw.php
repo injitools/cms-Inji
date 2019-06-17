@@ -23,6 +23,7 @@ class Withdraw extends \Model {
         'merchant_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'merchant'],
         'currency_id' => ['type' => 'select', 'source' => 'relation', 'relation' => 'currency'],
         'status' => ['type' => 'text'],
+        'comment' => ['type' => 'text'],
         'ip' => ['type' => 'text'],
         'amount' => ['type' => 'decimal'],
         'info' => ['type' => 'textarea'],
