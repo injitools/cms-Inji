@@ -178,11 +178,8 @@ class Users extends Module {
             $passre->save();
             $passre = Users\Passre::get([['hash', $hash]]);
             $pass = Tools::randomString(10);
-            $user = $passre->user;
-            if(!$user){
-                Msg::add('произошла неизвестная ошибка при сбросе пароля', 'danger');
-                return false;
-            }
+            $user = Users\User::get($passre->user_id);
+            $user->activation = '';
             $user->pass = $this->hashpass($pass);
             $user->save();
             $session = $this->autorization($user->id, $pass, 'id', true, true, $redirect ? '' : false);
