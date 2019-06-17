@@ -65,8 +65,8 @@ class BowerCmd {
         while (!Inji::$inst->blockParallel()) {
             sleep(2);
         }
-        ComposerCmd::requirePackage("injitools/bowerphp", "dev-master", '.');
-        include_once 'vendor/injitools/bowerphp/src/bootstrap.php';
+        ComposerCmd::requirePackage("beelab/bowerphp", "dev-master", '.');
+        include_once 'vendor/beelab/bowerphp/src/bootstrap.php';
         if ($needOutput) {
             $output = new Symfony\Component\Console\Output\StreamOutput(fopen('php://output', 'w'));
         } else {
