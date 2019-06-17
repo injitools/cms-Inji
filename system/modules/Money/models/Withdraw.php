@@ -13,6 +13,7 @@ namespace Money;
  * @property int $merchant_id
  * @property int $currency_id
  * @property string $status
+ * @property string $comment
  * @property string $ip
  * @property float $amount
  * @property string $info
