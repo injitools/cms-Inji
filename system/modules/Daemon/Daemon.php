@@ -22,7 +22,6 @@ class Daemon extends Module {
             } elseif (function_exists('fsockopen') && $fp = @fsockopen($_SERVER['SERVER_NAME'],
                     80,
                     $errno, $errstr, 30)) {
-                echo 'nope2';
                 $out = "GET /daemon/start HTTP/1.1\r\n";
                 $out .= "Host: " . $_SERVER['SERVER_NAME'] . "\r\n";
                 $out .= "Connection: Close\r\n\r\n";
@@ -41,7 +40,7 @@ class Daemon extends Module {
 
     function fileGetContentMethod() {
         $url = 'http://' . $_SERVER['SERVER_NAME'] . '/daemon/start';
-        $result = file_get_contents($url, false, null, -1, 5);
+        $result = @file_get_contents($url, false, null, -1, 5);
         return $result === 'start';
     }
 
