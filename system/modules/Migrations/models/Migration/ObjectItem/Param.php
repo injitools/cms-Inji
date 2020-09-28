@@ -86,4 +86,8 @@ class Param extends \Model {
     public static function table() {
         return 'migrations_migration_object_param';
     }
+
+    public static function colPrefix() {
+        return 'migration_object_param_';
+    }
 }

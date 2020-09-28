@@ -63,4 +63,7 @@ class ObjectItem extends \Model {
         return 'migrations_migration_object';
     }
 
+    public static function colPrefix() {
+        return 'migration_object_';
+    }
 }

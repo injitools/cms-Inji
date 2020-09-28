@@ -2076,6 +2076,9 @@ class Model {
      * @return boolean
      */
     public function __isset($name) {
+        if (in_array($name, array_keys(static::relations()))) {
+            return true;
+        }
         static::fixPrefix($name);
         return isset($this->_params[$name]);
     }
