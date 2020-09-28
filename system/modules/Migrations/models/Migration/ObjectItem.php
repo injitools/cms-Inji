@@ -60,7 +60,7 @@ class ObjectItem extends \Model {
     }
 
     public static function table() {
-        return 'inji_migrations_migration_object';
+        return 'migrations_migration_object';
     }
 
 }

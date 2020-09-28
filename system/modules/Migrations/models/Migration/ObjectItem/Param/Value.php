@@ -30,7 +30,7 @@ class Value extends \Model {
     }
 
     public static function table() {
-        return 'inji_migrations_migration_object_param_value';
+        return 'migrations_migration_object_param_value';
     }
 
 }

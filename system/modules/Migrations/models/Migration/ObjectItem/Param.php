@@ -84,6 +84,6 @@ class Param extends \Model {
     }
 
     public static function table() {
-        return 'inji_migrations_migration_object_param';
+        return 'migrations_migration_object_param';
     }
 }
