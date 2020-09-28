@@ -21,7 +21,7 @@ class MapController extends Controller {
                     $mapPath->type = 'object';
                 } else {
                     if ($objectType == 'object') {
-                        $object = new Migrations\Migration\Object();
+                        $object = new Migrations\Migration\ObjectItem();
                         $object->model = !empty($_POST['typeOptions'][$pathId]) ? $_POST['typeOptions'][$pathId] : '';
                         $object->migration_id = $mapPath->map->migration_id;
                         $object->code = $object->name = $mapPath->item;
@@ -38,10 +38,10 @@ class MapController extends Controller {
         }
         if (!empty($_POST['param'])) {
             foreach ($_POST['param'] as $paramId => $type) {
-                $param = \Migrations\Migration\Object\Param::get($paramId);
+                $param = \Migrations\Migration\ObjectItem\Param::get($paramId);
 
                 if ($type == 'newObject') {
-                    $object = new Migrations\Migration\Object();
+                    $object = new Migrations\Migration\ObjectItem();
                     $object->model = !empty($_POST['paramOptions'][$paramId]) ? $_POST['paramOptions'][$paramId] : '';
                     $object->migration_id = $param->object->migration_id;
                     $object->code = $object->name = $param->code;

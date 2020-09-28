@@ -49,7 +49,7 @@ class ParamsList extends \Migrations\Parser {
             if ($key == '@attributes' || !empty($walked[$key])) {
                 continue;
             }
-            $param = new \Migrations\Migration\Object\Param();
+            $param = new \Migrations\Migration\ObjectItem\Param();
             $param->parent_id = $this->param->id;
             $param->object_id = $this->object->object->id;
             $param->code = $key;

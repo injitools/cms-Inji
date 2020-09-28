@@ -59,7 +59,7 @@ class Value extends \Migrations\Parser {
         if (!empty($options['valueReplace'])) {
             $values = $this->param->values(['key' => 'original']);
             if (!isset($values[$value])) {
-                $valueObject = new \Migrations\Migration\Object\Param\Value();
+                $valueObject = new \Migrations\Migration\ObjectItem\Param\Value();
                 $valueObject->param_id = $this->param->id;
                 $valueObject->original = $value;
                 $valueObject->save();

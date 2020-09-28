@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Migrations\Migration\Object;
+namespace Migrations\Migration\ObjectItem;
 /**
  * @property int $id
  * @property string $code
@@ -20,14 +20,14 @@ namespace Migrations\Migration\Object;
  * @property int $parent_id
  * @property string $date_create
  *
- * @property \Migrations\Migration\Object $object
- * @property \Migrations\Migration\Object\Param $parent
- * @property \Migrations\Migration\Object\Param\Value[] $values
- * @property \Migrations\Migration\Object\Param[] $childs
- * @method \Migrations\Migration\Object object($params)
- * @method \Migrations\Migration\Object\Param parent($params)
- * @method \Migrations\Migration\Object\Param\Value[] values($params)
- * @method \Migrations\Migration\Object\Param[] childs($params)
+ * @property \Migrations\Migration\ObjectItem $object
+ * @property \Migrations\Migration\ObjectItem\Param $parent
+ * @property \Migrations\Migration\ObjectItem\Param\Value[] $values
+ * @property \Migrations\Migration\ObjectItem\Param[] $childs
+ * @method \Migrations\Migration\ObjectItem object($params)
+ * @method \Migrations\Migration\ObjectItem\Param parent($params)
+ * @method \Migrations\Migration\ObjectItem\Param\Value[] values($params)
+ * @method \Migrations\Migration\ObjectItem\Param[] childs($params)
  */
 class Param extends \Model {
 
@@ -63,24 +63,27 @@ class Param extends \Model {
     public static function relations() {
         return [
             'object' => [
-                'model' => 'Migrations\Migration\Object',
+                'model' => 'Migrations\Migration\ObjectItem',
                 'col' => 'object_id'
             ],
             'parent' => [
-                'model' => 'Migrations\Migration\Object\Param',
+                'model' => 'Migrations\Migration\ObjectItem\Param',
                 'col' => 'parent_id'
             ],
             'values' => [
                 'type' => 'many',
-                'model' => 'Migrations\Migration\Object\Param\Value',
+                'model' => 'Migrations\Migration\ObjectItem\Param\Value',
                 'col' => 'param_id'
             ],
             'childs' => [
                 'type' => 'many',
-                'model' => 'Migrations\Migration\Object\Param',
+                'model' => 'Migrations\Migration\ObjectItem\Param',
                 'col' => 'parent_id'
             ]
         ];
     }
 
+    public static function table() {
+        return 'inji_migrations_migration_object_param';
+    }
 }

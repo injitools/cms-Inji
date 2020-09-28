@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Migrations\Migration\Object\Param;
+namespace Migrations\Migration\ObjectItem\Param;
 
 class Value extends \Model {
 
@@ -24,9 +24,13 @@ class Value extends \Model {
         return [
             'param' => [
                 'col' => 'param_id',
-                'model' => 'Migrations\Migration\Object\Param'
+                'model' => 'Migrations\Migration\ObjectItem\Param'
             ]
         ];
+    }
+
+    public static function table() {
+        return 'inji_migrations_migration_object_param_value';
     }
 
 }

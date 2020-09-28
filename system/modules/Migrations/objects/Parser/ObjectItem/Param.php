@@ -26,7 +26,7 @@ class Param extends \Migrations\Parser {
 
     /**
      * @param array $data
-     * @param \Migrations\Migration\Object\Param[] $params
+     * @param \Migrations\Migration\ObjectItem\Param[] $params
      */
     private function parseData(&$data, $params) {
         $objectParamValue = [
@@ -41,7 +41,7 @@ class Param extends \Migrations\Parser {
                     case 'paramName':
                         $param->values(['key' => 'original']);
                         if (!isset($param->values(['key' => 'original'])[(string) $objectParam])) {
-                            $valueObject = new \Migrations\Migration\Object\Param\Value();
+                            $valueObject = new \Migrations\Migration\ObjectItem\Param\Value();
                             $valueObject->param_id = $param->id;
                             $valueObject->original = (string) $objectParam;
                             $valueObject->save();
@@ -78,7 +78,7 @@ class Param extends \Migrations\Parser {
             if ($key == '@attributes' || !empty($walked[$key])) {
                 continue;
             }
-            $param = new \Migrations\Migration\Object\Param();
+            $param = new \Migrations\Migration\ObjectItem\Param();
             $param->parent_id = $this->param->id;
             $param->object_id = $this->object->object->id;
             $param->code = $key;

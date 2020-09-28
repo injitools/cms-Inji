@@ -30,7 +30,7 @@ class Path extends \Model {
                 'col' => 'map_id'
             ],
             'object' => [
-                'model' => 'Migrations\Migration\Object',
+                'model' => 'Migrations\Migration\ObjectItem',
                 'col' => 'object_id'
             ],
             'childs' => [

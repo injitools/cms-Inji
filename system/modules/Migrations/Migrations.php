@@ -84,7 +84,7 @@ class Migrations extends \Module {
      * @param \Migrations\Migration $migration
      * @param int|string $objectId
      * @param null|string $col
-     * @return null|\Migrations\Migration\Object
+     * @return null|\Migrations\Migration\ObjectItem
      */
     public function getMigrationObject($migration, $objectId, $col = null) {
         if ($col === null && isset($migration->objects[$objectId])) {

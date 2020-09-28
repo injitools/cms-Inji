@@ -17,10 +17,10 @@ namespace Migrations;
  * @property string $secret
  * @property string $date_create
  * @property \Migrations\Migration\Map[] $maps
- * @property \Migrations\Migration\Object[] $objects
+ * @property \Migrations\Migration\ObjectItem[] $objects
  *
  * @method  \Migrations\Migration\Map[] maps($params)
- * @method \Migrations\Migration\Object[] objects($params)
+ * @method \Migrations\Migration\ObjectItem[] objects($params)
  */
 class Migration extends \Model {
 
@@ -63,7 +63,7 @@ class Migration extends \Model {
             ],
             'objects' => [
                 'type' => 'many',
-                'model' => 'Migrations\Migration\Object',
+                'model' => 'Migrations\Migration\ObjectItem',
                 'col' => 'migration_id'
             ]
         ];

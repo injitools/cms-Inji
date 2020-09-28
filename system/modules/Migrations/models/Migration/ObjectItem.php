@@ -11,7 +11,7 @@
 
 namespace Migrations\Migration;
 
-class Object extends \Model {
+class ObjectItem extends \Model {
 
     public static $objectName = 'Объект миграции';
     public static $labels = [
@@ -50,13 +50,17 @@ class Object extends \Model {
             ],
             'params' => [
                 'type' => 'many',
-                'model' => 'Migrations\Migration\Object\Param',
+                'model' => 'Migrations\Migration\ObjectItem\Param',
                 'col' => 'object_id',
                 'where' => [
                     ['parent_id', 0]
                 ]
             ]
         ];
+    }
+
+    public static function table() {
+        return 'inji_migrations_migration_object';
     }
 
 }

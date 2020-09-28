@@ -20,7 +20,7 @@ class Relation extends \Migrations\Parser {
         $relation = $modelName::getRelation($this->param->value);
         $object = \App::$cur->migrations->getMigrationObject($this->walker->migration, $relation['model'], 'model');
         if (!$object) {
-            $object = new \Migrations\Migration\Object([
+            $object = new \Migrations\Migration\ObjectItem([
                 'model' => $relation['model'],
                 'code' => $this->param->code,
                 'name' => $this->param->code,

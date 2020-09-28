@@ -37,7 +37,7 @@ function drawParam($param, $form, $models, $objects, $parent = 0) {
     $objectsCols = [];
 
     if (!isset($selectArrays[$param->object->migration_id])) {
-        $selectArrays[$param->object->migration_id] = Migrations\Migration\Object::getList(['where' => ['migration_id', $param->object->migration_id], 'forSelect' => true]);
+        $selectArrays[$param->object->migration_id] = Migrations\Migration\ObjectItem::getList(['where' => ['migration_id', $param->object->migration_id], 'forSelect' => true]);
 
         $selectArrays[$param->object->migration_id] = [
             '' => 'Выберите',
