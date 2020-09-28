@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Migrations\Parser\Object;
+namespace Migrations\Parser\ObjectItem;
 
 class ParamsList extends \Migrations\Parser {
 
@@ -21,7 +21,7 @@ class ParamsList extends \Migrations\Parser {
                 if ($param->type == 'custom') {
                     $parserName = $param->value;
                 } else {
-                    $parserName = '\Migrations\Parser\Object\\' . ucfirst($param->type);
+                    $parserName = '\Migrations\Parser\ObjectItem\\' . ucfirst($param->type);
                 }
                 if (is_array($this->data) && !\Tools::isAssoc($this->data)) {
                     foreach ($this->data as $data) {

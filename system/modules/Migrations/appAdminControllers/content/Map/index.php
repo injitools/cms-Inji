@@ -58,7 +58,7 @@ function drawParam($param, $form, $models, $objects, $parent = 0) {
         $relations[$relName] = $relName;
     }
     if ($parent) {
-        $parserName = '\Migrations\Parser\Object\\' . ucfirst($parent->type);
+        $parserName = '\Migrations\Parser\ObjectItem\\' . ucfirst($parent->type);
         $parser = new $parserName;
         $parser->param = $parent;
         $values = $parser->editor();

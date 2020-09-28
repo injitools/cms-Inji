@@ -9,7 +9,7 @@
  * @license https://github.com/injitools/cms-Inji/blob/master/LICENSE
  */
 
-namespace Migrations\Parser\Object;
+namespace Migrations\Parser\ObjectItem;
 
 class ParamValue extends \Migrations\Parser {
 

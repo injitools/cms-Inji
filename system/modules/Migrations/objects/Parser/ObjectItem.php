@@ -74,7 +74,7 @@ class ObjectItem {
                         if ($param->type == 'custom') {
                             $parserName = $param->value;
                         } else {
-                            $parserName = '\Migrations\Parser\Object\\' . ucfirst($param->type);
+                            $parserName = '\Migrations\Parser\ObjectItem\\' . ucfirst($param->type);
                         }
                         $parser = new $parserName;
                         $parser->data = &$data[$param->code];
