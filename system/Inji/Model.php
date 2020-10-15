@@ -1573,6 +1573,12 @@ class Model {
         if (empty($options['disableBeforeTrigger'])) {
             $this->beforeSave();
         }
+        if (static::$categoryModel) {
+            $this->changeItemTree();
+        }
+        if (static::$treeCategory) {
+            $this->changeCategoryTree();
+        }
         $values = [];
 
         foreach ($this->cols() as $col => $param) {
@@ -1591,12 +1597,6 @@ class Model {
 
         if (empty($values) && empty($options['empty'])) {
             return false;
-        }
-        if (static::$categoryModel) {
-            $this->changeItemTree();
-        }
-        if (static::$treeCategory) {
-            $this->changeCategoryTree();
         }
         if ($this->pk()) {
             $new = false;
